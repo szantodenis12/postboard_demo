@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics Report — PostBoard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      background: #07070e;
+      color: #fff;
+      min-height: 100vh;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .brand { font-size: 11px; text-transform: uppercase; letter-spacing: 3px; color: rgba(255,255,255,0.3); margin-bottom: 16px; }
+    .client-name { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+    .period { font-size: 16px; color: rgba(255,255,255,0.4); }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .metric-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+    }
+    .metric-value {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      background: linear-gradient(135deg, #7c3aed, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .metric-value.google-grad {
+      background: linear-gradient(135deg, #4285F4, #34A853);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .metric-label { font-size: 12px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; }
+    .section { margin-bottom: 48px; }
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+    .platform-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .platform-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .platform-name { font-size: 14px; font-weight: 600; margin-bottom: 16px; }
+    .platform-stat { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .platform-stat:last-child { border: none; }
+    .stat-label { color: rgba(255,255,255,0.4); font-size: 13px; }
+    .stat-value { font-weight: 600; font-size: 13px; }
+    .top-posts { list-style: none; }
+    .post-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 8px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: start;
+    }
+    .post-caption { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.5; }
+    .post-meta { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 6px; }
+    .post-engagement {
+      text-align: right;
+      white-space: nowrap;
+    }
+    .post-engagement-value { font-size: 20px; font-weight: 700; color: #7c3aed; }
+    .post-engagement-label { font-size: 10px; color: rgba(255,255,255,0.3); text-transform: uppercase; }
+    .chart-container {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .bar-chart { display: flex; align-items: flex-end; gap: 4px; height: 120px; padding-top: 8px; }
+    .bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
+    .bar {
+      width: 100%;
+      max-width: 32px;
+      border-radius: 4px 4px 0 0;
+      background: linear-gradient(to top, #7c3aed, #06b6d4);
+      min-height: 2px;
+      transition: height 0.5s ease;
+    }
+    .bar.google-bar {
+      background: linear-gradient(to top, #4285F4, #34A853);
+    }
+    .bar-label { font-size: 9px; color: rgba(255,255,255,0.3); }
+    .progress-bar-container {
+      background: rgba(255,255,255,0.04);
+      border-radius: 6px;
+      height: 6px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.6s ease;
+    }
+    .google-breakdown-item {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .google-breakdown-item:last-child { border: none; }
+    .google-breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .footer {
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.2);
+      font-size: 12px;
+    }
+    .footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+    .loading { text-align: center; padding: 80px 0; color: rgba(255,255,255,0.3); }
+    .error { text-align: center; padding: 80px 0; color: #ef4444; }
+    .fb-color { color: #1877F2; }
+    .ig-color { color: #E4405F; }
+    .google-color { color: #4285F4; }
+    @media (max-width: 600px) {
+      .platform-row { grid-template-columns: 1fr; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .metric-value { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <div class="loading">Loading report...</div>
+  </div>
+  <script>
+    const token = window.location.pathname.split('/report/')[1]
+    if (!token) {
+      document.getElementById('app').innerHTML = '<div class="error">Invalid report link</div>'
+    } else {
+      fetch(`/api/reports/${token}/data`)
+        .then(r => {
+          if (!r.ok) throw new Error('Report not found')
+          return r.json()
+        })
+        .then(data => renderReport(data))
+        .catch(err => {
+          document.getElementById('app').innerHTML = `<div class="error">${err.message}</div>`
+        })
+    }
+
+    function fmt(n) { return (n || 0).toLocaleString('ro-RO') }
+
+    function renderReport(data) {
+      const a = data.analytics
+      const g = data.google
+      const periodLabel = data.periodLabel || data.period || 'Perioadă necunoscută'
+
+      let metaSection = ''
+      if (a) {
+        const c = a.combined
+        metaSection = renderMetaSection(a, c)
+      }
+
+      let googleSection = ''
+      if (g) {
+        googleSection = renderGoogleSection(g)
+      }
+
+      document.getElementById('app').innerHTML = `
+        <div class="header">
+          <div class="brand">PostBoard &middot; Analytics Report</div>
+          <div class="client-name" style="color:${data.clientColor}">${data.clientName}</div>
+          <div class="period">${periodLabel}</div>
+        </div>
+
+        ${metaSection}
+        ${googleSection}
+
+        <div class="footer">
+          Generated ${new Date(data.createdAt).toLocaleDateString('ro-RO')} &middot;
+          <a href="#">PostBoard</a> by Epic Digital Hub
+        </div>
+      `
+    }
+
+    function renderMetaSection(a, c) {
+      // Engagement chart
+      let chartHtml = ''
+      if (c.engagementByDay.length > 0) {
+        const maxEng = Math.max(...c.engagementByDay.map(d => d.engagement), 1)
+        chartHtml = `
+          <div class="chart-container">
+            <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:rgba(255,255,255,0.6)">Meta Engagement by Day</div>
+            <div class="bar-chart">
+              ${c.engagementByDay.map(d => {
+                const h = Math.max(2, (d.engagement / maxEng) * 100)
+                const day = new Date(d.date).getDate()
+                return `<div class="bar-wrapper"><div class="bar" style="height:${h}%"></div><div class="bar-label">${day}</div></div>`
+              }).join('')}
+            </div>
+          </div>`
+      }
+
+      // Top posts
+      let topPostsHtml = ''
+      if (c.topPosts.length > 0) {
+        topPostsHtml = c.topPosts.slice(0, 5).map(p => {
+          const date = new Date(p.publishedAt).toLocaleDateString('ro-RO', { day: 'numeric', month: 'short' })
+          const platform = p.platform === 'facebook' ? '<span class="fb-color">FB</span>' : '<span class="ig-color">IG</span>'
+          return `
+            <div class="post-item">
+              <div>
+                <div class="post-caption">${p.message.slice(0, 200)}${p.message.length > 200 ? '...' : ''}</div>
+                <div class="post-meta">${platform} &middot; ${date} &middot; ${fmt(p.likes)} likes &middot; ${fmt(p.comments)} comments${p.shares ? ' &middot; ' + fmt(p.shares) + ' shares' : ''}</div>
+              </div>
+              <div class="post-engagement">
+                <div class="post-engagement-value">${fmt(p.engagement)}</div>
+                <div class="post-engagement-label">engagement</div>
+              </div>
+            </div>`
+        }).join('')
+      }
+
+      return `
+        <div class="section">
+          <div class="section-title">Meta (Facebook + Instagram)</div>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-value">${fmt(c.totalPosts)}</div>
+            <div class="metric-label">Posts</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">${fmt(c.totalEngagement)}</div>
+            <div class="metric-label">Total Engagement</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">${fmt(c.totalLikes)}</div>
+            <div class="metric-label">Likes</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">${fmt(c.totalComments)}</div>
+            <div class="metric-label">Comments</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">${fmt(c.totalShares)}</div>
+            <div class="metric-label">Shares</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">${fmt(c.avgEngagement)}</div>
+            <div class="metric-label">Avg / Post</div>
+          </div>
+        </div>
+
+        ${chartHtml}
+
+        <div class="section">
+          <div class="section-title">Platform Breakdown</div>
+          <div class="platform-row">
+            <div class="platform-card">
+              <div class="platform-name fb-color">Facebook</div>
+              <div class="platform-stat"><span class="stat-label">Posts</span><span class="stat-value">${fmt(a.facebook.posts.length)}</span></div>
+              <div class="platform-stat"><span class="stat-label">Likes</span><span class="stat-value">${fmt(a.facebook.totalLikes)}</span></div>
+              <div class="platform-stat"><span class="stat-label">Comments</span><span class="stat-value">${fmt(a.facebook.totalComments)}</span></div>
+              <div class="platform-stat"><span class="stat-label">Shares</span><span class="stat-value">${fmt(a.facebook.totalShares)}</span></div>
+              <div class="platform-stat"><span class="stat-label">Avg Engagement</span><span class="stat-value">${fmt(a.facebook.avgEngagement)}</span></div>
+            </div>
+            <div class="platform-card">
+              <div class="platform-name ig-color">Instagram</div>
+              <div class="platform-stat"><span class="stat-label">Posts</span><span class="stat-value">${fmt(a.instagram.posts.length)}</span></div>
+              <div class="platform-stat"><span class="stat-label">Likes</span><span class="stat-value">${fmt(a.instagram.totalLikes)}</span></div>
+              <div class="platform-stat"><span class="stat-label">Comments</span><span class="stat-value">${fmt(a.instagram.totalComments)}</span></div>
+              <div class="platform-stat"><span class="stat-label">Avg Engagement</span><span class="stat-value">${fmt(a.instagram.avgEngagement)}</span></div>
+            </div>
+          </div>
+        </div>
+
+        ${c.topPosts.length > 0 ? `
+          <div class="section">
+            <div class="section-title">Top Performing Posts</div>
+            <div class="top-posts">${topPostsHtml}</div>
+          </div>
+        ` : ''}
+      `
+    }
+
+    function renderGoogleSection(g) {
+      const m = g.metrics
+      const total = m.totalInteractions || 1
+
+      // Daily chart
+      let chartHtml = ''
+      if (g.dailyMetrics && g.dailyMetrics.length > 0) {
+        const maxVal = Math.max(...g.dailyMetrics.map(d => d.searches + d.maps + d.website + d.phone + d.directions), 1)
+        chartHtml = `
+          <div class="chart-container">
+            <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:rgba(255,255,255,0.6)">Google Daily Interactions</div>
+            <div class="bar-chart">
+              ${g.dailyMetrics.map(d => {
+                const t = d.searches + d.maps + d.website + d.phone + d.directions
+                const h = Math.max(2, (t / maxVal) * 100)
+                const day = new Date(d.date).getDate()
+                return `<div class="bar-wrapper"><div class="bar google-bar" style="height:${h}%"></div><div class="bar-label">${day}</div></div>`
+              }).join('')}
+            </div>
+          </div>`
+      }
+
+      // Breakdown items
+      const items = [
+        { label: 'Search Impressions', value: m.searchViews, color: '#4285F4' },
+        { label: 'Map Impressions', value: m.mapViews, color: '#34A853' },
+        { label: 'Website Clicks', value: m.websiteClicks, color: '#7c3aed' },
+        { label: 'Phone Calls', value: m.phoneClicks, color: '#FBBC05' },
+        { label: 'Direction Requests', value: m.directionRequests, color: '#EA4335' },
+      ]
+
+      const breakdownHtml = items.map(item => {
+        const pct = ((item.value / total) * 100).toFixed(1)
+        return `
+          <div class="google-breakdown-item">
+            <div class="google-breakdown-row">
+              <span class="stat-label">${item.label}</span>
+              <span class="stat-value">${fmt(item.value)} <span style="color:rgba(255,255,255,0.25)">(${pct}%)</span></span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" style="width:${pct}%;background:${item.color}"></div>
+            </div>
+          </div>`
+      }).join('')
+
+      return `
+        <div class="section">
+          <div class="section-title">Google Business Profile</div>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-value google-grad">${fmt(m.searchViews)}</div>
+            <div class="metric-label">Search Views</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value google-grad">${fmt(m.mapViews)}</div>
+            <div class="metric-label">Map Views</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value google-grad">${fmt(m.websiteClicks)}</div>
+            <div class="metric-label">Website Clicks</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value google-grad">${fmt(m.phoneClicks)}</div>
+            <div class="metric-label">Phone Calls</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value google-grad">${fmt(m.directionRequests)}</div>
+            <div class="metric-label">Directions</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value google-grad">${fmt(m.totalInteractions)}</div>
+            <div class="metric-label">Total Interactions</div>
+          </div>
+        </div>
+
+        ${chartHtml}
+
+        <div class="section">
+          <div class="section-title">Interaction Breakdown</div>
+          <div class="platform-card">
+            ${breakdownHtml}
+          </div>
+        </div>
+      `
+    }
+  </script>
+</body>
+</html>

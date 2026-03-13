@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Content Review — PostBoard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #07070e;
+      color: rgba(255,255,255,0.8);
+      min-height: 100vh;
+    }
+    .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .header h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+    .header p { font-size: 13px; color: rgba(255,255,255,0.35); }
+
+    /* Reviewer name */
+    .reviewer-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+    }
+    .reviewer-bar label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      white-space: nowrap;
+    }
+    .reviewer-bar input {
+      flex: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: white;
+      font-size: 13px;
+      outline: none;
+    }
+    .reviewer-bar input:focus { border-color: rgba(124,58,237,0.4); }
+    .reviewer-bar input::placeholder { color: rgba(255,255,255,0.15); }
+
+    /* Progress bar */
+    .progress-bar {
+      margin-bottom: 24px;
+      padding: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .progress-text { font-size: 13px; color: rgba(255,255,255,0.5); }
+    .progress-count { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); }
+    .progress-track {
+      height: 4px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+      background: linear-gradient(90deg, #7c3aed, #06b6d4);
+    }
+    .progress-stats {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .progress-stat {
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .dot { width: 6px; height: 6px; border-radius: 50%; }
+    .dot-approved { background: #10b981; }
+    .dot-changes { background: #f59e0b; }
+
+    /* Stats grid */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .stat {
+      text-align: center;
+      padding: 16px 8px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+    }
+    .stat-value { font-size: 24px; font-weight: 700; }
+    .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.3); margin-top: 4px; }
+
+    /* Post card */
+    .post {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 12px;
+      transition: border-color 0.3s;
+    }
+    .post.post-approved { border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.02); }
+    .post.post-changes { border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.02); }
+    .post-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .platform-badge {
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .status-badge {
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      margin-left: auto;
+    }
+    .post-date { font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 12px; }
+    .post-caption {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.7);
+      white-space: pre-wrap;
+      margin-bottom: 12px;
+    }
+    .post-hashtags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .hashtag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(6,182,212,0.08);
+      color: rgba(6,182,212,0.7);
+    }
+    .post-visual {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      padding: 12px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 8px;
+      margin-top: 12px;
+    }
+    .post-visual-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.2);
+      margin-bottom: 4px;
+    }
+    .post-image {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    /* Action bar */
+    .action-bar {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-approve {
+      background: rgba(16,185,129,0.1);
+      color: #10b981;
+      border-color: rgba(16,185,129,0.2);
+    }
+    .btn-approve:hover { background: rgba(16,185,129,0.2); }
+    .btn-changes {
+      background: rgba(245,158,11,0.1);
+      color: #f59e0b;
+      border-color: rgba(245,158,11,0.2);
+    }
+    .btn-changes:hover { background: rgba(245,158,11,0.2); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Comment form */
+    .comment-form {
+      margin-top: 12px;
+      display: none;
+    }
+    .comment-form.visible { display: block; }
+    .comment-form textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: white;
+      font-size: 13px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+    }
+    .comment-form textarea:focus { border-color: rgba(245,158,11,0.4); }
+    .comment-form textarea::placeholder { color: rgba(255,255,255,0.15); }
+    .comment-form .btn-submit {
+      margin-top: 8px;
+      background: rgba(245,158,11,0.15);
+      color: #f59e0b;
+      border-color: rgba(245,158,11,0.2);
+      padding: 8px 20px;
+    }
+    .comment-form .btn-submit:hover { background: rgba(245,158,11,0.25); }
+    .comment-form .btn-cancel {
+      margin-top: 8px;
+      margin-left: 8px;
+      background: transparent;
+      color: rgba(255,255,255,0.3);
+      border-color: rgba(255,255,255,0.06);
+      padding: 8px 16px;
+    }
+
+    /* Feedback state display */
+    .feedback-state {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .feedback-state.state-approved {
+      background: rgba(16,185,129,0.08);
+      color: #10b981;
+      border: 1px solid rgba(16,185,129,0.15);
+    }
+    .feedback-state.state-changes {
+      background: rgba(245,158,11,0.08);
+      color: #f59e0b;
+      border: 1px solid rgba(245,158,11,0.15);
+    }
+    .feedback-comment {
+      margin-top: 8px;
+      font-weight: 400;
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    .feedback-undo {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.25);
+      font-size: 11px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .feedback-undo:hover { color: rgba(255,255,255,0.5); }
+
+    /* Status update banner */
+    .status-update-banner {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 500;
+      animation: fadeSlideIn 0.3s ease;
+    }
+    .status-update-banner.banner-approved {
+      background: rgba(16,185,129,0.06);
+      color: rgba(16,185,129,0.8);
+      border: 1px solid rgba(16,185,129,0.1);
+    }
+    .status-update-banner.banner-changes {
+      background: rgba(245,158,11,0.06);
+      color: rgba(245,158,11,0.8);
+      border: 1px solid rgba(245,158,11,0.1);
+    }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SVG icons inline */
+    .icon { display: inline-block; vertical-align: middle; width: 14px; height: 14px; }
+
+    .error { text-align: center; padding: 60px 20px; color: rgba(255,255,255,0.4); }
+    .loading { text-align: center; padding: 60px 20px; color: rgba(255,255,255,0.3); }
+    .powered-by {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      font-size: 11px;
+      color: rgba(255,255,255,0.15);
+    }
+    @media (max-width: 600px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .container { padding: 20px 16px; }
+      .action-bar { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <div class="loading">Se incarca...</div>
+  </div>
+  <script>
+    var token = window.location.pathname.split('/review/')[1];
+    var feedbackState = {}; // postId → { action, comment }
+    var totalPosts = 0;
+    var reviewerName = '';
+
+    var PLATFORM_COLORS = {
+      facebook: { bg: '#1877F215', color: '#1877F2' },
+      instagram: { bg: '#E4405F15', color: '#E4405F' },
+      linkedin: { bg: '#0A66C215', color: '#0A66C2' },
+      tiktok: { bg: '#00000020', color: '#ffffff' },
+      google: { bg: '#4285F415', color: '#4285F4' },
+      stories: { bg: '#E4405F15', color: '#E4405F' }
+    };
+    var STATUS_COLORS = {
+      draft: { bg: '#f59e0b15', color: '#f59e0b' },
+      approved: { bg: '#3b82f615', color: '#3b82f6' },
+      scheduled: { bg: '#8b5cf615', color: '#8b5cf6' },
+      published: { bg: '#10b98115', color: '#10b981' }
+    };
+
+    var ICON_CHECK = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+    var ICON_EDIT = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>';
+    var ICON_CHECK_CIRCLE = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>';
+    var ICON_ALERT = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>';
+
+    // Fetch data + existing feedback in parallel
+    Promise.all([
+      fetch('/api/review/' + token + '/data').then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); }),
+      fetch('/api/review/' + token + '/feedback').then(function(r) { if (r.ok) return r.json(); return { feedback: [] }; })
+    ])
+    .then(function(results) {
+      var data = results[0];
+      var fb = results[1].feedback || [];
+      // Pre-populate feedback state
+      for (var i = 0; i < fb.length; i++) {
+        feedbackState[fb[i].postId] = { action: fb[i].action, comment: fb[i].comment || '' };
+      }
+      render(data.client);
+    })
+    .catch(function() {
+      document.getElementById('app').innerHTML =
+        '<div class="error"><h2>Link invalid sau expirat</h2><p style="margin-top:8px">Acest link de review nu mai este activ.</p></div>';
+    });
+
+    function render(client) {
+      var posts = client.posts.sort(function(a, b) { return a.date.localeCompare(b.date); });
+      totalPosts = posts.length;
+      var html = '';
+
+      // Header
+      html += '<div class="header">';
+      html += '<h1 style="color:' + client.color + '">' + esc(client.displayName) + '</h1>';
+      html += '<p>Review Continut &mdash; ' + posts.length + ' postari</p>';
+      html += '</div>';
+
+      // Reviewer name
+      html += '<div class="reviewer-bar">';
+      html += '<label>Numele tau:</label>';
+      html += '<input type="text" id="reviewer-name" placeholder="Introdu numele tau (optional)" oninput="reviewerName=this.value">';
+      html += '</div>';
+
+      // Progress bar
+      html += '<div class="progress-bar" id="progress-bar">';
+      html += '<div class="progress-header">';
+      html += '<span class="progress-text">Progres review</span>';
+      html += '<span class="progress-count" id="progress-count">0 din ' + totalPosts + '</span>';
+      html += '</div>';
+      html += '<div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>';
+      html += '<div class="progress-stats">';
+      html += '<span class="progress-stat"><span class="dot dot-approved"></span> <span id="approved-count">0</span> aprobate</span>';
+      html += '<span class="progress-stat"><span class="dot dot-changes"></span> <span id="changes-count">0</span> modificari</span>';
+      html += '</div>';
+      html += '</div>';
+
+      // Stats
+      html += '<div class="stats">';
+      html += mkStat(client.stats.draft, 'Draft', '#f59e0b');
+      html += mkStat(client.stats.approved, 'Aprobat', '#3b82f6');
+      html += mkStat(client.stats.scheduled, 'Programat', '#8b5cf6');
+      html += mkStat(client.stats.published, 'Publicat', '#10b981');
+      html += '</div>';
+
+      // Posts
+      for (var i = 0; i < posts.length; i++) {
+        html += renderPost(posts[i]);
+      }
+
+      html += '<div class="powered-by">Powered by PostBoard &mdash; Epic Digital Hub</div>';
+      document.getElementById('app').innerHTML = html;
+
+      // Apply pre-existing feedback states
+      for (var postId in feedbackState) {
+        applyFeedbackUI(postId, feedbackState[postId].action, feedbackState[postId].comment);
+      }
+      updateProgress();
+    }
+
+    function mkStat(value, label, color) {
+      return '<div class="stat"><div class="stat-value" style="color:' + color + '">' + value + '</div><div class="stat-label">' + label + '</div></div>';
+    }
+
+    function renderPost(post) {
+      var pc = PLATFORM_COLORS[post.platform] || PLATFORM_COLORS.facebook;
+      var sc = STATUS_COLORS[post.status] || STATUS_COLORS.draft;
+      var dateStr = new Date(post.date).toLocaleDateString('ro-RO', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+      var html = '<div class="post" id="post-' + post.id + '">';
+      html += '<div class="post-header">';
+      html += '<span class="platform-badge" style="background:' + pc.bg + ';color:' + pc.color + '">' + esc(post.platform) + '</span>';
+      if (post.format) html += '<span style="font-size:11px;color:rgba(255,255,255,0.3)">' + esc(post.format) + '</span>';
+      html += '<span class="status-badge" style="background:' + sc.bg + ';color:' + sc.color + '">' + esc(post.status) + '</span>';
+      html += '</div>';
+      html += '<div class="post-date">' + dateStr + (post.time ? ' &bull; ' + esc(post.time) : '') + '</div>';
+      if (post.imageUrl) {
+        html += '<img class="post-image" src="' + esc(post.imageUrl) + '" alt="Post image" loading="lazy">';
+      }
+      html += '<div class="post-caption">' + esc(post.caption) + '</div>';
+
+      if (post.hashtags && post.hashtags.length) {
+        html += '<div class="post-hashtags">';
+        for (var i = 0; i < post.hashtags.length; i++) {
+          html += '<span class="hashtag">#' + esc(post.hashtags[i]) + '</span>';
+        }
+        html += '</div>';
+      }
+
+      if (post.visualDescription) {
+        html += '<div class="post-visual"><div class="post-visual-label">Descriere vizual</div>' + esc(post.visualDescription) + '</div>';
+      }
+      if (post.cta) {
+        html += '<div class="post-visual" style="margin-top:8px"><div class="post-visual-label">Call to Action</div>' + esc(post.cta) + '</div>';
+      }
+
+      // Action bar
+      html += '<div class="action-bar" id="actions-' + post.id + '">';
+      html += '<button class="btn btn-approve" onclick="submitApprove(\'' + post.id + '\')">' + ICON_CHECK + ' Aprob</button>';
+      html += '<button class="btn btn-changes" onclick="showCommentForm(\'' + post.id + '\')">' + ICON_EDIT + ' Necesita modificari</button>';
+      html += '</div>';
+
+      // Comment form (hidden by default)
+      html += '<div class="comment-form" id="comment-form-' + post.id + '">';
+      html += '<textarea id="comment-text-' + post.id + '" placeholder="Descrie ce modificari sunt necesare..."></textarea>';
+      html += '<button class="btn btn-submit" onclick="submitChanges(\'' + post.id + '\')">' + ICON_EDIT + ' Trimite feedback</button>';
+      html += '<button class="btn btn-cancel" onclick="hideCommentForm(\'' + post.id + '\')">Anuleaza</button>';
+      html += '</div>';
+
+      // Feedback state (hidden by default, shown after submission)
+      html += '<div class="feedback-state" id="feedback-' + post.id + '" style="display:none"></div>';
+
+      html += '</div>';
+      return html;
+    }
+
+    function showCommentForm(postId) {
+      var form = document.getElementById('comment-form-' + postId);
+      form.classList.add('visible');
+      form.querySelector('textarea').focus();
+    }
+
+    function hideCommentForm(postId) {
+      var form = document.getElementById('comment-form-' + postId);
+      form.classList.remove('visible');
+    }
+
+    function submitApprove(postId) {
+      sendFeedback(postId, 'approved', '');
+    }
+
+    function submitChanges(postId) {
+      var comment = document.getElementById('comment-text-' + postId).value.trim();
+      sendFeedback(postId, 'changes-requested', comment);
+    }
+
+    function sendFeedback(postId, action, comment) {
+      // Disable buttons while sending
+      var actionsEl = document.getElementById('actions-' + postId);
+      var buttons = actionsEl.querySelectorAll('button');
+      for (var i = 0; i < buttons.length; i++) buttons[i].disabled = true;
+
+      fetch('/api/review/' + token + '/posts/' + postId + '/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: action, comment: comment, reviewerName: reviewerName })
+      })
+      .then(function(r) { if (!r.ok) throw new Error('Failed'); return r.json(); })
+      .then(function(data) {
+        feedbackState[postId] = { action: action, comment: comment };
+        var statusUpdated = data.statusUpdated || (action === 'approved' ? 'approved' : 'draft');
+        applyFeedbackUI(postId, action, comment, statusUpdated);
+        updateProgress();
+      })
+      .catch(function() {
+        for (var i = 0; i < buttons.length; i++) buttons[i].disabled = false;
+        alert('A aparut o eroare. Te rugam sa incerci din nou.');
+      });
+    }
+
+    function applyFeedbackUI(postId, action, comment, statusUpdated) {
+      var postEl = document.getElementById('post-' + postId);
+      var actionsEl = document.getElementById('actions-' + postId);
+      var commentForm = document.getElementById('comment-form-' + postId);
+      var feedbackEl = document.getElementById('feedback-' + postId);
+
+      if (!postEl || !actionsEl || !feedbackEl) return;
+
+      // Hide action buttons and comment form
+      actionsEl.style.display = 'none';
+      if (commentForm) commentForm.style.display = 'none';
+
+      // Style the post card
+      postEl.classList.remove('post-approved', 'post-changes');
+      postEl.classList.add(action === 'approved' ? 'post-approved' : 'post-changes');
+
+      // Update the status badge in the post header
+      var statusBadge = postEl.querySelector('.status-badge');
+      if (statusBadge) {
+        var newStatus = statusUpdated || (action === 'approved' ? 'approved' : 'draft');
+        var sc = STATUS_COLORS[newStatus] || STATUS_COLORS.draft;
+        statusBadge.style.background = sc.bg;
+        statusBadge.style.color = sc.color;
+        statusBadge.textContent = newStatus;
+      }
+
+      // Show feedback state
+      var stateClass = action === 'approved' ? 'state-approved' : 'state-changes';
+      var icon = action === 'approved' ? ICON_CHECK_CIRCLE : ICON_ALERT;
+      var label = action === 'approved' ? 'Aprobat' : 'Modificari solicitate';
+
+      // Status update banner text
+      var statusLabel = action === 'approved' ? 'Approved' : 'Draft';
+      var bannerClass = action === 'approved' ? 'banner-approved' : 'banner-changes';
+      var bannerIcon = action === 'approved' ? ICON_CHECK : ICON_EDIT;
+      var bannerText = action === 'approved'
+        ? 'Status actualizat: Approved'
+        : 'Status actualizat: Draft — in asteptarea modificarilor';
+
+      var html = '<div class="feedback-state ' + stateClass + '" style="display:flex;flex-wrap:wrap">';
+      html += icon + ' ' + label;
+      html += '<button class="feedback-undo" onclick="undoFeedback(\'' + postId + '\')">Schimba</button>';
+      if (comment) {
+        html += '<div class="feedback-comment" style="width:100%">' + esc(comment) + '</div>';
+      }
+      html += '</div>';
+      html += '<div class="status-update-banner ' + bannerClass + '">' + bannerIcon + ' ' + bannerText + '</div>';
+
+      feedbackEl.outerHTML = html.replace('<div class="feedback-state', '<div id="feedback-' + postId + '" class="feedback-state');
+    }
+
+    function undoFeedback(postId) {
+      var postEl = document.getElementById('post-' + postId);
+      var actionsEl = document.getElementById('actions-' + postId);
+      var feedbackEl = document.getElementById('feedback-' + postId);
+
+      if (!postEl || !actionsEl || !feedbackEl) return;
+
+      // Show action buttons again
+      actionsEl.style.display = 'flex';
+      var buttons = actionsEl.querySelectorAll('button');
+      for (var i = 0; i < buttons.length; i++) buttons[i].disabled = false;
+
+      // Hide feedback state
+      feedbackEl.style.display = 'none';
+      feedbackEl.className = 'feedback-state';
+      feedbackEl.innerHTML = '';
+
+      // Remove status update banner (sibling after feedback element)
+      var banner = feedbackEl.nextElementSibling;
+      if (banner && banner.classList.contains('status-update-banner')) {
+        banner.remove();
+      }
+
+      // Remove post styling
+      postEl.classList.remove('post-approved', 'post-changes');
+
+      // Clear from state
+      delete feedbackState[postId];
+      updateProgress();
+    }
+
+    function updateProgress() {
+      var reviewed = Object.keys(feedbackState).length;
+      var approved = 0;
+      var changes = 0;
+      for (var pid in feedbackState) {
+        if (feedbackState[pid].action === 'approved') approved++;
+        else changes++;
+      }
+
+      var pct = totalPosts > 0 ? Math.round((reviewed / totalPosts) * 100) : 0;
+
+      var countEl = document.getElementById('progress-count');
+      var fillEl = document.getElementById('progress-fill');
+      var appEl = document.getElementById('approved-count');
+      var chgEl = document.getElementById('changes-count');
+
+      if (countEl) countEl.textContent = reviewed + ' din ' + totalPosts;
+      if (fillEl) fillEl.style.width = pct + '%';
+      if (appEl) appEl.textContent = approved;
+      if (chgEl) chgEl.textContent = changes;
+    }
+
+    function esc(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+  </script>
+</body>
+</html>

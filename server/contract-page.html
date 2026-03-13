@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contract — Epic Digital Hub</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=DM+Serif+Display&display=swap');
+
+  :root {
+    --ink: #0f0f14;
+    --ink-soft: #3a3a4a;
+    --ink-muted: #8888a0;
+    --ink-faint: #b8b8cc;
+    --line: #e4e4ec;
+    --line-light: #f0f0f6;
+    --surface: #fafafc;
+    --white: #ffffff;
+    --accent: #5b2fd4;
+    --accent-soft: #ede8fd;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--surface);
+    line-height: 1.65;
+    font-size: 13.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    background: var(--white);
+    min-height: 100vh;
+  }
+
+  .page-inner {
+    padding: 48px 52px 44px;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .page { box-shadow: none; max-width: 100%; }
+    .page-inner { padding: 0; }
+    .no-print { display: none !important; }
+    @page { margin: 16mm 14mm; size: A4; }
+  }
+
+  /* ── Top Bar ─────────────────────────── */
+  .top-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), #8b5cf6, #06b6d4);
+  }
+
+  /* ── Print Bar ───────────────────────── */
+  .print-bar {
+    position: sticky;
+    top: 0;
+    background: var(--ink);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    z-index: 100;
+  }
+
+  .print-bar button {
+    padding: 7px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.02em;
+    transition: all 0.15s;
+  }
+
+  .btn-print {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-print:hover { background: #4a22b8; }
+
+  .btn-close {
+    background: transparent;
+    color: var(--ink-muted);
+    border: 1px solid #333 !important;
+  }
+  .btn-close:hover { color: #fff; border-color: #555 !important; }
+
+  /* ── Header ──────────────────────────── */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 44px;
+  }
+
+  .brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .brand-logo {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.5px;
+  }
+
+  .brand-text h1 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.3px;
+  }
+
+  .brand-text span {
+    font-size: 10.5px;
+    color: var(--ink-muted);
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .doc-type {
+    text-align: right;
+  }
+
+  .doc-type h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.3px;
+  }
+
+  .doc-type .doc-nr {
+    font-size: 11px;
+    color: var(--ink-muted);
+    margin-top: 2px;
+  }
+
+  /* ── Divider ─────────────────────────── */
+  .divider {
+    height: 1px;
+    background: var(--line);
+    margin: 0 0 36px;
+  }
+
+  .divider-accent {
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin: 0 0 36px;
+  }
+
+  /* ── Parties ─────────────────────────── */
+  .parties {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 36px;
+  }
+
+  .party {
+    padding: 20px 24px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+  }
+
+  .party.provider {
+    border-color: var(--accent);
+    border-left: 3px solid var(--accent);
+  }
+
+  .party-label {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--ink-muted);
+    margin-bottom: 10px;
+  }
+
+  .party-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: -0.2px;
+  }
+
+  .party-detail {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.8;
+  }
+
+  .party-detail strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ── Section ─────────────────────────── */
+  .section {
+    margin-bottom: 32px;
+  }
+
+  .section-head {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-head::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line-light);
+  }
+
+  /* ── Period ──────────────────────────── */
+  .period-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+
+  .period-card {
+    padding: 16px 20px;
+    background: var(--surface);
+    border-radius: 8px;
+  }
+
+  .period-card label {
+    display: block;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-muted);
+    margin-bottom: 4px;
+  }
+
+  .period-card p {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ── Services ────────────────────────── */
+  .services {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .service-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 90px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--line-light);
+    align-items: center;
+  }
+
+  .service-row:last-child {
+    border-bottom: none;
+  }
+
+  .service-row.head {
+    background: var(--surface);
+    padding: 10px 20px;
+  }
+
+  .service-row.head span {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-muted);
+  }
+
+  .service-name {
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 13px;
+  }
+
+  .service-desc {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .service-posts {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+
+  /* ── Payment ─────────────────────────── */
+  .payment-box {
+    background: var(--ink);
+    border-radius: 10px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+  }
+
+  .payment-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .payment-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .payment-terms {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 4px;
+  }
+
+  .payment-amount {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 400;
+    letter-spacing: -1px;
+    color: #fff;
+  }
+
+  .payment-amount small {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.45);
+    margin-left: 4px;
+    letter-spacing: 0;
+  }
+
+  /* ── Terms ───────────────────────────── */
+  .terms-list {
+    counter-reset: term;
+    list-style: none;
+  }
+
+  .terms-list li {
+    counter-increment: term;
+    padding: 6px 0;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.75;
+    padding-left: 28px;
+    position: relative;
+  }
+
+  .terms-list li::before {
+    content: counter(term, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .terms-list li strong {
+    color: var(--ink);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* ── Signatures ──────────────────────── */
+  .sig-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    margin-top: 52px;
+    padding-top: 20px;
+  }
+
+  .sig-box {
+    border-top: 1px solid var(--line);
+    padding-top: 64px;
+    position: relative;
+  }
+
+  .sig-box::before {
+    content: 'L.S.';
+    position: absolute;
+    top: 20px;
+    right: 0;
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 2px;
+  }
+
+  .sig-role {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+  }
+
+  .sig-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .sig-company {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+
+  /* ── Footer ──────────────────────────── */
+  .footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--ink-faint);
+  }
+
+  .footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="print-bar no-print">
+  <button class="btn-print" onclick="window.print()">Salvează PDF</button>
+  <button class="btn-close" onclick="window.close()">Închide</button>
+</div>
+
+<div class="page">
+  <div class="top-stripe"></div>
+  <div class="page-inner" id="contract-page">
+    <div id="loading" style="text-align:center;padding:120px 0;color:var(--ink-muted);font-size:13px;">Se încarcă contractul...</div>
+  </div>
+</div>
+
+<script>
+(async function() {
+  const contractId = window.location.pathname.split('/contract/')[1];
+  if (!contractId) { document.getElementById('loading').textContent = 'Contract ID lipsă.'; return; }
+
+  try {
+    const res = await fetch('/api/crm/contracts/' + contractId + '/pdf-data');
+    if (!res.ok) throw new Error('Contract not found');
+    const { contract, profile, clientName, postCount } = await res.json();
+
+    const fmtDate = d => d ? new Date(d).toLocaleDateString('ro-RO', { day: 'numeric', month: 'long', year: 'numeric' }) : '—';
+    const fmtNum = n => n.toLocaleString('ro-RO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    const today = fmtDate(new Date().toISOString());
+
+    const months = contract.endDate
+      ? Math.max(1, Math.round((new Date(contract.endDate) - new Date(contract.startDate)) / (30.44*24*60*60*1000)))
+      : 12;
+
+    // Parse services
+    const svc = [];
+    const n = (contract.notes || '').toLowerCase();
+    if (n.includes('social media') || n.includes(' fb') || n.includes(' ig') || n.includes('postări') || n.includes('community'))
+      svc.push(['Social Media Management', 'Creare conținut, programare, community management, raportare', postCount || '12–15']);
+    if (n.includes('seo'))
+      svc.push(['SEO & Optimizare', 'Audit tehnic, optimizare on-page, keyword tracking, rapoarte', '—']);
+    if (n.includes('google ads') || n.includes('meta ads') || n.includes('ads'))
+      svc.push(['Campanii Plătite (Ads)', 'Setup, optimizare, A/B testing, raportare (buget separat)', '—']);
+    if (n.includes('google business'))
+      svc.push(['Google Business Profile', 'Optimizare profil, postări locale, monitorizare recenzii', '4–8']);
+    if (n.includes('content') || n.includes('calendar'))
+      svc.push(['Calendar Editorial', 'Planificare lunară, brief-uri vizuale, coordonare producție', '—']);
+    if (n.includes('email'))
+      svc.push(['Email Marketing', 'Campanii newsletter, automatizări, segmentare audiență', '2–4']);
+    if (n.includes('lead'))
+      svc.push(['Lead Generation', 'Landing pages, formulare, campanii de captare', '—']);
+    if (n.includes('tiktok'))
+      svc.push(['TikTok', 'Producție conținut video scurt, trend research', '4–8']);
+    if (n.includes('linkedin'))
+      svc.push(['LinkedIn', 'Postări profesionale, dezvoltare comunitate B2B', '4–8']);
+    if (n.includes('youtube'))
+      svc.push(['YouTube', 'Producție video, SEO YouTube, thumbnails', '2–4']);
+    if (n.includes('website') || n.includes('audit'))
+      svc.push(['Website & UX', 'Audit, optimizare conversii, monitorizare', '—']);
+    if (n.includes('launch') || n.includes('lansare'))
+      svc.push(['Campanie de Lansare', 'Strategie, materiale, execuție multi-canal', '—']);
+    if (svc.length === 0)
+      svc.push([contract.title, contract.notes || 'Servicii de marketing digital', '—']);
+
+    document.getElementById('contract-page').innerHTML = `
+      <div class="header">
+        <div class="brand-mark">
+          <div class="brand-logo">E</div>
+          <div class="brand-text">
+            <h1>Epic Digital Hub</h1>
+            <span>Marketing Digital</span>
+          </div>
+        </div>
+        <div class="doc-type">
+          <h2>Contract de Servicii</h2>
+          <div class="doc-nr">Data: ${today}</div>
+        </div>
+      </div>
+
+      <div class="divider-accent"></div>
+
+      <div class="parties">
+        <div class="party provider">
+          <div class="party-label">Prestator</div>
+          <div class="party-name">Epic Digital Hub</div>
+          <div class="party-detail">
+            <strong>Reprezentant:</strong> Roland Sipoș<br>
+            <strong>Email:</strong> contact@epicdigitalhub.ro<br>
+            <strong>Web:</strong> epicdigitalhub.ro
+          </div>
+        </div>
+        <div class="party">
+          <div class="party-label">Beneficiar</div>
+          <div class="party-name">${clientName}</div>
+          <div class="party-detail">
+            ${profile?.contactPerson ? `<strong>Contact:</strong> ${profile.contactPerson}<br>` : ''}
+            ${profile?.email ? `<strong>Email:</strong> ${profile.email}<br>` : ''}
+            ${profile?.phone ? `<strong>Telefon:</strong> ${profile.phone}<br>` : ''}
+            ${profile?.industry ? `<strong>Industrie:</strong> ${profile.industry}` : ''}
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head">Perioada contractuală</div>
+        <div class="period-grid">
+          <div class="period-card">
+            <label>Început</label>
+            <p>${fmtDate(contract.startDate)}</p>
+          </div>
+          <div class="period-card">
+            <label>Sfârșit</label>
+            <p>${contract.endDate ? fmtDate(contract.endDate) : 'Nedeterminat'}</p>
+          </div>
+          <div class="period-card">
+            <label>Perioadă minimă</label>
+            <p>3 luni</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head">Servicii incluse</div>
+        <div class="services">
+          <div class="service-row head">
+            <span>Serviciu</span>
+            <span>Descriere</span>
+            <span style="text-align:center">Postări / lună</span>
+          </div>
+          ${svc.map(([name, desc, posts]) => `
+            <div class="service-row">
+              <span class="service-name">${name}</span>
+              <span class="service-desc">${desc}</span>
+              <span class="service-posts">${posts}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head">Investiție</div>
+        <div class="payment-box">
+          <div class="payment-left">
+            <div class="payment-label">Tarif lunar</div>
+            <div class="payment-terms">Plată lunară, scadență: ziua 10 a lunii curente</div>
+          </div>
+          <div class="payment-amount">
+            ${fmtNum(contract.monthlyValue)}<small>RON / lună</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head">Termeni și condiții</div>
+        <ul class="terms-list">
+          <li>Prezentul contract intră în vigoare la data semnării și are o perioadă minimă de <strong>3 luni</strong>. După perioada minimă, contractul se prelungește automat lunar.</li>
+          <li>Prestatorul se obligă să livreze serviciile la standardele profesionale specifice industriei de marketing digital, conform celor mai bune practici actuale.</li>
+          <li>Beneficiarul va pune la dispoziție materialele necesare (logo, fotografii, informații despre produse/servicii) în termen de 5 zile lucrătoare de la solicitare.</li>
+          <li>Conținutul creat în cadrul contractului devine proprietatea beneficiarului după achitarea integrală a facturilor aferente.</li>
+          <li>Bugetul pentru campanii plătite (Meta Ads, Google Ads, etc.) nu este inclus în tariful lunar și se facturează separat, conform bugetului agreat.</li>
+          <li>Rapoartele de performanță se livrează lunar, în primele 5 zile lucrătoare ale lunii următoare.</li>
+          <li>Oricare dintre părți poate denunța contractul cu un preaviz scris de <strong>30 de zile calendaristice</strong>, dar nu înainte de expirarea perioadei minime.</li>
+          <li>Orice modificare a serviciilor sau tarifului se face prin act adițional semnat de ambele părți.</li>
+        </ul>
+      </div>
+
+      <div class="sig-section">
+        <div class="sig-box">
+          <div class="sig-role">Prestator</div>
+          <div class="sig-name">Roland Sipoș</div>
+          <div class="sig-company">Epic Digital Hub</div>
+        </div>
+        <div class="sig-box">
+          <div class="sig-role">Beneficiar</div>
+          <div class="sig-name">${profile?.contactPerson || clientName}</div>
+          <div class="sig-company">${clientName}</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>Epic Digital Hub &mdash; Contract de Servicii</span>
+        <span>${today}</span>
+      </div>
+    `;
+  } catch (err) {
+    document.getElementById('loading').textContent = 'Eroare: ' + err.message;
+  }
+})();
+</script>
+</body>
+</html>
