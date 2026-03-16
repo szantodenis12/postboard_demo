@@ -3848,6 +3848,9 @@ function serveApp(res: any) {
   console.log(`[SPA Shell] Serving from: ${htmlPath}`)
   try {
     const html = readFileSync(htmlPath, 'utf-8')
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+    res.setHeader('Pragma', 'no-cache')
+    res.setHeader('Expires', '0')
     res.type('html').send(html)
   } catch (err) {
     console.error(`[SPA Shell] Error reading ${htmlPath}:`, err)
@@ -3949,13 +3952,27 @@ const isProduction = process.env.NODE_ENV === 'production'
 if (isProduction) {
   const DIST_PATH = resolve(PROJECT_ROOT, 'dist')
   if (existsSync(DIST_PATH)) {
-    app.use(express.static(DIST_PATH))
+    // Serve static files (assets, images, etc)
+    app.use(express.static(DIST_PATH, {
+      setHeaders: (res, path) => {
+        if (path.endsWith('.html')) {
+          res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+        }
+      }
+    }))
     // SPA Catch-all
     app.get('*', (req, res, next) => {
-      // Don't catch API routes or other internal routes
+      // Don't catch API routes, contracts, or missing assets!
       if (req.path.startsWith('/api') || req.path.startsWith('/contract')) {
         return next()
       }
+      // If the browser specifically requested a static asset that doesn't exist, return 404 instead of index.html
+      if (req.path.startsWith('/assets/') || req.path.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg)$/)) {
+        return res.status(404).send('Asset not found')
+      }
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+      res.setHeader('Pragma', 'no-cache')
+      res.setHeader('Expires', '0')
       res.sendFile(resolve(DIST_PATH, 'index.html'))
     })
   }
