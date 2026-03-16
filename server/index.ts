@@ -140,6 +140,14 @@ app.get('/api/auth/status', (_req, res) => {
   res.json({ authEnabled: isAuthEnabled() })
 })
 
+// Debug endpoint for deployment
+app.get('/api/health/firebase', (_req, res) => {
+  res.json({
+    hasEnvVar: !!process.env.FIREBASE_SERVICE_ACCOUNT,
+    envVarSnippet: process.env.FIREBASE_SERVICE_ACCOUNT ? process.env.FIREBASE_SERVICE_ACCOUNT.substring(0, 15) + '...' : 'none',
+  })
+})
+
 // Protect all API routes (except public ones)
 if (isAuthEnabled()) {
   app.use(authMiddleware)
