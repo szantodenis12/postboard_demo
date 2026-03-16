@@ -11,6 +11,7 @@ export type WebhookEvent =
   | 'post.scheduled'
   | 'feedback.received'
   | 'review.created'
+  | 'review.reminder'
   | 'report.generated'
 
 export const WEBHOOK_EVENTS: { value: WebhookEvent; label: string }[] = [
@@ -20,6 +21,7 @@ export const WEBHOOK_EVENTS: { value: WebhookEvent; label: string }[] = [
   { value: 'post.scheduled', label: 'Post Scheduled' },
   { value: 'feedback.received', label: 'Client Feedback Received' },
   { value: 'review.created', label: 'Review Link Created' },
+  { value: 'review.reminder', label: 'Review Reminder Sent' },
   { value: 'report.generated', label: 'Report Generated' },
 ]
 
