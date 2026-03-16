@@ -827,8 +827,8 @@ app.get('/api/post-media', async (_req, res) => {
       }
     })
     res.json(mapping)
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch post media' })
+  } catch (error: any) {
+    res.status(500).json({ error: `Failed to fetch post media: ${error?.message || error}` })
   }
 })
 
@@ -1445,8 +1445,8 @@ app.get('/api/meta/page-mapping', async (_req, res) => {
   try {
     const doc = await db.collection('settings').doc('pageMapping').get()
     res.json(doc.exists ? doc.data() : {})
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch page mapping' })
+  } catch (error: any) {
+    res.status(500).json({ error: `Failed to fetch page mapping: ${error.message}` })
   }
 })
 
@@ -1770,8 +1770,8 @@ app.get('/api/notifications', async (_req, res) => {
     const snapshot = await db.collection('notifications').orderBy('createdAt', 'desc').get()
     const notifs = snapshot.docs.map(doc => doc.data())
     res.json({ notifications: notifs })
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch notifications' })
+  } catch (error: any) {
+    res.status(500).json({ error: `Failed to fetch notifications: ${error.message}` })
   }
 })
 
