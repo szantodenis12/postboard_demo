@@ -26,3 +26,4 @@ export default defineConfig({
     },
   },
 })
+// trigger hot-reload 2

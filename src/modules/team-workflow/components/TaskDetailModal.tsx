@@ -23,6 +23,7 @@ import {
   SquarePen,
 } from 'lucide-react'
 import { useApp } from '../../../core/context'
+import { CustomSelect } from '../../../core/ui/CustomSelect'
 import { WORKFLOW_STAGES } from '../../../core/types'
 import type { WorkflowStage, WorkflowTask, TeamMember } from '../../../core/types'
 
@@ -323,16 +324,15 @@ export function TaskDetailModal({ task, onClose, onUpdate, onDelete, members }: 
                   Assignee
                 </label>
                 {editing ? (
-                  <select
+                  <CustomSelect
                     value={assignee}
-                    onChange={e => setAssignee(e.target.value)}
-                    className="w-full bg-white/[0.04] border border-white/[0.06] rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-accent-violet/40"
-                  >
-                    <option value="">Unassigned</option>
-                    {members.map(m => (
-                      <option key={m.id} value={m.id}>{m.name}</option>
-                    ))}
-                  </select>
+                    onChange={setAssignee}
+                    options={[
+                      { value: '', label: 'Unassigned' },
+                      ...members.map(m => ({ value: m.id, label: m.name }))
+                    ]}
+                    placeholder="Assignee"
+                  />
                 ) : (
                   <div className="flex items-center gap-2">
                     {member ? (
@@ -359,16 +359,15 @@ export function TaskDetailModal({ task, onClose, onUpdate, onDelete, members }: 
                   Client
                 </label>
                 {editing ? (
-                  <select
+                  <CustomSelect
                     value={clientId}
-                    onChange={e => setClientId(e.target.value)}
-                    className="w-full bg-white/[0.04] border border-white/[0.06] rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-accent-violet/40"
-                  >
-                    <option value="">Select client...</option>
-                    {data.clients.map(c => (
-                      <option key={c.id} value={c.id}>{c.displayName}</option>
-                    ))}
-                  </select>
+                    onChange={setClientId}
+                    options={[
+                      { value: '', label: 'Select client...' },
+                      ...data.clients.map(c => ({ value: c.id, label: c.displayName }))
+                    ]}
+                    placeholder="Client"
+                  />
                 ) : (
                   <div className="flex items-center gap-2">
                     {client ? (

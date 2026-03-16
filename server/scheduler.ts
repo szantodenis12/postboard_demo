@@ -1,5 +1,5 @@
-import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { resolve } from 'path'
+import { db } from './firebase.js'
 
 const SCHEDULER_FILE = resolve(import.meta.dirname, '..', 'data', 'scheduler.json')
 const SCHEDULER_LOG_FILE = resolve(import.meta.dirname, '..', 'data', 'scheduler-log.json')
@@ -66,41 +66,45 @@ function normalizeSchedulerConfig(config: Partial<SchedulerConfig> | null | unde
   }
 }
 
-export function readSchedulerConfig(): SchedulerConfig {
+export async function readSchedulerConfig(): Promise<SchedulerConfig> {
   try {
-    if (existsSync(SCHEDULER_FILE)) {
-      return normalizeSchedulerConfig(JSON.parse(readFileSync(SCHEDULER_FILE, 'utf-8')))
+    const doc = await db.collection('settings').doc('scheduler').get()
+    if (doc.exists) {
+      return normalizeSchedulerConfig(doc.data() as any)
     }
-  } catch { /* ignore */ }
+  } catch (err) {
+    console.error('Error reading scheduler config from Firestore:', err)
+  }
   return normalizeSchedulerConfig(undefined)
 }
 
-export function writeSchedulerConfig(config: SchedulerConfig) {
-  writeFileSync(SCHEDULER_FILE, JSON.stringify(normalizeSchedulerConfig(config), null, 2), 'utf-8')
+export async function writeSchedulerConfig(config: SchedulerConfig) {
+  try {
+    await db.collection('settings').doc('scheduler').set(normalizeSchedulerConfig(config))
+  } catch (err) {
+    console.error('Error writing scheduler config to Firestore:', err)
+  }
 }
 
-export function readSchedulerLog(): SchedulerLogEntry[] {
+export async function readSchedulerLog(): Promise<SchedulerLogEntry[]> {
   try {
-    if (existsSync(SCHEDULER_LOG_FILE)) {
-      return JSON.parse(readFileSync(SCHEDULER_LOG_FILE, 'utf-8'))
-    }
-  } catch { /* ignore */ }
+    const snap = await db.collection('schedulerLogs').orderBy('timestamp', 'desc').limit(500).get()
+    return snap.docs.map(doc => ({ id: doc.id, ...doc.data() as any }))
+  } catch (err) {
+    console.error('Error reading scheduler logs from Firestore:', err)
+  }
   return []
 }
 
-export function writeSchedulerLog(log: SchedulerLogEntry[]) {
-  const trimmed = log.slice(0, 500)
-  writeFileSync(SCHEDULER_LOG_FILE, JSON.stringify(trimmed, null, 2), 'utf-8')
-}
-
-export function addSchedulerLog(entry: Omit<SchedulerLogEntry, 'id' | 'timestamp'>) {
-  const log = readSchedulerLog()
-  log.unshift({
-    ...entry,
-    id: `sl_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
-    timestamp: new Date().toISOString(),
-  })
-  writeSchedulerLog(log)
+export async function addSchedulerLog(entry: Omit<SchedulerLogEntry, 'id' | 'timestamp'>) {
+  try {
+    await db.collection('schedulerLogs').add({
+      ...entry,
+      timestamp: new Date().toISOString(),
+    })
+  } catch (err) {
+    console.error('Error adding scheduler log to Firestore:', err)
+  }
 }
 
 export function getBucharestClockTime() {

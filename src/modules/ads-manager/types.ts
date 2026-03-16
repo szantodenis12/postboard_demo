@@ -49,6 +49,7 @@ export interface Campaign {
   updatedAt: string
   variants: AdVariant[]
   spendEntries: SpendEntry[]
+  _metaCampaignId?: string
 }
 
 // ── Constants ────────────────────────────────────────────

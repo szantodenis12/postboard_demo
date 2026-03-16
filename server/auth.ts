@@ -1,22 +1,12 @@
-import jwt from 'jsonwebtoken'
 import type { Request, Response, NextFunction } from 'express'
-
-const JWT_SECRET = process.env.JWT_SECRET || 'postboard-default-secret'
-const USERNAME = process.env.POSTBOARD_USERNAME || 'admin'
-const PASSWORD = process.env.POSTBOARD_PASSWORD || 'admin'
+import { auth } from './firebase.ts'
 
 export function login(req: Request, res: Response) {
-  const { username, password } = req.body
-  if (username !== USERNAME || password !== PASSWORD) {
-    res.status(401).json({ error: 'Invalid credentials' })
-    return
-  }
-  const token = jwt.sign({ user: username }, JWT_SECRET, { expiresIn: '30d' })
-  res.json({ success: true, token, username })
+  res.status(400).json({ error: 'Login is now handled client-side via Firebase Auth' })
 }
 
 export function verify(req: Request, res: Response) {
-  res.json({ authenticated: true, username: USERNAME })
+  res.json({ authenticated: true })
 }
 
 // Public routes that don't require auth
@@ -31,7 +21,7 @@ const PUBLIC_PREFIXES = [
   '/uploads/',
 ]
 
-export function authMiddleware(req: Request, res: Response, next: NextFunction) {
+export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   // Skip auth for public routes
   const path = req.path
   if (PUBLIC_PREFIXES.some(prefix => path.startsWith(prefix))) {
@@ -50,13 +40,16 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
   }
 
   try {
-    jwt.verify(authHeader.slice(7), JWT_SECRET)
+    const idToken = authHeader.split('Bearer ')[1]
+    const decodedToken = await auth.verifyIdToken(idToken)
+    ;(req as any).user = decodedToken
     next()
-  } catch {
+  } catch (error) {
+    console.error('Error verifying auth token:', error)
     res.status(401).json({ error: 'Invalid or expired token' })
   }
 }
 
 export function isAuthEnabled(): boolean {
-  return !!process.env.POSTBOARD_PASSWORD
+  return true
 }

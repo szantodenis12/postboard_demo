@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowLeft, Target, Calendar, DollarSign, Plus, Trash2, Edit3,
   Trophy, TrendingUp, TrendingDown, BarChart3, MousePointerClick,
-  Eye, Users, Save, X, Check,
+  Eye, Users, Save, X, Check, Rocket, Loader2, AlertCircle
 } from 'lucide-react'
 import { useApp } from '../../../core/context'
 import type { Campaign, AdVariant, SpendEntry, AdPlatform } from '../types'
@@ -21,6 +21,8 @@ export function CampaignDetail({ campaign, campaignHook, onBack }: Props) {
   const [showAddVariant, setShowAddVariant] = useState(false)
   const [showAddSpend, setShowAddSpend] = useState(false)
   const [editingMetrics, setEditingMetrics] = useState<string | null>(null)
+  const [isLaunching, setIsLaunching] = useState(false)
+  const [launchError, setLaunchError] = useState<string | null>(null)
 
   const client = data.clients.find(c => c.id === campaign.clientId)
   const statusCfg = STATUS_CONFIG[campaign.status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG.planning
@@ -63,6 +65,36 @@ export function CampaignDetail({ campaign, campaignHook, onBack }: Props) {
                 {new Date(campaign.startDate).toLocaleDateString('ro-RO')} — {new Date(campaign.endDate).toLocaleDateString('ro-RO')}
               </span>
             </div>
+          </div>
+          
+          <div className="flex flex-col items-end gap-2">
+            {campaign.status === 'planning' && !campaign._metaCampaignId && campaign.platforms.includes('facebook') && (
+              <button
+                onClick={async () => {
+                  setLaunchError(null)
+                  setIsLaunching(true)
+                  try {
+                    await campaignHook.launchMetaCampaign(campaign.id)
+                  } catch (err: any) {
+                    setLaunchError(err.message || 'Failed to launch. Check Meta config.')
+                  } finally {
+                    setIsLaunching(false)
+                  }
+                }}
+                disabled={isLaunching}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#1877F2] to-[#0A4BB3] text-white text-sm font-medium hover:brightness-110 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50"
+              >
+                {isLaunching ? <Loader2 size={16} className="animate-spin" /> : <Rocket size={16} />}
+                {isLaunching ? 'Launching...' : 'Launch to Meta'}
+              </button>
+            )}
+            
+            {launchError && (
+              <div className="flex items-center gap-1.5 text-xs text-red-400 bg-red-400/10 px-3 py-1.5 rounded-lg max-w-xs text-right">
+                <AlertCircle size={12} className="shrink-0" />
+                <span className="truncate">{launchError}</span>
+              </div>
+            )}
           </div>
         </div>
       </motion.div>

@@ -1,9 +1,14 @@
+import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
+import helmet from 'helmet'
+import { rateLimit } from 'express-rate-limit'
 import multer from 'multer'
 import { resolve, extname } from 'path'
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'fs'
-import { scanClients } from './scanner.ts'
+import { db, auth, storage } from './firebase.js'
+import type { PostStatus } from '../src/core/types.js'
+import { scanClients } from './scanner.js'
 import {
   type FacebookPublishMedia,
   type InstagramPublishMedia,
@@ -19,7 +24,8 @@ import {
   writeInstagramOverrides,
   publishToFacebook,
   publishToInstagram,
-} from './meta.ts'
+  APP_ORIGIN,
+} from './meta.js'
 import {
   isAIConfigured,
   streamChat,
@@ -27,7 +33,7 @@ import {
   streamRewrite,
   streamHashtags,
   streamImagePrompt,
-} from './ai.ts'
+} from './ai.js'
 import {
   readAnalytics,
   writeAnalytics,
@@ -36,14 +42,14 @@ import {
   writeReports,
   type ClientAnalytics,
   type ReportToken as AnalyticsReportToken,
-} from './insights.ts'
+} from './insights.js'
 import {
   readWebhooks,
   writeWebhooks,
   readWebhookLog,
   triggerWebhooks,
   type Webhook,
-} from './webhooks.ts'
+} from './webhooks.js'
 import {
   readSchedulerConfig,
   writeSchedulerConfig,
@@ -52,8 +58,8 @@ import {
   getBucharestClockTime,
   getBucharestDateString,
   isInPublishWindow,
-} from './scheduler.ts'
-import crmRouter from './crm.ts'
+} from './scheduler.js'
+import crmRouter from './crm.js'
 import {
   GOOGLE_CLIENT_ID,
   getGoogleLoginUrl,
@@ -76,17 +82,17 @@ import {
   publishToGoogle,
   type GoogleInsightsData,
   type GoogleInsightsRetryJob,
-} from './google.ts'
-import { registerCampaignRoutes } from './campaigns.ts'
-import { registerMetaAdsRoutes } from './meta-ads.ts'
-import intelligenceRouter from './intelligence.ts'
-import { login, verify, authMiddleware, isAuthEnabled } from './auth.ts'
+} from './google.js'
+import { registerCampaignRoutes } from './campaigns.js'
+import { registerMetaAdsRoutes } from './meta-ads.js'
+import intelligenceRouter from './intelligence.js'
+import { login, verify, authMiddleware, isAuthEnabled } from './auth.js'
 
 const app = express()
 const PORT = 3001
 
 // Root of the Epic Digital Hub project
-const PROJECT_ROOT = resolve(import.meta.dirname, '..', '..', '..')
+const PROJECT_ROOT = resolve(import.meta.dirname, '..')
 const STATUSES_FILE = resolve(import.meta.dirname, '..', 'data', 'statuses.json')
 const CAPTIONS_FILE = resolve(import.meta.dirname, '..', 'data', 'captions.json')
 const DATES_FILE = resolve(import.meta.dirname, '..', 'data', 'dates.json')
@@ -94,10 +100,37 @@ const POST_PUBLISH_OPTIONS_FILE = resolve(import.meta.dirname, '..', 'data', 'po
 const HIDDEN_FILE = resolve(import.meta.dirname, '..', 'data', 'hidden.json')
 const PAGE_MAPPING_FILE = resolve(import.meta.dirname, '..', 'data', 'page-mapping.json')
 
-const UPLOADS_DIR = resolve(import.meta.dirname, '..', 'uploads')
 
-app.use(cors())
+// Global sync state
+let lastChangeTime = Date.now()
+
+function notifyChange() {
+  lastChangeTime = Date.now()
+}
+
+
+app.use(helmet({
+  contentSecurityPolicy: false, // Disable CSP for now to avoid breaking existing external assets/scripts
+}))
+
+app.use(cors({
+  origin: [APP_ORIGIN, 'http://localhost:5173'], // Allow app origin and local dev
+  credentials: true,
+}))
+
 app.use(express.json())
+
+// Rate limiting for API requests
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  message: { error: 'Too many requests from this IP, please try again after 15 minutes' },
+  skip: (req) => !req.path.startsWith('/api/'), // Only rate limit /api/ routes
+})
+
+app.use('/api/', apiLimiter)
 
 // ── Auth Routes ──────────────────────────────────────────
 app.post('/api/auth/login', login)
@@ -111,8 +144,6 @@ if (isAuthEnabled()) {
   app.use(authMiddleware)
 }
 
-// Serve uploaded files
-app.use('/uploads', express.static(UPLOADS_DIR))
 
 // CRM routes
 app.use('/api/crm', crmRouter)
@@ -121,21 +152,8 @@ app.use('/api/crm', crmRouter)
 app.use('/api/intelligence', intelligenceRouter)
 
 // ── Multer config ─────────────────────────────────────────
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    const clientId = _req.params.clientId || 'general'
-    const dir = resolve(UPLOADS_DIR, clientId)
-    if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
-    cb(null, dir)
-  },
-  filename: (_req, file, cb) => {
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e6)}`
-    cb(null, `${uniqueSuffix}${extname(file.originalname)}`)
-  },
-})
-
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
   fileFilter: (_req, file, cb) => {
     const allowed = /\.(jpg|jpeg|png|gif|webp|mp4|mov|svg)$/i
@@ -147,80 +165,41 @@ const upload = multer({
   },
 })
 
-// ── Status persistence ───────────────────────────────────
-function readStatuses(): Record<string, string> {
-  try {
-    if (existsSync(STATUSES_FILE)) {
-      return JSON.parse(readFileSync(STATUSES_FILE, 'utf-8'))
-    }
-  } catch { /* ignore */ }
-  return {}
+// ── Overrides Persistence (MIGRATED TO FIRESTORE) ─────────────────
+// Overrides are now stored directly in the Firestore 'posts' collection or specific metadata fields.
+
+async function updatePostStatus(postId: string, status: string) {
+  await db.collection('posts').doc(postId).update({ status })
+  notifyChange()
 }
 
-function writeStatuses(statuses: Record<string, string>) {
-  writeFileSync(STATUSES_FILE, JSON.stringify(statuses, null, 2), 'utf-8')
+async function updatePostCaption(postId: string, data: { caption?: string; hashtags?: string[] }) {
+  await db.collection('posts').doc(postId).update(data)
+  notifyChange()
 }
 
-// ── Caption overrides persistence ─────────────────────────
-function readCaptions(): Record<string, { caption?: string; hashtags?: string[] }> {
-  try {
-    if (existsSync(CAPTIONS_FILE)) {
-      return JSON.parse(readFileSync(CAPTIONS_FILE, 'utf-8'))
-    }
-  } catch { /* ignore */ }
-  return {}
+async function updatePostDate(postId: string, date: string) {
+  await db.collection('posts').doc(postId).update({ date })
+  notifyChange()
 }
 
-function writeCaptions(captions: Record<string, { caption?: string; hashtags?: string[] }>) {
-  writeFileSync(CAPTIONS_FILE, JSON.stringify(captions, null, 2), 'utf-8')
+async function updatePostPublishOptions(postId: string, options: { requiresInstagramMusic?: boolean }) {
+  await db.collection('posts').doc(postId).update({ 
+    requiresInstagramMusic: !!options.requiresInstagramMusic 
+  })
+  notifyChange()
 }
 
-// ── Date overrides persistence ────────────────────────────
-function readDates(): Record<string, string> {
-  try {
-    if (existsSync(DATES_FILE)) {
-      return JSON.parse(readFileSync(DATES_FILE, 'utf-8'))
-    }
-  } catch { /* ignore */ }
-  return {}
+// ── Hidden posts persistence (MIGRATED TO FIRESTORE) ────────────
+async function togglePostHidden(postId: string, hidden: boolean) {
+  await db.collection('posts').doc(postId).update({ hidden })
+  notifyChange()
 }
 
-function writeDates(dates: Record<string, string>) {
-  writeFileSync(DATES_FILE, JSON.stringify(dates, null, 2), 'utf-8')
-}
-
-// ── Post publish options persistence ─────────────────────
-function readPostPublishOptions(): Record<string, { requiresInstagramMusic?: boolean }> {
-  try {
-    if (existsSync(POST_PUBLISH_OPTIONS_FILE)) {
-      return JSON.parse(readFileSync(POST_PUBLISH_OPTIONS_FILE, 'utf-8'))
-    }
-  } catch { /* ignore */ }
-  return {}
-}
-
-function writePostPublishOptions(options: Record<string, { requiresInstagramMusic?: boolean }>) {
-  const sanitized: Record<string, { requiresInstagramMusic?: boolean }> = {}
-  for (const [postId, config] of Object.entries(options)) {
-    if (config?.requiresInstagramMusic) {
-      sanitized[postId] = { requiresInstagramMusic: true }
-    }
-  }
-  writeFileSync(POST_PUBLISH_OPTIONS_FILE, JSON.stringify(sanitized, null, 2), 'utf-8')
-}
-
-// ── Hidden posts persistence ─────────────────────────────
-function readHidden(): string[] {
-  try {
-    if (existsSync(HIDDEN_FILE)) {
-      return JSON.parse(readFileSync(HIDDEN_FILE, 'utf-8'))
-    }
-  } catch { /* ignore */ }
-  return []
-}
-
-function writeHidden(ids: string[]) {
-  writeFileSync(HIDDEN_FILE, JSON.stringify(ids, null, 2), 'utf-8')
+// Hidden posts are now stored as a 'hidden' boolean field on each post document in Firestore.
+async function getHiddenPostIds(): Promise<string[]> {
+  const snap = await db.collection('posts').where('hidden', '==', true).get()
+  return snap.docs.map(d => d.id)
 }
 
 function getTodayIso() {
@@ -229,84 +208,62 @@ function getTodayIso() {
   }).format(new Date())
 }
 
+// This function now merges external data if needed, but primary overrides are in Firestore.
 function applyOverrides(
-  data: ReturnType<typeof scanClients>,
+  data: any,
+  hiddenIds: string[],
   options: { includeExpired?: boolean } = {},
 ) {
-  const statusOverrides = readStatuses()
-  const captionOverrides = readCaptions()
-  const dateOverrides = readDates()
-  const postPublishOptions = readPostPublishOptions()
-  const hiddenSet = new Set(readHidden())
+  const hiddenSet = new Set(hiddenIds)
   const todayIso = getTodayIso()
   const includeExpired = options.includeExpired ?? true
 
   for (const client of data.clients) {
     // Filter out hidden posts
     if (hiddenSet.size > 0) {
-      client.posts = client.posts.filter(p => !hiddenSet.has(p.id))
+      client.posts = client.posts.filter((p: any) => !hiddenSet.has(p.id))
     }
 
     // Reset stats before recount
-    client.stats.draft = 0
-    client.stats.approved = 0
-    client.stats.scheduled = 0
-    client.stats.published = 0
-
-    for (const post of client.posts) {
-      if (statusOverrides[post.id]) {
-        post.status = statusOverrides[post.id] as any
+    client.stats = {
+      ...client.stats,
+      draft: 0,
+      approved: 0,
+      scheduled: 0,
+      published: 0,
+      total: 0,
+      platforms: {
+        facebook: 0,
+        instagram: 0,
+        linkedin: 0,
+        tiktok: 0,
+        google: 0,
+        stories: 0,
       }
-      if (captionOverrides[post.id]) {
-        if (captionOverrides[post.id].caption !== undefined) {
-          post.caption = captionOverrides[post.id].caption!
-        }
-        if (captionOverrides[post.id].hashtags !== undefined) {
-          post.hashtags = captionOverrides[post.id].hashtags!
-        }
-      }
-      if (dateOverrides[post.id]) {
-        post.date = dateOverrides[post.id]
-      }
-      if (postPublishOptions[post.id]?.requiresInstagramMusic) {
-        post.requiresInstagramMusic = true
-      } else {
-        delete post.requiresInstagramMusic
-      }
-      client.stats[post.status]++
     }
 
     if (!includeExpired) {
       // Hide expired posts that were never actually published.
-      client.posts = client.posts.filter(post => post.status === 'published' || post.date >= todayIso)
-    }
-
-    client.stats.draft = 0
-    client.stats.approved = 0
-    client.stats.scheduled = 0
-    client.stats.published = 0
-    client.stats.platforms = {
-      facebook: 0,
-      instagram: 0,
-      linkedin: 0,
-      tiktok: 0,
-      google: 0,
-      stories: 0,
+      client.posts = client.posts.filter((post: any) => post.status === 'published' || post.date >= todayIso)
     }
 
     for (const post of client.posts) {
-      client.stats[post.status]++
+      client.stats[post.status] = (client.stats[post.status] || 0) + 1
       client.stats.platforms[post.platform] = (client.stats.platforms[post.platform] || 0) + 1
     }
 
     client.stats.total = client.posts.length
   }
+
   // Recalculate totals
-  data.totals.posts = data.clients.reduce((s, c) => s + c.stats.total, 0)
-  data.totals.draft = data.clients.reduce((s, c) => s + c.stats.draft, 0)
-  data.totals.approved = data.clients.reduce((s, c) => s + c.stats.approved, 0)
-  data.totals.scheduled = data.clients.reduce((s, c) => s + c.stats.scheduled, 0)
-  data.totals.published = data.clients.reduce((s, c) => s + c.stats.published, 0)
+  data.totals = {
+    posts: data.clients.reduce((s: number, c: any) => s + (c.stats.total || 0), 0),
+    draft: data.clients.reduce((s: number, c: any) => s + (c.stats.draft || 0), 0),
+    approved: data.clients.reduce((s: number, c: any) => s + (c.stats.approved || 0), 0),
+    scheduled: data.clients.reduce((s: number, c: any) => s + (c.stats.scheduled || 0), 0),
+    published: data.clients.reduce((s: number, c: any) => s + (c.stats.published || 0), 0),
+  }
+
   return data
 }
 
@@ -352,133 +309,238 @@ function serializeMetaPage(page: {
 // ── API Routes ───────────────────────────────────────────
 
 // Get all clients with their posts and stats
-app.get('/api/clients', (_req, res) => {
+app.get('/api/clients', async (req, res) => {
   try {
-    const data = applyOverrides(scanClients(PROJECT_ROOT), {
-      includeExpired: parseIncludeExpired(_req.query.includeExpired),
-    })
-    res.json(data)
+    const clientsSnap = await db.collection('clients').get()
+    const clients: any[] = clientsSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+
+    const postsSnap = await db.collection('posts').where('hidden', '==', false).get()
+    const allPosts = postsSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+    const includeExpired = parseIncludeExpired(req.query.includeExpired)
+    const todayIso = getTodayIso()
+
+    for (const client of clients) {
+      client.posts = allPosts.filter((p: any) => p.clientId === client.id)
+
+      if (!includeExpired) {
+        client.posts = client.posts.filter((post: any) => post.status === 'published' || post.date >= todayIso)
+      }
+
+      client.stats = {
+        total: client.posts.length,
+        draft: 0, approved: 0, scheduled: 0, published: 0,
+        platforms: { facebook: 0, instagram: 0, linkedin: 0, tiktok: 0, google: 0, stories: 0 }
+      }
+      for (const post of client.posts) {
+        client.stats[post.status]++
+        if (client.stats.platforms[post.platform] !== undefined) {
+          client.stats.platforms[post.platform]++
+        }
+      }
+    }
+
+    clients.sort((a, b) => b.stats.total - a.stats.total)
+
+    const totals = {
+      clients: clients.length,
+      posts: clients.reduce((sum, c) => sum + c.stats.total, 0),
+      draft: clients.reduce((sum, c) => sum + c.stats.draft, 0),
+      approved: clients.reduce((sum, c) => sum + c.stats.approved, 0),
+      scheduled: clients.reduce((sum, c) => sum + c.stats.scheduled, 0),
+      published: clients.reduce((sum, c) => sum + c.stats.published, 0),
+    }
+
+    res.json({ clients, totals })
   } catch (error) {
-    console.error('Scanner error:', error)
-    res.status(500).json({ error: 'Failed to scan clients' })
+    console.error('Firestore route error:', error)
+    res.status(500).json({ error: 'Failed to fetch clients' })
   }
 })
 
 // Get single client by ID
-app.get('/api/clients/:id', (req, res) => {
+app.get('/api/clients/:id', async (req, res) => {
   try {
-    const data = applyOverrides(scanClients(PROJECT_ROOT), {
-      includeExpired: parseIncludeExpired(req.query.includeExpired),
-    })
-    const client = data.clients.find(c => c.id === req.params.id)
-    if (!client) {
+    const doc = await db.collection('clients').doc(req.params.id).get()
+    if (!doc.exists) {
       res.status(404).json({ error: 'Client not found' })
       return
     }
+    const client: any = { id: doc.id, ...doc.data() }
+
+    const postsSnap = await db.collection('posts')
+      .where('clientId', '==', req.params.id)
+      .where('hidden', '==', false)
+      .get()
+
+    client.posts = postsSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+
+    const includeExpired = parseIncludeExpired(req.query.includeExpired)
+    if (!includeExpired) {
+      const todayIso = getTodayIso()
+      client.posts = client.posts.filter((post: any) => post.status === 'published' || post.date >= todayIso)
+    }
+
+    client.stats = {
+      total: client.posts.length,
+      draft: 0, approved: 0, scheduled: 0, published: 0,
+      platforms: { facebook: 0, instagram: 0, linkedin: 0, tiktok: 0, google: 0, stories: 0 }
+    }
+    for (const post of client.posts) {
+      client.stats[post.status]++
+      if (client.stats.platforms[post.platform] !== undefined) {
+        client.stats.platforms[post.platform]++
+      }
+    }
+
     res.json(client)
   } catch (error) {
-    console.error('Scanner error:', error)
-    res.status(500).json({ error: 'Failed to scan client' })
+    console.error('Firestore route error:', error)
+    res.status(500).json({ error: 'Failed to fetch client' })
   }
 })
 
-// Update post status
-app.patch('/api/posts/:id/status', (req, res) => {
-  const { id } = req.params
-  const { status } = req.body
-  const valid = ['draft', 'approved', 'scheduled', 'published']
-  if (!valid.includes(status)) {
-    res.status(400).json({ error: `Invalid status. Must be one of: ${valid.join(', ')}` })
-    return
-  }
+// Create a new client
+app.post('/api/clients', async (req, res) => {
   try {
-    const statuses = readStatuses()
-    statuses[id] = status
-    writeStatuses(statuses)
-    res.json({ id, status, updated: true })
-    // Fire webhook
-    const eventMap: Record<string, string> = { approved: 'post.approved', scheduled: 'post.scheduled', published: 'post.published' }
-    const webhookEvent = eventMap[status] || 'post.status_changed'
-    triggerWebhooks(webhookEvent as any, { postId: id, status }).catch(() => {})
-    if (webhookEvent !== 'post.status_changed') {
-      triggerWebhooks('post.status_changed', { postId: id, status }).catch(() => {})
+    const { name, displayName, color } = req.body
+    if (!name || !displayName) {
+      res.status(400).json({ error: 'name and displayName are required' })
+      return
     }
+
+    const id = name.toLowerCase().replace(/[^a-z0-9]/g, '-')
+    const clientRef = db.collection('clients').doc(id)
+
+    const doc = await clientRef.get()
+    if (doc.exists) {
+      res.status(400).json({ error: 'Client with this id already exists' })
+      return
+    }
+
+    const newClient = {
+      name,
+      displayName,
+      color: color || '#7c3aed',
+      stats: { total: 0, draft: 0, approved: 0, scheduled: 0, published: 0, platforms: {} },
+      files: []
+    }
+
+    await clientRef.set(newClient)
+    res.json({ id, ...newClient, posts: [] })
   } catch (error) {
-    console.error('Status update error:', error)
-    res.status(500).json({ error: 'Failed to update status' })
+    console.error('Create client error:', error)
+    res.status(500).json({ error: 'Failed to create client' })
   }
 })
 
-// Update post date
-app.patch('/api/posts/:id/date', (req, res) => {
-  const { id } = req.params
-  const { date } = req.body
-  if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-    res.status(400).json({ error: 'Invalid date format. Use YYYY-MM-DD' })
-    return
-  }
+// Update client details
+app.put('/api/clients/:id', async (req, res) => {
   try {
-    const dates = readDates()
-    dates[id] = date
-    writeDates(dates)
-    res.json({ id, date, updated: true })
+    const { displayName, color } = req.body
+    const updateData: any = {}
+    if (displayName) updateData.displayName = displayName
+    if (color) updateData.color = color
+
+    await db.collection('clients').doc(req.params.id).update(updateData)
+    res.json({ id: req.params.id, ...updateData, updated: true })
   } catch (error) {
-    console.error('Date update error:', error)
-    res.status(500).json({ error: 'Failed to update date' })
+    console.error('Update client error:', error)
+    res.status(500).json({ error: 'Failed to update client' })
   }
 })
 
-// Update post caption/hashtags
-app.patch('/api/posts/:id/caption', (req, res) => {
-  const { id } = req.params
-  const { caption, hashtags } = req.body
-  if (caption === undefined && hashtags === undefined) {
-    res.status(400).json({ error: 'Provide caption and/or hashtags' })
-    return
-  }
+// Delete a client and all their posts
+app.delete('/api/clients/:id', async (req, res) => {
   try {
-    const captions = readCaptions()
-    const existing = captions[id] || {}
-    if (caption !== undefined) existing.caption = caption
-    if (hashtags !== undefined) existing.hashtags = hashtags
-    captions[id] = existing
-    writeCaptions(captions)
-    res.json({ id, updated: true, ...existing })
+    const clientId = req.params.id
+    const batch = db.batch()
+
+    // Delete client doc
+    batch.delete(db.collection('clients').doc(clientId))
+
+    // Delete all posts for this client
+    const postsSnap = await db.collection('posts').where('clientId', '==', clientId).get()
+    postsSnap.docs.forEach(doc => {
+      batch.delete(doc.ref)
+    })
+
+    await batch.commit()
+    res.json({ success: true, deletedPosts: postsSnap.size })
   } catch (error) {
-    console.error('Caption update error:', error)
-    res.status(500).json({ error: 'Failed to update caption' })
+    console.error('Delete client error:', error)
+    res.status(500).json({ error: 'Failed to delete client' })
   }
 })
 
-// Update post publish options
-app.patch('/api/posts/:id/publish-options', (req, res) => {
-  const { id } = req.params
-  const { requiresInstagramMusic } = req.body
-  if (requiresInstagramMusic === undefined || typeof requiresInstagramMusic !== 'boolean') {
-    res.status(400).json({ error: 'Provide requiresInstagramMusic as boolean' })
-    return
-  }
+// Create a new post
+app.post('/api/posts', async (req, res) => {
   try {
-    const options = readPostPublishOptions()
-    if (requiresInstagramMusic) options[id] = { ...(options[id] || {}), requiresInstagramMusic: true }
-    else delete options[id]
-    writePostPublishOptions(options)
-    res.json({ id, updated: true, requiresInstagramMusic })
+    const { clientId, date, time, platform, format, pillar, caption, visualDescription, cta, hashtags, requiresInstagramMusic } = req.body
+
+    // Auto-generate clientName from clientId
+    const clientDoc = await db.collection('clients').doc(clientId).get()
+    if (!clientDoc.exists) {
+      res.status(404).json({ error: 'Client not found' })
+      return
+    }
+    const clientName = clientDoc.data()?.displayName || clientId
+
+    const newPost = {
+      clientId,
+      clientName,
+      date,
+      time: time || '',
+      platform,
+      format: format || 'single-image',
+      pillar: pillar || '',
+      caption: caption || '',
+      visualDescription: visualDescription || '',
+      cta: cta || '',
+      hashtags: hashtags || [],
+      status: 'draft',
+      hidden: false,
+      requiresInstagramMusic: requiresInstagramMusic || false,
+      createdAt: new Date().toISOString()
+    }
+
+    const docRef = await db.collection('posts').add(newPost)
+    res.json({ id: docRef.id, ...newPost })
   } catch (error) {
-    console.error('Publish options update error:', error)
-    res.status(500).json({ error: 'Failed to update publish options' })
+    console.error('Create post error:', error)
+    res.status(500).json({ error: 'Failed to create post' })
+  }
+})
+
+// Update an entire post (from a form)
+app.put('/api/posts/:id', async (req, res) => {
+  try {
+    const { date, time, platform, format, pillar, caption, visualDescription, cta, hashtags, requiresInstagramMusic } = req.body
+    const updateData: any = {}
+
+    if (date !== undefined) updateData.date = date
+    if (time !== undefined) updateData.time = time
+    if (platform !== undefined) updateData.platform = platform
+    if (format !== undefined) updateData.format = format
+    if (pillar !== undefined) updateData.pillar = pillar
+    if (caption !== undefined) updateData.caption = caption
+    if (visualDescription !== undefined) updateData.visualDescription = visualDescription
+    if (cta !== undefined) updateData.cta = cta
+    if (hashtags !== undefined) updateData.hashtags = hashtags
+    if (requiresInstagramMusic !== undefined) updateData.requiresInstagramMusic = requiresInstagramMusic
+
+    await db.collection('posts').doc(req.params.id).update(updateData)
+    res.json({ id: req.params.id, ...updateData, updated: true })
+  } catch (error) {
+    console.error('Update post error:', error)
+    res.status(500).json({ error: 'Failed to update post' })
   }
 })
 
 // Hide (soft-delete) a post
-app.delete('/api/posts/:id', (req, res) => {
+app.delete('/api/posts/:id', async (req, res) => {
   try {
-    const hidden = readHidden()
-    if (!hidden.includes(req.params.id)) {
-      hidden.push(req.params.id)
-      writeHidden(hidden)
-    }
-    res.json({ success: true, hidden: hidden.length })
+    await db.collection('posts').doc(req.params.id).update({ hidden: true })
+    res.json({ success: true })
   } catch (error) {
     console.error('Hide post error:', error)
     res.status(500).json({ error: 'Failed to hide post' })
@@ -486,11 +548,10 @@ app.delete('/api/posts/:id', (req, res) => {
 })
 
 // Restore a hidden post
-app.post('/api/posts/:id/restore', (req, res) => {
+app.post('/api/posts/:id/restore', async (req, res) => {
   try {
-    const hidden = readHidden().filter(id => id !== req.params.id)
-    writeHidden(hidden)
-    res.json({ success: true, hidden: hidden.length })
+    await db.collection('posts').doc(req.params.id).update({ hidden: false })
+    res.json({ success: true })
   } catch (error) {
     console.error('Restore post error:', error)
     res.status(500).json({ error: 'Failed to restore post' })
@@ -498,23 +559,29 @@ app.post('/api/posts/:id/restore', (req, res) => {
 })
 
 // List all hidden post IDs
-app.get('/api/posts/hidden', (_req, res) => {
-  res.json({ hidden: readHidden() })
+app.get('/api/posts/hidden', async (_req, res) => {
+  try {
+    const snap = await db.collection('posts').where('hidden', '==', true).get()
+    const hiddenIds = snap.docs.map(d => d.id)
+    res.json({ hidden: hiddenIds })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to get hidden posts' })
+  }
 })
 
 // Bulk update statuses
-app.patch('/api/posts/status/bulk', (req, res) => {
+app.patch('/api/posts/status/bulk', async (req, res) => {
   const { updates } = req.body as { updates: { id: string; status: string }[] }
   if (!Array.isArray(updates)) {
     res.status(400).json({ error: 'Expected { updates: [{ id, status }] }' })
     return
   }
   try {
-    const statuses = readStatuses()
+    const batch = db.batch()
     for (const { id, status } of updates) {
-      statuses[id] = status
+      batch.update(db.collection('posts').doc(id), { status })
     }
-    writeStatuses(statuses)
+    await batch.commit()
     res.json({ updated: updates.length })
   } catch (error) {
     console.error('Bulk status update error:', error)
@@ -747,14 +814,41 @@ function removePostMedia(postId: string, filename?: string) {
   return store[postId] || []
 }
 
-// Get all post→media mappings
-app.get('/api/post-media', (_req, res) => {
-  res.json(readPostMedia())
+// Get all post→media mappings from Firestore
+app.get('/api/post-media', async (_req, res) => {
+  try {
+    const snap = await db.collection('posts').where('hidden', '==', false).get()
+    const mapping: Record<string, any[]> = {}
+    snap.docs.forEach(doc => {
+      const data = doc.data()
+      if (data.media && data.media.length > 0) {
+        mapping[doc.id] = data.media
+      }
+    })
+    res.json(mapping)
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch post media' })
+  }
 })
 
 // Legacy compatibility: expose the first image per post
-app.get('/api/post-images', (_req, res) => {
-  res.json(toLegacyPostImages(readPostMedia()))
+app.get('/api/post-images', async (_req, res) => {
+  try {
+    const snap = await db.collection('posts').where('hidden', '==', false).get()
+    const images: Record<string, any> = {}
+    snap.docs.forEach(doc => {
+      const data = doc.data()
+      if (data.media && data.media.length > 0) {
+        const firstImage = data.media.find((m: any) => m.type === 'image')
+        if (firstImage) {
+          images[doc.id] = firstImage
+        }
+      }
+    })
+    res.json(images)
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch post images' })
+  }
 })
 
 // Attach a media item from the library to a post
@@ -781,28 +875,58 @@ app.put('/api/posts/:id/media', (req, res) => {
 })
 
 // Upload + attach one or more media files to a post
-app.post('/api/posts/:id/media/:clientId', upload.array('files', 10), (req, res) => {
-  const { id, clientId } = req.params
+app.post('/api/posts/:id/media/:clientId', upload.array('files', 10), async (req, res) => {
+  const postId = req.params.id as string
+  const clientId = req.params.clientId as string
   const files = req.files as Express.Multer.File[]
   if (!files || files.length === 0) {
     res.status(400).json({ error: 'No files uploaded' })
     return
   }
 
-  const items = files
-    .map(file => normalizePostMediaItem({
-      clientId,
-      filename: file.filename,
-      url: `/uploads/${clientId}/${file.filename}`,
-      type: inferPostMediaType(file.originalname),
-      mimeType: file.mimetype,
-      originalName: file.originalname,
-      addedAt: new Date().toISOString(),
-    }))
-    .filter((item): item is PostMediaItem => !!item)
+  try {
+    const bucket = storage.bucket()
+    const results = await Promise.all(
+      files.map(async (file) => {
+        const fileName = `${clientId}/${Date.now()}-${file.originalname}`
+        const blob = bucket.file(fileName)
 
-  const media = appendPostMedia(id, items)
-  res.json({ success: true, media, files: items })
+        await blob.save(file.buffer, {
+          metadata: { contentType: file.mimetype },
+          resumable: false
+        })
+
+        await blob.makePublic()
+        const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`
+
+        return {
+          clientId,
+          filename: fileName,
+          url,
+          type: file.mimetype.startsWith('video/') ? 'video' : 'image',
+          mimeType: file.mimetype,
+          originalName: file.originalname,
+          addedAt: new Date().toISOString()
+        }
+      })
+    )
+
+    const postRef = db.collection('posts').doc(postId)
+    const postDoc = await postRef.get()
+    if (!postDoc.exists) {
+      res.status(404).json({ error: 'Post not found' })
+      return
+    }
+
+    const currentMedia = postDoc.data()?.media || []
+    const updatedMedia = [...currentMedia, ...results]
+    await postRef.update({ media: updatedMedia })
+
+    res.json({ success: true, media: updatedMedia })
+  } catch (error: any) {
+    console.error('Storage upload error:', error)
+    res.status(500).json({ error: error.message })
+  }
 })
 
 // Remove one media item or clear all media from a post
@@ -812,7 +936,6 @@ app.delete('/api/posts/:id/media', (req, res) => {
   res.json({ success: true, media })
 })
 
-// Legacy compatibility: replace a post with a single image attachment
 app.put('/api/posts/:id/image', (req, res) => {
   const { id } = req.params
   const image = normalizePostMediaItem({
@@ -832,28 +955,53 @@ app.put('/api/posts/:id/image', (req, res) => {
 })
 
 // Legacy compatibility: upload a single image and replace existing media
-app.post('/api/posts/:id/image/:clientId', upload.single('file'), (req, res) => {
-  const { id, clientId } = req.params
+app.post('/api/posts/:id/image/:clientId', upload.single('file'), async (req, res) => {
+  const postId = req.params.id as string
+  const clientId = req.params.clientId as string
   const file = req.file
   if (!file) {
     res.status(400).json({ error: 'No file uploaded' })
     return
   }
-  const image = normalizePostMediaItem({
-    clientId,
-    filename: file.filename,
-    url: `/uploads/${clientId}/${file.filename}`,
-    type: 'image',
-    mimeType: file.mimetype,
-    originalName: file.originalname,
-    addedAt: new Date().toISOString(),
-  })
-  if (!image) {
-    res.status(400).json({ error: 'Invalid file metadata' })
-    return
+
+  try {
+    const bucket = storage.bucket()
+    const fileName = `${clientId}/${Date.now()}-${file.originalname}`
+    const blob = bucket.file(fileName)
+
+    await blob.save(file.buffer, {
+      metadata: { contentType: file.mimetype },
+      resumable: false
+    })
+
+    await blob.makePublic()
+    const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`
+
+    const image = normalizePostMediaItem({
+      clientId,
+      filename: fileName.replace(`${clientId}/`, ''),
+      url,
+      type: 'image',
+      mimeType: file.mimetype,
+      originalName: file.originalname,
+      addedAt: new Date().toISOString(),
+    })
+
+    if (!image) {
+      res.status(400).json({ error: 'Invalid file metadata' })
+      return
+    }
+
+    const media = replacePostMedia(postId, [image])
+    res.json({
+      success: true,
+      image: { clientId, filename: image.filename, url: image.url, originalName: file.originalname },
+      media
+    })
+  } catch (error: any) {
+    console.error('Legacy image upload error:', error)
+    res.status(500).json({ error: error.message })
   }
-  const media = replacePostMedia(id, [image])
-  res.json({ success: true, image: { clientId, filename: file.filename, url: image.url, originalName: file.originalname }, media })
 })
 
 // Legacy compatibility: clear all attachments for a post
@@ -912,34 +1060,28 @@ app.delete('/api/media/meta', (req, res) => {
 // ── Media Upload Routes ─────────────────────────────────
 
 // List all uploads across all clients
-app.get('/api/uploads', (_req, res) => {
-  if (!existsSync(UPLOADS_DIR)) {
-    res.json({ files: [] })
-    return
-  }
+app.get('/api/uploads', async (_req, res) => {
   try {
-    const allFiles: any[] = []
-    const clientDirs = readdirSync(UPLOADS_DIR).filter(d => {
-      const p = resolve(UPLOADS_DIR, d)
-      return statSync(p).isDirectory() && !d.startsWith('.')
-    })
-    for (const clientId of clientDirs) {
-      const dir = resolve(UPLOADS_DIR, clientId)
-      const files = readdirSync(dir)
-        .filter(f => !f.startsWith('.'))
-        .map(f => {
-          const filepath = resolve(dir, f)
-          const stat = statSync(filepath)
-          return {
-            filename: f,
-            clientId,
-            size: stat.size,
-            url: `/uploads/${clientId}/${f}`,
-            uploadedAt: stat.mtime.toISOString(),
-          }
-        })
-      allFiles.push(...files)
-    }
+    const bucket = storage.bucket()
+    const [files] = await bucket.getFiles()
+
+    const allFiles = files
+      .filter(file => !file.name.endsWith('/')) // Skip directories
+      .map(file => {
+        const parts = file.name.split('/')
+        const clientId = parts[0] || 'general'
+        const filename = parts.slice(1).join('/')
+
+        return {
+          filename,
+          clientId,
+          size: Number(file.metadata.size),
+          mimeType: file.metadata.contentType, // Add mimeType
+          url: `https://storage.googleapis.com/${bucket.name}/${file.name}`,
+          uploadedAt: (file.metadata.updated || file.metadata.timeCreated || '') as string,
+        }
+      }).filter((f: any) => f.filename)
+
     allFiles.sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt))
     res.json({ files: allFiles })
   } catch (error) {
@@ -948,45 +1090,98 @@ app.get('/api/uploads', (_req, res) => {
   }
 })
 
+// List uploads for a specific client (Optimized with prefix)
+app.get('/api/uploads/:clientId', async (req, res) => {
+  const { clientId } = req.params
+  try {
+    const bucket = storage.bucket()
+    const [files] = await bucket.getFiles({ prefix: `${clientId}/` })
+
+    const clientFiles = files
+      .filter(file => !file.name.endsWith('/'))
+      .map(file => {
+        const parts = file.name.split('/')
+        const filename = parts.slice(1).join('/')
+
+        return {
+          filename,
+          clientId,
+          size: Number(file.metadata.size),
+          mimeType: file.metadata.contentType,
+          url: `https://storage.googleapis.com/${bucket.name}/${file.name}`,
+          uploadedAt: (file.metadata.updated || file.metadata.timeCreated || '') as string,
+        }
+      }).filter((f: any) => f.filename)
+
+    clientFiles.sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt))
+    res.json({ files: clientFiles })
+  } catch (error) {
+    console.error(`List uploads for ${clientId} error:`, error)
+    res.status(500).json({ error: `Failed to list uploads for ${clientId}` })
+  }
+})
+
 // Upload files for a client
-app.post('/api/uploads/:clientId', upload.array('files', 10), (req, res) => {
+app.post('/api/uploads/:clientId', upload.array('files', 10), async (req, res) => {
+  const { clientId } = req.params
   const files = req.files as Express.Multer.File[]
   if (!files || files.length === 0) {
     res.status(400).json({ error: 'No files uploaded' })
     return
   }
-  const uploaded = files.map(f => ({
-    filename: f.filename,
-    originalName: f.originalname,
-    size: f.size,
-    mimeType: f.mimetype,
-    url: `/uploads/${req.params.clientId}/${f.filename}`,
-  }))
-  res.json({ success: true, files: uploaded })
+
+  try {
+    const bucket = storage.bucket()
+    const uploaded = await Promise.all(
+      files.map(async (file) => {
+        const fileName = `${clientId}/${Date.now()}-${file.originalname}`
+        const blob = bucket.file(fileName)
+
+        await blob.save(file.buffer, {
+          metadata: { contentType: file.mimetype },
+          resumable: false
+        })
+
+        await blob.makePublic()
+        const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`
+
+        return {
+          filename: fileName.replace(`${clientId}/`, ''),
+          originalName: file.originalname,
+          size: file.size,
+          mimeType: file.mimetype,
+          url,
+        }
+      })
+    )
+    res.json({ success: true, files: uploaded })
+  } catch (error: any) {
+    console.error('Upload error:', error)
+    res.status(500).json({ error: error.message })
+  }
 })
 
 // List files for a client
-app.get('/api/uploads/:clientId', (req, res) => {
-  const dir = resolve(UPLOADS_DIR, req.params.clientId)
-  if (!existsSync(dir)) {
-    res.json({ files: [] })
-    return
-  }
+app.get('/api/uploads/:clientId', async (req, res) => {
+  const { clientId } = req.params
   try {
-    const files = readdirSync(dir)
-      .filter(f => !f.startsWith('.'))
-      .map(f => {
-        const filepath = resolve(dir, f)
-        const stat = statSync(filepath)
-        return {
-          filename: f,
-          size: stat.size,
-          url: `/uploads/${req.params.clientId}/${f}`,
-          uploadedAt: stat.mtime.toISOString(),
-        }
-      })
-      .sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt))
-    res.json({ files })
+    const bucket = storage.bucket()
+    const [files] = await bucket.getFiles({ prefix: `${clientId}/` })
+
+    const clientFiles = files.map(file => {
+      const filename = file.name.replace(`${clientId}/`, '')
+      if (!filename) return null
+
+      return {
+        filename,
+        size: Number(file.metadata.size),
+        url: `https://storage.googleapis.com/${bucket.name}/${file.name}`,
+        uploadedAt: file.metadata.updated || file.metadata.timeCreated,
+      }
+    }).filter((f): f is any => !!f)
+
+    clientFiles.sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt))
+    res.json({ files: clientFiles })
   } catch (error) {
     console.error('List uploads error:', error)
     res.status(500).json({ error: 'Failed to list uploads' })
@@ -994,14 +1189,19 @@ app.get('/api/uploads/:clientId', (req, res) => {
 })
 
 // Delete a file
-app.delete('/api/uploads/:clientId/:filename', (req, res) => {
-  const filepath = resolve(UPLOADS_DIR, req.params.clientId, req.params.filename)
-  if (!existsSync(filepath)) {
-    res.status(404).json({ error: 'File not found' })
-    return
-  }
+app.delete('/api/uploads/:clientId/:filename', async (req, res) => {
+  const { clientId, filename } = req.params
   try {
-    unlinkSync(filepath)
+    const bucket = storage.bucket()
+    const file = bucket.file(`${clientId}/${filename}`)
+    const [exists] = await file.exists()
+
+    if (!exists) {
+      res.status(404).json({ error: 'File not found' })
+      return
+    }
+
+    await file.delete()
     res.json({ success: true })
   } catch (error) {
     console.error('Delete upload error:', error)
@@ -1240,32 +1440,43 @@ app.put('/api/meta/instagram-override', (req, res) => {
 // ── Page-to-Client Mapping Routes ────────────────────────
 
 // Get all page-to-client mappings { clientId: pageId }
-app.get('/api/meta/page-mapping', (_req, res) => {
-  res.json(readPageMapping())
+app.get('/api/meta/page-mapping', async (_req, res) => {
+  try {
+    const doc = await db.collection('settings').doc('pageMapping').get()
+    res.json(doc.exists ? doc.data() : {})
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch page mapping' })
+  }
 })
 
 // Set a single client→page mapping
-app.put('/api/meta/page-mapping', (req, res) => {
+app.put('/api/meta/page-mapping', async (req, res) => {
   const { clientId, pageId } = req.body
   if (!clientId) {
     res.status(400).json({ error: 'Missing clientId' })
     return
   }
-  const mapping = readPageMapping()
-  if (pageId) {
-    mapping[clientId] = pageId
-  } else {
-    delete mapping[clientId]
+  try {
+    const docRef = db.collection('settings').doc('pageMapping')
+    const doc = await docRef.get()
+    const mapping = doc.exists ? doc.data() as Record<string, string> : {}
+
+    if (pageId) {
+      mapping[clientId] = pageId
+    } else {
+      delete mapping[clientId]
+    }
+
+    await docRef.set(mapping)
+    res.json({ success: true, mapping })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update page mapping' })
   }
-  writePageMapping(mapping)
-  res.json({ success: true, mapping })
 })
 
 // ── Shareable Review Links ───────────────────────────────
 
-const REVIEW_TOKENS_FILE = resolve(import.meta.dirname, '..', 'data', 'review-tokens.json')
-const FEEDBACK_FILE = resolve(import.meta.dirname, '..', 'data', 'feedback.json')
-const NOTIFICATIONS_FILE = resolve(import.meta.dirname, '..', 'data', 'notifications.json')
+// ── Shareable Review Links ───────────────────────────────
 
 interface ReviewToken {
   token: string
@@ -1298,57 +1509,40 @@ interface AppNotification {
   createdAt: string
 }
 
-function readReviewTokens(): ReviewToken[] {
+async function validateReviewToken(token: string): Promise<{ entry: ReviewToken | null; error?: string; status?: number }> {
   try {
-    if (existsSync(REVIEW_TOKENS_FILE)) {
-      return JSON.parse(readFileSync(REVIEW_TOKENS_FILE, 'utf-8'))
+    const doc = await db.collection('reviewTokens').doc(token).get()
+    if (!doc.exists) return { entry: null, error: 'Invalid or expired review link', status: 404 }
+    const entry = doc.data() as ReviewToken
+    if (entry.expiresAt && new Date(entry.expiresAt) < new Date()) {
+      return { entry: null, error: 'This review link has expired', status: 410 }
     }
-  } catch { /* ignore */ }
-  return []
-}
-
-function writeReviewTokens(tokens: ReviewToken[]) {
-  writeFileSync(REVIEW_TOKENS_FILE, JSON.stringify(tokens, null, 2), 'utf-8')
-}
-
-function readFeedback(): ReviewFeedback[] {
-  try {
-    if (existsSync(FEEDBACK_FILE)) {
-      return JSON.parse(readFileSync(FEEDBACK_FILE, 'utf-8'))
-    }
-  } catch { /* ignore */ }
-  return []
-}
-
-function writeFeedback(feedback: ReviewFeedback[]) {
-  writeFileSync(FEEDBACK_FILE, JSON.stringify(feedback, null, 2), 'utf-8')
-}
-
-function readNotifications(): AppNotification[] {
-  try {
-    if (existsSync(NOTIFICATIONS_FILE)) {
-      return JSON.parse(readFileSync(NOTIFICATIONS_FILE, 'utf-8'))
-    }
-  } catch { /* ignore */ }
-  return []
-}
-
-function writeNotifications(notifs: AppNotification[]) {
-  writeFileSync(NOTIFICATIONS_FILE, JSON.stringify(notifs, null, 2), 'utf-8')
-}
-
-function validateReviewToken(token: string): { entry: ReviewToken | null; error?: string; status?: number } {
-  const tokens = readReviewTokens()
-  const entry = tokens.find(t => t.token === token)
-  if (!entry) return { entry: null, error: 'Invalid or expired review link', status: 404 }
-  if (entry.expiresAt && new Date(entry.expiresAt) < new Date()) {
-    return { entry: null, error: 'This review link has expired', status: 410 }
+    return { entry }
+  } catch (error) {
+    console.error('Validate token error:', error)
+    return { entry: null, error: 'Internal server error', status: 500 }
   }
-  return { entry }
+}
+
+// Firestore rejects undefined/NaN values
+function sanitize<T>(obj: T): T {
+  if (Array.isArray(obj)) {
+    return obj.map(sanitize).filter(v => v !== undefined) as any
+  }
+  if (obj !== null && typeof obj === 'object') {
+    const clean: Record<string, any> = {}
+    for (const [k, v] of Object.entries(obj)) {
+      if (v !== undefined && !(typeof v === 'number' && isNaN(v))) {
+        clean[k] = sanitize(v)
+      }
+    }
+    return clean as T
+  }
+  return obj
 }
 
 // Generate a review link for a client
-app.post('/api/review/create', (req, res) => {
+app.post('/api/review/create', async (req, res) => {
   const { clientId, label, expiresInDays } = req.body
   if (!clientId) {
     res.status(400).json({ error: 'Missing clientId' })
@@ -1364,45 +1558,58 @@ app.post('/api/review/create', (req, res) => {
   if (expiresInDays) {
     entry.expiresAt = new Date(Date.now() + expiresInDays * 24 * 60 * 60 * 1000).toISOString()
   }
-  const tokens = readReviewTokens()
-  tokens.push(entry)
-  writeReviewTokens(tokens)
-  triggerWebhooks('review.created', { clientId, token, label }).catch(() => {})
-  res.json({ success: true, token, url: `/review/${token}` })
+
+  try {
+    await db.collection('reviewTokens').doc(token).set(sanitize(entry))
+    triggerWebhooks('review.created', { clientId, token, label }).catch(() => { })
+    res.json({ success: true, token, url: `/review/${token}` })
+  } catch (error) {
+    console.error('Create review token error:', error)
+    res.status(500).json({ error: 'Failed to create review link' })
+  }
 })
 
 // List all review tokens
-app.get('/api/review/tokens', (_req, res) => {
-  res.json(readReviewTokens())
+app.get('/api/review/tokens', async (_req, res) => {
+  try {
+    const snapshot = await db.collection('reviewTokens').orderBy('createdAt', 'desc').get()
+    const tokens = snapshot.docs.map(doc => doc.data())
+    res.json(tokens)
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch review tokens' })
+  }
 })
 
 // Delete a review token
-app.delete('/api/review/:token', (req, res) => {
-  const tokens = readReviewTokens().filter(t => t.token !== req.params.token)
-  writeReviewTokens(tokens)
-  res.json({ success: true })
+app.delete('/api/review/:token', async (req, res) => {
+  try {
+    await db.collection('reviewTokens').doc(req.params.token).delete()
+    res.json({ success: true })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete review token' })
+  }
 })
 
 // Public review endpoint — returns client posts (no auth needed)
-app.get('/api/review/:token/data', (req, res) => {
-  const tokens = readReviewTokens()
-  const entry = tokens.find(t => t.token === req.params.token)
-  if (!entry) {
-    res.status(404).json({ error: 'Invalid or expired review link' })
-    return
-  }
-  if (entry.expiresAt && new Date(entry.expiresAt) < new Date()) {
-    res.status(410).json({ error: 'This review link has expired' })
+app.get('/api/review/:token/data', async (req, res) => {
+  const validation = await validateReviewToken(req.params.token)
+  if (!validation.entry) {
+    res.status(validation.status!).json({ error: validation.error })
     return
   }
   try {
-    const data = applyOverrides(scanClients(PROJECT_ROOT))
-    const client = data.clients.find(c => c.id === entry.clientId)
-    if (!client) {
+    const clientDoc = await db.collection('clients').doc(validation.entry.clientId).get()
+    if (!clientDoc.exists) {
       res.status(404).json({ error: 'Client not found' })
       return
     }
-    const postMedia = readPostMedia()
+    const client = clientDoc.data() as any
+    const postsSnapshot = await db.collection('posts').where('clientId', '==', validation.entry.clientId).get()
+    const allPosts = postsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as any }))
+
+    // Filter out past posts
+    const todayIso = getTodayIso()
+    const posts = allPosts.filter(p => p.date >= todayIso)
 
     // Return only non-sensitive data
     res.json({
@@ -1410,8 +1617,10 @@ app.get('/api/review/:token/data', (req, res) => {
         displayName: client.displayName,
         color: client.color,
         stats: client.stats,
-        posts: client.posts.map(p => ({
+        posts: posts.map(p => ({
           id: p.id,
+
+
           date: p.date,
           time: p.time,
           platform: p.platform,
@@ -1422,8 +1631,8 @@ app.get('/api/review/:token/data', (req, res) => {
           cta: p.cta,
           hashtags: p.hashtags,
           status: p.status,
-          imageUrl: getPrimaryPostImage(postMedia[p.id])?.url || null,
-          media: postMedia[p.id] || [],
+          imageUrl: (p.media && p.media.length > 0) ? p.media[0].url : null,
+          media: p.media || [],
         })),
       },
     })
@@ -1436,11 +1645,12 @@ app.get('/api/review/:token/data', (req, res) => {
 // ── Feedback Routes (Client Portal M3) ──────────────────
 
 // Submit feedback on a post (from client review page)
-app.post('/api/review/:token/posts/:postId/feedback', (req, res) => {
+// Submit feedback on a post (from client review page)
+app.post('/api/review/:token/posts/:postId/feedback', async (req, res) => {
   const { token, postId } = req.params
   const { action, comment, reviewerName } = req.body
 
-  const validation = validateReviewToken(token)
+  const validation = await validateReviewToken(token)
   if (!validation.entry) {
     res.status(validation.status!).json({ error: validation.error })
     return
@@ -1450,121 +1660,143 @@ app.post('/api/review/:token/posts/:postId/feedback', (req, res) => {
     return
   }
 
-  const feedback = readFeedback()
-  // Deduplicate: remove previous feedback for same token+postId
-  const filtered = feedback.filter(f => !(f.token === token && f.postId === postId))
-  const entry: ReviewFeedback = {
-    id: `fb_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
+  const feedbackId = `fb_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`
+  const entry: any = {
+    id: feedbackId,
     token,
     postId,
     action,
-    comment: comment || undefined,
-    reviewerName: reviewerName || undefined,
     createdAt: new Date().toISOString(),
   }
-  filtered.push(entry)
-  writeFeedback(filtered)
 
-  // ── Update post status based on client feedback ────────
-  const newStatus = action === 'approved' ? 'approved' : 'draft'
-  try {
-    const statuses = readStatuses()
-    statuses[postId] = newStatus
-    writeStatuses(statuses)
-  } catch (err) {
-    console.error('Failed to update post status from review feedback:', err)
-  }
+  if (comment) entry.comment = comment
+  if (reviewerName) entry.reviewerName = reviewerName
 
-  // Resolve post caption for notification context
-  let postCaption: string | undefined
   try {
-    const data = applyOverrides(scanClients(PROJECT_ROOT))
-    for (const client of data.clients) {
-      const post = client.posts.find(p => p.id === postId)
-      if (post) { postCaption = post.caption?.slice(0, 120); break }
+    // 1. Save feedback
+    await db.collection('feedback').doc(feedbackId).set(entry)
+
+    // 2. Update post status in Firestore
+    const newStatus = action === 'approved' ? 'approved' : 'draft'
+    console.log(`[Feedback API] Updating post ${postId} status to ${newStatus}`)
+    await db.collection('posts').doc(postId).update({ status: newStatus })
+    notifyChange()
+
+
+    // 3. Create notification for the agency
+    const reviewerLabel = reviewerName ? reviewerName : 'Client'
+    const notificationId = `n_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`
+
+    // Attempt to get post caption for notification
+    let postCaption: string | undefined
+    const postDoc = await db.collection('posts').doc(postId).get()
+    if (postDoc.exists) {
+      postCaption = (postDoc.data() as any).caption?.slice(0, 120)
     }
-  } catch { /* ignore */ }
 
-  // Create notification for the agency
-  const reviewerLabel = reviewerName ? reviewerName : 'Client'
-  const notifs = readNotifications()
-  notifs.unshift({
-    id: `n_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
-    type: action === 'approved' ? 'feedback-approved' : 'feedback-changes-requested',
-    token,
-    clientId: validation.entry.clientId,
-    postId,
-    postCaption,
-    reviewerName: reviewerLabel,
-    comment: comment || undefined,
-    read: false,
-    createdAt: new Date().toISOString(),
-  })
-  writeNotifications(notifs)
+    await db.collection('notifications').doc(notificationId).set({
+      id: notificationId,
+      type: action === 'approved' ? 'feedback-approved' : 'feedback-changes-requested',
+      token,
+      clientId: validation.entry.clientId,
+      postId,
+      postCaption,
+      reviewerName: reviewerLabel,
+      comment: comment || undefined,
+      read: false,
+      createdAt: new Date().toISOString(),
+    })
 
-  // Fire webhooks: feedback event + status-specific event
-  const clientId = validation.entry.clientId
-  triggerWebhooks('feedback.received', {
-    postId,
-    clientId,
-    action,
-    reviewerName: reviewerLabel,
-    comment,
-    newStatus,
-  }).catch(() => {})
+    // 4. Fire webhooks
+    const clientId = validation.entry.clientId
+    triggerWebhooks('feedback.received', {
+      postId,
+      clientId,
+      action,
+      reviewerName: reviewerLabel,
+      comment,
+      newStatus,
+    }).catch(() => { })
 
-  if (action === 'approved') {
-    triggerWebhooks('post.approved', { postId, clientId, status: newStatus, source: 'client-review', reviewerName: reviewerLabel }).catch(() => {})
+    if (action === 'approved') {
+      triggerWebhooks('post.approved', { postId, clientId, status: newStatus, source: 'client-review', reviewerName: reviewerLabel }).catch(() => { })
+    }
+    triggerWebhooks('post.status_changed', { postId, clientId, status: newStatus, source: 'client-review', reviewerName: reviewerLabel }).catch(() => { })
+
+    res.json({ success: true, feedback: entry, statusUpdated: newStatus })
+  } catch (error: any) {
+    console.error('[Feedback API] Error:', error)
+    res.status(500).json({
+      error: 'Failed to submit feedback',
+      details: error.message,
+      stack: error.stack
+    })
   }
-  triggerWebhooks('post.status_changed', { postId, clientId, status: newStatus, source: 'client-review', reviewerName: reviewerLabel }).catch(() => {})
-
-  res.json({ success: true, feedback: entry, statusUpdated: newStatus })
 })
 
 // Get feedback for a review session
-app.get('/api/review/:token/feedback', (req, res) => {
-  const validation = validateReviewToken(req.params.token)
-  if (!validation.entry) {
-    res.status(validation.status!).json({ error: validation.error })
-    return
+app.get('/api/review/:token/feedback', async (req, res) => {
+  try {
+    const validation = await validateReviewToken(req.params.token)
+    if (!validation.entry) {
+      res.status(validation.status!).json({ error: validation.error })
+      return
+    }
+    const snapshot = await db.collection('feedback').where('token', '==', req.params.token).get()
+    const feedback = snapshot.docs.map(doc => doc.data())
+    res.json({ feedback })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to load feedback' })
   }
-  const feedback = readFeedback().filter(f => f.token === req.params.token)
-  res.json({ feedback })
 })
 
 // Get all feedback (internal dashboard)
-app.get('/api/feedback', (_req, res) => {
-  const feedback = readFeedback().sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-  res.json({ feedback })
+app.get('/api/feedback', async (_req, res) => {
+  try {
+    const snapshot = await db.collection('feedback').orderBy('createdAt', 'desc').get()
+    const feedback = snapshot.docs.map(doc => doc.data())
+    res.json({ feedback })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch feedback' })
+  }
 })
 
 // ── Notification Routes ─────────────────────────────────
 
 // List notifications
-app.get('/api/notifications', (_req, res) => {
-  const notifs = readNotifications().sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-  res.json({ notifications: notifs })
+app.get('/api/notifications', async (_req, res) => {
+  try {
+    const snapshot = await db.collection('notifications').orderBy('createdAt', 'desc').get()
+    const notifs = snapshot.docs.map(doc => doc.data())
+    res.json({ notifications: notifs })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch notifications' })
+  }
 })
 
 // Mark single notification read
-app.patch('/api/notifications/:id/read', (req, res) => {
-  const notifs = readNotifications()
-  const notif = notifs.find(n => n.id === req.params.id)
-  if (!notif) {
-    res.status(404).json({ error: 'Notification not found' })
-    return
+app.patch('/api/notifications/:id/read', async (req, res) => {
+  try {
+    await db.collection('notifications').doc(req.params.id).update({ read: true })
+    res.json({ success: true })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update notification' })
   }
-  notif.read = true
-  writeNotifications(notifs)
-  res.json({ success: true })
 })
 
 // Mark all notifications read
-app.post('/api/notifications/read-all', (_req, res) => {
-  const notifs = readNotifications()
-  for (const n of notifs) n.read = true
-  writeNotifications(notifs)
-  res.json({ success: true })
+app.post('/api/notifications/read-all', async (_req, res) => {
+  try {
+    const snapshot = await db.collection('notifications').where('read', '==', false).get()
+    const batch = db.batch()
+    snapshot.docs.forEach(doc => {
+      batch.update(doc.ref, { read: true })
+    })
+    await batch.commit()
+    res.json({ success: true })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to mark notifications as read' })
+  }
 })
 
 // ── SLA / Approval Tracker Routes ─────────────────────
@@ -1607,18 +1839,33 @@ app.put('/api/sla/config', (req, res) => {
 })
 
 // Get SLA status for all active reviews
-app.get('/api/sla/status', (_req, res) => {
+// Get SLA status for all active reviews
+app.get('/api/sla/status', async (_req, res) => {
   try {
-    const config = readSLAConfig()
-    const tokens = readReviewTokens()
-    const feedback = readFeedback()
-    const data = applyOverrides(scanClients(PROJECT_ROOT))
+    // 1. Get SLA Config
+    const configDoc = await db.collection('settings').doc('slaConfig').get()
+    const config = configDoc.exists ? configDoc.data() as SLAConfig : { defaultDeadlineHours: 48, reminderIntervals: [24, 6, 1], clients: {} }
+
+    // 2. Get All Tokens
+    const tokensSnapshot = await db.collection('reviewTokens').get()
+    const tokens = tokensSnapshot.docs.map(doc => doc.data() as ReviewToken)
+
+    // 3. Get All Feedback
+    const feedbackSnapshot = await db.collection('feedback').get()
+    const feedback = feedbackSnapshot.docs.map(doc => doc.data() as ReviewFeedback)
+
+    // 4. Get Client/Post stats from Firestore
+    const clientsSnapshot = await db.collection('clients').get()
+    const clients = clientsSnapshot.docs.map(doc => doc.data() as any)
 
     const clientMap: Record<string, string> = {}
     const postCountMap: Record<string, number> = {}
-    for (const c of data.clients) {
+
+    // Fetch post counts for each client
+    for (const c of clients) {
       clientMap[c.id] = c.displayName
-      postCountMap[c.id] = c.posts.length
+      const postsSnapshot = await db.collection('posts').where('clientId', '==', c.id).get()
+      postCountMap[c.id] = postsSnapshot.size
     }
 
     // Build feedback lookup by token
@@ -1677,68 +1924,73 @@ app.get('/api/sla/status', (_req, res) => {
 })
 
 // Manually send a reminder for a review token
-app.post('/api/sla/remind/:token', (req, res) => {
+// Manually send a reminder for a review token
+app.post('/api/sla/remind/:token', async (req, res) => {
   const token = req.params.token
-  const tokens = readReviewTokens()
-  const entry = tokens.find(t => t.token === token)
-  if (!entry) {
-    res.status(404).json({ error: 'Review token not found' })
-    return
+  try {
+    const doc = await db.collection('reviewTokens').doc(token).get()
+    if (!doc.exists) {
+      res.status(404).json({ error: 'Review token not found' })
+      return
+    }
+    const entry = doc.data() as ReviewToken
+
+    const clientDoc = await db.collection('clients').doc(entry.clientId).get()
+    const clientName = clientDoc.exists ? (clientDoc.data() as any).displayName : entry.clientId
+
+    // Create a reminder notification
+    const notificationId = `n_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`
+    await db.collection('notifications').doc(notificationId).set({
+      id: notificationId,
+      type: 'sla-reminder',
+      token,
+      clientId: entry.clientId,
+      postId: '',
+      postCaption: `SLA reminder sent to ${clientName}`,
+      reviewerName: 'System',
+      read: false,
+      createdAt: new Date().toISOString(),
+    })
+
+    // Trigger webhook for reminder
+    triggerWebhooks('review.reminder', {
+      token,
+      clientId: entry.clientId,
+      clientName,
+      label: entry.label,
+      message: req.body.message || `Reminder: pending content review for ${clientName}`,
+    }).catch(() => { })
+
+    res.json({ success: true, message: `Reminder sent for ${clientName}` })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to send reminder' })
   }
-
-  const data = applyOverrides(scanClients(PROJECT_ROOT))
-  const client = data.clients.find(c => c.id === entry.clientId)
-  const clientName = client?.displayName || entry.clientId
-
-  // Create a reminder notification
-  const notifs = readNotifications()
-  notifs.unshift({
-    id: `n_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
-    type: 'sla-reminder',
-    token,
-    clientId: entry.clientId,
-    postId: '',
-    postCaption: `SLA reminder sent to ${clientName}`,
-    reviewerName: 'System',
-    read: false,
-    createdAt: new Date().toISOString(),
-  })
-  writeNotifications(notifs)
-
-  // Trigger webhook for reminder
-  triggerWebhooks('review.reminder', {
-    token,
-    clientId: entry.clientId,
-    clientName,
-    label: entry.label,
-    message: req.body.message || `Reminder: pending content review for ${clientName}`,
-  }).catch(() => {})
-
-  res.json({ success: true, message: `Reminder sent for ${clientName}` })
 })
 
 // Extend deadline for a review token
-app.post('/api/sla/extend/:token', (req, res) => {
+// Extend deadline for a review token
+app.post('/api/sla/extend/:token', async (req, res) => {
   const token = req.params.token
   const { hours } = req.body
   if (!hours || typeof hours !== 'number') {
     res.status(400).json({ error: 'Missing hours parameter' })
     return
   }
-  // We extend by adjusting the SLA config per-client, or we can store per-token overrides
-  // For simplicity, we'll extend by moving the token's createdAt forward
-  const tokens = readReviewTokens()
-  const entry = tokens.find(t => t.token === token)
-  if (!entry) {
-    res.status(404).json({ error: 'Review token not found' })
-    return
-  }
-  // Push createdAt forward by the requested hours — effectively extending the deadline
-  const newCreatedAt = new Date(new Date(entry.createdAt).getTime() + hours * 60 * 60 * 1000).toISOString()
-  entry.createdAt = newCreatedAt
-  writeReviewTokens(tokens)
+  try {
+    const doc = await db.collection('reviewTokens').doc(token).get()
+    if (!doc.exists) {
+      res.status(404).json({ error: 'Review token not found' })
+      return
+    }
+    const entry = doc.data() as ReviewToken
+    // Push createdAt forward by the requested hours — effectively extending the deadline
+    const newCreatedAt = new Date(new Date(entry.createdAt).getTime() + hours * 60 * 60 * 1000).toISOString()
+    await db.collection('reviewTokens').doc(token).update({ createdAt: newCreatedAt })
 
-  res.json({ success: true, newCreatedAt })
+    res.json({ success: true, newCreatedAt })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to extend deadline' })
+  }
 })
 
 // ── AI Routes ───────────────────────────────────────────
@@ -1885,9 +2137,9 @@ app.post('/api/google/connect', async (req, res) => {
     }
 
     if (existingIdx >= 0) {
-      conns[existingIdx] = newConn
+      conns[existingIdx] = newConn as any
     } else {
-      conns.push(newConn)
+      conns.push(newConn as any)
     }
     writeGoogleConnections(conns)
 
@@ -2354,7 +2606,7 @@ app.post('/api/reports/generate', async (req, res) => {
     const reports = readReports()
     reports.push(entry)
     writeReports(reports)
-    triggerWebhooks('report.generated', { clientId, token, period: entry.period }).catch(() => {})
+    triggerWebhooks('report.generated', { clientId, token, period: entry.period }).catch(() => { })
     res.json({ success: true, token, url: `/report/${token}` })
   } catch (error: any) {
     console.error('Report generation error:', error)
@@ -2387,7 +2639,7 @@ app.delete('/api/reports/:token', (req, res) => {
 })
 
 // Get full report data (public, no auth)
-app.get('/api/reports/:token/data', (req, res) => {
+app.get('/api/reports/:token/data', async (req, res) => {
   const reports = readReports()
   const entry = reports.find(r => r.token === req.params.token)
   if (!entry) {
@@ -2396,8 +2648,9 @@ app.get('/api/reports/:token/data', (req, res) => {
   }
   // Also get client display info
   try {
-    const clientData = applyOverrides(scanClients(PROJECT_ROOT))
-    const client = clientData.clients.find(c => c.id === entry.clientId)
+    const hiddenIds = await getHiddenPostIds()
+    const clientData = applyOverrides(await scanClients(PROJECT_ROOT), hiddenIds)
+    const client = clientData.clients.find((c: any) => c.id === entry.clientId)
     const entryPeriods = getReportPeriodsFromEntry(entry)
     res.json({
       clientName: client?.displayName || entry.clientId,
@@ -2518,22 +2771,22 @@ app.get('/api/webhooks/log', (_req, res) => {
 // ── Scheduler Routes ────────────────────────────────────
 
 // Get scheduler config
-app.get('/api/scheduler/config', (_req, res) => {
-  res.json(readSchedulerConfig())
+app.get('/api/scheduler/config', async (_req, res) => {
+  res.json(await readSchedulerConfig())
 })
 
 // Update scheduler config
-app.put('/api/scheduler/config', (req, res) => {
+app.put('/api/scheduler/config', async (req, res) => {
   const config = req.body
-  writeSchedulerConfig(config)
+  await writeSchedulerConfig(config)
   // Restart the scheduler timer with new interval
   startSchedulerTimer(config.checkIntervalMinutes)
   res.json({ success: true, config })
 })
 
 // Get scheduler log
-app.get('/api/scheduler/log', (_req, res) => {
-  res.json(readSchedulerLog())
+app.get('/api/scheduler/log', async (_req, res) => {
+  res.json(await readSchedulerLog())
 })
 
 // Manually run scheduler
@@ -2559,51 +2812,55 @@ app.post('/api/scheduler/analytics-sync/run', async (_req, res) => {
 
 // ── Scheduler Engine ────────────────────────────────────
 
+let isSchedulerRunning = false
+
 async function runScheduler() {
-  const config = readSchedulerConfig()
-  if (!config.enabled) return { skipped: true, reason: 'Scheduler disabled' }
+  if (isSchedulerRunning) return { skipped: true, reason: 'Already running' }
+  isSchedulerRunning = true
 
-  const data = applyOverrides(scanClients(PROJECT_ROOT))
-  const mapping = readPageMapping()
-  const connections = readConnections()
-  const results: any[] = []
+  try {
+    const config = await readSchedulerConfig()
+    if (!config.enabled) return { skipped: true, reason: 'Scheduler disabled' }
 
-  const todayStr = getBucharestDateString()
+    const todayStr = getBucharestDateString()
+    const mapping = readPageMapping()
+    const connections = readConnections()
+    const googleMapping = readGoogleMapping()
+    const postMedia = readPostMedia()
 
-  const googleMapping = readGoogleMapping()
-  const postMedia = readPostMedia()
+    // 1. Fetch all scheduled posts from Firestore that are due
+    const postsSnap = await db.collection('posts')
+      .where('status', '==', 'scheduled')
+      .where('date', '<=', todayStr)
+      .where('hidden', '==', false)
+      .get()
 
-  for (const client of data.clients) {
-    const clientConfig = config.clients[client.id]
-    if (!clientConfig?.autoPublish) continue
-    if (!isInPublishWindow(clientConfig)) {
-      continue
+    if (postsSnap.empty) {
+      return { processed: 0, results: [] }
     }
 
-    // Resolve Meta page for this client (optional)
-    const pageId = mapping[client.id]
-    const page = pageId ? connections.pages.find((p: any) => p.pageId === pageId) : null
+    const results: any[] = []
+    const posts = postsSnap.docs.map(d => ({ id: d.id, ...d.data() as any }))
 
-    // Resolve Google location for this client (optional)
-    const googleLocationName = googleMapping[client.id]
+    for (const post of posts) {
+      const clientId = post.clientId
+      const clientConfig = config.clients[clientId]
+      
+      // Auto-publish must be enabled for this client
+      if (!clientConfig?.autoPublish) continue
+      
+      // Check if we are within the allowed publish hour window
+      if (!isInPublishWindow(clientConfig)) continue
 
-    // Skip if no platform is mapped at all
-    if (!page && !googleLocationName) continue
-
-    // Find posts that are scheduled and due (date <= today)
-    const duePosts = client.posts.filter(p =>
-      p.status === 'scheduled' && p.date <= todayStr
-    )
-
-    for (const post of duePosts) {
       try {
-        const message = post.caption + (post.hashtags.length > 0 ? '\n\n' + post.hashtags.join(' ') : '')
+        const message = post.caption + (post.hashtags?.length > 0 ? '\n\n' + post.hashtags.join(' ') : '')
 
         if (post.platform === 'google') {
           // ── Google Business Profile ──
+          const googleLocationName = googleMapping[clientId]
           if (!googleLocationName) {
-            addSchedulerLog({
-              postId: post.id, clientId: client.id, clientName: client.displayName,
+            await addSchedulerLog({
+              postId: post.id, clientId, clientName: post.clientName,
               platform: post.platform, caption: post.caption?.slice(0, 60),
               action: 'skipped', message: 'Skipped: No Google location mapped for this client',
             })
@@ -2615,9 +2872,12 @@ async function runScheduler() {
           await publishToGoogle(googleLocationName, message, imgUrl)
         } else if (post.platform === 'facebook') {
           // ── Facebook ──
+          const pageId = mapping[clientId]
+          const page = pageId ? connections.pages.find((p: any) => p.pageId === pageId) : null
+
           if (!page) {
-            addSchedulerLog({
-              postId: post.id, clientId: client.id, clientName: client.displayName,
+            await addSchedulerLog({
+              postId: post.id, clientId, clientName: post.clientName,
               platform: post.platform, caption: post.caption?.slice(0, 60),
               action: 'skipped', message: 'Skipped: No Meta page mapped for this client',
             })
@@ -2626,8 +2886,8 @@ async function runScheduler() {
           }
           const facebookMedia = resolveFacebookPublishMedia(post, postMedia[post.id])
           if (facebookMedia === null) {
-            addSchedulerLog({
-              postId: post.id, clientId: client.id, clientName: client.displayName,
+            await addSchedulerLog({
+              postId: post.id, clientId, clientName: post.clientName,
               platform: post.platform, caption: post.caption?.slice(0, 60),
               action: 'skipped', message: 'Skipped: Facebook video post requires an attached video',
             })
@@ -2635,15 +2895,18 @@ async function runScheduler() {
             continue
           }
           const mediaPayload = facebookMedia
-            ? { ...facebookMedia, url: `${PUBLIC_ORIGIN}${facebookMedia.url}` }
+            ? { ...facebookMedia, url: toPublicAssetUrl(facebookMedia.url) }
             : undefined
           await publishToFacebook(pageId!, page.pageAccessToken, message, mediaPayload)
         } else if (post.platform === 'instagram' || post.platform === 'stories') {
           // ── Instagram / Stories ──
+          const pageId = mapping[clientId]
+          const page = pageId ? connections.pages.find((p: any) => p.pageId === pageId) : null
           const instagramAccountId = page ? getEffectiveInstagramAccountId(page) : undefined
+
           if (!page || !instagramAccountId) {
-            addSchedulerLog({
-              postId: post.id, clientId: client.id, clientName: client.displayName,
+            await addSchedulerLog({
+              postId: post.id, clientId, clientName: post.clientName,
               platform: post.platform, caption: post.caption?.slice(0, 60),
               action: 'skipped', message: 'Skipped: No Instagram account linked',
             })
@@ -2651,8 +2914,8 @@ async function runScheduler() {
             continue
           }
           if (post.requiresInstagramMusic) {
-            addSchedulerLog({
-              postId: post.id, clientId: client.id, clientName: client.displayName,
+            await addSchedulerLog({
+              postId: post.id, clientId, clientName: post.clientName,
               platform: post.platform, caption: post.caption?.slice(0, 60),
               action: 'skipped',
               message: 'Skipped: Instagram post is marked for manual publish with music in the Instagram app',
@@ -2670,45 +2933,35 @@ async function runScheduler() {
                   ? 'Skipped: Instagram carousel supports at most 10 media items'
                   : instagramResolution.error === 'story_missing'
                     ? 'Skipped: Instagram story requires one attached image or video'
-                  : instagramResolution.error === 'story_multiple'
-                    ? 'Skipped: Instagram story supports exactly one attached image or video'
-                  : 'Skipped: Instagram requires an image attachment'
-            const instagramReason = instagramResolution.error === 'missing_video'
-              ? 'No video for IG video post'
-              : instagramResolution.error === 'carousel_min'
-                ? 'Not enough media for IG carousel'
-                : instagramResolution.error === 'carousel_max'
-                  ? 'Too many media items for IG carousel'
-                  : instagramResolution.error === 'story_missing'
-                    ? 'No media for IG story'
-                  : instagramResolution.error === 'story_multiple'
-                    ? 'Too many media items for IG story'
-                  : 'No image for IG'
-            addSchedulerLog({
-              postId: post.id, clientId: client.id, clientName: client.displayName,
+                    : instagramResolution.error === 'story_multiple'
+                      ? 'Skipped: Instagram story supports exactly one attached image or video'
+                      : 'Skipped: Instagram requires an image attachment'
+            
+            await addSchedulerLog({
+              postId: post.id, clientId, clientName: post.clientName,
               platform: post.platform, caption: post.caption?.slice(0, 60),
               action: 'skipped',
               message: instagramMessage,
             })
-            results.push({ postId: post.id, action: 'skipped', reason: instagramReason })
+            results.push({ postId: post.id, action: 'skipped', reason: instagramResolution.error })
             continue
           }
           const instagramMedia = instagramResolution.payload
           const mediaPayload = instagramMedia.type === 'carousel'
             ? {
-                type: 'carousel' as const,
-                items: instagramMedia.items.map(item => ({ ...item, url: toPublicAssetUrl(item.url) })),
-              }
+              type: 'carousel' as const,
+              items: instagramMedia.items.map(item => ({ ...item, url: toPublicAssetUrl(item.url) })),
+            }
             : instagramMedia.type === 'story'
               ? {
-                  type: 'story' as const,
-                  media: { ...instagramMedia.media, url: toPublicAssetUrl(instagramMedia.media.url) },
-                }
-            : { ...instagramMedia, url: toPublicAssetUrl(instagramMedia.url) }
+                type: 'story' as const,
+                media: { ...instagramMedia.media, url: toPublicAssetUrl(instagramMedia.media.url) },
+              }
+              : { ...instagramMedia, url: toPublicAssetUrl(instagramMedia.url) }
           await publishToInstagram(instagramAccountId, page.pageAccessToken, message, mediaPayload)
         } else {
-          addSchedulerLog({
-            postId: post.id, clientId: client.id, clientName: client.displayName,
+          await addSchedulerLog({
+            postId: post.id, clientId, clientName: post.clientName,
             platform: post.platform, caption: post.caption?.slice(0, 60),
             action: 'skipped', message: `Skipped: Platform "${post.platform}" not yet supported for auto-publish`,
           })
@@ -2716,15 +2969,13 @@ async function runScheduler() {
           continue
         }
 
-        // Update status to published
-        const statuses = readStatuses()
-        statuses[post.id] = 'published'
-        writeStatuses(statuses)
+        // Update status to published in Firestore
+        await db.collection('posts').doc(post.id).update({ status: 'published' })
 
-        addSchedulerLog({
+        await addSchedulerLog({
           postId: post.id,
-          clientId: client.id,
-          clientName: client.displayName,
+          clientId,
+          clientName: post.clientName,
           platform: post.platform,
           caption: post.caption?.slice(0, 60),
           action: 'published',
@@ -2734,17 +2985,17 @@ async function runScheduler() {
         // Trigger webhooks
         triggerWebhooks('post.published', {
           postId: post.id,
-          clientId: client.id,
+          clientId,
           platform: post.platform,
           autoPublished: true,
         })
 
         results.push({ postId: post.id, action: 'published' })
       } catch (error: any) {
-        addSchedulerLog({
+        await addSchedulerLog({
           postId: post.id,
-          clientId: client.id,
-          clientName: client.displayName,
+          clientId,
+          clientName: post.clientName,
           platform: post.platform,
           caption: post.caption?.slice(0, 60),
           action: 'failed',
@@ -2753,9 +3004,11 @@ async function runScheduler() {
         results.push({ postId: post.id, action: 'failed', error: error.message })
       }
     }
-  }
 
-  return { processed: results.length, results }
+    return { processed: results.length, results }
+  } finally {
+    isSchedulerRunning = false
+  }
 }
 
 function getBucharestMonthPeriod() {
@@ -2764,7 +3017,7 @@ function getBucharestMonthPeriod() {
 }
 
 async function runAnalyticsSync(options: { force?: boolean } = {}) {
-  const config = readSchedulerConfig()
+  const config = await readSchedulerConfig()
   const analyticsConfig = config.analyticsSync
 
   if (!options.force && !analyticsConfig.enabled) {
@@ -2787,7 +3040,7 @@ async function runAnalyticsSync(options: { force?: boolean } = {}) {
   }
 
   const targetPeriod = getBucharestMonthPeriod()
-  const data = applyOverrides(scanClients(PROJECT_ROOT))
+  const data = await scanClients(PROJECT_ROOT)
   const mapping = readPageMapping()
   const connections = readConnections()
   const googleMapping = readGoogleMapping()
@@ -2874,7 +3127,7 @@ async function runAnalyticsSync(options: { force?: boolean } = {}) {
     lastRunAt: new Date().toISOString(),
     lastRunSummary: summary,
   }
-  writeSchedulerConfig(config)
+  await writeSchedulerConfig(config)
 
   return {
     period: targetPeriod,
@@ -2887,27 +3140,32 @@ let schedulerInterval: ReturnType<typeof setInterval> | null = null
 
 function startSchedulerTimer(intervalMinutes?: number) {
   if (schedulerInterval) clearInterval(schedulerInterval)
-  const config = readSchedulerConfig()
-  const mins = intervalMinutes ?? config.checkIntervalMinutes ?? 5
-  const hasGoogleRetries = readGoogleRetryQueue().length > 0
-  if (config.enabled || config.analyticsSync?.enabled || hasGoogleRetries) {
-    schedulerInterval = setInterval(async () => {
-      runScheduler().catch(err => console.error('Scheduler error:', err))
-      runAnalyticsSync().catch(err => console.error('Analytics sync error:', err))
-      const retryResults = await processGoogleRetryQueue().catch(err => {
-        console.error('Google retry queue error:', err)
-        return null
-      })
-      const latestConfig = readSchedulerConfig()
-      const stillHasRetries = (retryResults?.pending || 0) > 0
-      if (!latestConfig.enabled && !latestConfig.analyticsSync?.enabled && !stillHasRetries && schedulerInterval) {
-        clearInterval(schedulerInterval)
-        schedulerInterval = null
-        console.log('  💤 Background jobs paused: no active schedules or pending Google retries')
-      }
-    }, mins * 60 * 1000)
-    console.log(`  🕐 Background jobs active: checking every ${mins} minutes`)
-  }
+  
+  // Async IIFE to handle the async config read
+  ;(async () => {
+    const config = await readSchedulerConfig()
+    const mins = intervalMinutes ?? config.checkIntervalMinutes ?? 5
+    const hasGoogleRetries = (await readGoogleRetryQueue()).length > 0
+    
+    if (config.enabled || config.analyticsSync?.enabled || hasGoogleRetries) {
+      schedulerInterval = setInterval(async () => {
+        runScheduler().catch(err => console.error('Scheduler error:', err))
+        runAnalyticsSync().catch(err => console.error('Analytics sync error:', err))
+        const retryResults = await processGoogleRetryQueue().catch(err => {
+          console.error('Google retry queue error:', err)
+          return null
+        })
+        const latestConfig = await readSchedulerConfig()
+        const stillHasRetries = (retryResults?.pending || 0) > 0
+        if (!latestConfig.enabled && !latestConfig.analyticsSync?.enabled && !stillHasRetries && schedulerInterval) {
+          clearInterval(schedulerInterval)
+          schedulerInterval = null
+          console.log('  💤 Background jobs paused: no active schedules or pending Google retries')
+        }
+      }, mins * 60 * 1000)
+      console.log(`  🕐 Background jobs active: checking every ${mins} minutes`)
+    }
+  })()
 }
 
 // ── Team & Workflow Routes (M8) ──────────────────────────
@@ -3099,7 +3357,7 @@ app.post('/api/ai/adcopy', async (req, res) => {
     return
   }
   try {
-    const { getClientContext } = await import('./ai.ts')
+    const { getClientContext } = await import('./ai.js')
     const context = getClientContext(PROJECT_ROOT, clientId, {
       task: 'ads',
       query: `${platform || ''} ${objective || ''} ${product} ${audience || ''} ${keyMessage || ''} ${tone || ''}`,
@@ -3240,8 +3498,9 @@ function getContentFingerprint(): string {
 }
 
 app.get('/api/changes', (_req, res) => {
-  res.json({ fingerprint: getContentFingerprint() })
+  res.json({ fingerprint: getContentFingerprint() + `|v:${lastChangeTime}` })
 })
+
 
 // ── UTM Tracking & Revenue Attribution ──────────────────
 
@@ -3309,7 +3568,7 @@ function buildUtmUrl(websiteUrl: string, params: Record<string, string>): string
 }
 
 // Generate UTM parameters for a post
-app.post('/api/utm/generate', (req, res) => {
+app.post('/api/utm/generate', async (req, res) => {
   const { postId, clientId, platform, pillar, campaignName, websiteUrl } = req.body
   if (!postId || !clientId || !platform || !websiteUrl) {
     res.status(400).json({ error: 'Missing required fields: postId, clientId, platform, websiteUrl' })
@@ -3337,8 +3596,9 @@ app.post('/api/utm/generate', (req, res) => {
     // Get client name from scanned data
     let clientName = clientId
     try {
-      const scanned = applyOverrides(scanClients(PROJECT_ROOT))
-      const client = scanned.clients.find(c => c.id === clientId)
+      const hiddenIds = await getHiddenPostIds()
+      const scanned = applyOverrides(await scanClients(PROJECT_ROOT), hiddenIds)
+      const client = scanned.clients.find((c: any) => c.id === clientId)
       if (client) clientName = client.displayName || client.name
     } catch { /* fallback to clientId */ }
 
@@ -3384,7 +3644,7 @@ app.post('/api/utm/generate', (req, res) => {
 })
 
 // Bulk generate UTM links for all posts of a client
-app.post('/api/utm/generate-bulk', (req, res) => {
+app.post('/api/utm/generate-bulk', async (req, res) => {
   const { clientId, websiteUrl, campaignName } = req.body
   if (!clientId || !websiteUrl) {
     res.status(400).json({ error: 'Missing required fields: clientId, websiteUrl' })
@@ -3399,8 +3659,9 @@ app.post('/api/utm/generate-bulk', (req, res) => {
   }
 
   try {
-    const scanned = applyOverrides(scanClients(PROJECT_ROOT))
-    const client = scanned.clients.find(c => c.id === clientId)
+    const hiddenIds = await getHiddenPostIds()
+    const scanned = applyOverrides(await scanClients(PROJECT_ROOT), hiddenIds)
+    const client = scanned.clients.find((c: any) => c.id === clientId)
     if (!client) {
       res.status(404).json({ error: 'Client not found' })
       return
@@ -3576,39 +3837,56 @@ app.delete('/api/utm/:linkId', (req, res) => {
   res.json({ success: true })
 })
 
-// Serve the review page HTML
-const REVIEW_PAGE_HTML = readFileSync(resolve(import.meta.dirname, 'review-page.html'), 'utf-8')
+// Serve the SPA shell for public routes so React can handle them
+const INDEX_HTML_PATH = resolve(PROJECT_ROOT, 'index.html')
+const DIST_INDEX_HTML_PATH = resolve(PROJECT_ROOT, 'dist', 'index.html')
+
+function serveApp(res: any) {
+  // Prefer the source index.html in dev (root), but dist in production
+  const htmlPath = existsSync(INDEX_HTML_PATH) ? INDEX_HTML_PATH : DIST_INDEX_HTML_PATH
+  console.log(`[SPA Shell] Serving from: ${htmlPath}`)
+  try {
+    const html = readFileSync(htmlPath, 'utf-8')
+    res.type('html').send(html)
+  } catch (err) {
+    console.error(`[SPA Shell] Error reading ${htmlPath}:`, err)
+    res.status(500).send('Application shell not found')
+  }
+}
+
 app.get('/review/:token', (_req, res) => {
-  res.type('html').send(REVIEW_PAGE_HTML)
+  serveApp(res)
 })
 
-// Serve the client portal HTML
-const CLIENT_PORTAL_HTML = existsSync(resolve(import.meta.dirname, 'client-portal.html'))
-  ? readFileSync(resolve(import.meta.dirname, 'client-portal.html'), 'utf-8')
-  : '<html><body>Client portal page not found</body></html>'
 app.get('/portal/:token', (_req, res) => {
-  res.type('html').send(CLIENT_PORTAL_HTML)
+  serveApp(res)
 })
 
 // Client portal API — returns client data, posts, analytics, feedback, and white-label config
-app.get('/api/portal/:token/data', (req, res) => {
-  const validation = validateReviewToken(req.params.token)
+app.get('/api/portal/:token/data', async (req, res) => {
+  const validation = await validateReviewToken(req.params.token)
   if (!validation.entry) {
     res.status(validation.status!).json({ error: validation.error })
     return
   }
   try {
-    const data = applyOverrides(scanClients(PROJECT_ROOT))
-    const client = data.clients.find(c => c.id === validation.entry!.clientId)
-    if (!client) {
+    const clientDoc = await db.collection('clients').doc(validation.entry.clientId).get()
+    if (!clientDoc.exists) {
       res.status(404).json({ error: 'Client not found' })
       return
     }
+    const client = clientDoc.data() as any
+    const postsSnapshot = await db.collection('posts').where('clientId', '==', validation.entry.clientId).get()
+    const allPosts = postsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as any }))
 
-    const postMedia = readPostMedia()
+    // Filter out past posts
+    const todayIso = getTodayIso()
+    const posts = allPosts.filter(p => p.date >= todayIso)
+
 
     // Feedback for this token
-    const feedback = readFeedback().filter(f => f.token === req.params.token)
+    const fbSnapshot = await db.collection('feedback').where('token', '==', req.params.token).get()
+    const feedback = fbSnapshot.docs.map(doc => doc.data())
 
     // Analytics (if available)
     const analyticsStore = readAnalytics()
@@ -3628,7 +3906,7 @@ app.get('/api/portal/:token/data', (req, res) => {
         displayName: client.displayName,
         color: client.color,
         stats: client.stats,
-        posts: client.posts.map(p => ({
+        posts: posts.map((p: any) => ({
           id: p.id,
           date: p.date,
           time: p.time,
@@ -3640,14 +3918,14 @@ app.get('/api/portal/:token/data', (req, res) => {
           cta: p.cta,
           hashtags: p.hashtags,
           status: p.status,
-          imageUrl: getPrimaryPostImage(postMedia[p.id])?.url || null,
-          media: postMedia[p.id] || [],
+          imageUrl: (p.media && p.media.length > 0) ? p.media[0].url : null,
+          media: p.media || [],
         })),
       },
       feedback,
       analytics: analytics ? {
-        period: analytics.period,
-        combined: analytics.combined,
+        period: (analytics as any).period,
+        combined: (analytics as any).combined,
       } : null,
       whiteLabel,
     })
@@ -3665,9 +3943,27 @@ app.get('/contract/:contractId', (_req, res) => {
   res.type('html').send(CONTRACT_PAGE_HTML)
 })
 
+// Serve static files in production
+const isProduction = process.env.NODE_ENV === 'production'
+if (isProduction) {
+  const DIST_PATH = resolve(PROJECT_ROOT, 'dist')
+  if (existsSync(DIST_PATH)) {
+    app.use(express.static(DIST_PATH))
+    // SPA Catch-all
+    app.get('*', (req, res, next) => {
+      // Don't catch API routes or other internal routes
+      if (req.path.startsWith('/api') || req.path.startsWith('/contract')) {
+        return next()
+      }
+      res.sendFile(resolve(DIST_PATH, 'index.html'))
+    })
+  }
+}
+
 app.listen(PORT, () => {
   console.log(`\n  ⚡ PostBoard API running at http://localhost:${PORT}`)
   console.log(`  📁 Scanning: ${PROJECT_ROOT}/CLIENTI\n`)
   // Start scheduler on boot
   startSchedulerTimer()
 })
+// trigger hot-reload 2

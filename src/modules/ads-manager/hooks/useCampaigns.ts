@@ -129,6 +129,18 @@ export function useCampaigns() {
     return campaign.budget > 0 ? Math.min((spent / campaign.budget) * 100, 100) : 0
   }
 
+  // Meta Ads functionality
+  const launchMetaCampaign = async (id: string) => {
+    const res = await fetch(`${API}/api/ads/launch/${id}`, { method: 'POST' })
+    const data = await res.json()
+    if (!data.success) {
+      throw new Error(data.error || 'Failed to launch campaign to Meta')
+    }
+    // Refresh campaigns to get the updated status and Meta ID
+    await fetchCampaigns()
+    return data
+  }
+
   return {
     campaigns,
     loading,
@@ -145,5 +157,6 @@ export function useCampaigns() {
     getCampaignsByClient,
     getTotalSpend,
     getBudgetUtilization,
+    launchMetaCampaign,
   }
 }

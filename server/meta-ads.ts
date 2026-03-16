@@ -1,6 +1,5 @@
-import { readFileSync, writeFileSync, existsSync } from 'fs'
-import { resolve } from 'path'
-import { readConnections } from './meta.ts'
+
+import { readConnections } from './meta.js'
 
 // ── Types ──────────────────────────────────────────────
 
@@ -84,36 +83,27 @@ export interface AdAccountSync {
   campaigns: CampaignWithInsights[]
 }
 
-// ── Persistence ────────────────────────────────────────
+import { db } from './firebase.js'
 
-const AD_ACCOUNTS_MAPPING_FILE = resolve(import.meta.dirname, '..', 'data', 'ad-accounts-mapping.json')
-const AD_DATA_FILE = resolve(import.meta.dirname, '..', 'data', 'ad-data.json')
+// ── Persistence (MIGRATED TO FIRESTORE) ────────────────
 
 // Maps clientId → adAccountId
-export function readAdAccountMapping(): Record<string, string> {
-  try {
-    if (existsSync(AD_ACCOUNTS_MAPPING_FILE)) {
-      return JSON.parse(readFileSync(AD_ACCOUNTS_MAPPING_FILE, 'utf-8'))
-    }
-  } catch { /* ignore */ }
-  return {}
+export async function readAdAccountMapping(): Promise<Record<string, string>> {
+  const doc = await db.collection('settings').doc('adAccountMapping').get()
+  return doc.exists ? (doc.data() as Record<string, string>) : {}
 }
 
-export function writeAdAccountMapping(mapping: Record<string, string>) {
-  writeFileSync(AD_ACCOUNTS_MAPPING_FILE, JSON.stringify(mapping, null, 2), 'utf-8')
+export async function writeAdAccountMapping(mapping: Record<string, string>): Promise<void> {
+  await db.collection('settings').doc('adAccountMapping').set(mapping)
 }
 
-export function readAdData(): Record<string, AdAccountSync> {
-  try {
-    if (existsSync(AD_DATA_FILE)) {
-      return JSON.parse(readFileSync(AD_DATA_FILE, 'utf-8'))
-    }
-  } catch { /* ignore */ }
-  return {}
+export async function readAdDataForClient(clientId: string): Promise<AdAccountSync | null> {
+  const doc = await db.collection('adData').doc(clientId).get()
+  return doc.exists ? (doc.data() as AdAccountSync) : null
 }
 
-export function writeAdData(data: Record<string, AdAccountSync>) {
-  writeFileSync(AD_DATA_FILE, JSON.stringify(data, null, 2), 'utf-8')
+export async function writeAdDataForClient(clientId: string, data: AdAccountSync): Promise<void> {
+  await db.collection('adData').doc(clientId).set(data)
 }
 
 // ── Graph API Helpers ──────────────────────────────────
@@ -124,8 +114,8 @@ async function graphGet(path: string, token: string, params: Record<string, stri
   for (const [k, v] of Object.entries(params)) {
     url.searchParams.set(k, v)
   }
-  const res = await fetch(url.toString())
-  const data = await res.json()
+  const res: any = await fetch(url.toString())
+  const data: any = await res.json()
   if (data.error) {
     throw new Error(`Meta Ads API: ${data.error.message} (code ${data.error.code})`)
   }
@@ -147,13 +137,13 @@ async function graphGetAll(path: string, token: string, params: Record<string, s
   url = initial.toString()
 
   while (url) {
-    const res = await fetch(url)
-    const data = await res.json()
-    if (data.error) {
-      throw new Error(`Meta Ads API: ${data.error.message}`)
+    const response: any = await fetch(url)
+    const json: any = await response.json()
+    if (json.error) {
+      throw new Error(`Meta Ads API: ${json.error.message}`)
     }
-    results.push(...(data.data || []))
-    url = data.paging?.next || null
+    results.push(...(json.data || []))
+    url = json.paging?.next || null
   }
   return results
 }
@@ -278,6 +268,64 @@ export async function fetchInsights(
   } catch {
     return null
   }
+}
+
+// ── Campaign Creation (LAUNCH) ────────────────────────
+
+export async function createMetaCampaign(
+  adAccountId: string,
+  userToken: string,
+  params: {
+    name: string
+    objective: string
+    status?: 'PAUSED' | 'ACTIVE'
+    dailyBudget?: number
+    totalBudget?: number
+  }
+): Promise<{ id: string }> {
+  // Map our internal objectives to Meta ODAX objectives
+  const objectiveMap: Record<string, string> = {
+    awareness: 'OUTCOME_AWARENESS',
+    traffic: 'OUTCOME_TRAFFIC',
+    engagement: 'OUTCOME_ENGAGEMENT',
+    leads: 'OUTCOME_LEADS',
+    sales: 'OUTCOME_SALES',
+    conversions: 'OUTCOME_SALES', // Most common mapping for general conversions
+  }
+
+  const payload: any = {
+    name: params.name,
+    objective: objectiveMap[params.objective] || 'OUTCOME_TRAFFIC',
+    status: params.status || 'PAUSED',
+    special_ad_categories: '[]', // Required field
+  }
+
+  // Budgets are in cents in Meta API
+  if (params.dailyBudget) {
+    payload.daily_budget = Math.round(params.dailyBudget * 100)
+  } else if (params.totalBudget) {
+    payload.lifetime_budget = Math.round(params.totalBudget * 100)
+  }
+
+  const data = await graphPost(`/${adAccountId}/campaigns`, userToken, payload)
+  return { id: data.id }
+}
+
+async function graphPost(path: string, token: string, payload: Record<string, any>): Promise<any> {
+  const url = new URL(`https://graph.facebook.com/v21.0${path}`)
+  url.searchParams.set('access_token', token)
+
+  const res = await fetch(url.toString(), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+
+  const data = await res.json()
+  if (data.error) {
+    throw new Error(`Meta Ads API Error: ${data.error.message} (code ${data.error.code})`)
+  }
+  return data
 }
 
 // ── Full Sync ──────────────────────────────────────────
@@ -449,55 +497,68 @@ export function registerMetaAdsRoutes(app: any) {
   })
 
   // Get ad account → client mapping
-  app.get('/api/ads/mapping', (_req: any, res: any) => {
-    res.json(readAdAccountMapping())
+  app.get('/api/ads/mapping', async (_req: any, res: any) => {
+    try {
+      const mapping = await readAdAccountMapping()
+      res.json(mapping)
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to read mapping' })
+    }
   })
 
   // Set ad account → client mapping
-  app.put('/api/ads/mapping', (req: any, res: any) => {
-    const { clientId, adAccountId } = req.body
-    if (!clientId) {
-      res.status(400).json({ error: 'Missing clientId' })
-      return
+  app.put('/api/ads/mapping', async (req: any, res: any) => {
+    try {
+      let { clientId, adAccountId } = req.body
+      
+      // Attempt to extract ad account ID safely if an object was passed by accident in frontend
+      if (adAccountId && typeof adAccountId === 'object' && adAccountId.id) {
+        adAccountId = adAccountId.id
+      }
+      
+      if (!clientId) {
+        res.status(400).json({ error: 'Missing clientId' })
+        return
+      }
+      const mapping = await readAdAccountMapping()
+      if (adAccountId) {
+        mapping[clientId] = adAccountId
+      } else {
+        delete mapping[clientId]
+      }
+      await writeAdAccountMapping(mapping)
+      res.json({ success: true, mapping })
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to update mapping' })
     }
-    const mapping = readAdAccountMapping()
-    if (adAccountId) {
-      mapping[clientId] = adAccountId
-    } else {
-      delete mapping[clientId]
-    }
-    writeAdAccountMapping(mapping)
-    res.json({ success: true, mapping })
   })
 
   // Sync ad data for a client
   app.post('/api/ads/sync/:clientId', async (req: any, res: any) => {
-    const { clientId } = req.params
-    const mapping = readAdAccountMapping()
-    const adAccountId = mapping[clientId]
-
-    if (!adAccountId) {
-      res.status(400).json({ error: 'No ad account mapped to this client. Go to Settings to map one.' })
-      return
-    }
-
-    const connections = readConnections()
-    if (!connections.userAccessToken) {
-      res.status(400).json({ error: 'Not connected to Meta.' })
-      return
-    }
-
     try {
+      const { clientId } = req.params
+      const mapping = await readAdAccountMapping()
+      const adAccountId = mapping[clientId]
+
+      if (!adAccountId) {
+        res.status(400).json({ error: 'No ad account mapped to this client. Go to Settings to map one.' })
+        return
+      }
+
+      const connections = readConnections()
+      if (!connections.userAccessToken) {
+        res.status(400).json({ error: 'Not connected to Meta.' })
+        return
+      }
+
       const syncResult = await syncAdAccount(adAccountId, clientId, connections.userAccessToken)
 
       // Save raw sync data
-      const adData = readAdData()
-      adData[clientId] = syncResult
-      writeAdData(adData)
+      await writeAdDataForClient(clientId, syncResult)
 
       // Convert to PostBoard campaign format and merge with existing campaigns
-      const { readCampaigns, writeCampaigns } = await import('./campaigns.ts')
-      const existingCampaigns = readCampaigns()
+      const { readCampaigns, writeCampaign } = await import('./campaigns.js')
+      const existingCampaigns = await readCampaigns()
       const metaCampaigns = metaToPostboardCampaigns(syncResult)
 
       // Merge: update existing meta campaigns, add new ones, keep manual campaigns
@@ -506,18 +567,17 @@ export function registerMetaAdsRoutes(app: any) {
         if (existingIdx >= 0) {
           // Update existing — preserve any manual edits to notes
           const existing = existingCampaigns[existingIdx]
-          existingCampaigns[existingIdx] = {
+          const updatedCampaign = {
             ...metaCamp,
             notes: existing.notes?.includes('Synced from Meta')
               ? metaCamp.notes
               : existing.notes || metaCamp.notes,
           }
+          await writeCampaign(updatedCampaign)
         } else {
-          existingCampaigns.push(metaCamp)
+          await writeCampaign(metaCamp)
         }
       }
-
-      writeCampaigns(existingCampaigns)
 
       res.json({
         success: true,
@@ -532,51 +592,115 @@ export function registerMetaAdsRoutes(app: any) {
   })
 
   // Get cached ad data for a client
-  app.get('/api/ads/data/:clientId', (req: any, res: any) => {
-    const adData = readAdData()
-    const data = adData[req.params.clientId]
-    if (!data) {
-      res.json({ data: null, message: 'No ad data. Click "Sync from Meta" to pull campaigns.' })
-      return
+  app.get('/api/ads/data/:clientId', async (req: any, res: any) => {
+    try {
+      const data = await readAdDataForClient(req.params.clientId)
+      if (!data) {
+        res.json({ data: null, message: 'No ad data. Click "Sync from Meta" to pull campaigns.' })
+        return
+      }
+      res.json({ data })
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to read ad data' })
     }
-    res.json({ data })
   })
 
   // Sync all mapped clients at once
   app.post('/api/ads/sync-all', async (_req: any, res: any) => {
-    const mapping = readAdAccountMapping()
-    const connections = readConnections()
+    try {
+      const mapping = await readAdAccountMapping()
+      const connections = readConnections()
 
-    if (!connections.userAccessToken) {
-      res.status(400).json({ error: 'Not connected to Meta.' })
-      return
-    }
-
-    const results: any[] = []
-    for (const [clientId, adAccountId] of Object.entries(mapping)) {
-      try {
-        const syncResult = await syncAdAccount(adAccountId, clientId, connections.userAccessToken)
-        const adData = readAdData()
-        adData[clientId] = syncResult
-        writeAdData(adData)
-
-        const { readCampaigns, writeCampaigns } = await import('./campaigns.ts')
-        const existing = readCampaigns()
-        const metaCampaigns = metaToPostboardCampaigns(syncResult)
-
-        for (const mc of metaCampaigns) {
-          const idx = existing.findIndex((c: any) => c.id === mc.id)
-          if (idx >= 0) existing[idx] = mc
-          else existing.push(mc)
-        }
-        writeCampaigns(existing)
-
-        results.push({ clientId, success: true, synced: metaCampaigns.length })
-      } catch (error: any) {
-        results.push({ clientId, success: false, error: error.message })
+      if (!connections.userAccessToken) {
+        res.status(400).json({ error: 'Not connected to Meta.' })
+        return
       }
-    }
 
-    res.json({ results })
+      const results: any[] = []
+      for (const [clientId, adAccountId] of Object.entries(mapping)) {
+        try {
+          const syncResult = await syncAdAccount(adAccountId, clientId, connections.userAccessToken)
+          await writeAdDataForClient(clientId, syncResult)
+
+          const { readCampaigns, writeCampaign } = await import('./campaigns.js')
+          const existing = await readCampaigns()
+          const metaCampaigns = metaToPostboardCampaigns(syncResult)
+
+          for (const mc of metaCampaigns) {
+            const idx = existing.findIndex((c: any) => c.id === mc.id)
+            if (idx >= 0) {
+              await writeCampaign({ ...existing[idx], ...mc })
+            } else {
+              await writeCampaign(mc)
+            }
+          }
+
+          results.push({ clientId, success: true, synced: metaCampaigns.length })
+        } catch (error: any) {
+          results.push({ clientId, success: false, error: error.message })
+        }
+      }
+
+      res.json({ results })
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to sync all' })
+    }
+  })
+
+  // Launch a campaign to Meta
+  app.post('/api/ads/launch/:id', async (req: any, res: any) => {
+    try {
+      const { id } = req.params
+      const { readCampaigns, updateCampaignDoc } = await import('./campaigns.js')
+      const campaigns = await readCampaigns()
+      const campaign = campaigns.find(c => c.id === id)
+
+      if (!campaign) {
+        res.status(404).json({ error: 'Campaign not found' })
+        return
+      }
+
+      if (campaign.status === 'active' && campaign._metaCampaignId) {
+        res.status(400).json({ error: 'Campaign is already active on Meta' })
+        return
+      }
+
+      const mapping = await readAdAccountMapping()
+      const adAccountId = mapping[campaign.clientId]
+
+      if (!adAccountId) {
+        res.status(400).json({ error: 'No ad account mapped to this client. Go to Settings to map one.' })
+        return
+      }
+
+      const connections = readConnections()
+      if (!connections.userAccessToken) {
+        res.status(400).json({ error: 'Not connected to Meta.' })
+        return
+      }
+
+      // Create on Meta
+      const result = await createMetaCampaign(adAccountId, connections.userAccessToken, {
+        name: campaign.name,
+        objective: campaign.objective,
+        status: 'PAUSED', // Always launch as paused for safety
+        dailyBudget: campaign.dailyBudget,
+        totalBudget: campaign.budget,
+      })
+
+      // Update local campaign with Meta ID and status
+      const now = new Date().toISOString()
+      await updateCampaignDoc(id, {
+        status: 'active', // Mark as active in our system once launched
+        _metaCampaignId: result.id,
+        notes: (campaign.notes || '') + `\nLaunched to Meta — Campaign Shell Created (Meta ID: ${result.id}) at ${now}`,
+        updatedAt: now
+      })
+
+      res.json({ success: true, metaId: result.id })
+    } catch (error: any) {
+      console.error('Launch error:', error)
+      res.status(500).json({ error: error.message || 'Failed to launch campaign' })
+    }
   })
 }

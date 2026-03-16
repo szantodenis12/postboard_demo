@@ -6,15 +6,15 @@ export function LoginPage({ onLogin, error }: {
   onLogin: (username: string, password: string) => Promise<boolean>
   error: string | null
 }) {
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!username || !password) return
+    if (!email || !password) return
     setLoading(true)
-    await onLogin(username, password)
+    await onLogin(email, password)
     setLoading(false)
   }
 
@@ -46,16 +46,16 @@ export function LoginPage({ onLogin, error }: {
         >
           <div>
             <label className="text-[10px] uppercase tracking-wider text-white/25 font-medium mb-1.5 block">
-              Username
+              Email
             </label>
             <input
-              type="text"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
               className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-accent-violet/40 transition-colors placeholder:text-white/15"
-              placeholder="Enter username"
+              placeholder="Enter email"
               autoFocus
-              autoComplete="username"
+              autoComplete="email"
             />
           </div>
 
@@ -86,7 +86,7 @@ export function LoginPage({ onLogin, error }: {
 
           <button
             type="submit"
-            disabled={loading || !username || !password}
+            disabled={loading || !email || !password}
             className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 disabled:hover:scale-100"
             style={{
               background: 'linear-gradient(135deg, rgba(124,58,237,0.3), rgba(6,182,212,0.3))',
