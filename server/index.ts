@@ -89,7 +89,7 @@ import intelligenceRouter from './intelligence.js'
 import { login, verify, authMiddleware, isAuthEnabled } from './auth.js'
 
 const app = express()
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 
 // Root of the Epic Digital Hub project
 const PROJECT_ROOT = resolve(import.meta.dirname, '..')
