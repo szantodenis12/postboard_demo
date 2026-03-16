@@ -3,12 +3,43 @@ import { spawn } from 'child_process'
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'fs'
 import { resolve, join } from 'path'
 import { getClientContext } from './ai.js'
-import { scanClients } from './scanner.js'
+import { db } from './firebase.js'
 import type { Response } from 'express'
 
 const router = express.Router()
 const DATA_DIR = resolve(process.cwd(), 'data')
 const PROJECT_ROOT = process.cwd()
+
+// Helper to fetch clients and posts from Firestore instead of local disk
+async function getClientsData(clientId?: string) {
+  const clientsSnap = clientId 
+    ? await db.collection('clients').doc(clientId).get().then(d => d.exists ? [d] : [])
+    : await db.collection('clients').get().then(s => s.docs);
+  const clientsData = clientsSnap.map(d => ({ id: d.id, ...(d.data() as any) }));
+
+  const postsQuery = clientId
+    ? db.collection('posts').where('clientId', '==', clientId).where('hidden', '==', false)
+    : db.collection('posts').where('hidden', '==', false);
+  const postsSnap = await postsQuery.get();
+  const allPosts = postsSnap.docs.map(d => ({ id: d.id, ...(d.data() as any) }));
+
+  return {
+    clients: clientsData.map(client => {
+      const posts = allPosts.filter(p => p.clientId === client.id) || [];
+      const stats: any = {
+        total: posts.length,
+        draft: 0, approved: 0, scheduled: 0, published: 0,
+        platforms: { facebook: 0, instagram: 0, linkedin: 0, tiktok: 0, google: 0, stories: 0 }
+      };
+      for(const p of posts) {
+        if (stats[p.status] !== undefined) stats[p.status]++;
+        if (stats.platforms[p.platform] !== undefined) stats.platforms[p.platform]++;
+      }
+      return { ...client, posts, stats };
+    })
+  }
+}
+
 
 // ── SSE helpers ──────────────────────────────────────────
 function initSSE(res: Response) {
@@ -578,17 +609,17 @@ router.post('/predict-performance', (req, res) => {
 // ══════════════════════════════════════════════════════════
 // 5. Health Scores
 // ══════════════════════════════════════════════════════════
-router.get('/health-scores', (req, res) => {
+router.get('/health-scores', async (req, res) => {
   const { clientId } = req.query
   try {
-    const cd = scanClients(PROJECT_ROOT)
+    const cd = await getClientsData(clientId as string)
     const analytics = readJSON(resolve(DATA_DIR, 'analytics.json')) || {}
     const crm = readJSON(resolve(DATA_DIR, 'crm.json')) || { contracts: [] }
     const clients = clientId ? cd.clients.filter(c => c.id === clientId) : cd.clients
 
     const scores = clients.map(cl => {
       const fourWeeksAgo = new Date(Date.now() - 28 * 86400000).toISOString().split('T')[0]
-      const recent = cl.posts.filter(p => p.date >= fourWeeksAgo)
+      const recent = cl.posts.filter((p: any) => p.date >= fourWeeksAgo)
       const ppw = recent.length / 4
 
       let posting = ppw >= 4 ? 25 : ppw >= 3 ? 20 : ppw >= 2 ? 15 : ppw >= 1 ? 10 : 0
@@ -666,10 +697,10 @@ router.get('/best-times', (req, res) => {
 // ══════════════════════════════════════════════════════════
 // 7. Pillar Balance
 // ══════════════════════════════════════════════════════════
-router.get('/pillar-balance', (req, res) => {
+router.get('/pillar-balance', async (req, res) => {
   const { clientId } = req.query
   try {
-    const cd = scanClients(PROJECT_ROOT)
+    const cd = await getClientsData(clientId as string)
     const clients = clientId ? cd.clients.filter(c => c.id === clientId) : cd.clients
     const balances = clients.map(cl => {
       const pm = new Map<string, number>()
@@ -692,11 +723,11 @@ router.get('/pillar-balance', (req, res) => {
 // ══════════════════════════════════════════════════════════
 // 8. ROI
 // ══════════════════════════════════════════════════════════
-router.get('/roi', (req, res) => {
+router.get('/roi', async (req, res) => {
   const { clientId } = req.query
   if (!clientId) { res.json({ error: 'Missing clientId' }); return }
   try {
-    const cd = scanClients(PROJECT_ROOT)
+    const cd = await getClientsData(clientId as string)
     const cl = cd.clients.find(c => c.id === clientId)
     if (!cl) { res.json({ error: 'Not found' }); return }
     const crm = readJSON(resolve(DATA_DIR, 'crm.json')) || { contracts: [] }
@@ -706,7 +737,7 @@ router.get('/roi', (req, res) => {
     const retainer = active?.monthlyValue || 0
     const now = new Date()
     const mp = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`
-    const posts = cl.posts.filter(p => p.date.startsWith(mp)).length || cl.stats.total || 1
+    const posts = cl.posts.filter((p: any) => p.date.startsWith(mp)).length || cl.stats.total || 1
     const a = store[clientId as string]
     const eng = a?.combined?.totalEngagement || 0
     const cpp = retainer > 0 ? Math.round(retainer / posts) : 0
@@ -720,9 +751,9 @@ router.get('/roi', (req, res) => {
 // ══════════════════════════════════════════════════════════
 // 9. Agency Metrics
 // ══════════════════════════════════════════════════════════
-router.get('/agency-metrics', (_req, res) => {
+router.get('/agency-metrics', async (_req, res) => {
   try {
-    const cd = scanClients(PROJECT_ROOT)
+    const cd = await getClientsData()
     const crm = readJSON(resolve(DATA_DIR, 'crm.json')) || { contracts: [] }
     const now = new Date()
     const mp = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`
@@ -732,7 +763,7 @@ router.get('/agency-metrics', (_req, res) => {
     const status: Record<string, number> = { draft: 0, approved: 0, scheduled: 0, published: 0 }
     const pm = new Map<string, number>()
     const breakdown = cd.clients.map(cl => {
-      const mp2 = cl.posts.filter(p => p.date.startsWith(mp)).length
+      const mp2 = cl.posts.filter((p: any) => p.date.startsWith(mp)).length
       postsThisMonth += mp2; totalPosts += cl.stats.total
       status.draft += cl.stats.draft; status.approved += cl.stats.approved
       status.scheduled += cl.stats.scheduled; status.published += cl.stats.published

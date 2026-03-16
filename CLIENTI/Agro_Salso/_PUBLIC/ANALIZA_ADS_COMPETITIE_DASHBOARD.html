@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radar Publicitar — Agro Salso · Analiza Competiției</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                        space: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        forest: { 950: '#071209', 900: '#0C1F12', 800: '#132B18', 700: '#1B3A21', 600: '#244A2C', 500: '#2D5A35' },
+                        harvest: { DEFAULT: '#D4A017', light: '#E8BE4A', dim: '#8B6A10' },
+                        cream: { DEFAULT: '#F7F5F0', dark: '#E8E4DC' },
+                        sage: { 300: '#B4C4AE', 400: '#94A88D', 500: '#7A8E73', 600: '#5B6F55', 700: '#3D4F38' },
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background: #0C1F12; color: #F7F5F0; overflow-x: hidden; }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background:
+                repeating-radial-gradient(circle at 20% 30%, transparent 0, transparent 100px, rgba(212,160,23,0.015) 100px, rgba(212,160,23,0.015) 101px),
+                repeating-radial-gradient(circle at 80% 70%, transparent 0, transparent 150px, rgba(212,160,23,0.012) 150px, rgba(212,160,23,0.012) 151px);
+            pointer-events: none; z-index: 0;
+        }
+
+        .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.revealed { opacity: 1; transform: translateY(0); }
+
+        .bar-fill { width: 0; transition: width 1.2s cubic-bezier(0.16,1,0.3,1); }
+
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.06); flex-shrink: 0; }
+        .dot.active { background: #D4A017; box-shadow: 0 0 6px rgba(212,160,23,0.5); }
+
+        .heat-cell { width: 100%; aspect-ratio: 1; border-radius: 4px; transition: all 0.2s; cursor: default; }
+        .heat-cell:hover { transform: scale(1.2); z-index: 2; }
+        .heat-yes { background: #D4A017; }
+        .heat-partial { background: rgba(212,160,23,0.35); }
+        .heat-no { background: rgba(255,255,255,0.04); }
+
+        .threat-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.08); }
+        .threat-dot.filled { background: currentColor; }
+
+        .glass-card {
+            background: rgba(27,58,33,0.6); border: 1px solid rgba(212,160,23,0.08);
+            backdrop-filter: blur(12px); border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+        }
+        .glass-card:hover { border-color: rgba(212,160,23,0.2); background: rgba(36,74,44,0.7); }
+
+        .stat-card { position: relative; overflow: hidden; }
+        .stat-card::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, #D4A017, transparent);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .stat-card:hover::after { opacity: 1; }
+
+        .top-bar {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(12,31,18,0.85); backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(212,160,23,0.08);
+        }
+
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(212,160,23,0.15), transparent); }
+
+        .section-num {
+            font-family: 'Space Grotesk', sans-serif; font-size: 8rem; font-weight: 700;
+            color: rgba(212,160,23,0.04); position: absolute; top: -2rem; right: 1rem;
+            line-height: 1; pointer-events: none; user-select: none;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #D4A017, #E8BE4A);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+        .pulse { animation: pulse 2s infinite; }
+
+        .priority-badge {
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.65rem;
+            text-transform: uppercase; letter-spacing: 0.1em; padding: 2px 8px; border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0C1F12; }
+        ::-webkit-scrollbar-thumb { background: #2D5A35; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D4A017; }
+
+        .zero-glow { text-shadow: 0 0 40px rgba(212,160,23,0.3), 0 0 80px rgba(212,160,23,0.1); }
+    </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="top-bar">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <i data-lucide="crosshair" class="w-5 h-5 text-harvest"></i>
+            <span class="font-space font-bold text-sm tracking-wider">RADAR PUBLICITAR</span>
+            <span class="text-sage-600 text-sm hidden sm:inline">·</span>
+            <span class="text-sage-400 text-sm font-inter hidden sm:inline">Analiza Competiției</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-emerald-500 pulse"></div>
+                <span class="text-sage-400 text-xs font-space">26.02.2026</span>
+            </div>
+            <span class="text-sage-600 text-xs font-space tracking-wider hidden md:inline">EPIC DIGITAL HUB</span>
+        </div>
+    </div>
+</header>
+
+<!-- SEC 01: HERO -->
+<section class="max-w-7xl mx-auto px-6 pt-16 pb-12 relative" style="z-index:1">
+    <div class="mb-12 reveal">
+        <p class="font-space text-harvest text-sm tracking-widest uppercase mb-3">Agro Salso SRL — Inteligență Competitivă</p>
+        <h1 class="font-poppins font-extrabold text-4xl md:text-5xl lg:text-6xl leading-tight mb-4">
+            Competiția digitală<br>
+            <span class="gradient-text">e aproape inexistentă.</span>
+        </h1>
+        <p class="text-sage-400 text-lg max-w-2xl">
+            Am analizat 5 competitori prin Meta Ad Library, Google Ads și social media.
+            Nimeni nu face ads pe Dexwal sau grape cu discuri. Piața e deschisă.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="glass-card stat-card p-6 reveal" style="transition-delay:0.1s">
+            <div class="flex items-start justify-between mb-4">
+                <i data-lucide="target" class="w-5 h-5 text-harvest"></i>
+                <span class="priority-badge bg-harvest/10 text-harvest">DEXWAL</span>
+            </div>
+            <div class="font-space font-bold text-5xl text-harvest mb-2 zero-glow counter" data-count="0" data-suffix="">0</div>
+            <p class="text-sm text-sage-400">Reclame active pe „Dexwal"</p>
+            <p class="text-xs text-sage-600 mt-1">La nivel național · Zero competiție</p>
+        </div>
+        <div class="glass-card stat-card p-6 reveal" style="transition-delay:0.2s">
+            <div class="flex items-start justify-between mb-4">
+                <i data-lucide="disc" class="w-5 h-5 text-harvest"></i>
+                <span class="priority-badge bg-harvest/10 text-harvest">GRAPE</span>
+            </div>
+            <div class="font-space font-bold text-5xl text-harvest mb-2 zero-glow counter" data-count="0" data-suffix="">0</div>
+            <p class="text-sm text-sage-400">Reclame active pe „grapa cu discuri"</p>
+            <p class="text-xs text-sage-600 mt-1">Din 85 reclame istorice</p>
+        </div>
+        <div class="glass-card stat-card p-6 reveal" style="transition-delay:0.3s">
+            <div class="flex items-start justify-between mb-4">
+                <i data-lucide="eye-off" class="w-5 h-5 text-harvest"></i>
+                <span class="priority-badge bg-harvest/10 text-harvest">LOCAL</span>
+            </div>
+            <div class="font-space font-bold text-5xl text-harvest mb-2 zero-glow counter" data-count="0" data-suffix="">0</div>
+            <p class="text-sm text-sage-400">Competitori locali cu ads</p>
+            <p class="text-xs text-sage-600 mt-1">Neomart + AgroSprinter = zero</p>
+        </div>
+        <div class="glass-card stat-card p-6 reveal" style="transition-delay:0.4s">
+            <div class="flex items-start justify-between mb-4">
+                <i data-lucide="shield-alert" class="w-5 h-5 text-red-400"></i>
+                <span class="priority-badge bg-red-500/10 text-red-400">AMENINȚARE</span>
+            </div>
+            <div class="font-space font-bold text-5xl text-red-400 mb-2 counter" data-count="1" data-suffix="/5">0</div>
+            <p class="text-sm text-sage-400">Competitor cu ads structurate</p>
+            <p class="text-xs text-sage-600 mt-1">Doar Titan Machinery · Din 5 analizați</p>
+        </div>
+    </div>
+</section>
+
+<!-- SEC 02: COMPETITOR PROFILES -->
+<section class="max-w-7xl mx-auto px-6 py-16 relative" style="z-index:1">
+    <div class="section-num">02</div>
+    <div class="section-divider mb-12"></div>
+    <div class="flex items-center gap-3 mb-2 reveal">
+        <i data-lucide="users" class="w-5 h-5 text-sage-500"></i>
+        <span class="font-space text-sage-500 text-xs tracking-widest uppercase">Sec 02 · Profiluri Competitori</span>
+    </div>
+    <h2 class="font-poppins font-bold text-3xl mb-8 reveal">Cine sunt și ce fac</h2>
+
+    <div class="grid lg:grid-cols-3 gap-4">
+        <!-- TITAN — featured -->
+        <div class="glass-card p-6 lg:row-span-2 reveal" style="transition-delay:0.1s; border-color: rgba(239,68,68,0.15);">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center font-space font-bold text-red-400 text-sm">TM</div>
+                <div>
+                    <h3 class="font-poppins font-semibold text-lg">Titan Machinery</h3>
+                    <span class="text-xs font-space text-red-400 bg-red-500/10 px-2 py-0.5 rounded">AMENINȚARE RIDICATĂ</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-1.5 mb-5">
+                <span class="text-xs text-sage-600 mr-2 font-space uppercase tracking-wider">Threat</span>
+                <div class="threat-dot filled" style="color:#EF4444"></div>
+                <div class="threat-dot filled" style="color:#EF4444"></div>
+                <div class="threat-dot filled" style="color:#EF4444"></div>
+                <div class="threat-dot filled" style="color:#EF4444"></div>
+                <div class="threat-dot"></div>
+            </div>
+            <div class="space-y-2.5 mb-5 text-sm">
+                <div class="flex justify-between"><span class="text-sage-400">Cifra de afaceri</span><span class="font-space font-semibold">44,3M RON</span></div>
+                <div class="flex justify-between"><span class="text-sage-400">Angajați</span><span class="font-space font-semibold">326</span></div>
+                <div class="flex justify-between"><span class="text-sage-400">Locații</span><span class="font-space font-semibold">14</span></div>
+                <div class="flex justify-between"><span class="text-sage-400">Spend marketing/an</span><span class="font-space font-semibold text-harvest">440K–1,3M RON</span></div>
+            </div>
+            <div class="border-t border-white/5 pt-4 space-y-2 text-sm">
+                <div class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i><span>Meta Ads structurate (singurele din piață)</span></div>
+                <div class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i><span>Facebook Pixel instalat · Retargeting</span></div>
+                <div class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i><span>Serie video „Toma și Titanii" (Cuzin Toma)</span></div>
+                <div class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i><span>Raiffeisen Leasing 0%, trade-in</span></div>
+                <div class="border-t border-white/5 my-3"></div>
+                <div class="flex items-center gap-2 text-sage-500"><i data-lucide="x" class="w-4 h-4 text-red-400/50 flex-shrink-0"></i><span>Instagram mort — 272 followers</span></div>
+                <div class="flex items-center gap-2 text-sage-500"><i data-lucide="x" class="w-4 h-4 text-red-400/50 flex-shrink-0"></i><span>Zero YouTube</span></div>
+                <div class="flex items-center gap-2 text-sage-500"><i data-lucide="x" class="w-4 h-4 text-red-400/50 flex-shrink-0"></i><span>Lead gen pasiv (fără chatbot)</span></div>
+            </div>
+        </div>
+
+        <!-- MEWI -->
+        <div class="glass-card p-5 reveal" style="transition-delay:0.2s">
+            <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center font-space font-bold text-orange-400 text-xs">MW</div>
+                <div>
+                    <h3 class="font-poppins font-semibold text-sm">Mewi Romania</h3>
+                    <span class="text-xs font-space text-orange-400">GIGANT ADORMIT</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-1.5 mb-3">
+                <span class="text-xs text-sage-600 mr-2 font-space">THREAT</span>
+                <div class="threat-dot filled" style="color:#F97316"></div>
+                <div class="threat-dot filled" style="color:#F97316"></div>
+                <div class="threat-dot filled" style="color:#F97316"></div>
+                <div class="threat-dot"></div>
+                <div class="threat-dot"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-xs mb-3">
+                <div><span class="text-sage-500">Revenue</span><br><span class="font-space font-semibold">669,5M RON</span></div>
+                <div><span class="text-sage-500">Digital/an</span><br><span class="font-space font-semibold text-orange-400">50–200K RON</span></div>
+                <div><span class="text-sage-500">Instagram</span><br><span class="font-space font-semibold">735</span></div>
+                <div><span class="text-sage-500">Blog</span><br><span class="font-space font-semibold text-red-400">Mort din 2021</span></div>
+            </div>
+            <p class="text-xs text-sage-600">670M RON revenue · sub 0,03% investit în digital</p>
+        </div>
+
+        <!-- DICORLAND -->
+        <div class="glass-card p-5 reveal" style="transition-delay:0.3s">
+            <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center font-space font-bold text-yellow-400 text-xs">DL</div>
+                <div>
+                    <h3 class="font-poppins font-semibold text-sm">DicorLand</h3>
+                    <span class="text-xs font-space text-yellow-400">AMENINȚARE MEDIE</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-1.5 mb-3">
+                <span class="text-xs text-sage-600 mr-2 font-space">THREAT</span>
+                <div class="threat-dot filled" style="color:#EAB308"></div>
+                <div class="threat-dot filled" style="color:#EAB308"></div>
+                <div class="threat-dot"></div>
+                <div class="threat-dot"></div>
+                <div class="threat-dot"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-xs mb-3">
+                <div><span class="text-sage-500">Angajați</span><br><span class="font-space font-semibold">78</span></div>
+                <div><span class="text-sage-500">Locații</span><br><span class="font-space font-semibold">6 + 17 jud.</span></div>
+                <div><span class="text-sage-500">Instagram</span><br><span class="font-space font-semibold">2.264</span></div>
+                <div><span class="text-sage-500">YouTube</span><br><span class="font-space font-semibold">30+ video</span></div>
+            </div>
+            <p class="text-xs text-sage-600">Boosted posts · Blog activ · „Finanțare în 72h"</p>
+        </div>
+
+        <!-- NEOMART -->
+        <div class="glass-card p-5 reveal" style="transition-delay:0.4s">
+            <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center font-space font-bold text-emerald-400 text-xs">NM</div>
+                <div>
+                    <h3 class="font-poppins font-semibold text-sm">Tractoare Neomart</h3>
+                    <span class="text-xs font-space text-emerald-400">ZERO AMENINȚARE</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-1.5 mb-3">
+                <span class="text-xs text-sage-600 mr-2 font-space">THREAT</span>
+                <div class="threat-dot"></div><div class="threat-dot"></div><div class="threat-dot"></div><div class="threat-dot"></div><div class="threat-dot"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-xs mb-3">
+                <div><span class="text-sage-500">Revenue</span><br><span class="font-space font-semibold">871K RON</span></div>
+                <div><span class="text-sage-500">Profit</span><br><span class="font-space font-semibold text-red-400">-163K RON</span></div>
+                <div><span class="text-sage-500">Meta Ads</span><br><span class="font-space font-semibold text-red-400">ZERO</span></div>
+                <div><span class="text-sage-500">Facebook</span><br><span class="font-space font-semibold text-red-400">Inexistent</span></div>
+            </div>
+            <p class="text-xs text-sage-600">Diosig, Bihor · 48 listări · Doar offline</p>
+        </div>
+
+        <!-- AGROSPRINTER -->
+        <div class="glass-card p-5 reveal" style="transition-delay:0.5s">
+            <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center font-space font-bold text-emerald-400 text-xs">AS</div>
+                <div>
+                    <h3 class="font-poppins font-semibold text-sm">AgroSprinter</h3>
+                    <span class="text-xs font-space text-emerald-400">ZERO AMENINȚARE</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-1.5 mb-3">
+                <span class="text-xs text-sage-600 mr-2 font-space">THREAT</span>
+                <div class="threat-dot"></div><div class="threat-dot"></div><div class="threat-dot"></div><div class="threat-dot"></div><div class="threat-dot"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-xs mb-3">
+                <div><span class="text-sage-500">Produse</span><br><span class="font-space font-semibold">1.200+</span></div>
+                <div><span class="text-sage-500">Email</span><br><span class="font-space font-semibold text-red-400">@yahoo.com</span></div>
+                <div><span class="text-sage-500">Ads proprii</span><br><span class="font-space font-semibold text-red-400">ZERO</span></div>
+                <div><span class="text-sage-500">Facebook</span><br><span class="font-space font-semibold text-red-400">Inexistent</span></div>
+            </div>
+            <p class="text-xs text-sage-600">Borș, Bihor · Doar pe marketplace-uri terțe</p>
+        </div>
+    </div>
+</section>
+
+<!-- SEC 03: AD SPEND + SOCIAL MEDIA -->
+<section class="max-w-7xl mx-auto px-6 py-16 relative" style="z-index:1">
+    <div class="section-num">03</div>
+    <div class="section-divider mb-12"></div>
+    <div class="flex items-center gap-3 mb-2 reveal">
+        <i data-lucide="bar-chart-3" class="w-5 h-5 text-sage-500"></i>
+        <span class="font-space text-sage-500 text-xs tracking-widest uppercase">Sec 03 · Buget & Social Media</span>
+    </div>
+    <h2 class="font-poppins font-bold text-3xl mb-8 reveal">Cât cheltuie și unde sunt</h2>
+
+    <div class="grid md:grid-cols-2 gap-8">
+        <!-- AD SPEND CHART -->
+        <div class="glass-card p-6 reveal" style="transition-delay:0.1s">
+            <h3 class="font-poppins font-semibold text-lg mb-1">Spend publicitar estimat</h3>
+            <p class="text-xs text-sage-500 mb-6">RON / an · Marketing digital total</p>
+            <div class="space-y-4" id="spend-chart">
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span class="font-space text-red-400">Titan Machinery</span>
+                        <span class="font-space font-semibold">440K – 1,3M</span>
+                    </div>
+                    <div class="h-6 rounded bg-white/5 overflow-hidden">
+                        <div class="bar-fill h-full rounded bg-gradient-to-r from-red-500/60 to-red-400" data-width="92%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span class="font-space text-orange-400">Mewi</span>
+                        <span class="font-space font-semibold">50K – 200K</span>
+                    </div>
+                    <div class="h-6 rounded bg-white/5 overflow-hidden">
+                        <div class="bar-fill h-full rounded bg-gradient-to-r from-orange-500/60 to-orange-400" data-width="28%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span class="font-space text-yellow-400">DicorLand</span>
+                        <span class="font-space font-semibold text-sage-500">Neestimabil</span>
+                    </div>
+                    <div class="h-6 rounded bg-white/5 overflow-hidden">
+                        <div class="bar-fill h-full rounded bg-gradient-to-r from-yellow-500/40 to-yellow-400/60" data-width="10%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span class="font-space text-harvest">Agro Salso</span>
+                        <span class="font-space font-semibold">< 10K</span>
+                    </div>
+                    <div class="h-6 rounded bg-white/5 overflow-hidden">
+                        <div class="bar-fill h-full rounded bg-harvest/60" data-width="5%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span class="font-space text-emerald-400">Neomart</span>
+                        <span class="font-space font-semibold text-sage-600">0 RON</span>
+                    </div>
+                    <div class="h-6 rounded bg-white/5 overflow-hidden">
+                        <div class="bar-fill h-full rounded bg-emerald-500/30" data-width="0%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span class="font-space text-emerald-400">AgroSprinter</span>
+                        <span class="font-space font-semibold text-sage-600">0 RON</span>
+                    </div>
+                    <div class="h-6 rounded bg-white/5 overflow-hidden">
+                        <div class="bar-fill h-full rounded bg-emerald-500/30" data-width="0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SOCIAL MEDIA -->
+        <div class="glass-card p-6 reveal" style="transition-delay:0.2s">
+            <h3 class="font-poppins font-semibold text-lg mb-1">Prezență social media</h3>
+            <p class="text-xs text-sage-500 mb-6">Followers pe platforme principale</p>
+
+            <div class="mb-6">
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-5 h-5 rounded bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                        <i data-lucide="camera" class="w-3 h-3 text-white"></i>
+                    </div>
+                    <span class="text-sm font-space font-semibold">Instagram</span>
+                </div>
+                <div class="space-y-2" id="ig-chart">
+                    <div class="flex items-center gap-3">
+                        <span class="font-space text-xs text-sage-400 w-20 text-right">DicorLand</span>
+                        <div class="flex-1 h-4 rounded bg-white/5 overflow-hidden"><div class="bar-fill h-full rounded bg-gradient-to-r from-purple-500/50 to-pink-400/70" data-width="100%"></div></div>
+                        <span class="font-space text-xs w-12">2.264</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="font-space text-xs text-sage-400 w-20 text-right">Mewi</span>
+                        <div class="flex-1 h-4 rounded bg-white/5 overflow-hidden"><div class="bar-fill h-full rounded bg-gradient-to-r from-purple-500/50 to-pink-400/70" data-width="32%"></div></div>
+                        <span class="font-space text-xs w-12">735</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="font-space text-xs text-sage-400 w-20 text-right">Titan</span>
+                        <div class="flex-1 h-4 rounded bg-white/5 overflow-hidden"><div class="bar-fill h-full rounded bg-gradient-to-r from-purple-500/50 to-pink-400/70" data-width="12%"></div></div>
+                        <span class="font-space text-xs w-12">272</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="font-space text-xs text-sage-500 w-20 text-right">Restul</span>
+                        <div class="flex-1 h-4 rounded bg-white/5 overflow-hidden"></div>
+                        <span class="font-space text-xs text-sage-600 w-12">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-5 h-5 rounded bg-blue-600 flex items-center justify-center">
+                        <i data-lucide="briefcase" class="w-3 h-3 text-white"></i>
+                    </div>
+                    <span class="text-sm font-space font-semibold">LinkedIn</span>
+                </div>
+                <div class="space-y-2" id="li-chart">
+                    <div class="flex items-center gap-3">
+                        <span class="font-space text-xs text-sage-400 w-20 text-right">DicorLand</span>
+                        <div class="flex-1 h-4 rounded bg-white/5 overflow-hidden"><div class="bar-fill h-full rounded bg-blue-500/70" data-width="100%"></div></div>
+                        <span class="font-space text-xs w-12">2.606</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="font-space text-xs text-sage-400 w-20 text-right">Titan</span>
+                        <div class="flex-1 h-4 rounded bg-white/5 overflow-hidden"><div class="bar-fill h-full rounded bg-blue-500/70" data-width="78%"></div></div>
+                        <span class="font-space text-xs w-12">2.031</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="font-space text-xs text-sage-400 w-20 text-right">Mewi</span>
+                        <div class="flex-1 h-4 rounded bg-white/5 overflow-hidden"><div class="bar-fill h-full rounded bg-blue-500/70" data-width="57%"></div></div>
+                        <span class="font-space text-xs w-12">1.486</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="font-space text-xs text-sage-500 w-20 text-right">Restul</span>
+                        <div class="flex-1 h-4 rounded bg-white/5 overflow-hidden"></div>
+                        <span class="font-space text-xs text-sage-600 w-12">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SEC 04: MARKET LANDSCAPE -->
+<section class="max-w-7xl mx-auto px-6 py-16 relative" style="z-index:1">
+    <div class="section-num">04</div>
+    <div class="section-divider mb-12"></div>
+    <div class="flex items-center gap-3 mb-2 reveal">
+        <i data-lucide="scan" class="w-5 h-5 text-sage-500"></i>
+        <span class="font-space text-sage-500 text-xs tracking-widest uppercase">Sec 04 · Peisajul Pieței</span>
+    </div>
+    <h2 class="font-poppins font-bold text-3xl mb-3 reveal">Cât de goală e piața</h2>
+    <p class="text-sage-400 mb-8 reveal">Fiecare punct = o reclamă istorică pe Meta. Punctele aurii = active acum.</p>
+
+    <div class="grid md:grid-cols-3 gap-4">
+        <!-- DEXWAL -->
+        <div class="glass-card p-6 reveal" style="transition-delay:0.1s">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-poppins font-semibold">„Dexwal"</h3>
+                <span class="priority-badge bg-harvest/10 text-harvest">LIBER</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5 mb-4" id="dots-dexwal"></div>
+            <div class="border-t border-white/5 pt-3 space-y-1">
+                <div class="flex justify-between text-sm"><span class="text-sage-400">Reclame istorice</span><span class="font-space font-semibold">23</span></div>
+                <div class="flex justify-between text-sm"><span class="text-sage-400">Active acum</span><span class="font-space font-bold text-harvest">0</span></div>
+                <div class="flex justify-between text-sm"><span class="text-sage-400">Advertiseri vreodată</span><span class="font-space font-semibold">2</span></div>
+            </div>
+            <p class="text-xs text-sage-600 mt-3">Agro Salso + Ralcom Sibiu (450 km distanță)</p>
+        </div>
+
+        <!-- GRAPA CU DISCURI -->
+        <div class="glass-card p-6 reveal" style="transition-delay:0.2s">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-poppins font-semibold">„Grapa cu discuri"</h3>
+                <span class="priority-badge bg-harvest/10 text-harvest">LIBER</span>
+            </div>
+            <div class="flex flex-wrap gap-1 mb-4" id="dots-grapa"></div>
+            <div class="border-t border-white/5 pt-3 space-y-1">
+                <div class="flex justify-between text-sm"><span class="text-sage-400">Reclame istorice</span><span class="font-space font-semibold">~85</span></div>
+                <div class="flex justify-between text-sm"><span class="text-sage-400">Active acum</span><span class="font-space font-bold text-harvest">0</span></div>
+                <div class="flex justify-between text-sm"><span class="text-sage-400">Ultima activă</span><span class="font-space font-semibold">Dec 2025</span></div>
+            </div>
+            <p class="text-xs text-sage-600 mt-3">Titan Machinery — lichidare stoc (expirat)</p>
+        </div>
+
+        <!-- UTILAJE AGRICOLE -->
+        <div class="glass-card p-6 reveal" style="transition-delay:0.3s">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-poppins font-semibold">„Utilaje agricole"</h3>
+                <span class="priority-badge bg-yellow-500/10 text-yellow-400">SLAB OCUPAT</span>
+            </div>
+            <div class="flex flex-wrap gap-1 mb-4" id="dots-utilaje"></div>
+            <div class="border-t border-white/5 pt-3 space-y-1">
+                <div class="flex justify-between text-sm"><span class="text-sage-400">Reclame istorice</span><span class="font-space font-semibold">~600</span></div>
+                <div class="flex justify-between text-sm"><span class="text-sage-400">Active acum</span><span class="font-space font-bold text-yellow-400">11</span></div>
+                <div class="flex justify-between text-sm"><span class="text-sage-400">Relevante pt Agro Salso</span><span class="font-space font-bold text-red-400">1</span></div>
+            </div>
+            <p class="text-xs text-sage-600 mt-3">Doar Titan Machinery e competitor direct</p>
+        </div>
+    </div>
+</section>
+
+<!-- SEC 05: CAPABILITY MATRIX -->
+<section class="max-w-7xl mx-auto px-6 py-16 relative" style="z-index:1">
+    <div class="section-num">05</div>
+    <div class="section-divider mb-12"></div>
+    <div class="flex items-center gap-3 mb-2 reveal">
+        <i data-lucide="grid-3x3" class="w-5 h-5 text-sage-500"></i>
+        <span class="font-space text-sage-500 text-xs tracking-widest uppercase">Sec 05 · Matrice Capabilități</span>
+    </div>
+    <h2 class="font-poppins font-bold text-3xl mb-3 reveal">Cine are ce</h2>
+    <p class="text-sage-400 mb-8 reveal">
+        <span class="inline-block w-3 h-3 rounded-sm bg-harvest align-middle mr-1"></span> Da
+        <span class="inline-block w-3 h-3 rounded-sm ml-4 align-middle mr-1" style="background:rgba(212,160,23,0.35)"></span> Parțial
+        <span class="inline-block w-3 h-3 rounded-sm bg-white/5 ml-4 align-middle mr-1"></span> Nu
+    </p>
+
+    <div class="glass-card p-6 overflow-x-auto reveal" style="transition-delay:0.1s">
+        <table class="w-full min-w-[600px]">
+            <thead>
+                <tr>
+                    <th class="text-left pb-4 pr-4 font-space text-xs text-sage-500 uppercase tracking-wider">Capabilitate</th>
+                    <th class="pb-4 px-2 text-center"><div class="font-space text-xs text-harvest font-bold">AS</div><div class="text-[10px] text-sage-600">Agro Salso</div></th>
+                    <th class="pb-4 px-2 text-center"><div class="font-space text-xs text-emerald-400 font-bold">NM</div><div class="text-[10px] text-sage-600">Neomart</div></th>
+                    <th class="pb-4 px-2 text-center"><div class="font-space text-xs text-emerald-400 font-bold">ASp</div><div class="text-[10px] text-sage-600">AgroSprinter</div></th>
+                    <th class="pb-4 px-2 text-center"><div class="font-space text-xs text-red-400 font-bold">TM</div><div class="text-[10px] text-sage-600">Titan</div></th>
+                    <th class="pb-4 px-2 text-center"><div class="font-space text-xs text-orange-400 font-bold">MW</div><div class="text-[10px] text-sage-600">Mewi</div></th>
+                    <th class="pb-4 px-2 text-center"><div class="font-space text-xs text-yellow-400 font-bold">DL</div><div class="text-[10px] text-sage-600">DicorLand</div></th>
+                </tr>
+            </thead>
+            <tbody id="matrix-body"></tbody>
+        </table>
+    </div>
+</section>
+
+<!-- SEC 06: RECOMMENDATIONS -->
+<section class="max-w-7xl mx-auto px-6 py-16 relative" style="z-index:1">
+    <div class="section-num">06</div>
+    <div class="section-divider mb-12"></div>
+    <div class="flex items-center gap-3 mb-2 reveal">
+        <i data-lucide="zap" class="w-5 h-5 text-sage-500"></i>
+        <span class="font-space text-sage-500 text-xs tracking-widest uppercase">Sec 06 · Recomandări</span>
+    </div>
+    <h2 class="font-poppins font-bold text-3xl mb-8 reveal">Ce facem cu asta</h2>
+
+    <div class="grid md:grid-cols-3 gap-4">
+        <!-- IMEDIAT -->
+        <div class="glass-card p-6 reveal" style="transition-delay:0.1s; border-color: rgba(239,68,68,0.2);">
+            <div class="flex items-center gap-2 mb-4">
+                <div class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center">
+                    <i data-lucide="zap" class="w-4 h-4 text-red-400"></i>
+                </div>
+                <div>
+                    <h3 class="font-poppins font-semibold">Imediat</h3>
+                    <span class="text-xs font-space text-red-400">0–30 ZILE</span>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <div class="bg-white/5 rounded-lg p-3">
+                    <p class="text-sm font-semibold mb-1">Meta Ads pe „Dexwal"</p>
+                    <p class="text-xs text-sage-400">Zero competiție = CPM minim. Buget: 1–2K RON/lună.</p>
+                </div>
+                <div class="bg-white/5 rounded-lg p-3">
+                    <p class="text-sm font-semibold mb-1">Meta Ads pe „grapa cu discuri"</p>
+                    <p class="text-xs text-sage-400">Zero ads active. Singurul rezultat pentru fermieri.</p>
+                </div>
+                <div class="bg-white/5 rounded-lg p-3">
+                    <p class="text-sm font-semibold mb-1">Instalare Facebook Pixel</p>
+                    <p class="text-xs text-sage-400">Titan și Mewi deja fac retargeting. Agro Salso trebuie și el.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TERMEN SCURT -->
+        <div class="glass-card p-6 reveal" style="transition-delay:0.2s; border-color: rgba(234,179,8,0.15);">
+            <div class="flex items-center gap-2 mb-4">
+                <div class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                    <i data-lucide="clock" class="w-4 h-4 text-yellow-400"></i>
+                </div>
+                <div>
+                    <h3 class="font-poppins font-semibold">Termen scurt</h3>
+                    <span class="text-xs font-space text-yellow-400">1–3 LUNI</span>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <div class="bg-white/5 rounded-lg p-3">
+                    <p class="text-sm font-semibold mb-1">Video scurt pe Reels / TikTok</p>
+                    <p class="text-xs text-sage-400">Dexwal Mamut în acțiune. Nimeni nu face video agro local.</p>
+                </div>
+                <div class="bg-white/5 rounded-lg p-3">
+                    <p class="text-sm font-semibold mb-1">CTA finanțare AFIR DR-14</p>
+                    <p class="text-xs text-sage-400">„Te ajutăm cu documentația AFIR." Niciun competitor oferă asta.</p>
+                </div>
+                <div class="bg-white/5 rounded-lg p-3">
+                    <p class="text-sm font-semibold mb-1">Google Ads local</p>
+                    <p class="text-xs text-sage-400">„Utilaje agricole Bihor" — zero competitori locali pe Google.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TERMEN MEDIU -->
+        <div class="glass-card p-6 reveal" style="transition-delay:0.3s; border-color: rgba(34,197,94,0.15);">
+            <div class="flex items-center gap-2 mb-4">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                    <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i>
+                </div>
+                <div>
+                    <h3 class="font-poppins font-semibold">Termen mediu</h3>
+                    <span class="text-xs font-space text-emerald-400">3–6 LUNI</span>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <div class="bg-white/5 rounded-lg p-3">
+                    <p class="text-sm font-semibold mb-1">Blog cu conținut AFIR</p>
+                    <p class="text-xs text-sage-400">Modelul DicorLand funcționează. SEO pe fonduri europene.</p>
+                </div>
+                <div class="bg-white/5 rounded-lg p-3">
+                    <p class="text-sm font-semibold mb-1">Canal YouTube cu demo-uri</p>
+                    <p class="text-xs text-sage-400">Titan nu are YouTube. Mewi nu are. Teren virgin.</p>
+                </div>
+                <div class="bg-white/5 rounded-lg p-3">
+                    <p class="text-sm font-semibold mb-1">Remarketing pe baza Pixelului</p>
+                    <p class="text-xs text-sage-400">Campanii de revenire pentru vizitatori care nu au convertit.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SEC 07: KEY INSIGHT -->
+<section class="max-w-7xl mx-auto px-6 py-16 relative" style="z-index:1">
+    <div class="section-divider mb-12"></div>
+    <div class="glass-card p-8 md:p-12 text-center reveal" style="border-color: rgba(212,160,23,0.2); background: linear-gradient(135deg, rgba(27,58,33,0.8), rgba(36,74,44,0.6));">
+        <i data-lucide="sparkles" class="w-8 h-8 text-harvest mx-auto mb-4"></i>
+        <h2 class="font-poppins font-bold text-2xl md:text-3xl mb-4">
+            Cu 2–5K RON/lună pe ads, Agro Salso<br>
+            <span class="gradient-text">poate domina complet 3 categorii fără competiție.</span>
+        </h2>
+        <p class="text-sage-400 max-w-xl mx-auto">
+            Nimeni nu rulează ads pentru Dexwal la nivel național. Nimeni nu face ads pe „grapa cu discuri".
+            Competitorii locali nu au nici măcar pagină de Facebook. Fereastra e deschisă.
+        </p>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="max-w-7xl mx-auto px-6 py-8 relative" style="z-index:1">
+    <div class="section-divider mb-8"></div>
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-sage-600">
+        <div class="flex items-center gap-2">
+            <i data-lucide="crosshair" class="w-4 h-4 text-sage-700"></i>
+            <span class="font-space tracking-wider">RADAR PUBLICITAR · AGRO SALSO SRL</span>
+        </div>
+        <span>Realizat de Epic Digital Hub · Februarie 2026</span>
+        <span>Surse: Meta Ad Library, analiza web, date financiare publice</span>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Init Lucide icons
+    lucide.createIcons();
+
+    // Intersection Observer for reveals
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                // Trigger bar animations inside this element
+                entry.target.querySelectorAll('.bar-fill[data-width]').forEach(bar => {
+                    setTimeout(() => { bar.style.width = bar.dataset.width; }, 200);
+                });
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Counter animation
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const el = entry.target;
+                const target = parseInt(el.dataset.count);
+                const suffix = el.dataset.suffix || '';
+                if (target === 0) {
+                    el.textContent = '0' + suffix;
+                    return;
+                }
+                let current = 0;
+                const step = Math.max(1, Math.floor(target / 30));
+                const interval = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(interval);
+                    }
+                    el.textContent = current + suffix;
+                }, 40);
+                counterObserver.unobserve(el);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+    // Generate dot grids
+    function makeDots(containerId, total, active) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        for (let i = 0; i < total; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (i < active ? ' active' : '');
+            container.appendChild(dot);
+        }
+    }
+    makeDots('dots-dexwal', 23, 0);
+    makeDots('dots-grapa', 85, 0);
+    makeDots('dots-utilaje', 60, 1); // 60 = scaled from 600, 1 gold = Titan
+
+    // Capability matrix
+    const capabilities = [
+        ['Meta Ads Structurate',  'no','no','no','yes','no','partial'],
+        ['Google Ads',            'no','no','no','partial','no','no'],
+        ['Facebook Pixel',        'no','no','no','yes','yes','no'],
+        ['Instagram > 500',       'no','no','no','no','yes','yes'],
+        ['LinkedIn > 1.000',      'no','no','no','yes','yes','yes'],
+        ['YouTube',               'no','no','no','no','no','yes'],
+        ['Blog Activ',            'no','no','no','partial','no','yes'],
+        ['Conținut Video',        'no','no','no','yes','no','partial'],
+        ['Lead Gen Activ',        'no','no','no','no','no','partial'],
+        ['Finanțare Promovată',   'no','no','no','yes','no','yes'],
+        ['Retargeting',           'no','no','no','yes','partial','no'],
+    ];
+
+    const tbody = document.getElementById('matrix-body');
+    capabilities.forEach((row, i) => {
+        const tr = document.createElement('tr');
+        tr.style.transitionDelay = (i * 0.03) + 's';
+
+        const labelTd = document.createElement('td');
+        labelTd.className = 'py-2 pr-4 font-space text-xs text-sage-400 uppercase tracking-wider';
+        labelTd.textContent = row[0];
+        tr.appendChild(labelTd);
+
+        for (let j = 1; j <= 6; j++) {
+            const td = document.createElement('td');
+            td.className = 'py-2 px-2';
+            td.innerHTML = '<div class="flex justify-center"><div class="heat-cell w-7 h-7 heat-' + row[j] + '"></div></div>';
+            tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+    });
+
+    // Animate bars on scroll (for charts inside already-revealed cards)
+    const barObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const bars = entry.target.querySelectorAll('.bar-fill[data-width]');
+                bars.forEach((bar, i) => {
+                    setTimeout(() => { bar.style.width = bar.dataset.width; }, i * 100 + 200);
+                });
+                barObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('#spend-chart, #ig-chart, #li-chart').forEach(el => barObserver.observe(el));
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>thermX — Declarație de Performanță</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6B00;
+      --orange-light: #FFF3E8;
+      --blue: #1B3A5C;
+      --blue-light: #E8F0F8;
+      --green: #2E7D32;
+      --green-light: #E8F5E9;
+      --text: #1a1a1a;
+      --text-muted: #555;
+      --border: #e0e0e0;
+      --bg: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    @page {
+      size: A4;
+      margin: 20mm 18mm 25mm 18mm;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 16px;
+      border-bottom: 3px solid var(--orange);
+      margin-bottom: 28px;
+    }
+
+    .doc-header__logo img { height: 52px; }
+
+    .doc-header__company {
+      text-align: right;
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .doc-header__company strong {
+      color: var(--text);
+      font-size: 9pt;
+    }
+
+    .doc-title {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .doc-title h1 {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 22pt;
+      font-weight: 800;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .doc-title .subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 12pt;
+      font-weight: 600;
+      color: var(--orange);
+      text-transform: uppercase;
+    }
+
+    .doc-title .doc-ref {
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .section-title {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 12pt;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--orange);
+      margin: 24px 0 12px;
+    }
+
+    .section-title--sm {
+      font-size: 10.5pt;
+      border-bottom: 1px solid var(--border);
+    }
+
+    p { margin-bottom: 10px; }
+
+    .lead {
+      font-size: 11pt;
+      font-weight: 600;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .highlight-box {
+      background: var(--orange-light);
+      border-left: 4px solid var(--orange);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .highlight-box p { margin-bottom: 0; }
+
+    .info-box {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .info-box p { margin-bottom: 4px; }
+
+    .safe-box {
+      background: var(--green-light);
+      border-left: 4px solid var(--green);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .safe-box strong { color: var(--green); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 10pt;
+    }
+
+    th, td {
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--blue);
+      color: #fff;
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 600;
+      font-size: 9.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    tr:nth-child(even) { background: #f8f9fa; }
+
+    td:first-child { font-weight: 500; }
+
+    .table-value {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    ul, ol {
+      margin: 8px 0 12px 22px;
+    }
+
+    li { margin-bottom: 5px; }
+
+    .cols-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 14px 0;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 10pt;
+    }
+
+    .field-row__label {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 9.5pt;
+    }
+
+    .field-row__value {
+      font-weight: 500;
+    }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    .doc-footer {
+      margin-top: 32px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8pt;
+      color: var(--text-muted);
+    }
+
+    .doc-footer a {
+      color: var(--orange);
+      text-decoration: none;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: 'Exo 2', sans-serif;
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .reg-ref {
+      background: var(--blue-light);
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 9.5pt;
+      color: var(--text-muted);
+    }
+
+    .reg-ref strong {
+      color: var(--blue);
+    }
+
+    .signature-block {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .signature-block__item {
+      border-top: 2px solid var(--blue);
+      padding-top: 12px;
+    }
+
+    .signature-block__role {
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 700;
+      font-size: 9pt;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .signature-block__name {
+      font-weight: 600;
+      font-size: 10pt;
+    }
+
+    .signature-block__detail {
+      font-size: 8.5pt;
+      color: var(--text-muted);
+    }
+
+    @media print {
+      body { font-size: 9.5pt; line-height: 1.45; }
+      .doc-header { margin-bottom: 16px; padding-bottom: 12px; }
+      .section-title { margin-top: 16px; margin-bottom: 8px; page-break-after: avoid; }
+      .no-print { display: none; }
+      .page-break { page-break-before: always; }
+      a { color: var(--text) !important; text-decoration: none; }
+      table { page-break-inside: avoid; }
+      tr { page-break-inside: avoid; }
+      .highlight-box, .info-box, .safe-box { page-break-inside: avoid; }
+      .cols-2 { page-break-inside: avoid; }
+      p { orphans: 3; widows: 3; }
+      h2, h3 { page-break-after: avoid; }
+    }
+
+    @media screen {
+      body {
+        max-width: 210mm;
+        margin: 20px auto;
+        padding: 30px 28px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border-radius: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Nano Revolution SRL</strong><br>
+      Str. Ogorului Nr. 3, Oradea<br>
+      Jud. Bihor, 410554, România<br>
+      <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a><br>
+      +40 771 445 577
+    </div>
+  </header>
+
+  <!-- ═══ TITLE ═══ -->
+  <div class="doc-title">
+    <h1>Declarație de Performanță</h1>
+    <div class="subtitle">Conform Regulamentului (UE) Nr. 305/2011 (CPR)</div>
+    <div class="doc-ref">Ref. DoP-THERMX-001/2026 &nbsp;|&nbsp; Rev. 01 &nbsp;|&nbsp; Data: 08.03.2026</div>
+  </div>
+
+  <div class="reg-ref">
+    <strong>Baza legală:</strong> Regulamentul (UE) Nr. 305/2011 al Parlamentului European și al Consiliului din 9 martie 2011 de stabilire a unor condiții armonizate pentru comercializarea produselor pentru construcții și de abrogare a Directivei 89/106/CEE a Consiliului.
+  </div>
+
+
+  <!-- ═══ 1. IDENTIFICARE PRODUS ═══ -->
+  <h2 class="section-title">1. Identificarea produsului</h2>
+
+  <div class="field-row">
+    <div class="field-row__label">Cod de identificare unic al produsului-tip:</div>
+    <div class="field-row__value"><strong>THERMX-IC-2026-001</strong></div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Denumire comercială:</div>
+    <div class="field-row__value"><strong>thermX Insulation Coating</strong></div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Tip produs:</div>
+    <div class="field-row__value">Membrană termoizolantă și hidroizolantă nanoceramică</div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Utilizare preconizată:</div>
+    <div class="field-row__value">Izolație termică și hidroizolație pentru elemente constructive — fațade, pereți, acoperișuri, conducte, elemente structurale</div>
+  </div>
+
+
+  <!-- ═══ 2. PRODUCĂTOR ═══ -->
+  <h2 class="section-title">2. Producător</h2>
+
+  <div class="field-row">
+    <div class="field-row__label">Denumire:</div>
+    <div class="field-row__value"><strong>Nano Revolution SRL</strong></div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Adresa sediului social:</div>
+    <div class="field-row__value">Str. Ogorului Nr. 3, Oradea, Jud. Bihor, 410554, România</div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Cod unic de înregistrare:</div>
+    <div class="field-row__value">RO ___________</div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Persoana de contact:</div>
+    <div class="field-row__value">Alexandru Țucudean-Șușman &nbsp;|&nbsp; office@sinca.org</div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Telefon:</div>
+    <div class="field-row__value">+40 771 445 577</div>
+  </div>
+
+
+  <!-- ═══ 3. SISTEM AVCP ═══ -->
+  <h2 class="section-title">3. Sistem de evaluare și verificare a constanței performanței</h2>
+
+  <div class="info-box">
+    <p><strong>Sistem AVCP aplicabil: Sistem 3</strong></p>
+    <p>Conform Regulamentului (UE) Nr. 305/2011, Anexa V — Determinarea produsului-tip pe baza încercărilor de tip efectuate de un laborator notificat.</p>
+  </div>
+
+  <div class="field-row">
+    <div class="field-row__label">Standard armonizat de referință:</div>
+    <div class="field-row__value"><strong>EN 15824:2017</strong> — Specificații pentru tencuieli exterioare și interioare pe bază de lianți organici</div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Standard de calcul termic:</div>
+    <div class="field-row__value"><strong>СНиП 41-103-2000</strong> — Proiectarea izolației termice pentru echipamente și conducte</div>
+  </div>
+
+
+  <!-- ═══ 4. PERFORMANȚĂ DECLARATĂ ═══ -->
+  <h2 class="section-title">4. Performanță declarată</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:5%">Nr.</th>
+        <th style="width:38%">Caracteristică esențială</th>
+        <th style="width:15%">Unitate</th>
+        <th style="width:22%">Performanță declarată</th>
+        <th>Standard / Metodă</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Conductivitate termică la 20°C</td>
+        <td>W/m·K</td>
+        <td class="table-value">0,001</td>
+        <td>СНиП 41-103-2000</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Reacție la foc (stare uscată / polimerizată)</td>
+        <td>Clasă</td>
+        <td class="table-value">Clasa A</td>
+        <td>EN 15824</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Reacție la foc (stare lichidă)</td>
+        <td>Clasă</td>
+        <td class="table-value">Clasa C</td>
+        <td>EN 15824</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Aderență pe beton (durabilitate la rupere)</td>
+        <td>MPa</td>
+        <td class="table-value">≥ 1,84</td>
+        <td>EN 1542</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Aderență pe metal (durabilitate la rupere)</td>
+        <td>MPa</td>
+        <td class="table-value">≥ 1,53</td>
+        <td>EN 1542</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>Rezistență la tracțiune (după aplicare)</td>
+        <td>MPa</td>
+        <td class="table-value">≥ 2,0</td>
+        <td>EN ISO 527</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>Rezistență la tracțiune (după îmbătrânire 10 ani)</td>
+        <td>MPa</td>
+        <td class="table-value">≥ 3,0</td>
+        <td>EN ISO 527</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>Alungire relativă la rupere</td>
+        <td>%</td>
+        <td class="table-value">≥ 12</td>
+        <td>EN ISO 527</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>Absorbție de apă</td>
+        <td>g/cm³</td>
+        <td class="table-value">≤ 0,03</td>
+        <td>EN ISO 62</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>Permeabilitate la vapori de apă</td>
+        <td>mg/m·h·Pa</td>
+        <td class="table-value">0,0014</td>
+        <td>EN ISO 7783</td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td>Coeficient de emisie termică</td>
+        <td>W/m²·°C</td>
+        <td class="table-value">1,29 – 2,2</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td>Temperatură de exploatare</td>
+        <td>°C</td>
+        <td class="table-value">−60 → +260</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td>Densitate strat uscat</td>
+        <td>kg/m³</td>
+        <td class="table-value">380 – 410</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td>Durabilitate garantată</td>
+        <td>ani</td>
+        <td class="table-value">≥ 20</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══ 5. DECLARAȚIE ═══ -->
+  <h2 class="section-title">5. Declarație</h2>
+
+  <div class="safe-box">
+    <p><strong>Performanța produsului identificat mai sus este în conformitate cu setul de performanțe declarate.</strong></p>
+    <p>Această declarație de performanță este emisă, în conformitate cu Regulamentul (UE) Nr. 305/2011, sub responsabilitatea exclusivă a producătorului identificat la punctul 2.</p>
+  </div>
+
+  <p style="margin-top:8px;">Semnată în numele producătorului de:</p>
+
+  <div class="signature-block">
+    <div class="signature-block__item">
+      <div class="signature-block__role">Administrator / Reprezentant Legal</div>
+      <div class="signature-block__name">Alexandru Țucudean-Șușman</div>
+      <div class="signature-block__detail">Nano Revolution SRL</div>
+      <div class="signature-block__detail" style="margin-top:30px;">Semnătura: ________________________</div>
+    </div>
+    <div class="signature-block__item">
+      <div class="signature-block__role">Data și locul emiterii</div>
+      <div class="signature-block__name">08.03.2026, Oradea</div>
+      <div class="signature-block__detail" style="margin-top:16px;">Ștampila:</div>
+    </div>
+  </div>
+
+
+  <!-- ═══ DISCLAIMER ═══ -->
+  <div class="divider"></div>
+
+  <p style="font-size: 8.5pt; color: var(--text-muted); line-height: 1.5;">
+    Această declarație de performanță este întocmită în conformitate cu Regulamentul (UE) Nr. 305/2011 privind produsele pentru construcții. Producătorul este responsabil pentru acuratețea datelor declarate. Declarația nu constituie o garanție contractuală suplimentară față de legislația în vigoare. O copie a acestei declarații este disponibilă la cerere de la producător.
+  </p>
+
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="doc-footer">
+    <div>&copy; 2026 Nano Revolution SRL — Toate drepturile rezervate</div>
+    <div>
+      <a href="https://nanorevolution.ro">nanorevolution.ro</a> &nbsp;|&nbsp;
+      <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a>
+    </div>
+  </footer>
+
+</body>
+</html>

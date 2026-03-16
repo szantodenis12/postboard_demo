@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ofertă Social Media — AutoSiena Oradea</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1A1D26;
+      --ink-soft: #3D4155;
+      --ink-muted: #6B7089;
+      --ink-faint: #9BA0B4;
+      --surface: #FFFFFF;
+      --surface-warm: #FAF9F7;
+      --surface-tinted: #F2F0EC;
+      --accent: #B8965A;
+      --accent-light: #D4BC8A;
+      --accent-bg: rgba(184,150,90,0.06);
+      --border: #E6E3DC;
+      --border-light: #F0EDE8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @page { size: A4; margin: 0; }
+
+    html {
+      font-size: 15px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      color: var(--ink);
+      background: var(--surface);
+      line-height: 1.55;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    @media screen {
+      .page { margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 12px 48px rgba(0,0,0,0.06); }
+      body { background: #E8E6E1; padding: 30px 0; }
+    }
+
+    @media print {
+      .page { page-break-after: always; margin: 0; }
+      .page:last-child { page-break-after: auto; }
+      body { background: white; }
+    }
+
+    /* ═══════════════════════════════════════
+       COVER
+       ═══════════════════════════════════════ */
+    .cover {
+      background: var(--surface-warm);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cover-top-line {
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+    }
+
+    .cover-header {
+      padding: 40px 56px 0;
+    }
+
+    .cover-brand {
+      font-weight: 600;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      color: var(--accent);
+    }
+
+    .cover-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 56px;
+    }
+
+    .cover-overline {
+      font-weight: 500;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--ink-muted);
+      margin-bottom: 18px;
+    }
+
+    .cover-body h1 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-weight: 400;
+      font-size: 3.6rem;
+      line-height: 1.06;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+
+    .cover-subtitle {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 1.12rem;
+      color: var(--ink-muted);
+      font-style: italic;
+      margin-bottom: 48px;
+    }
+
+    .cover-rule {
+      width: 56px;
+      height: 2px;
+      background: var(--accent);
+      margin-bottom: 32px;
+    }
+
+    .cover-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 52px;
+      max-width: 480px;
+    }
+
+    .cover-meta-item label {
+      display: block;
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--ink-faint);
+      margin-bottom: 2px;
+      font-weight: 500;
+    }
+
+    .cover-meta-item span {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+    }
+
+    .cover-footer {
+      padding: 28px 56px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.68rem;
+      color: var(--ink-faint);
+    }
+
+    .cover-footer .accent-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .cover-bottom-line {
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+    }
+
+    /* ═══════════════════════════════════════
+       INTERIOR PAGES
+       ═══════════════════════════════════════ */
+    .interior {
+      padding: 40px 48px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-indicator {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.64rem;
+      color: var(--ink-faint);
+      margin-bottom: 26px;
+      letter-spacing: 0.04em;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .section-num {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 2.4rem;
+      color: var(--border);
+      line-height: 1;
+    }
+
+    .section-header h2 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-weight: 400;
+      font-size: 1.45rem;
+      letter-spacing: -0.02em;
+    }
+
+    .prose {
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+      line-height: 1.65;
+      max-width: 540px;
+    }
+
+    .prose strong { color: var(--ink); font-weight: 600; }
+
+    /* ═══════════════════════════════════════
+       PRICING CARDS
+       ═══════════════════════════════════════ */
+    .pricing-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 14px 0;
+    }
+
+    .pkg {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 20px;
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      position: relative;
+    }
+
+    .pkg.recommended {
+      border-color: var(--accent);
+      border-width: 1.5px;
+      background: linear-gradient(180deg, rgba(184,150,90,0.04) 0%, var(--surface) 40%);
+      box-shadow: 0 2px 16px rgba(184,150,90,0.1);
+    }
+
+    .pkg-badge {
+      font-size: 0.58rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      padding: 3px 10px;
+      border-radius: 100px;
+      width: fit-content;
+      margin-bottom: 12px;
+    }
+
+    .pkg .pkg-badge {
+      background: var(--surface-tinted);
+      color: var(--ink-muted);
+    }
+
+    .pkg.recommended .pkg-badge {
+      background: var(--accent);
+      color: white;
+    }
+
+    .pkg-name {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 1.3rem;
+      margin-bottom: 4px;
+    }
+
+    .pkg-freq {
+      font-size: 0.74rem;
+      color: var(--ink-muted);
+      margin-bottom: 14px;
+    }
+
+    .pkg-price {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 2.2rem;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .pkg.recommended .pkg-price { color: var(--accent); }
+
+    .pkg-unit {
+      font-size: 0.72rem;
+      color: var(--ink-faint);
+      margin-bottom: 14px;
+    }
+
+    .pkg-divider {
+      height: 1px;
+      background: var(--border-light);
+      margin-bottom: 12px;
+    }
+
+    .pkg.recommended .pkg-divider {
+      background: linear-gradient(90deg, var(--accent-light), transparent);
+      opacity: 0.4;
+    }
+
+    .pkg-features {
+      list-style: none;
+      padding: 0;
+      flex: 1;
+    }
+
+    .pkg-features li {
+      font-size: 0.73rem;
+      padding: 3.5px 0 3.5px 17px;
+      position: relative;
+      color: var(--ink-soft);
+    }
+
+    .pkg-features li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+      font-size: 0.68rem;
+      color: var(--accent);
+    }
+
+    .pkg-features .highlight {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    /* ═══════════════════════════════════════
+       GOOGLE BONUS
+       ═══════════════════════════════════════ */
+    .bonus-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent-bg);
+      border: 1px solid rgba(184,150,90,0.15);
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin: 10px 0 14px;
+    }
+
+    .bonus-bar .bonus-icon {
+      width: 22px;
+      height: 22px;
+      background: var(--accent);
+      border-radius: 5px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.62rem;
+      color: white;
+      font-weight: 700;
+    }
+
+    .bonus-bar p {
+      font-size: 0.76rem;
+      color: var(--ink-soft);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    .bonus-bar strong { color: var(--ink); }
+
+    /* ═══════════════════════════════════════
+       PREP MONTH
+       ═══════════════════════════════════════ */
+    .prep-box {
+      background: var(--surface-warm);
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      padding: 20px 22px;
+      margin-bottom: 12px;
+    }
+
+    .prep-box h3 {
+      font-weight: 600;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-muted);
+      margin-bottom: 6px;
+    }
+
+    .prep-box p {
+      font-size: 0.8rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .prep-box strong { color: var(--ink); }
+
+    .prep-prices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .prep-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .prep-card .label {
+      font-size: 0.64rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-muted);
+      margin-bottom: 3px;
+    }
+
+    .prep-card .price {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 1.15rem;
+      color: var(--ink);
+    }
+
+    .prep-card .note {
+      font-size: 0.66rem;
+      color: var(--ink-faint);
+      margin-top: 1px;
+    }
+
+    /* ═══════════════════════════════════════
+       RENEGOTIATION NOTE
+       ═══════════════════════════════════════ */
+    .renego-note {
+      background: var(--ink);
+      color: #F2F1EF;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 6px 0;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .renego-note .icon {
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.58rem;
+      color: var(--ink);
+      margin-top: 1px;
+    }
+
+    .renego-note p {
+      font-size: 0.76rem;
+      color: rgba(242,241,239,0.72);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .renego-note strong { color: #F2F1EF; }
+
+    .no-tva {
+      display: inline-block;
+      background: var(--surface-tinted);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 2px 11px;
+      font-size: 0.66rem;
+      color: var(--ink-muted);
+      font-weight: 500;
+    }
+
+    /* ═══════════════════════════════════════
+       TERMS & STEPS
+       ═══════════════════════════════════════ */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin: 12px 0;
+    }
+
+    .req-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .req-list li {
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      padding: 6px 0 6px 16px;
+      position: relative;
+    }
+
+    .req-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 13px;
+      width: 6px;
+      height: 6px;
+      border: 2px solid var(--accent);
+      border-radius: 2px;
+    }
+
+    .term-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .term-list li {
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .term-list li:last-child { border-bottom: none; }
+    .term-list li strong { color: var(--ink); font-weight: 600; font-size: 0.78rem; }
+
+    .steps { margin: 12px 0; }
+
+    .step {
+      display: flex;
+      gap: 12px;
+      padding: 8px 0;
+    }
+
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.64rem;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      padding-top: 3px;
+    }
+
+    .step-text strong { color: var(--ink); }
+
+    /* ═══════════════════════════════════════
+       PAGE FOOTER
+       ═══════════════════════════════════════ */
+    .page-foot {
+      margin-top: auto;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.66rem;
+      color: var(--ink-faint);
+    }
+
+    .page-foot .bar {
+      width: 18px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    /* ═══════════════════════════════════════
+       SIGN-OFF
+       ═══════════════════════════════════════ */
+    .sign-off {
+      text-align: center;
+      padding: 24px 0;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .sign-off .sign-brand {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .sign-off .sign-name {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .sign-off .sign-note {
+      font-size: 0.72rem;
+      color: var(--ink-faint);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ PAGE 1 — COVER ═══ -->
+  <div class="page cover">
+    <div class="cover-top-line"></div>
+    <div class="cover-header">
+      <div class="cover-brand">Epic Digital Hub</div>
+    </div>
+    <div class="cover-body">
+      <div class="cover-overline">Propunere comercială — Martie 2026</div>
+      <h1>Ofertă Servicii<br>Social Media &<br>Marketing Digital</h1>
+      <div class="cover-subtitle">AutoSiena Oradea — Chery — KGM</div>
+      <div class="cover-rule"></div>
+      <div class="cover-meta">
+        <div class="cover-meta-item">
+          <label>Pregătită de</label>
+          <span>Roland Sipos / Epic Digital Hub</span>
+        </div>
+        <div class="cover-meta-item">
+          <label>Pentru</label>
+          <span>Motors Mivado SRL (AutoSiena Oradea)</span>
+        </div>
+        <div class="cover-meta-item">
+          <label>Contact</label>
+          <span>Raul Bente</span>
+        </div>
+        <div class="cover-meta-item">
+          <label>Data</label>
+          <span>04.03.2026</span>
+        </div>
+      </div>
+    </div>
+    <div class="cover-footer">
+      <span>Valabilă până la 18.03.2026</span>
+      <div class="accent-dot"></div>
+      <span>Document confidențial</span>
+    </div>
+    <div class="cover-bottom-line"></div>
+  </div>
+
+  <!-- ═══ PAGE 2 — PACKAGES ═══ -->
+  <div class="page interior">
+    <div class="page-indicator">02 / 03</div>
+
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Ce primiți</h2>
+    </div>
+
+    <div class="prose" style="margin-bottom: 12px;">
+      <p>Management complet pentru <strong>3 entități</strong> — AutoSiena (showroom + service + daune), Chery și KGM — fiecare cu <strong>pagină Meta separată</strong> (Facebook + Instagram), un <strong>cont TikTok unificat</strong> și <strong>Google Business Profile</strong>. Conținut adaptat fiecărui brand — ton, vizual și mesaje diferite.</p>
+    </div>
+
+    <div class="pricing-row">
+      <!-- STANDARD -->
+      <div class="pkg">
+        <div class="pkg-badge">Standard</div>
+        <div class="pkg-name">Standard</div>
+        <div class="pkg-freq">3 postări feed / săptămână per brand</div>
+        <div class="pkg-price">8.000</div>
+        <div class="pkg-unit">RON / lună</div>
+        <div class="pkg-divider"></div>
+        <ul class="pkg-features">
+          <li>3 branduri Meta (Facebook + Instagram)</li>
+          <li class="highlight">~12 postări feed / lună per brand (~36 total)</li>
+          <li>~20 story-uri / lună per brand (~60 total)</li>
+          <li>8–12 TikTok videoclipuri / lună</li>
+          <li>Conținut service & daune (before/after, tips)</li>
+          <li>Video creation + design grafic</li>
+          <li>Community management zilnic</li>
+          <li>Google Business Profile management</li>
+          <li>1 ședință foto/video pe lună</li>
+          <li>Strategie + raport lunar</li>
+        </ul>
+      </div>
+
+      <!-- GROWTH -->
+      <div class="pkg recommended">
+        <div class="pkg-badge">Recomandat</div>
+        <div class="pkg-name">Growth</div>
+        <div class="pkg-freq">4 postări feed / săptămână per brand</div>
+        <div class="pkg-price">10.000</div>
+        <div class="pkg-unit">RON / lună</div>
+        <div class="pkg-divider"></div>
+        <ul class="pkg-features">
+          <li>3 branduri Meta (Facebook + Instagram)</li>
+          <li class="highlight">~16 postări feed / lună per brand (~48 total)</li>
+          <li>~24 story-uri / lună per brand (~72 total)</li>
+          <li>8–12 TikTok videoclipuri / lună</li>
+          <li>Conținut service & daune (before/after, tips)</li>
+          <li>Video creation + design grafic</li>
+          <li>Community management zilnic</li>
+          <li>Google Business Profile management</li>
+          <li>1 ședință foto/video pe lună</li>
+          <li>Strategie + raport lunar</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- GOOGLE BONUS -->
+    <div class="bonus-bar">
+      <div class="bonus-icon">G</div>
+      <p><strong>Google Business Profile AutoSiena</strong> — management, optimizare, postări și răspuns la recenzii. Serviciu inclus în ambele pachete, facturat de obicei separat.</p>
+    </div>
+
+    <span class="no-tva">Prețurile nu includ TVA (nu se aplică)</span>
+
+    <!-- PREP MONTH -->
+    <div class="prep-box">
+      <h3>Luna 1 — Creare materiale (-20%)</h3>
+      <p>Înainte să publicăm, construiesc totul de la zero: strategie per entitate, identitate vizuală, template-uri, configurare conturi, strategie service & daune, prima ședință foto și primele loturi de conținut. Ofer <strong>20% reducere</strong> pe prima lună.</p>
+      <div class="prep-prices">
+        <div class="prep-card">
+          <div class="label">Standard — Luna 1</div>
+          <div class="price">6.400 RON</div>
+          <div class="note">reducere 20%</div>
+        </div>
+        <div class="prep-card">
+          <div class="label">Growth — Luna 1</div>
+          <div class="price">8.000 RON</div>
+          <div class="note">reducere 20%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RENEGOTIATION -->
+    <div class="renego-note">
+      <div class="icon">★</div>
+      <p><strong>Ofertă de lansare.</strong> Prețurile și volumele de servicii vor fi renegociate după primele 3 luni, pe baza rezultatelor obținute și a nevoilor reale.</p>
+    </div>
+
+    <div class="page-foot">
+      <span>Roland Sipos / Epic Digital Hub</span>
+      <div class="bar"></div>
+      <span>Ofertă AutoSiena — 04.03.2026</span>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE 3 — TERMS ═══ -->
+  <div class="page interior">
+    <div class="page-indicator">03 / 03</div>
+
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Ce am nevoie de la voi</h2>
+    </div>
+
+    <ul class="req-list">
+      <li>Acces admin la paginile de Facebook și conturile de Instagram</li>
+      <li>Acces la showroom și mașini pentru ședințele foto/video</li>
+      <li>Acces la service / tinichigerie pentru conținut daune (before/after)</li>
+      <li>Un om de contact din echipă care răspunde rapid la întrebări (modele, prețuri, disponibilitate)</li>
+      <li>Materiale de la producători (cataloage, imagini oficiale) dacă există</li>
+    </ul>
+
+    <div style="height: 28px;"></div>
+
+    <div class="two-col">
+      <div>
+        <div class="section-header" style="margin-bottom: 14px;">
+          <span class="section-num">03</span>
+          <h2>Termeni</h2>
+        </div>
+        <ul class="term-list">
+          <li><strong>Contract minim</strong><br>3 luni (ofertă de lansare)</li>
+          <li><strong>Plata</strong><br>Lunar</li>
+          <li><strong>Conținut creat</strong><br>Rămâne proprietatea clientului</li>
+          <li><strong>Reziliere</strong><br>Cu preaviz de 30 de zile, după cele 3 luni</li>
+        </ul>
+      </div>
+      <div>
+        <div class="section-header" style="margin-bottom: 14px;">
+          <span class="section-num">04</span>
+          <h2>Cum începem</h2>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">01</div>
+            <div class="step-text"><strong>Confirmați oferta</strong> — semnăm un contract</div>
+          </div>
+          <div class="step">
+            <div class="step-num">02</div>
+            <div class="step-text"><strong>Acces + prima ședință foto</strong> — la showroom</div>
+          </div>
+          <div class="step">
+            <div class="step-num">03</div>
+            <div class="step-text"><strong>Luna de pregătire</strong> — strategie, template-uri, conținut</div>
+          </div>
+          <div class="step">
+            <div class="step-num">04</div>
+            <div class="step-text"><strong>Live</strong> — publicare pe ritm normal</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: 1;"></div>
+
+    <div class="sign-off">
+      <div class="sign-brand">Epic Digital Hub</div>
+      <div class="sign-name">Roland Sipos</div>
+      <div class="sign-note">Ofertă valabilă până la 18.03.2026 · Prețurile nu includ TVA (nu se aplică)</div>
+    </div>
+  </div>
+
+</body>
+</html>

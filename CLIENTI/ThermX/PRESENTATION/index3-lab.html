@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>thermX — Variantă Lab Interface</title>
+  <meta name="description" content="thermX — variantă alternativă de prezentare, cu interfață tehnică luminoasă. 1 mm, lambda echivalent ≤ 0,001 W/(m·K), accent pe detaliu și conformare energetică.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <link rel="stylesheet" href="css/index3-lab.css">
+</head>
+<body>
+  <div class="lab-noise"></div>
+  <div class="lab-grid"></div>
+  <div class="lab-spot lab-spot--blue"></div>
+  <div class="lab-spot lab-spot--orange"></div>
+  <div class="lab-progress"></div>
+  <div class="lab-cursor" aria-hidden="true"></div>
+
+  <header class="lab-nav" aria-label="Meniu principal">
+    <a href="#a01" class="lab-brand" aria-label="thermX home">therm<span>X</span></a>
+
+    <nav class="lab-links" aria-label="Secțiuni desktop">
+      <a href="#a01">Intro</a>
+      <a href="#a02">Logică</a>
+      <a href="#a03">nZEB</a>
+      <a href="#a04">Comparație</a>
+      <a href="#a05">Cifre</a>
+      <a href="#acalc">Calcul</a>
+      <a href="#afaq">FAQ</a>
+      <a href="#a20">Contact</a>
+    </nav>
+
+    <button class="lab-nav__toggle" type="button" aria-label="Deschide meniul" aria-expanded="false">
+      <i data-lucide="menu" class="lab-nav__icon-open"></i>
+      <i data-lucide="x" class="lab-nav__icon-close"></i>
+    </button>
+  </header>
+
+  <div class="lab-mobile" aria-hidden="true">
+    <a href="#a01">Intro</a>
+    <a href="#a02">Logică</a>
+    <a href="#a03">nZEB</a>
+    <a href="#a04">Comparație</a>
+    <a href="#a05">Cifre</a>
+    <a href="#a06">Aplicații</a>
+    <a href="#acalc">Calcul</a>
+    <a href="#afaq">FAQ</a>
+    <a href="#a20">Contact</a>
+  </div>
+
+  <aside class="lab-rail" aria-hidden="true">
+    <button class="lab-rail__item active" data-target="a01">Hero</button>
+    <button class="lab-rail__item" data-target="a02">Logică</button>
+    <button class="lab-rail__item" data-target="a03">nZEB</button>
+    <button class="lab-rail__item" data-target="a04">Versus</button>
+    <button class="lab-rail__item" data-target="a05">Cifre</button>
+    <button class="lab-rail__item" data-target="acalc">Calcul</button>
+    <button class="lab-rail__item" data-target="afaq">FAQ</button>
+    <button class="lab-rail__item" data-target="a20">Contact</button>
+  </aside>
+
+  <div class="lab-indicator" aria-live="polite">
+    <span class="lab-indicator__label">Hero</span>
+    <span class="lab-indicator__meta">Interfață tehnică</span>
+  </div>
+
+  <main>
+    <section id="a01" class="lab-section lab-hero">
+      <div class="lab-hero__measure" aria-hidden="true">0,001</div>
+      <div class="lab-shell lab-hero__grid">
+        <div class="lab-hero__copy" data-reveal="rise">
+          <p class="lab-kicker">Membrană termoizolantă nanoceramică</p>
+          <img src="thermx-logo.png" alt="thermX" width="360" height="96" class="lab-hero__logo" loading="eager" decoding="async" fetchpriority="high">
+          <h1 class="lab-display"><span class="lab-display__focus">1 mm</span> care intră <span class="lab-display__accent">în detaliu.</span></h1>
+          <p class="lab-body">thermX este gândit pentru zone unde sistemele clasice devin grele, groase sau imposibil de închis corect. Stratul se aplică prin pulverizare și tratează direct continuitatea termică a suportului.</p>
+
+          <div class="lab-proof-grid" data-reveal="stagger">
+            <div class="lab-proof">
+              <span class="lab-proof__meta">Control detaliu</span>
+              <strong>Fără rosturi</strong>
+            </div>
+            <div class="lab-proof">
+              <span class="lab-proof__meta">Masă adăugată</span>
+              <strong>0,4 kg/m²</strong>
+            </div>
+            <div class="lab-proof">
+              <span class="lab-proof__meta">Răspuns tehnic</span>
+              <strong>48 h</strong>
+            </div>
+          </div>
+
+          <div class="lab-actions">
+            <a class="lab-btn lab-btn--primary" href="#a04">Vezi comparația</a>
+            <a class="lab-btn lab-btn--ghost" href="#acalc">Testează calculatorul</a>
+          </div>
+
+          <div class="lab-metric-row" data-reveal="stagger">
+            <div class="lab-chip">
+              <span class="lab-chip__value">≤ 0,001</span>
+              <span class="lab-chip__label">W/(m·K)</span>
+            </div>
+            <div class="lab-chip">
+              <span class="lab-chip__value">85%</span>
+              <span class="lab-chip__label">Reflexie IR</span>
+            </div>
+            <div class="lab-chip">
+              <span class="lab-chip__value">0,4 kg/m²</span>
+              <span class="lab-chip__label">Greutate</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lab-sheet" data-reveal="scale">
+          <div class="lab-sheet__head">
+            <span class="lab-sheet__tag">Fișă termică</span>
+            <span class="lab-sheet__status">Sistem activ</span>
+          </div>
+
+          <div class="lab-sheet__thermal">
+            <span>Exterior</span>
+            <div class="lab-sheet__thermal-bar"><span></span></div>
+            <span>Interior</span>
+          </div>
+
+          <div class="lab-sheet__core">
+            <div class="lab-sheet__ring">
+              <span class="lab-sheet__ring-value">1 mm</span>
+              <span class="lab-sheet__ring-label">grosime standard</span>
+            </div>
+          </div>
+
+          <div class="lab-sheet__rows">
+            <div class="lab-sheet__row">
+              <span>Aplicare standard</span>
+              <strong>~50 m²/zi</strong>
+            </div>
+            <div class="lab-sheet__row">
+              <span>Interval termic</span>
+              <strong>-60°C → +260°C</strong>
+            </div>
+            <div class="lab-sheet__row">
+              <span>Garanție</span>
+              <strong>20 ani</strong>
+            </div>
+            <div class="lab-sheet__row">
+              <span>Durabilitate</span>
+              <strong>35+ ani</strong>
+            </div>
+          </div>
+
+          <div class="lab-sheet__footer">
+            <div class="lab-sheet__note">Membrană continuă, fără rosturi de placare.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lab-hero__float" data-reveal="scale">
+        <div class="lab-hero__float-line"></div>
+        <div class="lab-hero__float-copy">
+          <span class="lab-hero__float-kicker">Citire rapidă</span>
+          <strong>Avantajul real apare când detaliul devine dificil, iar continuitatea nu mai poate fi tratată simplu.</strong>
+        </div>
+        <div class="lab-hero__float-stat">
+          <span>Delta orientativă</span>
+          <strong>+64p</strong>
+          <small>în geometrii complexe</small>
+        </div>
+      </div>
+    </section>
+
+    <div class="lab-ticker" aria-hidden="true">
+      <div class="lab-ticker__track">
+        <span>Lambda echivalent ≤ 0,001 W/(m·K)</span>
+        <span>Reflexie IR 85%</span>
+        <span>Grosime standard 0,5–1 mm</span>
+        <span>Reducere pierderi până la 40%</span>
+        <span>Aplicare ~50 m²/zi</span>
+        <span>-60°C → +260°C</span>
+        <span>Lambda echivalent ≤ 0,001 W/(m·K)</span>
+        <span>Reflexie IR 85%</span>
+        <span>Grosime standard 0,5–1 mm</span>
+        <span>Reducere pierderi până la 40%</span>
+        <span>Aplicare ~50 m²/zi</span>
+        <span>-60°C → +260°C</span>
+      </div>
+    </div>
+
+    <section id="a02" class="lab-section">
+      <div class="lab-shell">
+        <div class="lab-head" data-reveal="rise">
+          <p class="lab-kicker">Logică de sistem</p>
+          <h2 class="lab-title">Problema nu este doar suprafața. Problema este detaliul constructiv.</h2>
+          <p class="lab-body">Când pierderile apar la racorduri, contururi și intersecții, volumul mare de material nu rezolvă automat execuția. thermX atacă exact zona în care apar discontinuitățile.</p>
+        </div>
+
+        <div class="lab-flow" data-reveal="stagger">
+          <article class="lab-flow__card">
+            <span class="lab-flow__index">01</span>
+            <h3>Fără panouri rigide</h3>
+            <p>Nu există decupaje, potriviri sau rosturi între elemente care să fragmenteze stratul.</p>
+          </article>
+
+          <article class="lab-flow__card">
+            <span class="lab-flow__index">02</span>
+            <h3>Aplicare pe geometrie reală</h3>
+            <p>Suprafața existentă este urmată direct: muchii, curbe, colțuri, contururi și zone de acces dificil.</p>
+          </article>
+
+          <article class="lab-flow__card">
+            <span class="lab-flow__index">03</span>
+            <h3>Masă structurală redusă</h3>
+            <p>Cu 0,4 kg/m² la 1 mm, sarcina adăugată rămâne redusă față de soluțiile clasice de placare.</p>
+          </article>
+        </div>
+
+        <div class="lab-band" data-reveal="stagger">
+          <div class="lab-band__item">
+            <span class="lab-band__value">0,5–1 mm</span>
+            <span class="lab-band__label">Grosime standard</span>
+          </div>
+          <div class="lab-band__item">
+            <span class="lab-band__value">până la 3,5 mm</span>
+            <span class="lab-band__label">Strat industrial</span>
+          </div>
+          <div class="lab-band__item">
+            <span class="lab-band__value">orice substrat</span>
+            <span class="lab-band__label">Aderență</span>
+          </div>
+          <div class="lab-band__item">
+            <span class="lab-band__value">fără rosturi</span>
+            <span class="lab-band__label">Membrană continuă</span>
+          </div>
+        </div>
+
+        <div class="lab-blueprint" data-reveal="stagger">
+          <div class="lab-blueprint__cell">
+            <span class="lab-blueprint__id">A1</span>
+            <strong>Contur tâmplărie</strong>
+            <p>Racorduri unde precizia de montaj influențează direct pierderea termică.</p>
+          </div>
+          <div class="lab-blueprint__cell">
+            <span class="lab-blueprint__id">B4</span>
+            <strong>Muchii și colțuri</strong>
+            <p>Zone unde materialele rigide cer tăieturi, potriviri și corecții.</p>
+          </div>
+          <div class="lab-blueprint__cell">
+            <span class="lab-blueprint__id">C2</span>
+            <strong>Tranziții structurale</strong>
+            <p>Intersecții de plan și racorduri unde continuitatea devine greu de păstrat.</p>
+          </div>
+          <div class="lab-blueprint__cell">
+            <span class="lab-blueprint__id">D7</span>
+            <strong>Suprafețe industriale</strong>
+            <p>Conducte, coturi și instalații care cer un strat ce urmărește geometria reală.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="a03" class="lab-section lab-section--ink">
+      <div class="lab-shell">
+        <div class="lab-head" data-reveal="rise">
+          <p class="lab-kicker">Context de conformare</p>
+          <h2 class="lab-title">nZEB schimbă standardul de discuție.</h2>
+          <p class="lab-body">Presiunea pe proiect nu este doar pe material, ci pe rezultatul energetic al închiderii. Controlul punților termice devine element funcțional, nu detaliu de executat „din mers”.</p>
+        </div>
+
+        <div class="lab-grid-2">
+          <div class="lab-matrix" data-reveal="stagger">
+            <div class="lab-matrix__card">
+              <strong>≤ 15</strong>
+              <span>kWh/m²·an pentru consum de energie primară</span>
+            </div>
+            <div class="lab-matrix__card">
+              <strong>A+</strong>
+              <span>Clasificare energetică minim urmărită</span>
+            </div>
+            <div class="lab-matrix__card">
+              <strong>≥ 30%</strong>
+              <span>Energie din surse regenerabile în mixul clădirii</span>
+            </div>
+          </div>
+
+          <div class="lab-bridge" data-reveal="scale">
+            <div class="lab-bridge__title">Zone critice de pierdere</div>
+            <div class="lab-bridge__list">
+              <button class="lab-bridge__item active" data-hotspot="0">Coamă</button>
+              <button class="lab-bridge__item" data-hotspot="1">Colț acoperiș</button>
+              <button class="lab-bridge__item" data-hotspot="2">Fereastră</button>
+              <button class="lab-bridge__item" data-hotspot="3">Perete–planșeu</button>
+              <button class="lab-bridge__item" data-hotspot="4">Fundație</button>
+              <button class="lab-bridge__item" data-hotspot="5">Balcon</button>
+            </div>
+            <div class="lab-bridge__panel">
+              <div class="lab-bridge__dot lab-bridge__dot--0 is-active"></div>
+              <div class="lab-bridge__dot lab-bridge__dot--1"></div>
+              <div class="lab-bridge__dot lab-bridge__dot--2"></div>
+              <div class="lab-bridge__dot lab-bridge__dot--3"></div>
+              <div class="lab-bridge__dot lab-bridge__dot--4"></div>
+              <div class="lab-bridge__dot lab-bridge__dot--5"></div>
+            </div>
+            <p class="lab-bridge__copy" id="bridgeCopy">La coamă, două planuri se întâlnesc într-o zonă unde plăcile rigide lasă ușor goluri. Un strat fluid urmărește geometria și reduce discontinuitatea.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="a04" class="lab-section">
+      <div class="lab-shell">
+        <div class="lab-head" data-reveal="rise">
+          <p class="lab-kicker">Comparație de logică</p>
+          <h2 class="lab-title">Aceeași suprafață. Două moduri complet diferite de a o trata.</h2>
+          <p class="lab-body">Sliderul de mai jos nu reprezintă un test de laborator, ci un instrument vizual pentru a vedea unde se mută avantajul când crește complexitatea de detaliu.</p>
+        </div>
+
+        <div class="lab-compare" data-reveal="scale">
+          <div class="lab-compare__top">
+            <span class="lab-compare__label">Complexitate detaliu</span>
+            <strong id="compareLevel">Mediu</strong>
+          </div>
+
+          <input id="compareRange" class="lab-compare__range" type="range" min="1" max="3" value="2" step="1" aria-label="Nivel de complexitate">
+
+          <div class="lab-compare__legend">
+            <span>Volum de material</span>
+            <span>Timp de execuție</span>
+            <span>Control pe detaliu</span>
+          </div>
+
+          <div class="lab-compare__grid">
+            <div class="lab-compare__col">
+              <h3>Sistem clasic</h3>
+              <div class="lab-compare__meter">
+                <div class="lab-compare__fill lab-compare__fill--muted" id="compareClassic"></div>
+              </div>
+              <p id="compareClassicText">Detaliul începe să consume timp și ajustări de montaj.</p>
+            </div>
+
+            <div class="lab-compare__col lab-compare__col--accent">
+              <h3>thermX</h3>
+              <div class="lab-compare__meter">
+                <div class="lab-compare__fill lab-compare__fill--accent" id="compareThermx"></div>
+              </div>
+              <p id="compareThermxText">Avantajul crește prin capacitatea de a acoperi continuu contururile.</p>
+            </div>
+          </div>
+
+          <div class="lab-compare__decision">
+            <div class="lab-compare__decision-head">
+              <span class="lab-compare__decision-label">Diferență de avantaj</span>
+              <strong id="compareDelta">+26 puncte</strong>
+            </div>
+            <p id="compareNarrative">La complexitate medie, diferența vine din controlul continuității în zonele în care montajul clasic începe să piardă precizie.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="a05" class="lab-section">
+      <div class="lab-shell">
+        <div class="lab-head" data-reveal="rise">
+          <p class="lab-kicker">Tabel rapid de cifre</p>
+          <h2 class="lab-title">Performanța se citește numeric, nu impresiv.</h2>
+          <p class="lab-body">Valorile esențiale sunt aduse într-o interfață compactă: comparație de lambda, impact de aplicare și estimări tipice pentru scenariul standard.</p>
+        </div>
+
+        <div class="lab-grid-2">
+          <div class="lab-bars" data-reveal="stagger">
+            <div class="lab-bars__item" data-bar="100">
+              <div class="lab-bars__head">
+                <span>Vată minerală</span>
+                <strong>0,040</strong>
+              </div>
+              <div class="lab-bars__track"><div class="lab-bars__fill lab-bars__fill--muted"></div></div>
+            </div>
+
+            <div class="lab-bars__item" data-bar="87">
+              <div class="lab-bars__head">
+                <span>EPS (polistiren)</span>
+                <strong>0,035</strong>
+              </div>
+              <div class="lab-bars__track"><div class="lab-bars__fill lab-bars__fill--muted"></div></div>
+            </div>
+
+            <div class="lab-bars__item" data-bar="55">
+              <div class="lab-bars__head">
+                <span>PIR / PUR</span>
+                <strong>0,022</strong>
+              </div>
+              <div class="lab-bars__track"><div class="lab-bars__fill lab-bars__fill--muted"></div></div>
+            </div>
+
+            <div class="lab-bars__item lab-bars__item--accent" data-bar="2.5">
+              <div class="lab-bars__head">
+                <span>thermX</span>
+                <strong>≤ 0,001</strong>
+              </div>
+              <div class="lab-bars__track"><div class="lab-bars__fill lab-bars__fill--accent"></div></div>
+            </div>
+          </div>
+
+          <div class="lab-kpis" data-reveal="stagger">
+            <div class="lab-spectrum-card">
+              <div class="lab-spectrum-card__head">
+                <span>Citire termică</span>
+                <strong>Barieră + reflexie</strong>
+              </div>
+              <div class="lab-spectrum-card__bar">
+                <span class="lab-spectrum-card__cold">Rece</span>
+                <div class="lab-spectrum-card__track"><i></i></div>
+                <span class="lab-spectrum-card__hot">Cald</span>
+              </div>
+              <p>Valoarea mică a lambda echivalente trebuie citită împreună cu efectul de reflexie IR și aplicarea continuă a stratului.</p>
+            </div>
+            <div class="lab-kpis__card">
+              <span class="lab-kpis__value"><span data-target="40" data-suffix="%">0%</span></span>
+              <span class="lab-kpis__label">Reducere estimată a pierderilor termice</span>
+            </div>
+            <div class="lab-kpis__card">
+              <span class="lab-kpis__value"><span data-target="80" data-suffix="%">0%</span></span>
+              <span class="lab-kpis__label">Execuție mai rapidă decât montajul clasic</span>
+            </div>
+            <div class="lab-kpis__card">
+              <span class="lab-kpis__value"><span data-target="30" data-suffix="%">0%</span></span>
+              <span class="lab-kpis__label">Economie orientativă de cost la instalare</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="a06" class="lab-section lab-section--soft">
+      <div class="lab-shell">
+        <div class="lab-head" data-reveal="rise">
+          <p class="lab-kicker">Aplicații</p>
+          <h2 class="lab-title">Același produs, argumentat diferit în funcție de proiect.</h2>
+          <p class="lab-body">În funcție de public, accentul nu cade pe aceeași problemă. De aceea, structura de prezentare trebuie să schimbe argumentul dominant.</p>
+        </div>
+
+        <div class="lab-tabs" data-tabs>
+          <div class="lab-tabs__nav">
+            <button class="lab-tabs__btn active" data-tab="lab-residential">Rezidențial</button>
+            <button class="lab-tabs__btn" data-tab="lab-development">Dezvoltare</button>
+            <button class="lab-tabs__btn" data-tab="lab-industrial">Industrial</button>
+          </div>
+
+          <div class="lab-tabs__panel active" id="lab-residential">
+            <div class="lab-tabs__grid">
+              <div class="lab-tabs__note">
+                <strong>Mesaj dominant</strong>
+                <p>Eliminarea punților termice în zone pe care sistemele clasice le tratează greu sau incomplet.</p>
+              </div>
+              <div class="lab-tabs__note">
+                <strong>Date de folosit</strong>
+                <p>1 mm, reducere până la 40%, 0,4 kg/m², aplicare directă pe suport.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="lab-tabs__panel" id="lab-development">
+            <div class="lab-tabs__grid">
+              <div class="lab-tabs__note">
+                <strong>Mesaj dominant</strong>
+                <p>Control mai bun pe detalii de execuție, greutate redusă și viteză de aplicare în proiecte cu multe suprafețe sensibile.</p>
+              </div>
+              <div class="lab-tabs__note">
+                <strong>Date de folosit</strong>
+                <p>~50 m²/zi, economie orientativă până la 30%, grosime standard 0,5–1 mm.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="lab-tabs__panel" id="lab-industrial">
+            <div class="lab-tabs__grid">
+              <div class="lab-tabs__note">
+                <strong>Mesaj dominant</strong>
+                <p>Aplicare pe geometrii complexe și stabilitate pe interval termic larg, în instalații și zone expuse.</p>
+              </div>
+              <div class="lab-tabs__note">
+                <strong>Date de folosit</strong>
+                <p>-60°C → +260°C, până la 3,5 mm strat, aplicare pe conducte, coturi și suprafețe metalice.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="acalc" class="lab-section">
+      <div class="lab-shell">
+        <div class="lab-head" data-reveal="rise">
+          <p class="lab-kicker">Calculator orientativ</p>
+          <h2 class="lab-title">Filtru rapid de fezabilitate.</h2>
+          <p class="lab-body">Acest modul este util pentru o primă estimare. Nu înlocuiește calculul termic de proiect, dar îți arată imediat unde stă scenariul.</p>
+        </div>
+
+        <div class="lab-calc">
+          <div class="lab-calc__form" data-reveal="rise">
+            <div class="lab-field">
+              <label for="labCalcBuilding">Tip clădire</label>
+              <select id="labCalcBuilding">
+                <option value="casa">Casă</option>
+                <option value="bloc">Bloc apartamente</option>
+                <option value="hala">Hală industrială</option>
+                <option value="publica">Clădire publică</option>
+              </select>
+            </div>
+
+            <div class="lab-field">
+              <label for="labCalcSurface">Suprafață izolată (m²)</label>
+              <input id="labCalcSurface" type="number" value="150" min="10" max="5000">
+              <input id="labCalcRange" type="range" min="10" max="5000" value="150">
+            </div>
+
+            <div class="lab-field">
+              <label for="labCalcSubstrate">Substrat</label>
+              <select id="labCalcSubstrate">
+                <option value="beton">Beton</option>
+                <option value="metal">Metal</option>
+                <option value="lemn">Lemn</option>
+                <option value="caramida">Cărămidă</option>
+                <option value="tencuiala">Tencuială</option>
+              </select>
+            </div>
+
+            <div class="lab-field">
+              <label for="labCalcClimate">Zonă climatică</label>
+              <select id="labCalcClimate">
+                <option value="I">I (blând)</option>
+                <option value="II" selected>II (mediu)</option>
+                <option value="III">III (rece)</option>
+                <option value="IV">IV (foarte rece)</option>
+              </select>
+            </div>
+
+            <div class="lab-field">
+              <label>Grosime strat</label>
+              <div class="lab-radio">
+                <label><input type="radio" name="lab-thickness" value="0.5"> 0,5 mm</label>
+                <label><input type="radio" name="lab-thickness" value="1" checked> 1 mm</label>
+                <label><input type="radio" name="lab-thickness" value="2"> 2 mm</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="lab-calc__results" data-reveal="scale">
+            <div class="lab-calc__summary">
+              <span class="lab-calc__summary-kicker">Stare scenariu</span>
+              <strong id="labCalcSignal">Echilibru optim</strong>
+              <p id="labCalcSummary">Configurație bună pentru o estimare inițială de cost și economie.</p>
+              <div class="lab-calc__signal-track">
+                <div class="lab-calc__signal-fill" id="labCalcSignalFill"></div>
+              </div>
+            </div>
+
+            <div class="lab-calc__grid">
+              <div class="lab-result">
+                <span>Reducere pierderi</span>
+                <strong id="labCalcThermal">40%</strong>
+              </div>
+              <div class="lab-result">
+                <span>Economie anuală</span>
+                <strong id="labCalcSavings">0 RON</strong>
+              </div>
+              <div class="lab-result">
+                <span>Cost aplicare</span>
+                <strong id="labCalcCost">0 RON</strong>
+              </div>
+              <div class="lab-result">
+                <span>Amortizare</span>
+                <strong id="labCalcPayback">0 ani</strong>
+              </div>
+              <div class="lab-result">
+                <span>Greutate adăugată</span>
+                <strong id="labCalcWeight">0 kg</strong>
+              </div>
+              <div class="lab-result">
+                <span>Timp aplicare</span>
+                <strong id="labCalcTime">0 zile</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="afaq" class="lab-section">
+      <div class="lab-shell">
+        <div class="lab-head" data-reveal="rise">
+          <p class="lab-kicker">Întrebări frecvente</p>
+          <h2 class="lab-title">Răspunsuri structurate pentru obiecțiile reale.</h2>
+          <p class="lab-body">Totul este organizat ca un bloc tehnic compact, pentru a păstra ritmul rapid de citire și claritatea mesajului.</p>
+        </div>
+
+        <div class="lab-faq" data-reveal="rise">
+          <div class="lab-faq__item" data-acc-item>
+            <button class="lab-faq__trigger" data-acc-trigger aria-expanded="false">
+              <span>Cu cât se reduc pierderile termice la 1 mm?</span>
+              <i data-lucide="plus"></i>
+            </button>
+            <div class="lab-faq__content" data-acc-content>
+              <p>Până la 40% în condiții standard de aplicare. Rezultatul final depinde de starea suportului, zona climatică și configurația construcției.</p>
+            </div>
+          </div>
+
+          <div class="lab-faq__item" data-acc-item>
+            <button class="lab-faq__trigger" data-acc-trigger aria-expanded="false">
+              <span>Este relevant pentru nZEB?</span>
+              <i data-lucide="plus"></i>
+            </button>
+            <div class="lab-faq__content" data-acc-content>
+              <p>Da. Lambda echivalent ≤ 0,001 W/mK și capacitatea de a reduce punțile termice susțin obiectivul de performanță energetică al anvelopei.</p>
+            </div>
+          </div>
+
+          <div class="lab-faq__item" data-acc-item>
+            <button class="lab-faq__trigger" data-acc-trigger aria-expanded="false">
+              <span>Se poate aplica pe geometrii complexe?</span>
+              <i data-lucide="plus"></i>
+            </button>
+            <div class="lab-faq__content" data-acc-content>
+              <p>Da. Sistemul este potrivit pentru contururi de tâmplărie, conducte, coturi, supape și alte zone greu de tratat cu panouri rigide.</p>
+            </div>
+          </div>
+
+          <div class="lab-faq__item" data-acc-item>
+            <button class="lab-faq__trigger" data-acc-trigger aria-expanded="false">
+              <span>Care este intervalul termic de exploatare?</span>
+              <i data-lucide="plus"></i>
+            </button>
+            <div class="lab-faq__content" data-acc-content>
+              <p>Intervalul declarat este de la -60°C la +260°C, ceea ce îl face potrivit și pentru scenarii industriale expuse.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="a20" class="lab-section lab-section--ink">
+      <div class="lab-shell lab-contact">
+        <div class="lab-contact__info" data-reveal="rise">
+          <p class="lab-kicker">Contact tehnic</p>
+          <h2 class="lab-title">Trimite datele proiectului.</h2>
+          <p class="lab-body">Primești o evaluare preliminară și direcția de calcul termic în maximum 48 h, pe baza parametrilor introduși.</p>
+
+          <div class="lab-contact__list">
+            <div><i data-lucide="phone"></i><span>+40 771 445 577</span></div>
+            <div><i data-lucide="mail"></i><span>contact@nanorevolution.ro</span></div>
+            <div><i data-lucide="map-pin"></i><span>Str. Ogorului, Nr. 3, Oradea</span></div>
+            <div><i data-lucide="globe"></i><span>nanorevolution.ro/thermx</span></div>
+          </div>
+        </div>
+
+        <form class="lab-form" id="labForm" novalidate data-reveal="scale">
+          <div class="lab-form__grid">
+            <div class="lab-form__field">
+              <label for="labName">Nume complet *</label>
+              <input id="labName" type="text" required autocomplete="name">
+              <span class="lab-form__error">Numele este obligatoriu.</span>
+            </div>
+
+            <div class="lab-form__field">
+              <label for="labEmail">Email *</label>
+              <input id="labEmail" type="email" required autocomplete="email">
+              <span class="lab-form__error">Introduceți un email valid.</span>
+            </div>
+
+            <div class="lab-form__field">
+              <label for="labPhone">Telefon</label>
+              <input id="labPhone" type="tel" autocomplete="tel">
+            </div>
+
+            <div class="lab-form__field">
+              <label for="labProject">Tip proiect</label>
+              <select id="labProject">
+                <option value=""></option>
+                <option value="Rezidențial nou">Rezidențial nou</option>
+                <option value="Renovare casă">Renovare casă</option>
+                <option value="Bloc apartamente">Bloc apartamente</option>
+                <option value="Hală industrială">Hală industrială</option>
+                <option value="Conducte / Instalații">Conducte / Instalații</option>
+                <option value="Altul">Altul</option>
+              </select>
+            </div>
+
+            <div class="lab-form__field lab-form__field--full">
+              <label for="labMessage">Mesaj</label>
+              <textarea id="labMessage" rows="5"></textarea>
+            </div>
+          </div>
+
+          <div class="lab-form__actions">
+            <button type="submit" class="lab-btn lab-btn--accent">
+              <i data-lucide="send"></i>
+              Solicită calcul termic
+            </button>
+          </div>
+
+          <div class="lab-form__success" id="labFormSuccess">
+            <i data-lucide="check-circle"></i>
+            <span>Mesaj pregătit pentru clientul de email.</span>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="lab-footer">
+    <div class="lab-footer__inner">
+      <img src="thermx-logo-white.png" alt="thermX" width="180" height="48" loading="lazy" decoding="async">
+      <p>Nano Revolution SRL — specificație orientată pe date, nu pe discurs decorativ.</p>
+    </div>
+  </footer>
+
+  <script src="js/index3-lab.js"></script>
+</body>
+</html>

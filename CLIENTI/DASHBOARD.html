@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Center — Epic Digital Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        slate: {
+                            950: '#080B12',
+                            925: '#0B0F19',
+                            900: '#0F1320',
+                            850: '#131828',
+                            800: '#1A2035',
+                            750: '#1E2640',
+                            700: '#273150',
+                        },
+                        accent: {
+                            DEFAULT: '#6C63FF',
+                            light: '#8B83FF',
+                            dim: '#4A42CC',
+                            glow: 'rgba(108,99,255,0.15)',
+                        },
+                        mint: { DEFAULT: '#34D399', dark: '#059669', glow: 'rgba(52,211,153,0.12)' },
+                        amber: { DEFAULT: '#FBBF24', dark: '#D97706', glow: 'rgba(251,191,36,0.12)' },
+                        rose: { DEFAULT: '#FB7185', dark: '#E11D48', glow: 'rgba(251,113,133,0.12)' },
+                        sky: { DEFAULT: '#38BDF8', dark: '#0284C7', glow: 'rgba(56,189,248,0.12)' },
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #080B12;
+            color: #E2E8F0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 20% 0%, rgba(108,99,255,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(52,211,153,0.04) 0%, transparent 50%);
+            pointer-events: none; z-index: 0;
+        }
+
+        .glass {
+            background: rgba(26,32,53,0.6);
+            border: 1px solid rgba(108,99,255,0.08);
+            backdrop-filter: blur(16px);
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+        }
+        .glass:hover {
+            border-color: rgba(108,99,255,0.18);
+            background: rgba(30,38,64,0.7);
+        }
+
+        .glass-subtle {
+            background: rgba(26,32,53,0.4);
+            border: 1px solid rgba(255,255,255,0.04);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+        }
+
+        .stat-card {
+            position: relative; overflow: hidden;
+        }
+        .stat-card::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .stat-card:hover::after { opacity: 1; }
+        .stat-card-accent::after { background: linear-gradient(90deg, transparent, #6C63FF, transparent); }
+        .stat-card-mint::after { background: linear-gradient(90deg, transparent, #34D399, transparent); }
+        .stat-card-amber::after { background: linear-gradient(90deg, transparent, #FBBF24, transparent); }
+        .stat-card-rose::after { background: linear-gradient(90deg, transparent, #FB7185, transparent); }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #6C63FF, #8B83FF);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .gradient-text-mint {
+            background: linear-gradient(135deg, #34D399, #6EE7B7);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .badge {
+            font-size: 0.65rem; font-weight: 600; letter-spacing: 0.03em;
+            padding: 3px 8px; border-radius: 6px;
+            text-transform: uppercase; white-space: nowrap;
+        }
+
+        .progress-bar {
+            height: 4px; border-radius: 2px; background: rgba(255,255,255,0.06);
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; border-radius: 2px;
+            transition: width 1s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .deadline-card {
+            position: relative;
+            padding-left: 16px;
+        }
+        .deadline-card::before {
+            content: '';
+            position: absolute; left: 0; top: 0; bottom: 0;
+            width: 3px; border-radius: 2px;
+        }
+        .deadline-urgent::before { background: #FB7185; }
+        .deadline-soon::before { background: #FBBF24; }
+        .deadline-normal::before { background: #34D399; }
+
+        .tab-btn {
+            padding: 8px 20px; border-radius: 8px;
+            font-size: 0.8rem; font-weight: 600;
+            letter-spacing: 0.02em; cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            background: transparent;
+            color: rgba(226,232,240,0.5);
+        }
+        .tab-btn:hover { color: rgba(226,232,240,0.8); background: rgba(255,255,255,0.04); }
+        .tab-btn.active {
+            background: rgba(108,99,255,0.15);
+            color: #8B83FF;
+            border-color: rgba(108,99,255,0.2);
+        }
+
+        .search-input {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 10px 16px 10px 42px;
+            color: #E2E8F0;
+            font-size: 0.85rem;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+            width: 100%;
+            max-width: 320px;
+        }
+        .search-input:focus {
+            border-color: rgba(108,99,255,0.3);
+            background: rgba(255,255,255,0.06);
+            box-shadow: 0 0 0 3px rgba(108,99,255,0.08);
+        }
+        .search-input::placeholder { color: rgba(226,232,240,0.3); }
+
+        .client-card {
+            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+        }
+        .client-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .reveal {
+            opacity: 0; transform: translateY(20px);
+            transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .collapsible-header { cursor: pointer; user-select: none; }
+        .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .collapsible-content.open { max-height: 2000px; }
+        .chevron-icon { transition: transform 0.3s; }
+        .chevron-icon.rotated { transform: rotate(180deg); }
+
+        .day-col {
+            min-width: 0;
+        }
+        .day-chip {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: rgba(108,99,255,0.1);
+            border: 1px solid rgba(108,99,255,0.15);
+            color: #8B83FF;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+        .day-chip.mint {
+            background: rgba(52,211,153,0.1);
+            border-color: rgba(52,211,153,0.15);
+            color: #34D399;
+        }
+        .day-chip.amber {
+            background: rgba(251,191,36,0.1);
+            border-color: rgba(251,191,36,0.15);
+            color: #FBBF24;
+        }
+        .day-chip.rose {
+            background: rgba(251,113,133,0.1);
+            border-color: rgba(251,113,133,0.15);
+            color: #FB7185;
+        }
+        .day-chip.sky {
+            background: rgba(56,189,248,0.1);
+            border-color: rgba(56,189,248,0.15);
+            color: #38BDF8;
+        }
+
+        @keyframes pulse-soft { 0%,100%{opacity:1} 50%{opacity:0.5} }
+        .pulse-soft { animation: pulse-soft 2.5s ease-in-out infinite; }
+
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+        @media (max-width: 768px) {
+            .search-input { max-width: 100%; }
+        }
+    </style>
+</head>
+<body class="relative z-10">
+
+<!-- ═══════════════════════ TOP BAR ═══════════════════════ -->
+<header class="sticky top-0 z-50 px-4 sm:px-8 py-4" style="background: rgba(8,11,18,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(108,99,255,0.06);">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 flex-wrap">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #6C63FF, #4A42CC);">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 text-white"></i>
+            </div>
+            <div>
+                <h1 class="font-poppins font-bold text-sm sm:text-base text-white leading-tight">Command Center</h1>
+                <p class="text-[0.65rem] text-slate-400 font-medium tracking-wide uppercase">Epic Digital Hub</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <span class="text-xs text-slate-500 hidden sm:block" id="currentDate"></span>
+            <div class="w-8 h-8 rounded-full flex items-center justify-center" style="background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.15);">
+                <i data-lucide="bell" class="w-4 h-4 text-accent-light"></i>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-8">
+
+    <!-- ═══════════════════════ STAT CARDS ═══════════════════════ -->
+    <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 reveal">
+        <div class="glass stat-card stat-card-accent p-5">
+            <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: rgba(108,99,255,0.12);">
+                    <i data-lucide="zap" class="w-4 h-4 text-accent-light"></i>
+                </div>
+                <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Activi</span>
+            </div>
+            <p class="font-poppins text-3xl font-bold text-white" id="statActive">7</p>
+            <p class="text-xs text-slate-500 mt-1">clienți activi</p>
+        </div>
+        <div class="glass stat-card stat-card-amber p-5">
+            <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: rgba(251,191,36,0.12);">
+                    <i data-lucide="pause-circle" class="w-4 h-4 text-amber"></i>
+                </div>
+                <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Pauză</span>
+            </div>
+            <p class="font-poppins text-3xl font-bold text-white" id="statPaused">3</p>
+            <p class="text-xs text-slate-500 mt-1">clienți în pauză</p>
+        </div>
+        <div class="glass stat-card stat-card-rose p-5">
+            <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: rgba(251,113,133,0.12);">
+                    <i data-lucide="clock" class="w-4 h-4 text-rose"></i>
+                </div>
+                <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Deadline-uri</span>
+            </div>
+            <p class="font-poppins text-3xl font-bold text-white" id="statDeadlines">0</p>
+            <p class="text-xs text-slate-500 mt-1">în 7 zile</p>
+        </div>
+        <div class="glass stat-card stat-card-mint p-5">
+            <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: rgba(52,211,153,0.12);">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-mint"></i>
+                </div>
+                <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Completare</span>
+            </div>
+            <p class="font-poppins text-3xl font-bold text-white" id="statCompleteness">0%</p>
+            <p class="text-xs text-slate-500 mt-1">docs strategie</p>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ URGENT DEADLINES ═══════════════════════ -->
+    <section class="reveal">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background: rgba(251,113,133,0.12);">
+                <i data-lucide="alert-triangle" class="w-4 h-4 text-rose"></i>
+            </div>
+            <h2 class="font-poppins font-bold text-base text-white">Deadline-uri & Termene</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="deadlinesGrid">
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ FILTERS + SEARCH ═══════════════════════ -->
+    <section class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 reveal">
+        <div class="flex items-center gap-2 flex-wrap">
+            <button class="tab-btn active" data-filter="all">Toți <span class="opacity-50 ml-1" id="countAll">13</span></button>
+            <button class="tab-btn" data-filter="active">Activi <span class="opacity-50 ml-1" id="countActive">7</span></button>
+            <button class="tab-btn" data-filter="paused">Pauză <span class="opacity-50 ml-1" id="countPaused">3</span></button>
+            <button class="tab-btn" data-filter="prospect">Prospect <span class="opacity-50 ml-1" id="countProspect">1</span></button>
+            <button class="tab-btn" data-filter="minimal">Informal <span class="opacity-50 ml-1" id="countMinimal">2</span></button>
+        </div>
+        <div class="relative w-full sm:w-auto">
+            <i data-lucide="search" class="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            <input type="text" class="search-input" placeholder="Caută client..." id="searchInput">
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ CLIENT GRID ═══════════════════════ -->
+    <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 reveal" id="clientGrid">
+    </section>
+
+    <!-- ═══════════════════════ PAUSED / PROSPECT (collapsible) ═══════════════════════ -->
+    <section class="reveal" id="pausedSection" style="display:none;">
+        <div class="collapsible-header flex items-center justify-between p-4 glass" onclick="toggleCollapsible('pausedContent', 'pausedChevron')">
+            <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background: rgba(251,191,36,0.12);">
+                    <i data-lucide="archive" class="w-4 h-4 text-amber"></i>
+                </div>
+                <h2 class="font-poppins font-bold text-base text-white">Clienți în Pauză & Prospecți</h2>
+                <span class="badge" style="background: rgba(251,191,36,0.12); color: #FBBF24;" id="pausedCount">0</span>
+            </div>
+            <i data-lucide="chevron-down" class="chevron-icon w-5 h-5 text-slate-400" id="pausedChevron"></i>
+        </div>
+        <div class="collapsible-content" id="pausedContent">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-4" id="pausedGrid">
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ WEEKLY PLANNER ═══════════════════════ -->
+    <section class="reveal">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background: rgba(56,189,248,0.12);">
+                <i data-lucide="calendar-days" class="w-4 h-4 text-sky"></i>
+            </div>
+            <h2 class="font-poppins font-bold text-base text-white">Ritm Săptămânal</h2>
+            <span class="text-xs text-slate-500">— sugestie de focus pe zi</span>
+        </div>
+        <div class="glass p-5 overflow-x-auto scrollbar-hide">
+            <div class="grid grid-cols-5 gap-3 min-w-[640px]">
+                <div class="day-col">
+                    <div class="text-center mb-3">
+                        <p class="font-poppins font-bold text-sm text-white">Luni</p>
+                        <p class="text-[0.6rem] text-slate-500 uppercase tracking-wider mt-0.5">Strategie</p>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="day-chip rose">ThermX — Lansare</span>
+                        <span class="day-chip">Philatopo — Content</span>
+                        <span class="day-chip mint">Planificare săpt.</span>
+                    </div>
+                </div>
+                <div class="day-col">
+                    <div class="text-center mb-3">
+                        <p class="font-poppins font-bold text-sm text-white">Marți</p>
+                        <p class="text-[0.6rem] text-slate-500 uppercase tracking-wider mt-0.5">Conținut</p>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="day-chip amber">Agro Salso — Social</span>
+                        <span class="day-chip">DentalNet — Posturi</span>
+                        <span class="day-chip sky">Hotel Maxim — Calendar</span>
+                    </div>
+                </div>
+                <div class="day-col">
+                    <div class="text-center mb-3">
+                        <p class="font-poppins font-bold text-sm text-white">Miercuri</p>
+                        <p class="text-[0.6rem] text-slate-500 uppercase tracking-wider mt-0.5">Clienți</p>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="day-chip rose">ThermX — Prezentare</span>
+                        <span class="day-chip">Marius Sinca — Brand</span>
+                        <span class="day-chip">Proiect Carina</span>
+                    </div>
+                </div>
+                <div class="day-col">
+                    <div class="text-center mb-3">
+                        <p class="font-poppins font-bold text-sm text-white">Joi</p>
+                        <p class="text-[0.6rem] text-slate-500 uppercase tracking-wider mt-0.5">Ads & SEO</p>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="day-chip amber">Agro Salso — Ads</span>
+                        <span class="day-chip sky">Hotel Maxim — SEO</span>
+                        <span class="day-chip">Philatopo — Website</span>
+                    </div>
+                </div>
+                <div class="day-col">
+                    <div class="text-center mb-3">
+                        <p class="font-poppins font-bold text-sm text-white">Vineri</p>
+                        <p class="text-[0.6rem] text-slate-500 uppercase tracking-wider mt-0.5">Review</p>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="day-chip mint">Review săptămânal</span>
+                        <span class="day-chip">AutoSiena — Follow-up</span>
+                        <span class="day-chip">Admin & rapoarte</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+    <footer class="text-center py-8">
+        <p class="text-xs text-slate-600">Epic Digital Hub — Command Center &middot; Actualizat manual</p>
+    </footer>
+
+</main>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// CLIENT DATA — edit here to update the dashboard
+// ═══════════════════════════════════════════════════════════════
+const clients = [
+    {
+        name: 'ThermX',
+        slug: 'ThermX',
+        industry: 'Construcții / Termoizolație',
+        status: 'active',
+        services: ['Brand Strategy', 'Social Media', 'SEO', 'Launch Campaign', 'Website', 'Content'],
+        focus: 'Lansare produs 26 Martie 2026 — prezentare + script gata. Continuare conținut Martie. Website în construcție.',
+        pending: ['Website build', 'Google Ads strategy', 'Email marketing'],
+        docsComplete: 90,
+        folder: 'ThermX',
+        lastUpdated: '2026-02-24',
+        package: null,
+        color: '#FB7185',
+    },
+    {
+        name: 'Agro Salso',
+        slug: 'Agro_Salso',
+        industry: 'Dealer Utilaje Agricole',
+        status: 'active',
+        services: ['Digital Audit', 'Ads (FB + Google)', 'Editorial Calendar', 'Market Research', 'Sales Strategy'],
+        focus: 'URGENT: Fix website (60% broken). Google Business Profile. Calendar editorial activ Feb-Mar. AFIR DR-14 deschis.',
+        pending: ['Website fix', 'Google Business Profile', 'SEO local', 'YouTube demos'],
+        docsComplete: 75,
+        folder: 'Agro_Salso',
+        lastUpdated: '2026-02-26',
+        package: null,
+        color: '#34D399',
+    },
+    {
+        name: 'Hotel Maxim',
+        slug: 'HotelMaxim',
+        industry: 'Hospitality — Hotel 4*',
+        status: 'active',
+        services: ['Brand Identity', 'Meta Strategy', 'Google Strategy', 'SEO', 'Editorial Calendar', 'Campanii'],
+        focus: 'Calendar editorial activ (23 Feb - 01 Apr). Campanie 8 Martie Giveaway. Google Ads de activat.',
+        pending: ['Google Ads activation', 'Market analysis', 'Buyer personas', 'Monthly reports'],
+        docsComplete: 65,
+        folder: 'HotelMaxim',
+        lastUpdated: '2026-02-27',
+        package: null,
+        color: '#38BDF8',
+    },
+    {
+        name: 'DentalNet Kids',
+        slug: 'DentalNet',
+        industry: 'Stomatologie Pediatrică',
+        status: 'active',
+        services: ['Brand Strategy', 'Social Media', 'Market Analysis', 'Mascot Design', 'Print Materials'],
+        focus: 'Conținut social media Martie gata. Website dentalnet.ro offline — de construit. Rafinare identitate brand.',
+        pending: ['Website build', 'Competitor analysis', 'Digital strategy', 'Ads strategy'],
+        docsComplete: 55,
+        folder: 'DentalNet',
+        lastUpdated: '2026-02-21',
+        package: null,
+        color: '#6C63FF',
+    },
+    {
+        name: 'Philatopo',
+        slug: 'Philatopo',
+        industry: 'Topografie & Cadastru',
+        status: 'active',
+        services: ['Brand Identity', 'Market Study', 'Editorial Calendar', 'Website Audit', 'Content'],
+        focus: 'Calendar editorial Aprilie gata. Profile social media de creat (FB, IG, LinkedIn). Acțiuni din audit website.',
+        pending: ['Social media profiles', 'Buyer personas', 'Digital strategy', 'SEO strategy'],
+        docsComplete: 55,
+        folder: 'Philatopo',
+        lastUpdated: '2026-02-28',
+        package: 'ADVANCED',
+        color: '#FBBF24',
+    },
+    {
+        name: 'Marius Sinca',
+        slug: 'MariusSinca',
+        industry: 'Brand Personal',
+        status: 'active',
+        services: ['Brand Discovery', 'Brand Analysis', 'Roadmap', 'Podcast Script'],
+        focus: 'BLOCAT — așteptăm răspunsuri la interviu. Website, logo, content plan depind de răspunsuri.',
+        pending: ['Client interview responses', 'Visual identity', 'Content strategy', 'Website'],
+        docsComplete: 35,
+        folder: 'MariusSinca',
+        lastUpdated: '2026-02-20',
+        package: 'FREE',
+        color: '#A78BFA',
+        blocked: true,
+    },
+    {
+        name: 'Proiect Carina',
+        slug: 'ProiectCarina',
+        industry: 'Kid-fluencer',
+        status: 'active',
+        services: ['Personal/Free'],
+        focus: 'Angajament ușor, documentație minimală. Strategie de conținut și plan de creștere necesare.',
+        pending: ['Content strategy', 'Growth plan', 'Brand guidelines', 'Editorial calendar'],
+        docsComplete: 10,
+        folder: 'ProiectCarina',
+        lastUpdated: '2026-02-20',
+        package: 'FREE',
+        color: '#F472B6',
+    },
+    {
+        name: 'AutoSiena Oradea',
+        slug: 'AutoSiena_Oradea',
+        industry: 'Dealer Auto Multi-Brand',
+        status: 'prospect',
+        services: ['Meeting Prep', 'Ofertă Comercială'],
+        focus: 'Prospect — întâlnire inițială 23.02.2026. Ofertă pregătită (2 pachete). Instagram de consolidat, TikTok de creat.',
+        pending: ['Client decision', 'Brand identity', 'Digital audit', 'Strategy docs'],
+        docsComplete: 10,
+        folder: 'AutoSiena_Oradea',
+        lastUpdated: '2026-02-23',
+        package: '2 opțiuni pregătite',
+        color: '#F97316',
+    },
+    {
+        name: 'Contabilitate',
+        slug: 'Contabilitate',
+        industry: 'Servicii Financiare',
+        status: 'paused',
+        services: ['ADVANCED Package'],
+        focus: 'Client în pauză. Doar README disponibil.',
+        pending: ['Toate documentele de strategie'],
+        docsComplete: 5,
+        folder: 'Contabilitate',
+        lastUpdated: '2026-02-20',
+        package: '2.000 RON/lună',
+        color: '#64748B',
+        pauseReason: 'Pauză — pachet ADVANCED, 24h/lună',
+    },
+    {
+        name: 'Fundația Sinca',
+        slug: 'FundatiaSinca',
+        industry: 'ONG / Caritate',
+        status: 'paused',
+        services: ['Personal/Free'],
+        focus: 'Client în pauză. Proiect personal/gratuit.',
+        pending: ['Toate documentele'],
+        docsComplete: 5,
+        folder: 'FundatiaSinca',
+        lastUpdated: '2026-02-20',
+        package: 'FREE',
+        color: '#64748B',
+        pauseReason: 'Pauză — proiect personal, 12h/lună',
+    },
+    {
+        name: 'Harmony Garden',
+        slug: 'HarmonyGarden',
+        industry: 'Evenimente / Summer Club',
+        status: 'paused',
+        services: ['Project-based'],
+        focus: 'Client în pauză. Conținut în limba maghiară.',
+        pending: ['Toate documentele', 'Brand identity'],
+        docsComplete: 5,
+        folder: 'HarmonyGarden',
+        lastUpdated: '2026-02-20',
+        package: '3.000 RON/proiect',
+        color: '#64748B',
+        pauseReason: 'Pauză — per proiect, output în HU',
+        language: 'HU',
+    },
+    {
+        name: 'TLP',
+        slug: 'TLP',
+        industry: 'Evenimente / DJ / Party',
+        status: 'minimal',
+        services: ['Content (HU)'],
+        focus: 'Client informal — documentație minimală. Output în maghiară.',
+        pending: ['Brand identity', 'Strategy', 'Content plan'],
+        docsComplete: 5,
+        folder: 'TLP',
+        lastUpdated: '2026-02-20',
+        package: null,
+        color: '#64748B',
+        language: 'HU',
+    },
+    {
+        name: 'XpertAudio',
+        slug: 'XpertAudio',
+        industry: 'Echipamente Audio / Events',
+        status: 'minimal',
+        services: [],
+        focus: 'Client informal — documentație minimală. Funktion One, LED, lighting.',
+        pending: ['Brand identity', 'Strategy', 'Content', 'Everything'],
+        docsComplete: 5,
+        folder: 'XpertAudio',
+        lastUpdated: '2026-02-20',
+        package: null,
+        color: '#64748B',
+    },
+];
+
+const deadlines = [
+    {
+        client: 'Hotel Maxim',
+        event: 'Campanie 8 Martie — Giveaway',
+        date: '2026-03-08',
+        urgency: 'urgent',
+        icon: 'gift',
+    },
+    {
+        client: 'ThermX',
+        event: 'Lansare Produs — Event',
+        date: '2026-03-26',
+        urgency: 'soon',
+        icon: 'rocket',
+    },
+    {
+        client: 'Agro Salso',
+        event: 'Sezon primăvară (Feb-Apr)',
+        date: '2026-04-30',
+        urgency: 'normal',
+        icon: 'tractor',
+    },
+    {
+        client: 'Hotel Maxim',
+        event: 'Calendar editorial se termină',
+        date: '2026-04-01',
+        urgency: 'normal',
+        icon: 'calendar-x',
+    },
+    {
+        client: 'Agro Salso',
+        event: 'AFIR DR-14 — sesiune deschisă',
+        date: '2026-02-27',
+        urgency: 'urgent',
+        icon: 'file-text',
+    },
+    {
+        client: 'Philatopo',
+        event: 'Calendar Aprilie — de executat',
+        date: '2026-04-01',
+        urgency: 'normal',
+        icon: 'file-edit',
+    },
+];
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER LOGIC
+// ═══════════════════════════════════════════════════════════════
+
+const today = new Date();
+const msPerDay = 86400000;
+
+function daysUntil(dateStr) {
+    const d = new Date(dateStr);
+    return Math.ceil((d - today) / msPerDay);
+}
+
+function formatDate(dateStr) {
+    const d = new Date(dateStr);
+    const months = ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function formatDateShort(dateStr) {
+    const d = new Date(dateStr);
+    const months = ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${d.getDate()} ${months[d.getMonth()]}`;
+}
+
+// Set current date in header
+document.getElementById('currentDate').textContent = formatDate(today.toISOString().split('T')[0]);
+
+// ── Stats ──
+function updateStats() {
+    const active = clients.filter(c => c.status === 'active');
+    const paused = clients.filter(c => c.status === 'paused');
+    const upcomingDeadlines = deadlines.filter(d => {
+        const days = daysUntil(d.date);
+        return days >= 0 && days <= 7;
+    });
+    const avgCompleteness = active.length
+        ? Math.round(active.reduce((sum, c) => sum + c.docsComplete, 0) / active.length)
+        : 0;
+
+    document.getElementById('statActive').textContent = active.length;
+    document.getElementById('statPaused').textContent = paused.length;
+    document.getElementById('statDeadlines').textContent = upcomingDeadlines.length;
+    document.getElementById('statCompleteness').textContent = avgCompleteness + '%';
+}
+
+// ── Deadlines ──
+function renderDeadlines() {
+    const grid = document.getElementById('deadlinesGrid');
+    const sorted = [...deadlines].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    grid.innerHTML = sorted.map(d => {
+        const days = daysUntil(d.date);
+        const isPast = days < 0;
+        const urgencyClass = isPast ? 'deadline-urgent' : d.urgency === 'urgent' ? 'deadline-urgent' : d.urgency === 'soon' ? 'deadline-soon' : 'deadline-normal';
+        const urgencyColor = isPast ? '#FB7185' : d.urgency === 'urgent' ? '#FB7185' : d.urgency === 'soon' ? '#FBBF24' : '#34D399';
+        const daysText = isPast ? `${Math.abs(days)}z în urmă` : days === 0 ? 'AZI' : days === 1 ? 'MÂINE' : `${days} zile`;
+        const daysClass = isPast || days <= 3 ? 'text-rose pulse-soft font-bold' : days <= 7 ? 'text-amber font-semibold' : 'text-mint font-medium';
+
+        return `
+            <div class="glass-subtle ${urgencyClass} deadline-card p-4">
+                <div class="flex items-start justify-between gap-2">
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs text-slate-400 font-medium">${d.client}</p>
+                        <p class="text-sm text-white font-semibold mt-0.5 leading-snug">${d.event}</p>
+                        <p class="text-xs text-slate-500 mt-1.5">${formatDateShort(d.date)}</p>
+                    </div>
+                    <div class="text-right flex-shrink-0">
+                        <p class="${daysClass} text-xs">${daysText}</p>
+                        <div class="mt-2 w-7 h-7 rounded-lg flex items-center justify-center" style="background: ${urgencyColor}15;">
+                            <i data-lucide="${d.icon}" class="w-3.5 h-3.5" style="color: ${urgencyColor};"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// ── Client Cards ──
+function getStatusBadge(status) {
+    const map = {
+        active: { bg: 'rgba(52,211,153,0.12)', color: '#34D399', label: 'Activ' },
+        paused: { bg: 'rgba(251,191,36,0.12)', color: '#FBBF24', label: 'Pauză' },
+        prospect: { bg: 'rgba(249,115,22,0.12)', color: '#F97316', label: 'Prospect' },
+        minimal: { bg: 'rgba(100,116,139,0.12)', color: '#94A3B8', label: 'Informal' },
+    };
+    const s = map[status] || map.minimal;
+    return `<span class="badge" style="background:${s.bg};color:${s.color};">${s.label}</span>`;
+}
+
+function renderClientCard(client) {
+    const progressColor = client.docsComplete >= 70 ? '#34D399' : client.docsComplete >= 40 ? '#FBBF24' : '#FB7185';
+    const blockedTag = client.blocked ? `<span class="badge ml-1" style="background:rgba(251,113,133,0.15);color:#FB7185;">Blocat</span>` : '';
+    const langTag = client.language ? `<span class="badge ml-1" style="background:rgba(56,189,248,0.1);color:#38BDF8;">${client.language}</span>` : '';
+    const packageTag = client.package ? `<span class="text-xs text-slate-500">${client.package}</span>` : '';
+
+    const servicesBadges = client.services.slice(0, 4).map(s =>
+        `<span class="text-[0.6rem] px-2 py-0.5 rounded bg-white/[0.04] text-slate-400 whitespace-nowrap">${s}</span>`
+    ).join('');
+    const moreServices = client.services.length > 4 ? `<span class="text-[0.6rem] text-slate-500">+${client.services.length - 4}</span>` : '';
+
+    return `
+        <div class="glass client-card p-5 flex flex-col" data-status="${client.status}" data-name="${client.name.toLowerCase()}">
+            <div class="flex items-start justify-between gap-2 mb-3">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-9 h-9 rounded-lg flex-shrink-0 flex items-center justify-center" style="background: ${client.color}15; border: 1px solid ${client.color}20;">
+                        <span class="font-poppins font-bold text-sm" style="color: ${client.color};">${client.name.charAt(0)}</span>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="font-poppins font-bold text-sm text-white truncate">${client.name}</h3>
+                        <p class="text-[0.65rem] text-slate-500 truncate">${client.industry}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1 flex-shrink-0">
+                    ${getStatusBadge(client.status)}
+                    ${blockedTag}
+                    ${langTag}
+                </div>
+            </div>
+
+            <div class="flex flex-wrap gap-1 mb-3">
+                ${servicesBadges}
+                ${moreServices}
+            </div>
+
+            <p class="text-xs text-slate-300 leading-relaxed mb-4 flex-1">${client.focus}</p>
+
+            <div class="space-y-3 mt-auto">
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[0.6rem] text-slate-500 uppercase tracking-wider">Completare docs</span>
+                        <span class="text-xs font-semibold" style="color: ${progressColor};">${client.docsComplete}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${client.docsComplete}%; background: ${progressColor};"></div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <span class="text-[0.6rem] text-slate-600">Actualizat: ${formatDate(client.lastUpdated)}</span>
+                    ${packageTag}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function renderPausedCard(client) {
+    const langTag = client.language ? `<span class="badge ml-1" style="background:rgba(56,189,248,0.1);color:#38BDF8;">${client.language}</span>` : '';
+
+    return `
+        <div class="glass-subtle p-4" data-status="${client.status}" data-name="${client.name.toLowerCase()}">
+            <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg flex-shrink-0 flex items-center justify-center" style="background: rgba(100,116,139,0.12);">
+                        <span class="font-poppins font-bold text-xs text-slate-400">${client.name.charAt(0)}</span>
+                    </div>
+                    <div>
+                        <h3 class="font-poppins font-semibold text-sm text-slate-300">${client.name}</h3>
+                        <p class="text-[0.6rem] text-slate-600">${client.industry}</p>
+                    </div>
+                </div>
+                <div class="flex gap-1">
+                    ${getStatusBadge(client.status)}
+                    ${langTag}
+                </div>
+            </div>
+            ${client.pauseReason ? `<p class="text-xs text-slate-500 mb-1">${client.pauseReason}</p>` : ''}
+            ${client.package ? `<p class="text-[0.65rem] text-slate-600">Pachet: <span class="text-slate-400">${client.package}</span></p>` : ''}
+            ${client.pending && client.pending.length ? `<p class="text-[0.6rem] text-slate-600 mt-2">Reactivare: ${client.pending.slice(0,2).join(', ')}</p>` : ''}
+        </div>
+    `;
+}
+
+// ── Main Render ──
+let currentFilter = 'all';
+
+function renderAll() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+    const grid = document.getElementById('clientGrid');
+    const pausedGrid = document.getElementById('pausedGrid');
+    const pausedSection = document.getElementById('pausedSection');
+
+    // Determine visible clients based on filter
+    let visibleClients;
+    if (currentFilter === 'all') {
+        visibleClients = clients;
+    } else {
+        visibleClients = clients.filter(c => c.status === currentFilter);
+    }
+
+    // Apply search
+    if (searchTerm) {
+        visibleClients = visibleClients.filter(c =>
+            c.name.toLowerCase().includes(searchTerm) ||
+            c.industry.toLowerCase().includes(searchTerm)
+        );
+    }
+
+    // When searching, show all matching clients in main grid (no split)
+    if (searchTerm) {
+        grid.innerHTML = visibleClients.map(renderClientCard).join('');
+        pausedSection.style.display = 'none';
+    } else if (currentFilter === 'all') {
+        // Normal "all" view: active in main grid, rest in collapsible
+        grid.innerHTML = visibleClients
+            .filter(c => c.status === 'active')
+            .map(renderClientCard).join('');
+
+        const pausedClients = visibleClients.filter(c => ['paused', 'prospect', 'minimal'].includes(c.status));
+        if (pausedClients.length > 0) {
+            pausedSection.style.display = 'block';
+            pausedGrid.innerHTML = pausedClients.map(renderPausedCard).join('');
+            document.getElementById('pausedCount').textContent = pausedClients.length;
+        } else {
+            pausedSection.style.display = 'none';
+        }
+    } else {
+        // Specific filter tab: show all matching in main grid
+        grid.innerHTML = visibleClients.map(renderClientCard).join('');
+        pausedSection.style.display = 'none';
+    }
+
+    // No results
+    if (visibleClients.length === 0) {
+        grid.innerHTML = `
+            <div class="col-span-full text-center py-16">
+                <i data-lucide="search-x" class="w-10 h-10 text-slate-700 mx-auto mb-3"></i>
+                <p class="text-sm text-slate-500">Niciun client găsit</p>
+            </div>
+        `;
+    }
+
+    // Recreate lucide icons for new elements
+    lucide.createIcons();
+}
+
+// ── Filter Tabs ──
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderAll();
+    });
+});
+
+// ── Search ──
+document.getElementById('searchInput').addEventListener('input', renderAll);
+
+// ── Collapsible ──
+function toggleCollapsible(contentId, chevronId) {
+    const content = document.getElementById(contentId);
+    const chevron = document.getElementById(chevronId);
+    content.classList.toggle('open');
+    chevron.classList.toggle('rotated');
+}
+
+// ── Counts ──
+function updateCounts() {
+    document.getElementById('countAll').textContent = clients.length;
+    document.getElementById('countActive').textContent = clients.filter(c => c.status === 'active').length;
+    document.getElementById('countPaused').textContent = clients.filter(c => c.status === 'paused').length;
+    document.getElementById('countProspect').textContent = clients.filter(c => c.status === 'prospect').length;
+    document.getElementById('countMinimal').textContent = clients.filter(c => c.status === 'minimal').length;
+}
+
+// ── Reveal Animation ──
+function initReveal() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+// ── Init ──
+function init() {
+    updateStats();
+    updateCounts();
+    renderDeadlines();
+    renderAll();
+    initReveal();
+    lucide.createIcons();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>

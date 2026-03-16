@@ -1,0 +1,40 @@
+﻿node.exe : 
+At C:\Program Files\nodejs\npx.ps1:29 char:3
++   & $NODE_EXE $NPX_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified    : 
+(:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeComman    
+dError
+ 
+node:internal/modules/run_main:122
+    triggerUncaughtException(
+    ^
+Error [TransformError]: Transform failed with 1 
+error:
+F:\postboard 
+roli\postboard\server\index.ts:3598:24: ERROR: 
+"await" can only be used inside an "async" 
+function
+    at failureErrorWithLog (F:\postboard roli\post
+board\node_modules\esbuild\lib\main.js:1467:15)
+    at F:\postboard roli\postboard\node_modules\es
+build\lib\main.js:736:50
+    at responseCallbacks.<computed> (F:\postboard 
+roli\postboard\node_modules\esbuild\lib\main.js:60
+3:9)
+    at handleIncomingPacket (F:\postboard roli\pos
+tboard\node_modules\esbuild\lib\main.js:658:12)
+    at Socket.readFromStdout (F:\postboard roli\po
+stboard\node_modules\esbuild\lib\main.js:581:7)
+    at Socket.emit (node:events:518:28)
+    at addChunk 
+(node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode 
+(node:internal/streams/readable:512:3)
+    at Readable.push 
+(node:internal/streams/readable:392:5)
+    at Pipe.onStreamRead 
+(node:internal/stream_base_commons:189:23)
+
+Node.js v22.14.0

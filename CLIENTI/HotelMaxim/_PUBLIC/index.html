@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Client — Hotel Maxim | Epic Digital Hub</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary:   '#1a1a2e',
+                            accent:    '#e94560',
+                            secondary: '#16213e',
+                            light:     '#f5f5f5',
+                            text:      '#333333',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        :root { --color-primary: #1a1a2e; --color-accent: #e94560; --color-secondary: #16213e; }
+        body { font-family: 'Inter', system-ui, sans-serif; color: #333; }
+        .gradient-hero {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, #0f3460 100%);
+            position: relative; overflow: hidden;
+        }
+        .gradient-hero::before {
+            content: ''; position: absolute; top: -50%; right: -20%;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(233,69,96,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .card-hover { transition: all 0.25s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(26,26,46,0.1); }
+    </style>
+</head>
+<body class="bg-brand-light min-h-screen flex flex-col">
+
+    <header class="gradient-hero text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 relative z-10">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/10">
+                    <i data-lucide="hotel" class="w-6 h-6 text-brand-accent"></i>
+                </div>
+                <span class="text-sm text-white/50 font-medium uppercase tracking-wider">Epic Digital Hub</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 tracking-tight">Hotel Maxim</h1>
+            <p class="text-white/60 text-lg max-w-xl">
+                Portal de livrabile &mdash; strategii digitale, campanii social media și materiale de marketing.
+            </p>
+            <div class="flex flex-wrap items-center gap-6 mt-8 text-sm">
+                <div class="flex items-center gap-2 text-white/50">
+                    <i data-lucide="folder" class="w-4 h-4"></i>
+                    <span>Livrabile disponibile pe bază de solicitare</span>
+                </div>
+                <div class="flex items-center gap-2 text-white/50">
+                    <i data-lucide="clock" class="w-4 h-4"></i>
+                    <span>Ultima actualizare: 28.02.2026</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 flex-1 w-full">
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-brand-primary">Servicii active</h2>
+            <p class="text-sm text-gray-400 mt-1">Pachetul Full Digital — SEO, Meta Ads, Google Ads, Social Media</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div class="card-hover bg-white rounded-2xl border border-gray-100 p-6 group">
+                <div class="w-12 h-12 bg-brand-primary/5 rounded-xl flex items-center justify-center mb-4">
+                    <i data-lucide="search" class="w-6 h-6 text-brand-primary"></i>
+                </div>
+                <div class="mb-3">
+                    <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700">Strategie</span>
+                </div>
+                <h3 class="font-bold text-brand-primary text-base mb-2">Strategie SEO 2026</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">Strategia completă de optimizare SEO: audit tehnic, keyword research, plan de conținut și link building.</p>
+            </div>
+
+            <div class="card-hover bg-white rounded-2xl border border-gray-100 p-6 group">
+                <div class="w-12 h-12 bg-brand-primary/5 rounded-xl flex items-center justify-center mb-4">
+                    <i data-lucide="target" class="w-6 h-6 text-brand-primary"></i>
+                </div>
+                <div class="mb-3">
+                    <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-blue-100 text-blue-700">Ads</span>
+                </div>
+                <h3 class="font-bold text-brand-primary text-base mb-2">Strategie Meta Ads</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">Campanii Facebook & Instagram Ads: targetare, bugete, creatives și optimizare continuă.</p>
+            </div>
+
+            <div class="card-hover bg-white rounded-2xl border border-gray-100 p-6 group">
+                <div class="w-12 h-12 bg-brand-primary/5 rounded-xl flex items-center justify-center mb-4">
+                    <i data-lucide="monitor" class="w-6 h-6 text-brand-primary"></i>
+                </div>
+                <div class="mb-3">
+                    <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-blue-100 text-blue-700">Ads</span>
+                </div>
+                <h3 class="font-bold text-brand-primary text-base mb-2">Strategie Google Ads</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">Campanii Google Search & Display: keyword targeting, ad copy, landing pages și bid management.</p>
+            </div>
+
+            <div class="card-hover bg-white rounded-2xl border border-gray-100 p-6 group">
+                <div class="w-12 h-12 bg-brand-primary/5 rounded-xl flex items-center justify-center mb-4">
+                    <i data-lucide="gift" class="w-6 h-6 text-brand-primary"></i>
+                </div>
+                <div class="mb-3">
+                    <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-brand-accent/10 text-brand-accent">Campanie</span>
+                </div>
+                <h3 class="font-bold text-brand-primary text-base mb-2">Campanie Giveaway 8 Martie</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">Campanie promoțională de 8 Martie: concept, mecanică, conținut și plan de promovare.</p>
+            </div>
+
+            <div class="card-hover bg-white rounded-2xl border border-gray-100 p-6 group">
+                <div class="w-12 h-12 bg-brand-primary/5 rounded-xl flex items-center justify-center mb-4">
+                    <i data-lucide="trending-up" class="w-6 h-6 text-brand-primary"></i>
+                </div>
+                <div class="mb-3">
+                    <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-purple-100 text-purple-700">Tendințe</span>
+                </div>
+                <h3 class="font-bold text-brand-primary text-base mb-2">Trenduri Social Media 2026</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">Analiza trendurilor curente în social media și recomandări pentru strategia de conținut.</p>
+            </div>
+        </div>
+
+        <div class="mt-10 bg-brand-primary/5 border border-brand-primary/10 rounded-xl p-6">
+            <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-brand-accent/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <i data-lucide="info" class="w-4 h-4 text-brand-accent"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-brand-primary mb-1">Livrabile HTML interactive</h3>
+                    <p class="text-sm text-gray-600">
+                        Pe măsură ce se finalizează rapoarte și calendare editoriale interactive, acestea vor fi adăugate aici. Contactează echipa pentru detalii.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <section class="bg-white border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+                <div>
+                    <h3 class="font-bold text-brand-primary text-lg mb-1">Ai întrebări sau feedback?</h3>
+                    <p class="text-sm text-gray-400">Echipa Epic Digital Hub este disponibilă pentru orice nelămurire.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="mailto:contact@epicdigitalhub.ro" class="inline-flex items-center gap-2 bg-brand-accent text-white px-5 py-3 rounded-xl text-sm font-medium hover:bg-red-600 transition-colors shadow-lg shadow-brand-accent/20">
+                        <i data-lucide="mail" class="w-4 h-4"></i> Trimite un email
+                    </a>
+                    <a href="https://epicdigitalhub.ro" target="_blank" class="inline-flex items-center gap-2 bg-brand-primary text-white px-5 py-3 rounded-xl text-sm font-medium hover:bg-brand-secondary transition-colors">
+                        <i data-lucide="globe" class="w-4 h-4"></i> Website
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="zap" class="w-4 h-4 text-brand-accent"></i>
+                    <span>Epic Digital Hub &mdash; Marketing & Digital Strategy</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="clock" class="w-3 h-3"></i>
+                    <span>Actualizat: 28.02.2026</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

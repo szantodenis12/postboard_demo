@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>thermX — Membrană Termoizolantă Nanoceramică</title>
+  <meta name="description" content="thermX — membrană termoizolantă nanoceramică. Lambda echivalent ≤ 0,001 W/(m·K). Grosime standard 0,5–1 mm. Reducere pierderi termice până la 40%.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <link rel="stylesheet" href="css/index3-fluid.css">
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="grid-overlay"></div>
+  <div class="orb orb--blue"></div>
+  <div class="orb orb--orange"></div>
+  <div class="cursor-glow" aria-hidden="true"></div>
+
+  <div class="scroll-progress"></div>
+
+  <nav class="nav" aria-label="Meniu principal">
+    <div class="nav__logo">therm<span>X</span></div>
+    <div class="nav__links">
+      <a href="#s01">Intro</a>
+      <a href="#s02">Structură</a>
+      <a href="#s03">nZEB</a>
+      <a href="#s04">Punți</a>
+      <a href="#s05">Mecanism</a>
+      <a href="#s06">Cifre</a>
+      <a href="#scalc">Calcul</a>
+      <a href="#sfaq">FAQ</a>
+      <a href="#s20">Contact</a>
+    </div>
+    <button class="nav__hamburger" aria-label="Meniu" aria-expanded="false">
+      <i data-lucide="menu" class="nav__hamburger-open"></i>
+      <i data-lucide="x" class="nav__hamburger-close"></i>
+    </button>
+  </nav>
+
+  <div class="nav__mobile" aria-hidden="true">
+    <a href="#s01">Intro</a>
+    <a href="#s02">Structură</a>
+    <a href="#s03">nZEB</a>
+    <a href="#s04">Punți termice</a>
+    <a href="#s05">Mecanism</a>
+    <a href="#s06">Cifre</a>
+    <a href="#scalc">Calculator</a>
+    <a href="#sfaq">Întrebări</a>
+    <a href="#s20">Contact</a>
+  </div>
+
+  <div class="progress-dots" aria-hidden="true">
+    <div class="progress-line"><div class="progress-line__fill"></div></div>
+    <div class="progress-dot active" data-section="s01" data-label="Hero"></div>
+    <div class="progress-dot" data-section="s02" data-label="1 mm"></div>
+    <div class="progress-dot" data-section="s03" data-label="nZEB"></div>
+    <div class="progress-dot" data-section="s04" data-label="Punți"></div>
+    <div class="progress-dot" data-section="s05" data-label="Mecanism"></div>
+    <div class="progress-dot" data-section="s06" data-label="Lambda"></div>
+    <div class="progress-dot" data-section="scalc" data-label="Calcul"></div>
+    <div class="progress-dot" data-section="sfaq" data-label="FAQ"></div>
+    <div class="progress-dot" data-section="s20" data-label="Contact"></div>
+  </div>
+
+  <div class="section-indicator" aria-live="polite">
+    <span class="section-indicator__eyebrow">Navigare</span>
+    <span class="section-indicator__label">Hero</span>
+  </div>
+
+  <section id="s01" class="section section--hero">
+    <div class="section__inner hero-grid">
+      <div class="hero-copy" data-reveal="scale">
+        <p class="label">Nano Revolution — Sistem termoizolant</p>
+        <img src="thermx-logo-white.png" alt="thermX" width="420" height="120" loading="eager" decoding="async" fetchpriority="high" class="hero-logo">
+        <h1 class="display-lg">1 mm. Strat continuu. Fără rosturi.</h1>
+        <p class="hero-note">thermX este o membrană termoizolantă nanoceramică aplicată prin pulverizare, cu grosime standard 0,5–1 mm, concepută pentru reducerea pierderilor termice și eliminarea punților termice.</p>
+        <div class="hero-metric">
+          <span class="hero-metric__value">≤ 0,001 W/(m·K)</span>
+          <span class="hero-metric__label">Lambda echivalent</span>
+        </div>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#s05">Vezi mecanismul</a>
+          <a class="btn btn-ghost" href="#scalc">Calculează estimarea</a>
+        </div>
+        <div class="hero-band" data-reveal="stagger">
+          <div class="hero-band__item">
+            <span class="hero-band__value">85%</span>
+            <span class="hero-band__label">Reflexie IR</span>
+          </div>
+          <div class="hero-band__item">
+            <span class="hero-band__value">0,4 kg/m²</span>
+            <span class="hero-band__label">Greutate</span>
+          </div>
+          <div class="hero-band__item">
+            <span class="hero-band__value">20 ani</span>
+            <span class="hero-band__label">Garanție</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-panel" data-reveal="scale" data-tilt>
+        <div class="hero-panel__topline">
+          <span class="hero-panel__kicker">Configurație activă</span>
+          <span class="hero-panel__status">Barieră termică continuă</span>
+        </div>
+        <div class="hero-panel__orbit">
+          <div class="hero-panel__ring hero-panel__ring--1"></div>
+          <div class="hero-panel__ring hero-panel__ring--2"></div>
+          <div class="hero-panel__ring hero-panel__ring--3"></div>
+          <div class="hero-panel__core">
+            <span class="hero-panel__eyebrow">Grosime utilă</span>
+            <strong>1 mm</strong>
+            <span class="hero-panel__caption">membrană continuă</span>
+          </div>
+        </div>
+        <div class="hero-panel__stack">
+          <div class="hero-panel__card">
+            <span class="hero-panel__card-label">Reducere pierderi</span>
+            <strong>până la 40%</strong>
+          </div>
+          <div class="hero-panel__card">
+            <span class="hero-panel__card-label">Aplicare</span>
+            <strong>~50 m²/zi</strong>
+          </div>
+          <div class="hero-panel__card hero-panel__card--accent">
+            <span class="hero-panel__card-label">Timp răspuns</span>
+            <strong>48 h pentru calcul</strong>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="s02" class="section section--dark">
+    <div class="section__inner">
+      <div class="split">
+        <div data-reveal>
+          <p class="label text-orange">STRUCTURĂ DE SISTEM</p>
+          <h2 class="heading">Mai puțină masă structurală. Mai mult control pe detaliu.</h2>
+          <p class="body-text">thermX nu adaugă volum de fațadă și nu cere o intervenție grea. Aplicarea se face prin pulverizare pe suprafața existentă, iar stratul rezultat urmărește forma suportului fără îmbinări.</p>
+          <div class="spec-strip">
+            <div class="spec-strip__item">
+              <span class="spec-strip__value">0,5–1 mm</span>
+              <span class="spec-strip__label">Grosime standard</span>
+            </div>
+            <div class="spec-strip__item">
+              <span class="spec-strip__value">până la 3,5 mm</span>
+              <span class="spec-strip__label">Industrial</span>
+            </div>
+            <div class="spec-strip__item">
+              <span class="spec-strip__value">orice substrat</span>
+              <span class="spec-strip__label">Aderență</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-stack" data-reveal="stagger">
+          <div class="product-card" data-tilt>Nu mărește semnificativ grosimea sistemului de perete.</div>
+          <div class="product-card" data-tilt>Nu introduce plăci, rosturi sau tăieturi în zone sensibile.</div>
+          <div class="product-card" data-tilt>Aplicarea urmează geometria existentă: colțuri, contururi, racorduri.</div>
+        </div>
+      </div>
+
+      <div class="grid-3" data-reveal="stagger">
+        <div class="card" data-tilt>
+          <div class="card__value">8–10 cm</div>
+          <p class="body-sm">Sistemul clasic cere volum suplimentar de fațadă și corecții de detaliu.</p>
+        </div>
+        <div class="card" data-tilt>
+          <div class="card__value">15 kg/m²</div>
+          <p class="body-sm">Greutatea unui termosistem clasic poate încărca suplimentar structura.</p>
+        </div>
+        <div class="card" data-tilt>
+          <div class="card__value">0,4 kg/m²</div>
+          <p class="body-sm">thermX adaugă masă redusă și rămâne potrivit pentru zone unde greutatea contează.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s03" class="section section--dark">
+    <div class="nzeb-year" aria-hidden="true">2028</div>
+    <div class="section__inner">
+      <div class="center" data-reveal>
+        <p class="label text-blue">DIRECTIVA nZEB</p>
+        <h2 class="heading">Presiunea vine din conformare, nu din discurs.</h2>
+        <p class="body-text">Pentru clădirile noi, performanța energetică nu mai este opțională. Detaliile constructive și controlul punților termice devin parte din rezultat, nu doar anexă tehnică.</p>
+      </div>
+
+      <div class="grid-3" data-reveal="stagger">
+        <div class="card" data-tilt>
+          <div class="card__value">≤ 15</div>
+          <p class="body-sm">kWh/m²·an pentru consum de energie primară, în scenariul țintă.</p>
+        </div>
+        <div class="card" data-tilt>
+          <div class="card__value">A+</div>
+          <p class="body-sm">Nivel minim urmărit pentru performanță energetică în proiectele noi.</p>
+        </div>
+        <div class="card" data-tilt>
+          <div class="card__value">≥ 30%</div>
+          <p class="body-sm">Pondere energie din surse regenerabile în structura totală a clădirii.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s04" class="section section--dark">
+    <div class="section__inner">
+      <div data-reveal>
+        <p class="label text-orange">PUNȚI TERMICE</p>
+        <h2 class="heading">Zonele unde sistemul clasic pierde continuitatea.</h2>
+        <p class="body-text">Aici se rupe performanța: racorduri, colțuri, intersecții de plan și zone greu de închis cu materiale rigide. Deschide fiecare zonă pentru context.</p>
+      </div>
+
+      <div class="grid-3" data-reveal="stagger">
+        <div class="zone-card" data-accordion-item data-tilt>
+          <button class="zone-card__header" data-accordion-trigger aria-expanded="false">
+            <span class="zone-card__dot"></span>
+            <span>
+              <span class="zone-card__name">Coamă</span>
+              <span class="zone-card__desc">Joncțiune acoperiș</span>
+            </span>
+            <i data-lucide="chevron-down" class="zone-card__chevron"></i>
+          </button>
+          <div class="zone-card__content" data-accordion-content>
+            <p>La coamă, două planuri se întâlnesc într-un detaliu greu de închis cu plăci. thermX se pulverizează direct pe geometrie și păstrează continuitatea stratului.</p>
+          </div>
+        </div>
+
+        <div class="zone-card" data-accordion-item data-tilt>
+          <button class="zone-card__header" data-accordion-trigger aria-expanded="false">
+            <span class="zone-card__dot"></span>
+            <span>
+              <span class="zone-card__name">Colț acoperiș</span>
+              <span class="zone-card__desc">Intersecție planuri</span>
+            </span>
+            <i data-lucide="chevron-down" class="zone-card__chevron"></i>
+          </button>
+          <div class="zone-card__content" data-accordion-content>
+            <p>Colțurile rămân zone de compromis când materialul trebuie tăiat și potrivit. Membrana fluidă acoperă complet detaliul fără goluri.</p>
+          </div>
+        </div>
+
+        <div class="zone-card" data-accordion-item data-tilt>
+          <button class="zone-card__header" data-accordion-trigger aria-expanded="false">
+            <span class="zone-card__dot"></span>
+            <span>
+              <span class="zone-card__name">Fereastră</span>
+              <span class="zone-card__desc">Contur tâmplărie</span>
+            </span>
+            <i data-lucide="chevron-down" class="zone-card__chevron"></i>
+          </button>
+          <div class="zone-card__content" data-accordion-content>
+            <p>Racordul tocului, glafurile și zona de montaj sunt surse frecvente de pierderi. thermX poate sigila conturul fără rosturi deschise.</p>
+          </div>
+        </div>
+
+        <div class="zone-card" data-accordion-item data-tilt>
+          <button class="zone-card__header" data-accordion-trigger aria-expanded="false">
+            <span class="zone-card__dot"></span>
+            <span>
+              <span class="zone-card__name">Perete–planșeu</span>
+              <span class="zone-card__desc">Joncțiune orizontală</span>
+            </span>
+            <i data-lucide="chevron-down" class="zone-card__chevron"></i>
+          </button>
+          <div class="zone-card__content" data-accordion-content>
+            <p>La fiecare nivel, discontinuitatea dintre elementele structurale devine o punte termică. Un strat continuu reduce acest efect în zona de racord.</p>
+          </div>
+        </div>
+
+        <div class="zone-card" data-accordion-item data-tilt>
+          <button class="zone-card__header" data-accordion-trigger aria-expanded="false">
+            <span class="zone-card__dot"></span>
+            <span>
+              <span class="zone-card__name">Fundație</span>
+              <span class="zone-card__desc">Contact cu solul</span>
+            </span>
+            <i data-lucide="chevron-down" class="zone-card__chevron"></i>
+          </button>
+          <div class="zone-card__content" data-accordion-content>
+            <p>Zona de bază combină transfer termic și expunere la umiditate. thermX se aplică direct pe beton și rămâne stabil în medii dificile.</p>
+          </div>
+        </div>
+
+        <div class="zone-card" data-accordion-item data-tilt>
+          <button class="zone-card__header" data-accordion-trigger aria-expanded="false">
+            <span class="zone-card__dot"></span>
+            <span>
+              <span class="zone-card__name">Balcon</span>
+              <span class="zone-card__desc">Consolă în exterior</span>
+            </span>
+            <i data-lucide="chevron-down" class="zone-card__chevron"></i>
+          </button>
+          <div class="zone-card__content" data-accordion-content>
+            <p>Placa de balcon transferă căldura direct spre exterior. Pulverizarea pe toate fețele expuse reduce zona de pierdere acolo unde plăcile rigide sunt incomode.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s05" class="section section--dark section--glow">
+    <div class="section__inner">
+      <div class="center" data-reveal>
+        <p class="label text-orange">MECANISM TERMIC</p>
+        <h2 class="heading">Trei straturi de logică inginerească.</h2>
+        <p class="body-text">Comportamentul termic nu vine din volum, ci din modul în care stratul tratează transferul: conductiv, radiant și la nivel de continuitate.</p>
+      </div>
+
+      <div class="grid-3" data-reveal="stagger">
+        <div class="card" data-tilt>
+          <div class="card__value">01</div>
+          <p class="body-text">Microsferele ceramice vidate reduc transferul conductiv prin compoziția stratului.</p>
+        </div>
+        <div class="card" data-tilt>
+          <div class="card__value">85%</div>
+          <p class="body-text">Reflexia radiației IR reduce componenta radiantă a pierderilor termice.</p>
+        </div>
+        <div class="card" data-tilt>
+          <div class="card__value">Fără rosturi</div>
+          <p class="body-text">Aplicarea fluidă închide detaliile constructive acolo unde apar discontinuități.</p>
+        </div>
+      </div>
+
+      <div class="split">
+        <div data-reveal>
+          <p class="label text-blue">SPECIFICAȚII DE OPERARE</p>
+          <h3 class="display-md">Membrană pentru rezidențial, B2B și industrial.</h3>
+          <p class="body-text">Intervalul de lucru și masa redusă permit integrarea în proiecte unde sistemele clasice creează constrângeri de detaliu, greutate sau acces.</p>
+          <div class="spec-strip">
+            <div class="spec-strip__item">
+              <span class="spec-strip__value">-60°C → +260°C</span>
+              <span class="spec-strip__label">Temperatură</span>
+            </div>
+            <div class="spec-strip__item">
+              <span class="spec-strip__value">35+ ani</span>
+              <span class="spec-strip__label">Durabilitate</span>
+            </div>
+            <div class="spec-strip__item">
+              <span class="spec-strip__value">20 ani</span>
+              <span class="spec-strip__label">Garanție</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-stack" data-reveal="stagger">
+          <div class="product-card" data-tilt>Rezidențial: reducerea punților termice la detalii greu de închis.</div>
+          <div class="product-card" data-tilt>Dezvoltare: masă structurală redusă și aplicare rapidă.</div>
+          <div class="product-card" data-tilt>Industrial: suprafețe metalice, conducte, coturi, supape și zone fierbinți.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s06" class="section section--dark">
+    <div class="section__inner">
+      <div class="center" data-reveal>
+        <p class="label text-orange">PERFORMANȚĂ COMPARATIVĂ</p>
+        <h2 class="heading">Când compari numeric, diferența devine clară.</h2>
+        <p class="body-text">Valorile de mai jos sunt introduse pentru orientare rapidă, în aceeași logică de citire: sisteme clasice vs stratul thermX.</p>
+      </div>
+
+      <div class="grid-2">
+        <div data-reveal>
+          <div class="lambda-bars" data-reveal="stagger">
+            <div class="lambda-bar" data-lambda-bar data-percent="100" data-tilt>
+              <div class="lambda-bar__label">Vată minerală</div>
+              <div class="lambda-bar__track"><div class="lambda-bar__fill lambda-bar__fill--muted"></div></div>
+              <div class="lambda-bar__value">0,040</div>
+            </div>
+            <div class="lambda-bar" data-lambda-bar data-percent="87" data-tilt>
+              <div class="lambda-bar__label">EPS (polistiren)</div>
+              <div class="lambda-bar__track"><div class="lambda-bar__fill lambda-bar__fill--muted"></div></div>
+              <div class="lambda-bar__value">0,035</div>
+            </div>
+            <div class="lambda-bar" data-lambda-bar data-percent="55" data-tilt>
+              <div class="lambda-bar__label">PIR / PUR</div>
+              <div class="lambda-bar__track"><div class="lambda-bar__fill lambda-bar__fill--muted"></div></div>
+              <div class="lambda-bar__value">0,022</div>
+            </div>
+            <div class="lambda-bar lambda-bar--hero" data-lambda-bar data-percent="2.5" data-tilt>
+              <div class="lambda-bar__label">therm<span class="text-orange">X</span></div>
+              <div class="lambda-bar__track"><div class="lambda-bar__fill lambda-bar__fill--orange"></div></div>
+              <div class="lambda-bar__value">≤ 0,001</div>
+            </div>
+          </div>
+          <p class="body-sm text-muted">Lambda echivalent include efectul de barieră IR și modul de aplicare continuă al stratului.</p>
+        </div>
+
+        <div class="product-stack" data-reveal="stagger">
+          <div class="perf-card" data-tilt>
+            <div class="perf-card__value"><span data-target="40" data-suffix="%">0%</span></div>
+            <p class="perf-card__label">Reducere estimată a pierderilor termice</p>
+          </div>
+          <div class="perf-card" data-tilt>
+            <div class="perf-card__value"><span data-target="80" data-suffix="%">0%</span></div>
+            <p class="perf-card__label">Mai rapid decât montajul clasic în scenariul standard</p>
+          </div>
+          <div class="perf-card" data-tilt>
+            <div class="perf-card__value"><span data-target="30" data-suffix="%">0%</span></div>
+            <p class="perf-card__label">Economie de cost la instalare, orientativ</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="scalc" class="section section--dark section--glow">
+    <div class="section__inner">
+      <div class="center" data-reveal>
+        <p class="label text-orange">CALCULATOR ESTIMATIV</p>
+        <h2 class="heading">Scenariu rapid pentru cost, economie și amortizare.</h2>
+        <p class="body-text">Rezultatele sunt orientative și trebuie validate pe proiect. Scopul este filtrarea rapidă a fezabilității înainte de calculul tehnic detaliat.</p>
+      </div>
+
+      <div class="calc">
+        <div class="calc__inputs" data-reveal>
+          <div class="calc__field">
+            <label class="calc__label" for="calc-building">Tip clădire</label>
+            <select id="calc-building" class="calc__select">
+              <option value="casa">Casă</option>
+              <option value="bloc">Bloc apartamente</option>
+              <option value="hala">Hală industrială</option>
+              <option value="publica">Clădire publică</option>
+            </select>
+          </div>
+
+          <div class="calc__field">
+            <label class="calc__label" for="calc-surface">Suprafață izolată (m²)</label>
+            <input id="calc-surface" type="number" class="calc__input" value="150" min="10" max="5000">
+            <input id="calc-surface-range" type="range" min="10" max="5000" value="150">
+          </div>
+
+          <div class="calc__field">
+            <label class="calc__label" for="calc-substrate">Substrat</label>
+            <select id="calc-substrate" class="calc__select">
+              <option value="beton">Beton</option>
+              <option value="metal">Metal</option>
+              <option value="lemn">Lemn</option>
+              <option value="caramida">Cărămidă</option>
+              <option value="tencuiala">Tencuială</option>
+            </select>
+          </div>
+
+          <div class="calc__field">
+            <label class="calc__label" for="calc-climate">Zonă climatică</label>
+            <select id="calc-climate" class="calc__select">
+              <option value="I">I (blând)</option>
+              <option value="II" selected>II (mediu)</option>
+              <option value="III">III (rece)</option>
+              <option value="IV">IV (foarte rece)</option>
+            </select>
+          </div>
+
+          <div class="calc__field">
+            <label class="calc__label">Grosime strat</label>
+            <div class="calc__radios">
+              <label><input type="radio" name="calc-thickness" value="0.5"> 0,5 mm</label>
+              <label><input type="radio" name="calc-thickness" value="1" checked> 1 mm</label>
+              <label><input type="radio" name="calc-thickness" value="2"> 2 mm</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc__results" data-reveal>
+          <div class="calc__summary">
+            <div>
+              <span class="result-card__label">Profil proiect</span>
+              <strong class="calc__summary-title" id="calc-r-signal">Echilibru optim</strong>
+            </div>
+            <div class="calc__signal">
+              <div class="calc__signal-track">
+                <div class="calc__signal-fill" id="calc-r-signal-fill"></div>
+              </div>
+              <p class="body-sm text-muted" id="calc-r-summary">Configurație standard pentru o estimare inițială.</p>
+            </div>
+          </div>
+
+          <div class="result-card" data-tilt>
+            <span class="result-card__label">Reducere pierderi termice</span>
+            <span class="result-card__value" id="calc-r-thermal">40%</span>
+          </div>
+          <div class="result-card" data-tilt>
+            <span class="result-card__label">Economie anuală estimată</span>
+            <span class="result-card__value" id="calc-r-savings">0 RON</span>
+          </div>
+          <div class="result-card" data-tilt>
+            <span class="result-card__label">Cost aplicare</span>
+            <span class="result-card__value" id="calc-r-cost">0 RON</span>
+          </div>
+          <div class="result-card" data-tilt>
+            <span class="result-card__label">Perioadă amortizare</span>
+            <span class="result-card__value" id="calc-r-payback">0 ani</span>
+          </div>
+          <div class="result-card" data-tilt>
+            <span class="result-card__label">Greutate adăugată</span>
+            <span class="result-card__value" id="calc-r-weight">0 kg</span>
+          </div>
+          <div class="result-card" data-tilt>
+            <span class="result-card__label">Timp aplicare</span>
+            <span class="result-card__value" id="calc-r-time">0 zile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sfaq" class="section section--dark">
+    <div class="section__inner">
+      <div class="center" data-reveal>
+        <p class="label text-orange">ÎNTREBĂRI FRECVENTE</p>
+        <h2 class="heading">Răspunsuri scurte, cu date utile.</h2>
+        <p class="body-text">Structurat pe tip de audiență, pentru a intra direct în întrebările care apar în discuțiile de proiect.</p>
+      </div>
+
+      <div class="tabs" data-tabs>
+        <div class="tabs__nav">
+          <button class="tabs__btn active" data-tab="faq-proprietari">Proprietari</button>
+          <button class="tabs__btn" data-tab="faq-constructori">Constructori</button>
+          <button class="tabs__btn" data-tab="faq-arhitecti">Arhitecți</button>
+          <button class="tabs__btn" data-tab="faq-industrial">Industrial</button>
+        </div>
+
+        <div class="tabs__panel active" id="faq-proprietari">
+          <div class="faq-accordion">
+            <div class="accordion__item" data-accordion-item>
+              <button class="accordion__trigger" data-accordion-trigger aria-expanded="false">
+                <span>Cu cât se reduc pierderile termice?</span>
+                <i data-lucide="chevron-down" class="accordion__chevron"></i>
+              </button>
+              <div class="accordion__content" data-accordion-content>
+                <div class="accordion__body">
+                  <p>Până la 40% la 1 mm grosime, în condiții standard de aplicare. Rezultatul depinde de starea suportului și de zona climatică.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion__item" data-accordion-item>
+              <button class="accordion__trigger" data-accordion-trigger aria-expanded="false">
+                <span>Cât durează aplicarea?</span>
+                <i data-lucide="chevron-down" class="accordion__chevron"></i>
+              </button>
+              <div class="accordion__content" data-accordion-content>
+                <div class="accordion__body">
+                  <p>O echipă de 1–2 operatori acoperă aproximativ 50 m²/zi. Pentru o casă medie, durata tipică este 2–4 zile.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tabs__panel" id="faq-constructori">
+          <div class="faq-accordion">
+            <div class="accordion__item" data-accordion-item>
+              <button class="accordion__trigger" data-accordion-trigger aria-expanded="false">
+                <span>Care este impactul pe cost de instalare?</span>
+                <i data-lucide="chevron-down" class="accordion__chevron"></i>
+              </button>
+              <div class="accordion__content" data-accordion-content>
+                <div class="accordion__body">
+                  <p>Estimarea orientativă indică până la 30% economie comparativ cu soluțiile clasice, în funcție de complexitatea suportului și acces.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion__item" data-accordion-item>
+              <button class="accordion__trigger" data-accordion-trigger aria-expanded="false">
+                <span>Ajută la țintele nZEB?</span>
+                <i data-lucide="chevron-down" class="accordion__chevron"></i>
+              </button>
+              <div class="accordion__content" data-accordion-content>
+                <div class="accordion__body">
+                  <p>Da. Lambda echivalent ≤ 0,001 W/mK și reducerea punților termice contribuie direct la performanța de ansamblu a închiderii.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tabs__panel" id="faq-arhitecti">
+          <div class="faq-accordion">
+            <div class="accordion__item" data-accordion-item>
+              <button class="accordion__trigger" data-accordion-trigger aria-expanded="false">
+                <span>Ce standarde sunt menționate în documentație?</span>
+                <i data-lucide="chevron-down" class="accordion__chevron"></i>
+              </button>
+              <div class="accordion__content" data-accordion-content>
+                <div class="accordion__body">
+                  <p>Sunt menționate SNiP, ASTM/ASHRAE, EN 15824 (Clasa A uscat, Clasa C lichid), ISO 9001 și marcaj CE, conform fișelor tehnice de produs.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion__item" data-accordion-item>
+              <button class="accordion__trigger" data-accordion-trigger aria-expanded="false">
+                <span>Există suport pentru modelare BIM?</span>
+                <i data-lucide="chevron-down" class="accordion__chevron"></i>
+              </button>
+              <div class="accordion__content" data-accordion-content>
+                <div class="accordion__body">
+                  <p>Da. Obiecte Revit/IFC cu proprietăți relevante pot fi livrate la cerere pentru integrare în proiectare.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tabs__panel" id="faq-industrial">
+          <div class="faq-accordion">
+            <div class="accordion__item" data-accordion-item>
+              <button class="accordion__trigger" data-accordion-trigger aria-expanded="false">
+                <span>Care este intervalul termic de exploatare?</span>
+                <i data-lucide="chevron-down" class="accordion__chevron"></i>
+              </button>
+              <div class="accordion__content" data-accordion-content>
+                <div class="accordion__body">
+                  <p>Intervalul declarat este de la -60°C la +260°C, ceea ce îl face adecvat pentru aplicații cu temperaturi extreme.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion__item" data-accordion-item>
+              <button class="accordion__trigger" data-accordion-trigger aria-expanded="false">
+                <span>Poate fi aplicat pe geometrii complexe?</span>
+                <i data-lucide="chevron-down" class="accordion__chevron"></i>
+              </button>
+              <div class="accordion__content" data-accordion-content>
+                <div class="accordion__body">
+                  <p>Da. Aplicarea prin pulverizare permite acoperirea conductelor, coturilor, supapelor și suprafețelor cu acces dificil.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s20" class="section section--dark section--glow">
+    <div class="section__inner">
+      <div class="split">
+        <div data-reveal>
+          <p class="label text-orange">CONTACT TEHNIC</p>
+          <h2 class="display-lg">Trimite proiectul.</h2>
+          <p class="body-text">Primești o evaluare preliminară și un calcul termic personalizat în 48 h, pe baza informațiilor de proiect.</p>
+          <div class="contact-lines">
+            <div class="contact-line"><i data-lucide="phone"></i><span>+40 771 445 577</span></div>
+            <div class="contact-line"><i data-lucide="mail"></i><span>contact@nanorevolution.ro</span></div>
+            <div class="contact-line"><i data-lucide="globe"></i><span>nanorevolution.ro/thermx</span></div>
+          </div>
+          <div class="hero-band" data-reveal="stagger">
+            <div class="hero-band__item">
+              <span class="hero-band__value">48 h</span>
+              <span class="hero-band__label">Răspuns</span>
+            </div>
+            <div class="hero-band__item">
+              <span class="hero-band__value">B2B + B2C</span>
+              <span class="hero-band__label">Segmente</span>
+            </div>
+            <div class="hero-band__item">
+              <span class="hero-band__value">Oradea</span>
+              <span class="hero-band__label">Punct de lucru</span>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form" id="contactForm" novalidate data-reveal>
+          <div class="contact-form__grid">
+            <div class="form-field">
+              <input type="text" id="cf-name" class="form-field__input" required autocomplete="name" placeholder=" ">
+              <label for="cf-name" class="form-field__label">Nume complet *</label>
+              <div class="form-field__error">Numele este obligatoriu.</div>
+            </div>
+
+            <div class="form-field">
+              <input type="email" id="cf-email" class="form-field__input" required autocomplete="email" placeholder=" ">
+              <label for="cf-email" class="form-field__label">Email *</label>
+              <div class="form-field__error">Introduceți o adresă de email validă.</div>
+            </div>
+
+            <div class="form-field">
+              <input type="tel" id="cf-phone" class="form-field__input" autocomplete="tel" placeholder=" ">
+              <label for="cf-phone" class="form-field__label">Telefon</label>
+            </div>
+
+            <div class="form-field">
+              <select id="cf-project" class="form-field__input form-field__select">
+                <option value="" selected></option>
+                <option value="Rezidențial nou">Rezidențial nou</option>
+                <option value="Renovare casă">Renovare casă</option>
+                <option value="Bloc apartamente">Bloc apartamente</option>
+                <option value="Hală industrială">Hală industrială</option>
+                <option value="Conducte / Instalații">Conducte / Instalații</option>
+                <option value="Altul">Altul</option>
+              </select>
+              <label for="cf-project" class="form-field__label">Tip proiect</label>
+            </div>
+
+            <div class="form-field">
+              <input type="number" id="cf-surface" class="form-field__input" min="1" autocomplete="off" placeholder=" ">
+              <label for="cf-surface" class="form-field__label">Suprafață estimată (m²)</label>
+            </div>
+
+            <div class="form-field form-field--full">
+              <textarea id="cf-message" class="form-field__input form-field__textarea" rows="4" placeholder=" "></textarea>
+              <label for="cf-message" class="form-field__label">Mesaj</label>
+            </div>
+          </div>
+
+          <div class="contact-form__actions">
+            <button type="submit" class="btn btn-cta">
+              <i data-lucide="send" style="width:18px;height:18px;"></i>
+              Solicită calcul termic
+            </button>
+          </div>
+
+          <div class="contact-form__success" id="formSuccess">
+            <i data-lucide="check-circle" style="width:48px;height:48px;color:var(--orange);"></i>
+            <p class="heading-sm">Mesaj pregătit</p>
+            <p class="body-text text-muted">Se va deschide clientul de email cu datele completate.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="s21" class="section section--dark">
+    <div class="section__inner section__centered">
+      <img src="thermx-logo-white.png" alt="thermX" width="280" height="80" loading="lazy" decoding="async" class="contact-logo">
+      <p class="label text-muted" data-reveal>Specifică thermX.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p class="body-sm text-muted">Nano Revolution SRL — Str. Ogorului, Nr. 3, Oradea, Bihor 410554</p>
+  </footer>
+
+  <script src="js/index3-fluid.js"></script>
+</body>
+</html>

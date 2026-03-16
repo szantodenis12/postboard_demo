@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar Editorial — Agro Salso · Feb–Mar 2026</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              poppins: ["Poppins", "sans-serif"],
+              inter: ["Inter", "sans-serif"],
+              space: ["Space Grotesk", "sans-serif"],
+            },
+            colors: {
+              forest: "#1B3A21",
+              harvest: "#D4A017",
+              cream: "#F7F5F0",
+              afir: "#16A34A",
+              demo: "#2563EB",
+              pret: "#D97706",
+              test: "#7C3AED",
+              edu: "#0D9488",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        --afir: #16A34A;
+        --demo: #2563EB;
+        --pret: #D97706;
+        --test: #7C3AED;
+        --edu: #0D9488;
+        --forest: #1B3A21;
+        --harvest: #D4A017;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: #F7F5F0;
+      }
+
+      /* Calendar grid */
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
+      }
+
+      .day-cell {
+        min-height: 90px;
+        padding: 6px 8px;
+        background: white;
+        border-radius: 8px;
+        position: relative;
+        transition: all 0.15s ease;
+      }
+
+      .day-cell:not(.empty):hover {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        transform: translateY(-1px);
+      }
+
+      .day-cell.empty {
+        background: transparent;
+        min-height: 0;
+      }
+
+      .day-cell.weekend {
+        background: #faf9f6;
+      }
+
+      .day-cell.today {
+        box-shadow: inset 0 0 0 2px #D4A017;
+      }
+
+      .day-number {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #94a3b8;
+        margin-bottom: 4px;
+        font-family: "Space Grotesk", sans-serif;
+      }
+
+      .day-cell.today .day-number {
+        color: #D4A017;
+        font-weight: 700;
+      }
+
+      .day-cell.weekend .day-number {
+        color: #cbd5e1;
+      }
+
+      /* Post chips in calendar */
+      .post-chip {
+        font-size: 0.65rem;
+        color: white;
+        padding: 3px 6px;
+        border-radius: 5px;
+        margin-bottom: 3px;
+        cursor: pointer;
+        line-height: 1.3;
+        font-weight: 500;
+        transition: all 0.15s ease;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .post-chip:hover {
+        filter: brightness(1.1);
+        transform: scale(1.02);
+      }
+
+      .post-chip.hidden {
+        display: none;
+      }
+
+      .format-tag {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.25);
+        font-size: 0.55rem;
+        font-weight: 700;
+        padding: 1px 4px;
+        border-radius: 3px;
+        margin-right: 4px;
+        letter-spacing: 0.03em;
+        vertical-align: middle;
+      }
+
+      /* Weekday header row */
+      .weekday-row {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
+        margin-bottom: 2px;
+      }
+
+      .weekday-cell {
+        text-align: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #94a3b8;
+        padding: 8px 0;
+        font-family: "Space Grotesk", sans-serif;
+      }
+
+      /* List view */
+      .list-view {
+        display: none;
+      }
+
+      .list-view.active {
+        display: block;
+      }
+
+      .list-card {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        padding: 16px 20px;
+        background: white;
+        border-radius: 12px;
+        border-left: 4px solid;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-bottom: 8px;
+      }
+
+      .list-card:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        transform: translateX(4px);
+      }
+
+      .list-card.hidden {
+        display: none;
+      }
+
+      .list-date {
+        text-align: center;
+        min-width: 48px;
+        flex-shrink: 0;
+      }
+
+      .list-date .day {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1B3A21;
+        line-height: 1;
+      }
+
+      .list-date .weekday {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #94a3b8;
+        letter-spacing: 0.05em;
+      }
+
+      .list-date .month-sm {
+        font-size: 0.65rem;
+        color: #cbd5e1;
+        font-weight: 500;
+      }
+
+      .list-content h3 {
+        font-family: "Poppins", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #1B3A21;
+        margin: 0 0 2px;
+      }
+
+      .list-content .subtitle {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-bottom: 8px;
+      }
+
+      .badge {
+        display: inline-block;
+        font-size: 0.65rem;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 6px;
+        margin-right: 6px;
+        letter-spacing: 0.02em;
+      }
+
+      .badge-format {
+        background: #f1f5f9;
+        color: #475569;
+      }
+
+      /* Modal */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+        padding: 24px;
+      }
+
+      .modal-overlay.open {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .modal {
+        background: white;
+        border-radius: 16px;
+        max-width: 680px;
+        width: 100%;
+        max-height: 85vh;
+        overflow-y: auto;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        transform: translateY(20px) scale(0.98);
+        transition: transform 0.25s ease;
+      }
+
+      .modal-overlay.open .modal {
+        transform: translateY(0) scale(1);
+      }
+
+      .modal-header {
+        padding: 28px 28px 20px;
+        border-bottom: 1px solid #f1f5f9;
+        position: relative;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: #f1f5f9;
+        color: #64748b;
+        border-radius: 8px;
+        font-size: 1.25rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+      }
+
+      .modal-close:hover {
+        background: #e2e8f0;
+        color: #1e293b;
+      }
+
+      .post-number {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 4px;
+      }
+
+      .modal-header h2 {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1B3A21;
+        margin: 0 0 10px;
+        line-height: 1.3;
+        padding-right: 32px;
+      }
+
+      .modal-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 0.8rem;
+        color: #64748b;
+      }
+
+      .modal-meta span {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .modal-body {
+        padding: 24px 28px 28px;
+      }
+
+      .modal-section {
+        margin-bottom: 24px;
+      }
+
+      .modal-section:last-child {
+        margin-bottom: 0;
+      }
+
+      .modal-section h4 {
+        font-family: "Poppins", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #1B3A21;
+        margin: 0 0 10px;
+      }
+
+      .caption, .visual-desc, .cta-text {
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: #334155;
+        white-space: pre-wrap;
+        background: #f8fafc;
+        padding: 16px;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .hashtags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .hashtag {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: #16A34A;
+        background: #f0fdf4;
+        padding: 4px 10px;
+        border-radius: 6px;
+        transition: all 0.15s;
+      }
+
+      .hashtag:hover {
+        background: #dcfce7;
+      }
+
+      /* Legend dot */
+      .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      /* Calendar view hidden */
+      .calendar-view.hidden {
+        display: none;
+      }
+
+      /* Scrollbar styling */
+      .modal::-webkit-scrollbar {
+        width: 6px;
+      }
+      .modal::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .modal::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .day-cell {
+          min-height: 70px;
+          padding: 4px 5px;
+        }
+        .post-chip {
+          font-size: 0.55rem;
+          padding: 2px 4px;
+        }
+        .format-tag {
+          display: none;
+        }
+        .modal {
+          max-height: 90vh;
+          border-radius: 12px;
+        }
+        .modal-header, .modal-body {
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .calendar-grid {
+          gap: 1px;
+        }
+        .day-cell {
+          min-height: 56px;
+          padding: 3px 4px;
+          border-radius: 4px;
+        }
+        .post-chip {
+          font-size: 0.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen">
+
+    <!-- ───── HEADER ───── -->
+    <div class="bg-gradient-to-br from-forest via-emerald-900 to-green-950 text-white py-12 px-6 text-center relative overflow-hidden">
+      <!-- Subtle field pattern -->
+      <div class="absolute inset-0 opacity-[0.04]" style="background-image: url('data:image/svg+xml,<svg width=&quot;60&quot; height=&quot;60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;><path d=&quot;M0 30h60M30 0v60&quot; fill=&quot;none&quot; stroke=&quot;white&quot; stroke-width=&quot;0.5&quot;/></svg>');"></div>
+      <div class="relative z-10 max-w-3xl mx-auto">
+        <h1 class="font-poppins text-3xl md:text-4xl font-bold tracking-tight mb-2">
+          Calendar Editorial <span class="text-harvest">Agro Salso</span>
+        </h1>
+        <p class="text-green-200 text-sm md:text-base mb-6">
+          25 Februarie – 31 Martie 2026 · Utilaje Agricole · DN79, Mădăras, Bihor
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-3 text-xs md:text-sm">
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/10">
+            <strong class="text-harvest">20</strong> postări
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/10">
+            Frecvență: <strong>4 postări / săptămână</strong>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/10">
+            Platformă: <strong>Facebook</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───── STATS BAR ───── -->
+    <div class="max-w-4xl mx-auto -mt-6 px-4 relative z-10">
+      <div class="bg-white rounded-2xl shadow-lg shadow-slate-200/50 border border-slate-100 p-5 grid grid-cols-5 gap-4">
+        <div class="text-center">
+          <div class="font-space text-2xl font-bold text-afir">5</div>
+          <div class="text-xs text-slate-500 font-medium mt-0.5">AFIR DR-14</div>
+        </div>
+        <div class="text-center">
+          <div class="font-space text-2xl font-bold text-demo">5</div>
+          <div class="text-xs text-slate-500 font-medium mt-0.5">Demo Utilaje</div>
+        </div>
+        <div class="text-center">
+          <div class="font-space text-2xl font-bold text-pret">4</div>
+          <div class="text-xs text-slate-500 font-medium mt-0.5">Prețuri & Stoc</div>
+        </div>
+        <div class="text-center">
+          <div class="font-space text-2xl font-bold text-test">3</div>
+          <div class="text-xs text-slate-500 font-medium mt-0.5">Testimoniale</div>
+        </div>
+        <div class="text-center">
+          <div class="font-space text-2xl font-bold text-edu">3</div>
+          <div class="text-xs text-slate-500 font-medium mt-0.5">Educație</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───── LEGEND + VIEW TOGGLE ───── -->
+    <div class="max-w-5xl mx-auto px-4 mt-8">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+        <!-- Legend -->
+        <div class="flex flex-wrap gap-2" id="legend">
+          <button class="legend-item active inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 border border-transparent hover:border-slate-300 transition-all cursor-pointer" data-filter="all">
+            <div class="legend-dot" style="background: var(--forest)"></div>
+            Toate
+          </button>
+          <button class="legend-item inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-green-50 text-green-700 border border-transparent hover:border-green-200 transition-all cursor-pointer" data-filter="afir">
+            <div class="legend-dot" style="background: var(--afir)"></div>
+            AFIR
+          </button>
+          <button class="legend-item inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 border border-transparent hover:border-blue-200 transition-all cursor-pointer" data-filter="demo">
+            <div class="legend-dot" style="background: var(--demo)"></div>
+            DEMO
+          </button>
+          <button class="legend-item inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-transparent hover:border-amber-200 transition-all cursor-pointer" data-filter="pret">
+            <div class="legend-dot" style="background: var(--pret)"></div>
+            PREȚURI
+          </button>
+          <button class="legend-item inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-purple-50 text-purple-700 border border-transparent hover:border-purple-200 transition-all cursor-pointer" data-filter="test">
+            <div class="legend-dot" style="background: var(--test)"></div>
+            TESTIMONIALE
+          </button>
+          <button class="legend-item inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-teal-50 text-teal-700 border border-transparent hover:border-teal-200 transition-all cursor-pointer" data-filter="edu">
+            <div class="legend-dot" style="background: var(--edu)"></div>
+            EDUCAȚIE
+          </button>
+        </div>
+
+        <!-- View toggle -->
+        <div class="flex bg-slate-100 rounded-lg p-1 gap-1 flex-shrink-0">
+          <button class="view-btn active text-xs font-semibold px-4 py-2 rounded-md transition-all" data-view="calendar">
+            <svg class="w-3.5 h-3.5 inline-block mr-1 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="4" x2="9" y2="2"/><line x1="15" y1="4" x2="15" y2="2"/></svg>
+            Calendar
+          </button>
+          <button class="view-btn text-xs font-semibold px-4 py-2 rounded-md transition-all" data-view="list">
+            <svg class="w-3.5 h-3.5 inline-block mr-1 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>
+            Listă
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───── CALENDAR VIEW ───── -->
+    <div class="max-w-5xl mx-auto px-4 pb-6 calendar-view" id="calendarView">
+      <!-- FEBRUARIE -->
+      <div class="flex items-baseline gap-2 mb-3">
+        <h2 class="font-poppins text-xl font-bold text-forest">Februarie</h2>
+        <span class="text-sm font-medium text-slate-400">2026</span>
+      </div>
+      <div class="bg-white/50 rounded-xl p-3 border border-slate-100 mb-8">
+        <div class="weekday-row">
+          <div class="weekday-cell">Lun</div>
+          <div class="weekday-cell">Mar</div>
+          <div class="weekday-cell">Mie</div>
+          <div class="weekday-cell">Joi</div>
+          <div class="weekday-cell">Vin</div>
+          <div class="weekday-cell">Sâm</div>
+          <div class="weekday-cell">Dum</div>
+        </div>
+        <div class="calendar-grid" id="febGrid"></div>
+      </div>
+
+      <!-- MARTIE -->
+      <div class="flex items-baseline gap-2 mb-3">
+        <h2 class="font-poppins text-xl font-bold text-forest">Martie</h2>
+        <span class="text-sm font-medium text-slate-400">2026</span>
+      </div>
+      <div class="bg-white/50 rounded-xl p-3 border border-slate-100">
+        <div class="weekday-row">
+          <div class="weekday-cell">Lun</div>
+          <div class="weekday-cell">Mar</div>
+          <div class="weekday-cell">Mie</div>
+          <div class="weekday-cell">Joi</div>
+          <div class="weekday-cell">Vin</div>
+          <div class="weekday-cell">Sâm</div>
+          <div class="weekday-cell">Dum</div>
+        </div>
+        <div class="calendar-grid" id="marGrid"></div>
+      </div>
+    </div>
+
+    <!-- ───── LIST VIEW ───── -->
+    <div class="max-w-3xl mx-auto px-4 pb-6 list-view" id="listView"></div>
+
+    <!-- ───── MODAL ───── -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal" id="modal">
+        <div class="modal-header" id="modalHeader">
+          <button class="modal-close" id="modalClose">&times;</button>
+          <div class="post-number" id="modalPostNum"></div>
+          <h2 id="modalTitle"></h2>
+          <div class="modal-meta" id="modalMeta"></div>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+      </div>
+    </div>
+
+    <!-- ───── FOOTER ───── -->
+    <div class="mt-8 border-t border-slate-200 bg-white">
+      <div class="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-slate-400">
+        <strong class="text-forest font-semibold">Agro Salso</strong>
+        <span class="mx-1.5 text-slate-300">&middot;</span>
+        Utilaje Agricole &middot; DN79, Mădăras, Bihor
+        <span class="mx-2 text-slate-200">|</span>
+        0742 936 959
+        <span class="mx-2 text-slate-200">|</span>
+        Pregătit de <span class="font-medium text-slate-500">Epic Digital Hub</span>
+        <span class="mx-2 text-slate-200">|</span>
+        Versiune 1.0 &middot; 25.02.2026
+      </div>
+    </div>
+
+    <script>
+      // ── Post Data (20 posts, 4/week, Feb–Mar 2026) ──
+      const posts = [
+        // ═══ WEEK 1 (25 Feb – 1 Mar) ═══
+        {
+          id: 1,
+          num: "#1",
+          date: "2026-02-25",
+          day: 25,
+          month: 2,
+          weekday: "Marți",
+          pilon: "afir",
+          pilonLabel: "AFIR DR-14",
+          subject: "Știi ce e DR-14?",
+          format: "REEL",
+          formatFull: "Reel (video vertical 9:16, 15 sec)",
+          week: "Săptămâna 1 — 25 Feb – 1 Mar",
+          caption: `Știi ce e DR-14?
+
+În martie se deschide sesiunea DR-14 prin AFIR — fonduri nerambursabile de până la 85% pentru utilaje agricole noi.
+
+Grape cu discuri, cultivatoare, semănători — toate sunt eligibile.
+
+Te ajutăm cu oferta conformă. Sună: 0742 936 959
+DN79, Mădăras, Bihor`,
+          visual: `Video vertical tip countdown — text animat pe fundal verde închis.
+Elementele principale:
+— Icon calendar animat
+— Cifra „85%" mare, centrată, galben pe verde închis
+— Text „fonduri nerambursabile" sub cifră
+— Final: contact Agro Salso + locație DN79
+Fotografii reale din showroom ca fundal sau inserturi.`,
+          hashtags: ["#AFIR", "#DR14", "#utilajeagricole", "#fondurieuropene", "#agriculturaBihor", "#AgroSalso", "#Mădăras"],
+          cta: "Sună pentru detalii despre DR-14: 0742 936 959",
+        },
+        {
+          id: 2,
+          num: "#2",
+          date: "2026-02-27",
+          day: 27,
+          month: 2,
+          weekday: "Joi",
+          pilon: "demo",
+          pilonLabel: "DEMO UTILAJE",
+          subject: "Dexwal Mamut prezentare",
+          format: "CAR 5",
+          formatFull: "Carousel, 5 slide-uri",
+          week: "Săptămâna 1 — 25 Feb – 1 Mar",
+          caption: `DEXWAL MAMUT — Grapă cu discuri independente
+
+Construcție robustă pentru solurile grele din vestul României:
+
+Slide 1: Prezentare generală — imagine produs
+Slide 2: Discuri 510–610 mm, lățimi 2.5–4 m
+Slide 3: Rulment în baie de ulei, unghi 175°
+Slide 4: Garanție 2 ani, transport opțional
+Slide 5: Contact + locație
+
+Pe stoc. Treci pe la noi pe DN79, Mădăras, sau sună: 0742 936 959`,
+          visual: `Carousel cu fotografii reale produs din stoc.
+Slide 1: Imagine hero — grapa Dexwal Mamut fotografiată în showroom sau pe câmp
+Slide 2–4: Detalii tehnice pe fundal verde închis cu text alb/galben, fonturi mari lizibile pe mobil
+Slide 5: Hartă simplă cu locația + date contact
+Stil: Fotografii reale, text suprapus minimal, curat.`,
+          hashtags: ["#DexwalMamut", "#grapeDiscuri", "#utilajeagricole", "#agriculturaBihor", "#AgroSalso", "#lucrăriSol"],
+          cta: "Vezi grapa Dexwal Mamut la showroom — sună pentru programare: 0742 936 959",
+        },
+        {
+          id: 3,
+          num: "#3",
+          date: "2026-02-28",
+          day: 28,
+          month: 2,
+          weekday: "Vineri",
+          pilon: "test",
+          pilonLabel: "TESTIMONIALE",
+          subject: "Testimonial Dexwal Mamut",
+          format: "IMG",
+          formatFull: "Imagine singulară + text",
+          week: "Săptămâna 1 — 25 Feb – 1 Mar",
+          caption: `„Am cumpărat Dexwal Mamut 3m acum doi ani. Merge bine și pe sol argilos, nu am avut nicio problemă cu ea."
+
+Ai și tu o grapă Dexwal? Scrie-ne experiența ta în comentarii.
+
+0742 936 959 | DN79, Mădăras, Bihor`,
+          visual: `Fotografie client lângă grapa Dexwal Mamut pe câmp (solicitată clientului).
+Alternativă: Imagine stoc a grapei cu overlay semi-transparent pe care apare citatul.
+Text citat mare, clar vizibil, font alb pe fundal foto.
+Logo Agro Salso mic în colț.`,
+          hashtags: ["#AgroSalso", "#testimoniale", "#DexwalMamut", "#grapeDiscuri", "#agriculturaBihor"],
+          cta: "Scrie-ne experiența ta cu utilajele Agro Salso",
+        },
+        {
+          id: 4,
+          num: "#4",
+          date: "2026-03-01",
+          day: 1,
+          month: 3,
+          weekday: "Sâmbătă",
+          pilon: "edu",
+          pilonLabel: "EDUCAȚIE",
+          subject: "De ce contează tipul de disc",
+          format: "CAR 4",
+          formatFull: "Carousel educativ, 4 slide-uri",
+          week: "Săptămâna 1 — 25 Feb – 1 Mar",
+          caption: `De ce contează tipul de disc la grapă?
+
+Nu toate discurile sunt la fel. Și nu orice disc e bun pentru orice sol.
+
+Slide 1: „Discuri — ce trebuie să știi"
+Slide 2: Discuri zimțate vs. netede — diferențe și utilizare
+Slide 3: Diametrele (510, 560, 610 mm) — când alegi care
+Slide 4: Sfat Agro Salso — ce funcționează pe solul argilos din Bihor
+
+Am 13 ani de experiență cu aceste utilaje. Dacă nu ești sigur ce model ți se potrivește, sună și discutăm.
+
+0742 936 959 | DN79, Mădăras, Bihor`,
+          visual: `Carousel educativ pe fundal crem/verde deschis.
+Slide 1: Titlu mare pe fundal verde închis — „DISCURI — CE TREBUIE SĂ ȘTII"
+Slide 2: Schemă vizuală simplă — disc zimțat vs. neted, cu săgeți și etichete
+Slide 3: 3 cercuri cu diametrele, fiecare cu o indicație de utilizare
+Slide 4: Fotografie reală disc Dexwal + sfat text + contact
+Design curat, informativ, fără clutter.`,
+          hashtags: ["#grapeDiscuri", "#discuriAgricole", "#educație", "#AgroSalso", "#agriculturaBihor", "#sfaturiFermieri"],
+          cta: "Nu știi ce disc ți se potrivește? Sună: 0742 936 959",
+        },
+
+        // ═══ WEEK 2 (2–8 Mar) ═══
+        {
+          id: 5,
+          num: "#5",
+          date: "2026-03-02",
+          day: 2,
+          month: 3,
+          weekday: "Luni",
+          pilon: "afir",
+          pilonLabel: "AFIR DR-14",
+          subject: "Cine poate accesa DR-14?",
+          format: "CAR 4",
+          formatFull: "Carousel, 4 slide-uri",
+          week: "Săptămâna 2 — 2–8 Mar",
+          caption: `Cine poate accesa fonduri DR-14?
+
+Slide 1: Ce e DR-14? — Submăsura 4.1 AFIR
+Slide 2: Cine e eligibil? — Ferme mici și mijlocii, PFA/II/IF agricole
+Slide 3: Ce poți cumpăra? — Utilaje agricole noi (grape, cultivatoare, semănători, subsoliere)
+Slide 4: Cât primești? — Până la 85% fonduri nerambursabile din 108 mil. EUR buget
+
+Nu știi de unde să începi? Te ajutăm cu oferta conformă.
+Sună: 0742 936 959`,
+          visual: `Carousel informativ — fundal verde închis, text alb/galben.
+Iconuri simple pentru fiecare slide: document, persoană, utilaj, bani.
+Design curat, citibil pe mobil, fonturi mari.
+Ultimul slide: contact + logo Agro Salso.`,
+          hashtags: ["#AFIR", "#DR14", "#fondurieuropene", "#utilajeagricole", "#fermieriRomânia", "#AgroSalso"],
+          cta: "Sună pentru consultanță gratuită DR-14: 0742 936 959",
+        },
+        {
+          id: 6,
+          num: "#6",
+          date: "2026-03-04",
+          day: 4,
+          month: 3,
+          weekday: "Miercuri",
+          pilon: "pret",
+          pilonLabel: "PREȚURI & STOC",
+          subject: "Dexwal Mamut — prețuri",
+          format: "IMG",
+          formatFull: "Imagine produs + prețuri",
+          week: "Săptămâna 2 — 2–8 Mar",
+          caption: `Dexwal Mamut — prețuri de la 4.000 EUR
+
+Configurezi cum ai nevoie:
+— Lățime: 2.5m, 2.7m, 3m, 3.5m, 4m
+— Discuri: 510, 560 sau 610 mm
+— Tăvălug: simplu, packer sau vinclu
+
+Pe stoc, livrare din Mădăras.
+Sună: 0742 936 959`,
+          visual: `Fotografie reală a grapei Dexwal Mamut pe fundal showroom sau câmp.
+Overlay cu prețurile — text galben pe bandă semi-transparentă.
+Configurații listate clar, fonturi mari.
+Contact vizibil în partea de jos.
+Stil: Fotografie reală, nu grafică generată.`,
+          hashtags: ["#DexwalMamut", "#prețuri", "#utilajeagricole", "#AgroSalso", "#grapeDiscuri", "#livrareRapidă"],
+          cta: "Sună pentru preț exact pe configurația ta: 0742 936 959",
+        },
+        {
+          id: 7,
+          num: "#7",
+          date: "2026-03-06",
+          day: 6,
+          month: 3,
+          weekday: "Vineri",
+          pilon: "demo",
+          pilonLabel: "DEMO UTILAJE",
+          subject: "Cultivatorul agricol",
+          format: "VID",
+          formatFull: "Video / Fotografie câmp",
+          week: "Săptămâna 2 — 2–8 Mar",
+          caption: `Cultivatorul agricol — pregătește patul germinativ rapid și uniform.
+
+La Agro Salso găsești cultivatoare pentru tractoare de la 45 CP.
+
+Ideal pentru lucrările de primăvară care vin acum.
+
+Pe stoc în Mădăras. Sună: 0742 936 959
+DN79, Mădăras, Bihor`,
+          visual: `Filmare scurtă a cultivatorului în funcțiune pe teren sau pe platforma din showroom.
+Close-up pe brațele și cuțitele cultivatorului.
+Text overlay cu specificații principale: lățime, putere necesară.
+Alternativă: Fotografie profesională a cultivatorului cu text suprapus.`,
+          hashtags: ["#cultivator", "#utilajeagricole", "#AgroSalso", "#agriculturaBihor", "#lucrăriPrimăvară", "#patGerminativ"],
+          cta: "Sună pentru detalii și disponibilitate: 0742 936 959",
+        },
+        {
+          id: 8,
+          num: "#8",
+          date: "2026-03-07",
+          day: 7,
+          month: 3,
+          weekday: "Sâmbătă",
+          pilon: "test",
+          pilonLabel: "TESTIMONIALE",
+          subject: "Rezultate pe câmp",
+          format: "CAR 3",
+          formatFull: "Carousel, 3 slide-uri (înainte/după)",
+          week: "Săptămâna 2 — 2–8 Mar",
+          caption: `Rezultate concrete pe câmp.
+
+Slide 1: Solul înainte — pământ compactat, resturi vegetale
+Slide 2: După o trecere cu Dexwal Mamut 3m — sol mărunțit uniform
+Slide 3: Clientul: „Fac 15 hectare pe zi fără probleme."
+
+Vrei să vezi rezultatul pe terenul tău? Treci pe la noi.
+DN79, Mădăras | 0742 936 959`,
+          visual: `Carousel cu fotografii reale câmp — înainte și după trecere cu grapa.
+Slide 1: Sol netrecut, compact, cu resturi — fotografie naturală
+Slide 2: Același teren după trecere cu Dexwal Mamut — sol fin, uniform
+Slide 3: Citat client pe fundal fotografie câmp, contact
+Imagini naturale, fără editare excesivă sau filtre.`,
+          hashtags: ["#înainteSiDupă", "#DexwalMamut", "#rezultate", "#AgroSalso", "#agriculturaBihor", "#solArgilos"],
+          cta: "Vino la showroom — testează pe terenul tău: 0742 936 959",
+        },
+
+        // ═══ WEEK 3 (9–15 Mar) ═══
+        {
+          id: 9,
+          num: "#9",
+          date: "2026-03-09",
+          day: 9,
+          month: 3,
+          weekday: "Luni",
+          pilon: "edu",
+          pilonLabel: "EDUCAȚIE",
+          subject: "Lucrări de primăvară — când?",
+          format: "CAR 4",
+          formatFull: "Carousel educativ, 4 slide-uri",
+          week: "Săptămâna 3 — 9–15 Mar",
+          caption: `Când e momentul potrivit pentru lucrările de primăvară?
+
+Slide 1: „Timing-ul contează" — de ce nu e bine nici prea devreme, nici prea târziu
+Slide 2: Temperatura solului — min. 5–8°C pentru lucrări eficiente
+Slide 3: Ordinea lucrărilor: decompactare → discuire → pat germinativ → semănat
+Slide 4: Sfat Agro Salso — verifică umiditatea, nu data din calendar
+
+13 ani de experiență cu solurile din Bihor. Dacă ai întrebări, sună.
+
+0742 936 959 | DN79, Mădăras`,
+          visual: `Carousel pe fundal crem cald, accente verzi și galbene.
+Slide 1: Titlu pe fotografie câmp de primăvară
+Slide 2: Schemă vizuală termometru sol + explicații
+Slide 3: Timeline vizual cu cele 4 etape ale lucrărilor, iconuri simple
+Slide 4: Fotografie showroom + sfat text + contact
+Design educativ, informativ, accesibil.`,
+          hashtags: ["#lucrăriPrimăvară", "#solAgricol", "#educație", "#AgroSalso", "#agriculturaBihor", "#sfaturiFermieri"],
+          cta: "Întreabă-ne despre momentul optim pentru terenul tău: 0742 936 959",
+        },
+        {
+          id: 10,
+          num: "#10",
+          date: "2026-03-11",
+          day: 11,
+          month: 3,
+          weekday: "Miercuri",
+          pilon: "afir",
+          pilonLabel: "AFIR DR-14",
+          subject: "Te ajutăm cu documentația",
+          format: "IMG",
+          formatFull: "Imagine singulară + text",
+          week: "Săptămâna 3 — 9–15 Mar",
+          caption: `Te ajutăm cu documentația AFIR DR-14.
+
+Ce facem noi:
+— Ofertă conformă cerințelor AFIR
+— Specificații tehnice complete
+— Consultanță gratuită
+
+Tu te ocupi de proiect, noi pregătim dosarul tehnic pentru utilaje.
+
+Sună: 0742 936 959
+DN79, Mădăras, Bihor`,
+          visual: `Imagine grafică simplă pe fundal verde închis.
+Element central: Icon document/dosar stilizat
+Cele 3 beneficii listate vizual cu iconuri (checkmark verde)
+Contact vizibil în partea de jos
+Logo Agro Salso
+Stil curat, profesional, serios — nu flashy.`,
+          hashtags: ["#AFIR", "#DR14", "#documentație", "#consultanță", "#AgroSalso", "#utilajeagricole", "#fondurieuropene"],
+          cta: "Sună pentru ofertă conformă AFIR: 0742 936 959",
+        },
+        {
+          id: 11,
+          num: "#11",
+          date: "2026-03-13",
+          day: 13,
+          month: 3,
+          weekday: "Vineri",
+          pilon: "pret",
+          pilonLabel: "PREȚURI & STOC",
+          subject: "Modele pe stoc",
+          format: "CAR 4",
+          formatFull: "Carousel prețuri, 4 slide-uri",
+          week: "Săptămâna 3 — 9–15 Mar",
+          caption: `Modele pe stoc — gata de livrare:
+
+Slide 1: Dexwal Mamut 2.5m — de la 4.000 EUR
+Slide 2: Dexwal Mamut 3m — de la 4.400 EUR
+Slide 3: Dexwal Mamut 3.5m — de la 5.000 EUR
+Slide 4: Toate configurațiile disponibile + contact
+
+Livrare din Mădăras, pe loc sau cu transport.
+Sună: 0742 936 959`,
+          visual: `Carousel cu preț pe fiecare slide.
+Fundal negru/verde închis, prețuri în galben, fonturi mari vizibile pe mobil.
+Fiecare slide: Fotografie produsului + preț suprapus + dimensiune
+Ultimul slide: Lista completă configurații + contact + logo
+Design minimal, orientat pe conversie.`,
+          hashtags: ["#peStoc", "#DexwalMamut", "#prețuri", "#livrareRapidă", "#AgroSalso", "#utilajeagricole"],
+          cta: "Sună pentru rezervare — stoc limitat: 0742 936 959",
+        },
+        {
+          id: 12,
+          num: "#12",
+          date: "2026-03-14",
+          day: 14,
+          month: 3,
+          weekday: "Sâmbătă",
+          pilon: "demo",
+          pilonLabel: "DEMO UTILAJE",
+          subject: "Semănători — acum e momentul",
+          format: "VID",
+          formatFull: "Video / Fotografie produs",
+          week: "Săptămâna 3 — 9–15 Mar",
+          caption: `Semănători pentru păioase și prășitoare — acum e momentul.
+
+Primăvara înseamnă semănat. La Agro Salso ai semănători compatibile cu tractoare de diferite puteri.
+
+Întreabă de stoc și prețuri: 0742 936 959
+DN79, Mădăras, Bihor`,
+          visual: `Filmare semănătoare în funcțiune pe câmp sau pe platforma din showroom.
+Close-up pe mecanismul de semănat, discurile de deschidere.
+Text overlay cu specificații principale: tip, lățime, compatibilitate.
+Alternativă: Fotografie profesională semănătoare cu text suprapus.`,
+          hashtags: ["#semănători", "#semănat", "#utilajeagricole", "#AgroSalso", "#agriculturaBihor", "#primăvara2026"],
+          cta: "Sună acum — stoc limitat pe semănători: 0742 936 959",
+        },
+
+        // ═══ WEEK 4 (16–22 Mar) ═══
+        {
+          id: 13,
+          num: "#13",
+          date: "2026-03-16",
+          day: 16,
+          month: 3,
+          weekday: "Luni",
+          pilon: "test",
+          pilonLabel: "TESTIMONIALE",
+          subject: "13 ani alături de fermieri",
+          format: "IMG",
+          formatFull: "Imagine singulară + text",
+          week: "Săptămâna 4 — 16–22 Mar",
+          caption: `De 13 ani lucrăm cu fermierii din Bihor.
+
+Nu suntem corporație. Suntem un dealer local, pe DN79 în Mădăras. Cunoaștem solul din zonă, știm ce utilaje merg aici și oferim sfat sincer.
+
+Treci pe la noi, vorbim la o cafea.
+0742 936 959`,
+          visual: `Fotografie informală — echipa Agro Salso la showroom, cu utilaje în fundal.
+Ton personal, natural, lumină de zi.
+Overlay discret cu textul „13 ANI" mare + „alături de fermierii din Bihor"
+Contact în partea de jos.
+Fără poze de stoc — doar fotografii reale.`,
+          hashtags: ["#AgroSalso", "#13ani", "#dealerLocal", "#Mădăras", "#Bihor", "#agriculturaBihor", "#încredere"],
+          cta: "Treci pe la noi pe DN79 — suntem aici: 0742 936 959",
+        },
+        {
+          id: 14,
+          num: "#14",
+          date: "2026-03-18",
+          day: 18,
+          month: 3,
+          weekday: "Miercuri",
+          pilon: "demo",
+          pilonLabel: "DEMO UTILAJE",
+          subject: "Subsolierul — decompactarea",
+          format: "CAR 4",
+          formatFull: "Carousel educativ-demo, 4 slide-uri",
+          week: "Săptămâna 4 — 16–22 Mar",
+          caption: `Subsolierul — de ce contează decompactarea solului.
+
+Slide 1: Problema — sol compactat, rădăcinile nu pătrund
+Slide 2: Soluția — subsolierul sparge stratul compactat la 40–60 cm
+Slide 3: Rezultatul — sol aerisit, producție mai mare
+Slide 4: Modele disponibile la Agro Salso + contact
+
+Întreabă de stoc: 0742 936 959`,
+          visual: `Carousel educativ-demo.
+Slide 1: Schemă vizuală sol compactat — rădăcini scurte, apă stagnantă
+Slide 2: Subsolierul în acțiune — fotografie reală sau diagramă
+Slide 3: Sol decompactat — rădăcini adânci, drenaj bun
+Slide 4: Fotografie subsolier din stoc + prețuri + contact
+Design informativ, accente verzi, stil curat.`,
+          hashtags: ["#subsolier", "#decompactare", "#utilajeagricole", "#AgroSalso", "#agriculturaBihor", "#solCompactat"],
+          cta: "Sună pentru disponibilitate subsoliere: 0742 936 959",
+        },
+        {
+          id: 15,
+          num: "#15",
+          date: "2026-03-20",
+          day: 20,
+          month: 3,
+          weekday: "Vineri",
+          pilon: "pret",
+          pilonLabel: "PREȚURI & STOC",
+          subject: "Pachet complet primăvară",
+          format: "IMG",
+          formatFull: "Imagine singulară + text",
+          week: "Săptămâna 4 — 16–22 Mar",
+          caption: `Pachet complet de primăvară: grapă + cultivator.
+
+Cumperi ambele? Discutăm un preț special.
+
+Toate sunt eligibile AFIR DR-14 — te ajutăm și cu documentația.
+
+Sună: 0742 936 959
+DN79, Mădăras, Bihor`,
+          visual: `Imagine compusă — grapă + cultivator alăturate, fotografiate în showroom pe DN79.
+Preț suprapus cu design minimal — fundal semi-transparent.
+Badge „ELIGIBIL AFIR" în colț
+Contact vizibil.
+Stil: Fotografie reală, text suprapus curat.`,
+          hashtags: ["#pachetComplet", "#ofertă", "#utilajeagricole", "#AgroSalso", "#AFIR", "#DR14", "#primăvară"],
+          cta: "Sună pentru preț pe pachet: 0742 936 959",
+        },
+        {
+          id: 16,
+          num: "#16",
+          date: "2026-03-21",
+          day: 21,
+          month: 3,
+          weekday: "Sâmbătă",
+          pilon: "afir",
+          pilonLabel: "AFIR DR-14",
+          subject: "Sesiunea e deschisă!",
+          format: "IMG",
+          formatFull: "Imagine urgency",
+          week: "Săptămâna 4 — 16–22 Mar",
+          caption: `Sesiunea DR-14 e deschisă — nu rata termenul!
+
+85% fonduri nerambursabile pentru utilaje agricole noi. Bugetul e limitat la 108 mil. EUR — cine depune primul, are prioritate.
+
+Hai să pregătim oferta: 0742 936 959`,
+          visual: `Imagine cu accent de urgență.
+Fundal cald galben/portocaliu pe fundal închis.
+Cifra „85%" mare centrală, pulsantă vizual.
+Text „SESIUNEA E DESCHISĂ" bold, sus.
+Contact mare, vizibil.
+Stil: Urgency fără a fi clickbait — serios, direct.`,
+          hashtags: ["#AFIR", "#DR14", "#deadline", "#fondurieuropene", "#utilajeagricole", "#AgroSalso", "#agriculturaBihor"],
+          cta: "Sună azi — pregătim oferta în 24h: 0742 936 959",
+        },
+
+        // ═══ WEEK 5 (23–31 Mar) ═══
+        {
+          id: 17,
+          num: "#17",
+          date: "2026-03-23",
+          day: 23,
+          month: 3,
+          weekday: "Luni",
+          pilon: "edu",
+          pilonLabel: "EDUCAȚIE",
+          subject: "Întreținere utilaje după iarnă",
+          format: "CAR 4",
+          formatFull: "Carousel sfaturi, 4 slide-uri",
+          week: "Săptămâna 5 — 23–31 Mar",
+          caption: `Întreținerea utilajelor după sezonul de iarnă — 4 pași simpli.
+
+Slide 1: „Utilajul tău e gata de primăvară?"
+Slide 2: Verifică rulmenții și lagărele — unge sau înlocuiește dacă e nevoie
+Slide 3: Verifică discurile — sunt uzate, crăpate, strâmbe? Avem piese pe stoc
+Slide 4: Verifică bolțurile și siguranțele — un utilaj nesigur e un risc
+
+Dacă ai nevoie de piese de schimb, le avem pe stoc.
+
+0742 936 959 | DN79, Mădăras`,
+          visual: `Carousel pe fundal crem, accente verzi.
+Slide 1: Titlu pe fotografie utilaj acoperit de zăpadă/depozit — „UTILAJUL TĂU E GATA?"
+Slide 2: Close-up rulment + cheklist vizual
+Slide 3: Discuri uzate vs. noi — comparație fotografică
+Slide 4: Fotografie piese de schimb pe raft + contact
+Stil educativ, practic, cu fotografii reale din showroom.`,
+          hashtags: ["#întreținere", "#utilajeagricole", "#pieseSchimb", "#AgroSalso", "#agriculturaBihor", "#sfaturiFermieri"],
+          cta: "Ai nevoie de piese? Sună: 0742 936 959",
+        },
+        {
+          id: 18,
+          num: "#18",
+          date: "2026-03-25",
+          day: 25,
+          month: 3,
+          weekday: "Miercuri",
+          pilon: "pret",
+          pilonLabel: "PREȚURI & STOC",
+          subject: "Stoc limitat Dexwal Mamut",
+          format: "IMG",
+          formatFull: "Imagine urgency",
+          week: "Săptămâna 5 — 23–31 Mar",
+          caption: `Stoc limitat pe Dexwal Mamut — nu mai sunt multe.
+
+Cele mai căutate configurații sunt aproape epuizate. Dacă ai nevoie pentru campania de primăvară, sună acum.
+
+Livrare din Mădăras, pe loc.
+0742 936 959`,
+          visual: `Imagine tip urgency — accent portocaliu/galben pe fundal închis.
+Text „STOC LIMITAT" mare, bold.
+Fotografie grapă Dexwal Mamut din stoc.
+Modele cu prețuri enumerate.
+Contact vizibil pe tot parcursul.
+Stil: Alert serios, nu spam.`,
+          hashtags: ["#stocLimitat", "#DexwalMamut", "#urgență", "#AgroSalso", "#utilajeagricole", "#livrareRapidă"],
+          cta: "Sună ACUM pentru rezervare: 0742 936 959",
+        },
+        {
+          id: 19,
+          num: "#19",
+          date: "2026-03-27",
+          day: 27,
+          month: 3,
+          weekday: "Vineri",
+          pilon: "demo",
+          pilonLabel: "DEMO UTILAJE",
+          subject: "Tocătoarea pentru tractor",
+          format: "VID",
+          formatFull: "Video / Fotografie câmp",
+          week: "Săptămâna 5 — 23–31 Mar",
+          caption: `Tocătoarea pentru tractor — pregătirea terenului.
+
+Tocătoarele de la Agro Salso sunt ideale pentru mărunțirea resturilor vegetale și pregătirea terenului pentru lucrări.
+
+Robuste, compatibile cu tractoare de la 45 CP. Pe stoc.
+
+Sună: 0742 936 959
+DN79, Mădăras, Bihor`,
+          visual: `Filmare tocătoare în funcțiune pe câmp — resturi vegetale mărunțite.
+Alternativă: Fotografie profesională tocătoare din showroom.
+Close-up pe cuțite și mecanism.
+Text overlay cu specificații: lățime, putere necesară, preț orientativ.`,
+          hashtags: ["#tocătoare", "#utilajeagricole", "#pregătireTeren", "#AgroSalso", "#agriculturaBihor", "#primăvara2026"],
+          cta: "Vino la showroom să vezi tocătoarea: 0742 936 959",
+        },
+        {
+          id: 20,
+          num: "#20",
+          date: "2026-03-30",
+          day: 30,
+          month: 3,
+          weekday: "Luni",
+          pilon: "afir",
+          pilonLabel: "AFIR DR-14",
+          subject: "Ultimele zile — DR-14",
+          format: "IMG",
+          formatFull: "Imagine final push",
+          week: "Săptămâna 5 — 23–31 Mar",
+          caption: `Ultimele zile — pregătește documentația AFIR DR-14.
+
+Bugetul se consumă repede. Dacă vrei utilaje noi cu 85% fonduri nerambursabile, acționează acum.
+
+Ce facem noi:
+— Ofertă conformă AFIR
+— Specificații tehnice
+— Livrare rapidă
+
+Sună: 0742 936 959
+DN79, Mădăras, Bihor`,
+          visual: `Imagine tip final push — urgency maximă dar profesională.
+Fundal gradient galben/portocaliu pe verde închis.
+Text „ULTIMELE ZILE" bold, mare.
+Cifra „85%" centrală.
+Contact vizibil pe tot parcursul.
+Logo Agro Salso.
+Stil: Serios, direct, fără exagerare.`,
+          hashtags: ["#AFIR", "#DR14", "#ultimeleZile", "#fondurieuropene", "#utilajeagricole", "#AgroSalso", "#agriculturaBihor"],
+          cta: "Sună azi — pregătim oferta rapid: 0742 936 959",
+        },
+      ];
+
+      // ── Pillar Colors ──
+      const pilonColors = {
+        afir: "var(--afir)",
+        demo: "var(--demo)",
+        pret: "var(--pret)",
+        test: "var(--test)",
+        edu: "var(--edu)",
+      };
+
+      // ── Build Calendar Grids ──
+      function buildMonthGrid(containerId, year, month) {
+        const container = document.getElementById(containerId);
+        const daysInMonth = new Date(year, month, 0).getDate();
+        const firstDay = new Date(year, month - 1, 1).getDay();
+        const offset = firstDay === 0 ? 6 : firstDay - 1;
+
+        // Today detection
+        const now = new Date();
+        const todayDay = now.getDate();
+        const todayMonth = now.getMonth() + 1;
+        const todayYear = now.getFullYear();
+
+        let html = "";
+        for (let i = 0; i < offset; i++) {
+          html += '<div class="day-cell empty"></div>';
+        }
+        for (let d = 1; d <= daysInMonth; d++) {
+          const jsDay = new Date(year, month - 1, d).getDay();
+          const isWeekend = jsDay === 0 || jsDay === 6;
+          const isToday = d === todayDay && month === todayMonth && year === todayYear;
+          const dayPosts = posts.filter(
+            (p) => p.day === d && p.month === month
+          );
+
+          html += `<div class="day-cell ${isWeekend ? "weekend" : ""} ${
+            isToday ? "today" : ""
+          }">`;
+          html += `<div class="day-number">${d}</div>`;
+          dayPosts.forEach((p) => {
+            html += `<div class="post-chip" data-pilon="${p.pilon}" data-id="${
+              p.id
+            }" style="background:${pilonColors[p.pilon]}" onclick="openModal(${
+              p.id
+            })">`;
+            html += `<span class="format-tag">${p.format}</span>${
+              p.subject.length > 20
+                ? p.subject.substring(0, 18) + "\u2026"
+                : p.subject
+            }`;
+            html += "</div>";
+          });
+          html += "</div>";
+        }
+        const totalCells = offset + daysInMonth;
+        const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+        for (let i = 0; i < remaining; i++) {
+          html += '<div class="day-cell empty"></div>';
+        }
+        container.innerHTML = html;
+      }
+
+      buildMonthGrid("febGrid", 2026, 2);
+      buildMonthGrid("marGrid", 2026, 3);
+
+      // ── Build List View ──
+      function buildListView() {
+        const container = document.getElementById("listView");
+        const weeks = {};
+        posts.forEach((p) => {
+          if (!weeks[p.week]) weeks[p.week] = [];
+          weeks[p.week].push(p);
+        });
+        let html = "";
+        Object.keys(weeks).forEach((weekName) => {
+          html += `<div class="mb-8">`;
+          html += `<div class="font-poppins text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3 pl-1">${weekName}</div>`;
+          weeks[weekName].forEach((p) => {
+            const monthNames = { 2: "Feb", 3: "Mar" };
+            html += `<div class="list-card" data-pilon="${p.pilon}" data-id="${
+              p.id
+            }" style="border-left-color:${
+              pilonColors[p.pilon]
+            }" onclick="openModal(${p.id})">`;
+            html += `<div class="list-date"><div class="day">${
+              p.day
+            }</div><div class="weekday">${p.weekday.substring(
+              0,
+              3
+            )}</div><div class="month-sm">${
+              monthNames[p.month] || ""
+            }</div></div>`;
+            html += `<div class="list-content">`;
+            html += `<h3>${p.num} \u2014 ${p.subject}</h3>`;
+            html += `<div class="subtitle">${p.pilonLabel} \u00B7 ${p.formatFull}</div>`;
+            html += `<div class="list-badges">`;
+            html += `<span class="badge" style="background:${
+              pilonColors[p.pilon]
+            }; color:#fff">${p.pilonLabel}</span>`;
+            html += `<span class="badge badge-format">${p.formatFull}</span>`;
+            html += `</div></div></div>`;
+          });
+          html += `</div>`;
+        });
+        container.innerHTML = html;
+      }
+      buildListView();
+
+      // ── Modal (Facebook only — no tabs) ──
+      function openModal(id) {
+        const p = posts.find((x) => x.id === id);
+        if (!p) return;
+        const monthNames = { 2: "Februarie", 3: "Martie" };
+        document.getElementById(
+          "modalPostNum"
+        ).textContent = `Postarea ${p.num}`;
+        document.getElementById("modalPostNum").style.color =
+          pilonColors[p.pilon];
+        document.getElementById("modalTitle").textContent = p.subject;
+        document.getElementById("modalMeta").innerHTML = `
+        <span><strong>${p.weekday}, ${p.day} ${
+          monthNames[p.month]
+        } 2026</strong></span>
+        <span style="color:${pilonColors[p.pilon]}; font-weight:600">${p.pilonLabel}</span>
+        <span>${p.formatFull}</span>
+    `;
+
+        const body = document.getElementById("modalBody");
+        body.innerHTML = `
+        <div class="modal-section">
+            <h4>Facebook — Copy</h4>
+            <div class="caption">${escapeHtml(p.caption)}</div>
+        </div>
+        <div class="modal-section">
+            <h4>Brief Vizual (Designer / Fotograf)</h4>
+            <div class="visual-desc">${escapeHtml(p.visual)}</div>
+        </div>
+        <div class="modal-section">
+            <h4># Hashtag-uri</h4>
+            <div class="hashtags">${p.hashtags
+              .map((h) => `<span class="hashtag">${h}</span>`)
+              .join("")}</div>
+        </div>
+        <div class="modal-section">
+            <h4>CTA</h4>
+            <div class="cta-text">${escapeHtml(p.cta)}</div>
+        </div>
+    `;
+
+        document.getElementById("modalOverlay").classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal() {
+        document.getElementById("modalOverlay").classList.remove("open");
+        document.body.style.overflow = "";
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      document
+        .getElementById("modalClose")
+        .addEventListener("click", closeModal);
+      document.getElementById("modalOverlay").addEventListener("click", (e) => {
+        if (e.target === document.getElementById("modalOverlay")) closeModal();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+      });
+
+      // ── View Toggle ──
+      document.querySelectorAll(".view-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".view-btn")
+            .forEach((b) => {
+              b.classList.remove("active", "bg-white", "text-forest", "shadow-sm");
+              b.classList.add("text-slate-500");
+            });
+          btn.classList.add("active", "bg-white", "text-forest", "shadow-sm");
+          btn.classList.remove("text-slate-500");
+          const view = btn.dataset.view;
+          if (view === "calendar") {
+            document.getElementById("calendarView").classList.remove("hidden");
+            document.getElementById("calendarView").style.display = "";
+            document.getElementById("listView").classList.remove("active");
+          } else {
+            document.getElementById("calendarView").classList.add("hidden");
+            document.getElementById("calendarView").style.display = "none";
+            document.getElementById("listView").classList.add("active");
+          }
+        });
+      });
+
+      // Init toggle button styles
+      document.querySelectorAll(".view-btn").forEach((btn) => {
+        if (btn.classList.contains("active")) {
+          btn.classList.add("bg-white", "text-forest", "shadow-sm");
+        } else {
+          btn.classList.add("text-slate-500");
+        }
+      });
+
+      // ── Filter by Pillar ──
+      let activeFilter = "all";
+      document.querySelectorAll(".legend-item").forEach((item) => {
+        item.addEventListener("click", () => {
+          const filter = item.dataset.filter;
+          activeFilter = filter;
+          document.querySelectorAll(".legend-item").forEach((li) => {
+            if (filter === "all") {
+              li.classList.remove("dimmed", "ring-2", "ring-offset-1");
+              li.style.opacity = "";
+              if (li.dataset.filter === "all") {
+                li.classList.add("ring-2", "ring-offset-1");
+                li.style.opacity = "";
+              }
+            } else {
+              li.classList.remove("ring-2", "ring-offset-1");
+              if (li.dataset.filter === filter) {
+                li.classList.add("ring-2", "ring-offset-1");
+                li.style.opacity = "";
+              } else if (li.dataset.filter !== "all") {
+                li.style.opacity = "0.4";
+              } else {
+                li.style.opacity = "";
+              }
+            }
+          });
+          document.querySelectorAll(".post-chip").forEach((chip) => {
+            if (filter === "all") {
+              chip.classList.remove("hidden");
+            } else {
+              chip.classList.toggle("hidden", chip.dataset.pilon !== filter);
+            }
+          });
+          document.querySelectorAll(".list-card").forEach((card) => {
+            if (filter === "all") {
+              card.classList.remove("hidden");
+            } else {
+              card.classList.toggle("hidden", card.dataset.pilon !== filter);
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

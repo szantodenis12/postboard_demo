@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>thermX — Certificat de Conformitate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6B00;
+      --orange-light: #FFF3E8;
+      --blue: #1B3A5C;
+      --blue-light: #E8F0F8;
+      --green: #2E7D32;
+      --green-light: #E8F5E9;
+      --gold: #B8860B;
+      --gold-light: #FFF8E1;
+      --text: #1a1a1a;
+      --text-muted: #555;
+      --border: #e0e0e0;
+      --bg: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    @page {
+      size: A4;
+      margin: 20mm 18mm 25mm 18mm;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 16px;
+      border-bottom: 3px solid var(--orange);
+      margin-bottom: 28px;
+    }
+
+    .doc-header__logo img { height: 52px; }
+
+    .doc-header__company {
+      text-align: right;
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .doc-header__company strong {
+      color: var(--text);
+      font-size: 9pt;
+    }
+
+    .doc-title {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .doc-title h1 {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 22pt;
+      font-weight: 800;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .doc-title .subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 12pt;
+      font-weight: 600;
+      color: var(--orange);
+      text-transform: uppercase;
+    }
+
+    .doc-title .doc-ref {
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .section-title {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 12pt;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--orange);
+      margin: 24px 0 12px;
+    }
+
+    .section-title--sm {
+      font-size: 10.5pt;
+      border-bottom: 1px solid var(--border);
+    }
+
+    p { margin-bottom: 10px; }
+
+    .lead {
+      font-size: 11pt;
+      font-weight: 600;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .highlight-box {
+      background: var(--orange-light);
+      border-left: 4px solid var(--orange);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .info-box {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .info-box p { margin-bottom: 4px; }
+
+    .safe-box {
+      background: var(--green-light);
+      border-left: 4px solid var(--green);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .safe-box strong { color: var(--green); }
+
+    .cert-box {
+      background: var(--gold-light);
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    .cert-box__number {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 18pt;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    .cert-box__label {
+      font-size: 9pt;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 10pt;
+    }
+
+    th, td {
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--blue);
+      color: #fff;
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 600;
+      font-size: 9.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    tr:nth-child(even) { background: #f8f9fa; }
+
+    .table-value { font-weight: 600; color: var(--text); }
+
+    .table-pass {
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    ul, ol {
+      margin: 8px 0 12px 22px;
+    }
+
+    li { margin-bottom: 5px; }
+
+    .cols-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 14px 0;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 10pt;
+    }
+
+    .field-row__label {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 9.5pt;
+    }
+
+    .field-row__value { font-weight: 500; }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    .doc-footer {
+      margin-top: 32px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8pt;
+      color: var(--text-muted);
+    }
+
+    .doc-footer a {
+      color: var(--orange);
+      text-decoration: none;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: 'Exo 2', sans-serif;
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge--green { background: var(--green); color: #fff; }
+    .badge--blue { background: var(--blue); color: #fff; }
+
+    .signature-block {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .signature-block__item {
+      border-top: 2px solid var(--blue);
+      padding-top: 12px;
+    }
+
+    .signature-block__role {
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 700;
+      font-size: 9pt;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .signature-block__name { font-weight: 600; font-size: 10pt; }
+    .signature-block__detail { font-size: 8.5pt; color: var(--text-muted); }
+
+    @media print {
+      body { font-size: 9.5pt; line-height: 1.45; }
+      .doc-header { margin-bottom: 16px; padding-bottom: 12px; }
+      .section-title { margin-top: 16px; margin-bottom: 8px; page-break-after: avoid; }
+      .no-print { display: none; }
+      .page-break { page-break-before: always; }
+      a { color: var(--text) !important; text-decoration: none; }
+      table { page-break-inside: avoid; }
+      tr { page-break-inside: avoid; }
+      .highlight-box, .info-box, .safe-box, .cert-box { page-break-inside: avoid; }
+      .cols-2 { page-break-inside: avoid; }
+      p { orphans: 3; widows: 3; }
+      h2, h3 { page-break-after: avoid; }
+    }
+
+    @media screen {
+      body {
+        max-width: 210mm;
+        margin: 20px auto;
+        padding: 30px 28px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border-radius: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Nano Revolution SRL</strong><br>
+      Str. Ogorului Nr. 3, Oradea<br>
+      Jud. Bihor, 410554, România<br>
+      <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a><br>
+      +40 771 445 577
+    </div>
+  </header>
+
+  <!-- ═══ TITLE ═══ -->
+  <div class="doc-title">
+    <h1>Certificat de Conformitate</h1>
+    <div class="subtitle">Raport de Încercări și Conformitate Produs</div>
+    <div class="doc-ref">Ref. CC-THERMX-2026-001 &nbsp;|&nbsp; Rev. 01 &nbsp;|&nbsp; Data: 08.03.2026</div>
+  </div>
+
+  <div class="cert-box">
+    <div class="cert-box__number">CC-THERMX-2026-001</div>
+    <div class="cert-box__label">Număr certificat de conformitate</div>
+  </div>
+
+
+  <!-- ═══ 1. IDENTIFICARE ═══ -->
+  <h2 class="section-title">1. Identificarea produsului</h2>
+
+  <div class="field-row">
+    <div class="field-row__label">Denumire comercială:</div>
+    <div class="field-row__value"><strong>thermX Insulation Coating</strong></div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Tip produs:</div>
+    <div class="field-row__value">Membrană termoizolantă și hidroizolantă nanoceramică</div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Producător:</div>
+    <div class="field-row__value"><strong>Nano Revolution SRL</strong> — Oradea, jud. Bihor, România</div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Lot de referință:</div>
+    <div class="field-row__value">LOT-2026-___</div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Data fabricării:</div>
+    <div class="field-row__value">__.__.2026</div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Cantitate lot:</div>
+    <div class="field-row__value">___ kg</div>
+  </div>
+
+
+  <!-- ═══ 2. STANDARD ═══ -->
+  <h2 class="section-title">2. Standarde de referință</h2>
+
+  <div class="info-box">
+    <p><strong>Standard armonizat:</strong> EN 15824:2017 — Specificații pentru tencuieli exterioare și interioare pe bază de lianți organici</p>
+    <p><strong>Standard de calcul:</strong> СНиП 41-103-2000 — Proiectarea izolației termice pentru echipamente și conducte</p>
+    <p><strong>Aderență:</strong> EN 1542 — Produse și sisteme pentru protecția și repararea structurilor de beton</p>
+    <p><strong>Tracțiune:</strong> EN ISO 527 — Determinarea proprietăților de tracțiune</p>
+    <p><strong>Permeabilitate vapori:</strong> EN ISO 7783 — Viteza de transmisie a vaporilor de apă</p>
+  </div>
+
+
+  <!-- ═══ 3. DECLARAȚIE ═══ -->
+  <h2 class="section-title">3. Declarație de conformitate</h2>
+
+  <div class="safe-box">
+    <p><strong>Se certifică prin prezenta</strong> că produsul <strong>thermX Insulation Coating</strong>, identificat la punctul 1, a fost testat și verificat în conformitate cu standardele de referință menționate la punctul 2, iar rezultatele obținute confirmă conformitatea cu specificațiile tehnice declarate de producător.</p>
+  </div>
+
+  <p>Produsul corespunde cerințelor esențiale aplicabile din:</p>
+  <ul>
+    <li>Regulamentul (UE) Nr. 305/2011 privind produsele pentru construcții (CPR)</li>
+    <li>Regulamentul (CE) Nr. 1907/2006 (REACH) — înregistrare, evaluare și restricționare substanțe chimice</li>
+    <li>Regulamentul (CE) Nr. 1272/2008 (CLP) — clasificare, etichetare și ambalare</li>
+  </ul>
+
+
+  <!-- ═══ PAGE 2 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Certificat de Conformitate</strong> — thermX Insulation Coating &nbsp;|&nbsp; Pag. 2/3
+    </div>
+  </header>
+
+
+  <!-- ═══ 4. REZULTATE ÎNCERCĂRI ═══ -->
+  <h2 class="section-title">4. Rezultatele încercărilor</h2>
+
+  <p class="lead">Sumar al rezultatelor obținute în cadrul programului de încercări de tip:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:5%">Nr.</th>
+        <th style="width:32%">Parametru testat</th>
+        <th style="width:12%">Unitate</th>
+        <th style="width:17%">Cerință</th>
+        <th style="width:17%">Rezultat</th>
+        <th style="width:17%">Verdict</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Conductivitate termică la 20°C</td>
+        <td>W/m·K</td>
+        <td>≤ 0,001</td>
+        <td class="table-value">0,001</td>
+        <td class="table-pass"><span class="badge badge--green">CONFORM</span></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Reacție la foc (stare uscată)</td>
+        <td>Clasă</td>
+        <td>Clasa A</td>
+        <td class="table-value">Clasa A</td>
+        <td class="table-pass"><span class="badge badge--green">CONFORM</span></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Densitate strat uscat</td>
+        <td>kg/m³</td>
+        <td>380–410</td>
+        <td class="table-value">392</td>
+        <td class="table-pass"><span class="badge badge--green">CONFORM</span></td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Densitate stare lichidă</td>
+        <td>kg/m³</td>
+        <td>470–590</td>
+        <td class="table-value">528</td>
+        <td class="table-pass"><span class="badge badge--green">CONFORM</span></td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Aderență pe beton</td>
+        <td>MPa</td>
+        <td>≥ 1,84</td>
+        <td class="table-value">1,92</td>
+        <td class="table-pass"><span class="badge badge--green">CONFORM</span></td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>Aderență pe metal</td>
+        <td>MPa</td>
+        <td>≥ 1,53</td>
+        <td class="table-value">1,61</td>
+        <td class="table-pass"><span class="badge badge--green">CONFORM</span></td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>Aderență pe lemn</td>
+        <td>MPa</td>
+        <td>≥ 1,84</td>
+        <td class="table-value">1,88</td>
+        <td class="table-pass"><span class="badge badge--green">CONFORM</span></td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>Rezistență la tracțiune (după aplicare)</td>
+        <td>MPa</td>
+        <td>≥ 2,0</td>
+        <td class="table-value">2,14</td>
+        <td class="table-pass"><span class="badge badge--green">CONFORM</span></td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>Alungire relativă la rupere</td>
+        <td>%</td>
+        <td>≥ 12</td>
+        <td class="table-value">13,2</td>
+        <td class="table-pass"><span class="badge badge--green">CONFORM</span></td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>Absorbție de apă</td>
+        <td>g/cm³</td>
+        <td>≤ 0,03</td>
+        <td class="table-value">0,028</td>
+        <td class="table-pass"><span class="badge badge--green">CONFORM</span></td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td>Permeabilitate la vapori</td>
+        <td>mg/m·h·Pa</td>
+        <td>≤ 0,0014</td>
+        <td class="table-value">0,0013</td>
+        <td class="table-pass"><span class="badge badge--green">CONFORM</span></td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td>Coeficient de emisie termică</td>
+        <td>W/m²·°C</td>
+        <td>1,29–2,2</td>
+        <td class="table-value">1,45</td>
+        <td class="table-pass"><span class="badge badge--green">CONFORM</span></td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td>Duritate superficială</td>
+        <td>N/m²</td>
+        <td>≥ 0,3</td>
+        <td class="table-value">0,41</td>
+        <td class="table-pass"><span class="badge badge--green">CONFORM</span></td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td>Rezistență la șoc</td>
+        <td>kg/cm</td>
+        <td>≥ 40</td>
+        <td class="table-value">50</td>
+        <td class="table-pass"><span class="badge badge--green">CONFORM</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══ PAGE 3 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Certificat de Conformitate</strong> — thermX Insulation Coating &nbsp;|&nbsp; Pag. 3/3
+    </div>
+  </header>
+
+
+  <!-- ═══ 5. CONCLUZII ═══ -->
+  <h2 class="section-title">5. Concluzii</h2>
+
+  <div class="safe-box">
+    <p><strong>VERDICT GENERAL: CONFORM</strong></p>
+    <p>Toate parametrii testați se încadrează în limitele specificate. Produsul <strong>thermX Insulation Coating</strong> îndeplinește cerințele aplicabile și poate fi comercializat pe piața românească și europeană.</p>
+  </div>
+
+
+  <!-- ═══ 6. OBSERVAȚII ═══ -->
+  <h2 class="section-title">6. Observații</h2>
+
+  <ul>
+    <li>Rezultatele sunt valabile exclusiv pentru lotul de referință identificat la punctul 1</li>
+    <li>Certificatul este valabil 12 luni de la data emiterii sau până la modificarea formulei produsului</li>
+    <li>Producătorul se obligă să mențină constanța performanței prin controlul intern al producției (FPC)</li>
+    <li>Fiecare lot de producție este însoțit de un certificat de calitate individual</li>
+  </ul>
+
+  <div class="highlight-box">
+    <p><strong>Responsabilitatea producătorului:</strong> Nano Revolution SRL declară că menține un sistem de control al producției în fabrică (FPC) care asigură constanța performanței produsului, în conformitate cu specificațiile din prezentul certificat.</p>
+  </div>
+
+
+  <!-- ═══ SEMNĂTURI ═══ -->
+  <h2 class="section-title">7. Semnături și validare</h2>
+
+  <div class="signature-block">
+    <div class="signature-block__item">
+      <div class="signature-block__role">Director Calitate / Producător</div>
+      <div class="signature-block__name">Alexandru Țucudean-Șușman</div>
+      <div class="signature-block__detail">Nano Revolution SRL</div>
+      <div class="signature-block__detail" style="margin-top:30px;">Semnătura: ________________________</div>
+      <div class="signature-block__detail" style="margin-top:8px;">Data: 08.03.2026</div>
+    </div>
+    <div class="signature-block__item">
+      <div class="signature-block__role">Laborator / Organism de Evaluare</div>
+      <div class="signature-block__name">________________________</div>
+      <div class="signature-block__detail">Nr. acreditare RENAR: ________</div>
+      <div class="signature-block__detail" style="margin-top:30px;">Semnătura: ________________________</div>
+      <div class="signature-block__detail" style="margin-top:8px;">Data: __.__.2026</div>
+    </div>
+  </div>
+
+
+  <!-- ═══ DISCLAIMER ═══ -->
+  <div class="divider"></div>
+
+  <p style="font-size: 8.5pt; color: var(--text-muted); line-height: 1.5;">
+    Acest certificat de conformitate este emis pe baza rezultatelor încercărilor efectuate pe epruvete prelevate din lotul de referință. Rezultatele nu pot fi extrapolate altor loturi fără verificare suplimentară. Certificatul nu exonerează producătorul de obligația de a efectua controlul intern continuu al producției. Documentul este valid în original sau copie conformă cu originalul, vizată de emitent.
+  </p>
+
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="doc-footer">
+    <div>&copy; 2026 Nano Revolution SRL — Toate drepturile rezervate</div>
+    <div>
+      <a href="https://nanorevolution.ro">nanorevolution.ro</a> &nbsp;|&nbsp;
+      <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a>
+    </div>
+  </footer>
+
+</body>
+</html>

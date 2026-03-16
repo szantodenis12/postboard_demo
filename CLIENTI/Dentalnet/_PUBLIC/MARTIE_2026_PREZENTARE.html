@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #36454F;
+    background: #F5F5DC;
+    line-height: 1.5;
+  }
+
+  /* COVER PAGE */
+  .cover {
+    width: 100%;
+    height: 297mm;
+    background: linear-gradient(160deg, #A3C1AD 0%, #8FB39E 40%, #7DA58F 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    page-break-after: always;
+    padding: 60px;
+    position: relative;
+  }
+
+  .cover-logo {
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 60px;
+  }
+
+  .cover h1 {
+    font-size: 42px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .cover h2 {
+    font-size: 22px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 60px;
+  }
+
+  .cover-meta {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    line-height: 2;
+  }
+
+  .cover-footer {
+    position: absolute;
+    bottom: 40px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* CONTENT PAGES */
+  .page {
+    width: 100%;
+    min-height: 297mm;
+    padding: 50px 55px;
+    background: #FAFAF5;
+    page-break-after: always;
+    position: relative;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #A3C1AD;
+    padding-bottom: 12px;
+    margin-bottom: 35px;
+  }
+
+  .page-header-brand {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #A3C1AD;
+  }
+
+  .page-header-section {
+    font-size: 11px;
+    color: #999;
+  }
+
+  .page-footer {
+    position: absolute;
+    bottom: 30px;
+    left: 55px;
+    right: 55px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #bbb;
+    border-top: 1px solid #eee;
+    padding-top: 8px;
+  }
+
+  /* SECTION HEADERS */
+  .section-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #36454F;
+    margin-bottom: 8px;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 30px;
+  }
+
+  /* WEEK HEADER */
+  .week-header {
+    background: #A3C1AD;
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    margin-top: 10px;
+  }
+
+  .week-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .week-header p {
+    font-size: 12px;
+    opacity: 0.85;
+  }
+
+  /* POST CARD */
+  .post-card {
+    background: #fff;
+    border: 1px solid #e8e8e0;
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin-bottom: 18px;
+    position: relative;
+  }
+
+  .post-card.zen {
+    border-left: 4px solid #A3C1AD;
+    background: linear-gradient(90deg, #f4f9f6 0%, #fff 30%);
+  }
+
+  .post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .post-date {
+    font-size: 13px;
+    font-weight: 700;
+    color: #36454F;
+  }
+
+  .post-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .tag {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .tag-ig { background: #fce4ec; color: #c2185b; }
+  .tag-fb { background: #e3f2fd; color: #1565c0; }
+  .tag-tt { background: #f3e5f5; color: #7b1fa2; }
+  .tag-gb { background: #e8f5e9; color: #2e7d32; }
+  .tag-zen { background: #A3C1AD; color: #fff; }
+  .tag-stories { background: #fff3e0; color: #e65100; }
+
+  .post-type {
+    font-size: 11px;
+    font-weight: 600;
+    color: #A3C1AD;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .post-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #36454F;
+    margin-bottom: 10px;
+  }
+
+  .post-visual {
+    font-size: 11px;
+    color: #888;
+    background: #f9f9f4;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    border-left: 3px solid #ddd;
+  }
+
+  .post-visual strong {
+    color: #666;
+  }
+
+  .post-caption {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.65;
+    margin-bottom: 8px;
+  }
+
+  .post-caption em {
+    color: #36454F;
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  .post-hashtags {
+    font-size: 10px;
+    color: #A3C1AD;
+    font-weight: 600;
+  }
+
+  .google-post {
+    background: #f0f7f2;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-size: 11px;
+    color: #555;
+  }
+
+  .google-post strong {
+    color: #2e7d32;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* SUMMARY TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 12px;
+  }
+
+  th {
+    background: #A3C1AD;
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #eee;
+    color: #555;
+  }
+
+  tr:nth-child(even) td {
+    background: #f9f9f4;
+  }
+
+  /* STATS BOX */
+  .stats-row {
+    display: flex;
+    gap: 16px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+  }
+
+  .stat-box {
+    flex: 1;
+    min-width: 120px;
+    background: #fff;
+    border: 1px solid #e8e8e0;
+    border-radius: 8px;
+    padding: 18px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 32px;
+    font-weight: 800;
+    color: #A3C1AD;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+  }
+
+  /* NEEDS LIST */
+  .needs-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .needs-list li {
+    padding: 10px 14px;
+    margin-bottom: 6px;
+    background: #fff;
+    border: 1px solid #e8e8e0;
+    border-radius: 6px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .needs-list .status-done {
+    color: #2e7d32;
+    font-weight: 700;
+    font-size: 11px;
+  }
+
+  .needs-list .status-todo {
+    color: #e65100;
+    font-weight: 700;
+    font-size: 11px;
+  }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box {
+    background: linear-gradient(135deg, #A3C1AD 0%, #8FB39E 100%);
+    color: #fff;
+    padding: 24px 28px;
+    border-radius: 10px;
+    margin: 20px 0;
+  }
+
+  .highlight-box h4 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .highlight-box p {
+    font-size: 13px;
+    opacity: 0.9;
+    line-height: 1.6;
+  }
+
+  /* SCRIPT BOX */
+  .script-box {
+    background: #36454F;
+    color: #fff;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.7;
+    margin: 10px 0;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div class="cover-logo">Epic Digital Hub</div>
+  <h1>Plan Social Media<br>Martie 2026</h1>
+  <h2>DentalNet Kids &mdash; Oradea</h2>
+  <div class="cover-meta">
+    Pregătit de: Epic Digital Hub<br>
+    Client: Dental Net SRL &mdash; Dr. Șipoș Lucian<br>
+    Data: 21.02.2026<br>
+    Clasificare: Confidențial
+  </div>
+  <div class="cover-footer">Acest document conține strategia de conținut pentru luna Martie 2026</div>
+</div>
+
+<!-- PAGE 2: OVERVIEW -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Prezentare Generală</span>
+  </div>
+
+  <div class="section-title">Ce Facem în Martie</div>
+  <div class="section-subtitle">Introducerea direcției de prevenție și a mascotei ZEN pe canalele existente</div>
+
+  <p style="font-size: 13px; color: #555; margin-bottom: 24px; line-height: 1.7;">
+    Martie 2026 marchează începutul colaborării strategice. Clinica DentalNet Kids există și are pacienți &mdash; dar nu are strategie de conținut. În această primă lună, introducem <strong>două elemente noi</strong>: direcția de <strong>prevenție</strong> (teritoriu neocupat de niciun competitor din Oradea) și mascota <strong>ZEN</strong> (element vizual diferențiator). Nu lansăm un brand &mdash; îi dăm direcție.
+  </p>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-number">12</div>
+      <div class="stat-label">Postări Feed</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number">4</div>
+      <div class="stat-label">Postări ZEN</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number">4</div>
+      <div class="stat-label">Google Business</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number">2</div>
+      <div class="stat-label">Serii Stories</div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <h4>Principiul lunii</h4>
+    <p>Fiecare postare educă. Fiecare ZEN creează emoție. Fiecare joi, Dr. Șipoș demontează un mit. Până la sfârșitul lunii, urmăritorii vor ști ce face DentalNet Kids diferit: prevenție, nu reparație.</p>
+  </div>
+
+  <h3 style="font-size: 16px; margin: 24px 0 12px; color: #36454F;">Structura Săptămânală</h3>
+  <table>
+    <tr>
+      <th>Zi</th>
+      <th>Rubrică</th>
+      <th>Format</th>
+    </tr>
+    <tr>
+      <td><strong>Luni/Marți</strong></td>
+      <td>Educativ / Prezentare serviciu</td>
+      <td>Carousel Instagram + Facebook</td>
+    </tr>
+    <tr>
+      <td><strong>Joi</strong></td>
+      <td>„Dr. Șipoș explică"</td>
+      <td>Reel 15-20 sec + Facebook + TikTok</td>
+    </tr>
+    <tr>
+      <td><strong>Sâmbătă</strong></td>
+      <td>ZEN</td>
+      <td>Single image Instagram + Facebook</td>
+    </tr>
+    <tr>
+      <td><strong>Variabil</strong></td>
+      <td>Stories interactive</td>
+      <td>Poll / Quiz pe Instagram + Facebook Stories</td>
+    </tr>
+  </table>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>2</span>
+  </div>
+</div>
+
+<!-- PAGE 3: WEEK 1 -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Săptămâna 1</span>
+  </div>
+
+  <div class="week-header">
+    <h3>Săptămâna 1 &mdash; 03-07 Martie</h3>
+    <p>Focus: Problema &mdash; De ce prevenția contează</p>
+  </div>
+
+  <!-- Post 1 -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-date">Marți, 03 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-ig">Instagram</span>
+        <span class="tag tag-fb">Facebook</span>
+      </div>
+    </div>
+    <div class="post-type">Carousel &mdash; 5 Slides &mdash; Educativ</div>
+    <div class="post-title">„Ce știi despre dinții copilului tău?"</div>
+    <div class="post-visual">
+      <strong>Slide 1:</strong> „Ce știi despre dinții copilului tău?"<br>
+      <strong>Slide 2:</strong> „66% dintre copiii din România au carii." (cifra mare, bold)<br>
+      <strong>Slide 3:</strong> „34% dintre părinți nu și-au dus niciodată copilul la dentist."<br>
+      <strong>Slide 4:</strong> „Doar 15% dintre copii au sigilări dentare."<br>
+      <strong>Slide 5:</strong> „Se poate diferit. Prin prevenție. La DentalNet Kids, de asta ne ocupăm."
+    </div>
+    <div class="post-caption">
+      Cifrele vorbesc de la sine. România are una dintre cele mai mari rate de carii din Europa la copii. Dar nu trebuie să fie așa. Prevenția funcționează &mdash; în Danemarca, indicele de carie la copii e de 10 ori mai mic decât la noi. La DentalNet Kids, prevenția nu e un serviciu din listă. E direcția noastră.
+    </div>
+    <div class="post-hashtags">#PrevențieDentară #StomatologieCopii #DentalNetKids #Oradea</div>
+    <div class="google-post">
+      <strong>Google Business:</strong> 66% dintre copiii din România au carii. La DentalNet Kids, ne concentrăm pe prevenție &mdash; nu așteptăm problemele, le prevenim. Programări: 0723 336 320.
+    </div>
+  </div>
+
+  <!-- Post 2 -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-date">Joi, 05 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-ig">Instagram</span>
+        <span class="tag tag-fb">Facebook</span>
+        <span class="tag tag-tt">TikTok</span>
+      </div>
+    </div>
+    <div class="post-type">Reel 20 sec &mdash; „Dr. Șipoș Explică" #1</div>
+    <div class="post-title">Periajul agresiv curăță mai bine?</div>
+    <div class="script-box">
+      „Periajul agresiv curăță mai bine? Nu. 55% dintre părinți cred asta, dar periajul corect e blând, cu mișcări circulare, 2 minute. Periajul agresiv deteriorează gingia și smalțul. Blând, nu tare."
+    </div>
+    <div class="post-caption">
+      55% dintre părinți cred că periajul agresiv curăță mai bine. Adevărul: periajul corect e blând. Mișcări circulare, 2 minute, periuță moale. Mai multe sfaturi? Urmărește seria „Dr. Șipoș explică" &mdash; în fiecare joi.
+    </div>
+    <div class="post-hashtags">#DrȘipoșExplică #Periaj #DentalNetKids #SfaturiDentare</div>
+  </div>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>3</span>
+  </div>
+</div>
+
+<!-- PAGE 4: WEEK 1 cont + WEEK 2 start -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Săptămâna 1 (cont.) + Săptămâna 2</span>
+  </div>
+
+  <!-- Post 3 Stories -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-date">Vineri, 06 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-stories">Stories</span>
+      </div>
+    </div>
+    <div class="post-type">Stories Interactive &mdash; Quiz</div>
+    <div class="post-title">„La ce vârstă prima vizită la dentist?"</div>
+    <div class="post-visual">
+      <strong>Story 1:</strong> Poll: „La 1 an" / „La 3 ani" / „Când are carii"<br>
+      <strong>Story 2:</strong> Răspuns: „De la primul dinte &mdash; 6-12 luni! La DentalNet Kids, prima vizită e gratuită."
+    </div>
+  </div>
+
+  <!-- Post 4 ZEN -->
+  <div class="post-card zen">
+    <div class="post-header">
+      <div class="post-date">Sâmbătă, 07 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-zen">ZEN</span>
+        <span class="tag tag-ig">Instagram</span>
+        <span class="tag tag-fb">Facebook</span>
+      </div>
+    </div>
+    <div class="post-type">Single Image &mdash; Introducere ZEN</div>
+    <div class="post-title">„Vă prezentăm pe cineva nou."</div>
+    <div class="post-visual">
+      <strong>Visual:</strong> Imaginea lui ZEN pe fundal bej cald. Simplu, curat. Text mic: „ZEN".
+    </div>
+    <div class="post-caption">
+      Vă prezentăm pe cineva nou. Se numește ZEN. E liniștit, e calm, și de acum face parte din familia DentalNet Kids. O să-l vedeți pe-aici din când în când. Dar azi doar atât &mdash; un bun venit. &#x1F49A;
+    </div>
+    <div class="post-hashtags">#ZEN #DentalNetKids #Oradea</div>
+    <div class="google-post">
+      <strong>Google Business:</strong> ZEN &mdash; noul prieten al copiilor de la DentalNet Kids. Calm, blând, mereu prezent. Urmăriți-ne pe Instagram și Facebook.
+    </div>
+  </div>
+
+  <div class="week-header" style="margin-top: 30px;">
+    <h3>Săptămâna 2 &mdash; 10-14 Martie</h3>
+    <p>Focus: Ce facem diferit &mdash; prevenția ca sistem</p>
+  </div>
+
+  <!-- Post 5 -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-date">Luni, 10 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-ig">Instagram</span>
+        <span class="tag tag-fb">Facebook</span>
+      </div>
+    </div>
+    <div class="post-type">Carousel &mdash; 5 Slides &mdash; Sigilarea Dentară</div>
+    <div class="post-title">„Cel mai simplu scut pentru molarii copilului tău."</div>
+    <div class="post-visual">
+      <strong>Slide 1:</strong> „Sigilarea dentară &mdash; cel mai simplu scut pentru molarii copilului tău."<br>
+      <strong>Slide 2:</strong> Ce este? Rășină transparentă pe molari. Durează câteva minute. Nu doare.<br>
+      <strong>Slide 3:</strong> Reduce riscul de carie cu 70-80%.<br>
+      <strong>Slide 4:</strong> Când? La erupția molarilor permanenți (~6 ani).<br>
+      <strong>Slide 5:</strong> „Doar 15% din copii au sigilări. La DentalNet Kids, sigilarea e parte din plan."
+    </div>
+    <div class="post-caption">
+      Sigilarea dentară reduce caria cu 70-80%. E rapidă, nu doare, și protejează molarii ani de zile. Dar doar 15% dintre copiii din România au beneficiat de ea. La DentalNet Kids, sigilarea nu e opțională. E parte din planul preventiv.
+    </div>
+    <div class="post-hashtags">#SigilareDentară #PrevențieDentară #DentalNetKids #DentistCopiiOradea</div>
+  </div>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>4</span>
+  </div>
+</div>
+
+<!-- PAGE 5: WEEK 2 cont -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Săptămâna 2 (cont.)</span>
+  </div>
+
+  <!-- Post 6 -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-date">Miercuri, 12 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-ig">Instagram</span>
+        <span class="tag tag-fb">Facebook</span>
+      </div>
+    </div>
+    <div class="post-type">Single Image &mdash; Echipă</div>
+    <div class="post-title">Dr. Șipoș Lucian și echipa DentalNet Kids</div>
+    <div class="post-visual">
+      <strong>Visual:</strong> Fotografie Dr. Șipoș &mdash; zâmbind, lumină naturală. Sau fotografie echipă la cabinet.
+    </div>
+    <div class="post-caption">
+      26 de ani de stomatologie. Publicații științifice în urgențe dentare pediatrice. Și o convingere simplă: cel mai bun tratament e cel de care nu ai nevoie. La noi, prevenția vine înaintea tratamentului. Evaluăm riscul fiecărui copil, construim un plan personalizat, și monitorizăm progresul în timp.
+    </div>
+    <div class="post-hashtags">#DrȘipoș #DentalNetKids #PedodonțieOradea #StomatologieCopii</div>
+  </div>
+
+  <!-- Post 7 -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-date">Joi, 13 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-ig">Instagram</span>
+        <span class="tag tag-fb">Facebook</span>
+        <span class="tag tag-tt">TikTok</span>
+      </div>
+    </div>
+    <div class="post-type">Reel 15-20 sec &mdash; „Dr. Șipoș Explică" #2</div>
+    <div class="post-title">„Sunt doar dinți de lapte, oricum cad."</div>
+    <div class="script-box">
+      „'Sunt doar dinți de lapte, oricum cad.' Aud asta des. Dar dinții de lapte țin locul celor permanenți. Dacă un dinte de lapte se pierde prea devreme, dinții permanenți pot crește strâmb. Dinții de lapte contează. Foarte mult."
+    </div>
+    <div class="post-caption">
+      „Sunt doar dinți de lapte." &mdash; cel mai frecvent mit pe care îl auzim. Dinții de lapte au trei roluri esențiale: 1) Țin locul dinților permanenți, 2) Ajută la dezvoltarea vorbirii, 3) Permit mestecarea corectă.
+    </div>
+    <div class="post-hashtags">#DrȘipoșExplică #DințiDeLapte #DentalNetKids #MituriDentare</div>
+  </div>
+
+  <!-- Post 8 ZEN -->
+  <div class="post-card zen">
+    <div class="post-header">
+      <div class="post-date">Sâmbătă, 15 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-zen">ZEN</span>
+        <span class="tag tag-ig">Instagram</span>
+        <span class="tag tag-fb">Facebook</span>
+      </div>
+    </div>
+    <div class="post-type">Single Image &mdash; ZEN + Cifră</div>
+    <div class="post-title">ZEN și o cifră care contează: 70-80%</div>
+    <div class="post-visual">
+      <strong>Visual:</strong> ZEN pe fundal bej. Text mare: „70-80%". Sub: „Cu atât reduce sigilarea riscul de carie."
+    </div>
+    <div class="post-caption">
+      ZEN și o cifră care contează. Sigilarea dentară reduce riscul de carie cu 70-80%. E simplu, rapid, și nu doare. Dar doar 15% dintre copiii din România au beneficiat de ea. La DentalNet Kids, sigilarea e parte din plan. Nu opțiune. &#x1F49A;
+    </div>
+    <div class="post-hashtags">#ZEN #SigilareDentară #PrevențieDentară #DentalNetKids</div>
+  </div>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>5</span>
+  </div>
+</div>
+
+<!-- PAGE 6: WEEK 3 -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Săptămâna 3</span>
+  </div>
+
+  <div class="week-header">
+    <h3>Săptămâna 3 &mdash; 17-21 Martie</h3>
+    <p>Focus: Carnetul de Sănătate Dentară + nutriție</p>
+  </div>
+
+  <!-- Post 9 -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-date">Luni, 17 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-ig">Instagram</span>
+        <span class="tag tag-fb">Facebook</span>
+      </div>
+    </div>
+    <div class="post-type">Carousel &mdash; 5 Slides &mdash; Produs Nou</div>
+    <div class="post-title">Carnetul de Sănătate Dentară</div>
+    <div class="post-visual">
+      <strong>Slide 1:</strong> „Fiecare copil merită un plan. Nu o ghicire."<br>
+      <strong>Slide 2:</strong> „Fiecare copil primește un Carnet de Sănătate Dentară."<br>
+      <strong>Slide 3:</strong> Conținut: harta dinților, evaluarea riscului, jurnalul vizitelor.<br>
+      <strong>Slide 4:</strong> „Ca la pediatru &mdash; dar pentru dinți."<br>
+      <strong>Slide 5:</strong> CTA: „Programează prima vizită &mdash; copilul primește Carnetul."
+    </div>
+    <div class="post-caption">
+      Când mergi la pediatru, copilul are un carnet de sănătate. Vaccinuri, greutate, înălțime &mdash; totul e urmărit. De ce la dentist nu e la fel? La DentalNet Kids, fiecare copil primește un Carnet de Sănătate Dentară. Nu improvizăm. Planificăm.
+    </div>
+    <div class="post-hashtags">#CarnetulDentar #PlanPreventiv #DentalNetKids #DentistCopiiOradea</div>
+    <div class="google-post">
+      <strong>Google Business:</strong> La DentalNet Kids, fiecare copil primește un Carnet de Sănătate Dentară cu evaluare personalizată și monitorizare pe termen lung. Prima vizită e gratuită. Programări: 0723 336 320.
+    </div>
+  </div>
+
+  <!-- Post 10 -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-date">Miercuri, 19 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-ig">Instagram</span>
+        <span class="tag tag-fb">Facebook</span>
+      </div>
+    </div>
+    <div class="post-type">Carousel &mdash; 4 Slides &mdash; Nutriție</div>
+    <div class="post-title">„Ghici câtă zahăr e într-un suc natural de 250ml?"</div>
+    <div class="post-visual">
+      <strong>Slide 1:</strong> Întrebarea + imagine suc<br>
+      <strong>Slide 2:</strong> Răspuns: ~24g = 6 cuburi de zahăr (vizual cu cuburi)<br>
+      <strong>Slide 3:</strong> Mecanismul: zahăr &rarr; bacterii &rarr; acid &rarr; demineralizare &rarr; carie<br>
+      <strong>Slide 4:</strong> Sfat: apă între mese, suc doar la masă, periaj la 30 min după
+    </div>
+    <div class="post-caption">
+      Un suc „natural" de 250ml conține ~24g de zahăr. Adică 6 cuburi. Problema nu e dulciurile ocazionale. Problema e expunerea constantă. Sfat simplu: apa e băutura de bază. Sucul doar la masă. La DentalNet Kids, prevenția include și sfaturi nutriționale personalizate.
+    </div>
+    <div class="post-hashtags">#NutriȚieDentară #ZahărȘiDinți #DentalNetKids #PrevențieDentară</div>
+  </div>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>6</span>
+  </div>
+</div>
+
+<!-- PAGE 7: WEEK 3 cont + WEEK 4 start -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Săptămâna 3 (cont.) + Săptămâna 4</span>
+  </div>
+
+  <!-- Post 11 -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-date">Joi, 20 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-ig">Instagram</span>
+        <span class="tag tag-fb">Facebook</span>
+        <span class="tag tag-tt">TikTok</span>
+      </div>
+    </div>
+    <div class="post-type">Reel 15-20 sec &mdash; „Dr. Șipoș Explică" #3</div>
+    <div class="post-title">Prima vizită la dentist &mdash; când?</div>
+    <div class="script-box">
+      „La ce vârstă prima vizită la dentist? Recomandarea: de la primul dinte, adică în jurul a 6-12 luni. Nu pentru tratament &mdash; pentru evaluare și un plan. Cu cât începi mai devreme, cu atât copilul se obișnuiește mai natural cu cabinetul dentar."
+    </div>
+    <div class="post-caption">
+      Prima vizită nu trebuie să fie o urgență. Recomandarea internațională: de la primul dinte (6-12 luni). La DentalNet Kids, prima vizită e blândă, gratuită, și e despre cunoaștere &mdash; nu despre tratament.
+    </div>
+    <div class="post-hashtags">#DrȘipoșExplică #PrimaVizită #DentalNetKids #PedodonțieOradea</div>
+  </div>
+
+  <!-- Post 12 ZEN -->
+  <div class="post-card zen">
+    <div class="post-header">
+      <div class="post-date">Sâmbătă, 22 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-zen">ZEN</span>
+        <span class="tag tag-ig">Instagram</span>
+        <span class="tag tag-fb">Facebook</span>
+      </div>
+    </div>
+    <div class="post-type">Single Image &mdash; ZEN + Carnetul</div>
+    <div class="post-title">„Fiecare copil, un plan."</div>
+    <div class="post-visual">
+      <strong>Visual:</strong> ZEN pe fundal verde deschis + mockup Carnet de Sănătate Dentară. Text: „Fiecare copil, un plan."
+    </div>
+    <div class="post-caption">
+      ZEN știe un secret: fiecare copil e diferit. De aceea fiecare copil primește un plan diferit. Carnetul de Sănătate Dentară &mdash; urmărim dinții, evaluăm riscul, planificăm prevenția. Ca la pediatru. Dar pentru zâmbet. &#x1F49A;
+    </div>
+    <div class="post-hashtags">#ZEN #CarnetulDentar #DentalNetKids #Prevenție</div>
+  </div>
+
+  <div class="week-header" style="margin-top: 30px;">
+    <h3>Săptămâna 4 &mdash; 24-28 Martie</h3>
+    <p>Focus: Pachete preventive &mdash; invitație la acțiune</p>
+  </div>
+
+  <!-- Post 13 -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-date">Luni, 24 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-ig">Instagram</span>
+        <span class="tag tag-fb">Facebook</span>
+      </div>
+    </div>
+    <div class="post-type">Carousel &mdash; 4 Slides &mdash; Pachete Preventive</div>
+    <div class="post-title">„Trei pachete. Un singur obiectiv: dinți sănătoși."</div>
+    <div class="post-visual">
+      <strong>Slide 1:</strong> „Trei pachete. Un singur obiectiv: dinți sănătoși."<br>
+      <strong>Slide 2:</strong> START &mdash; Prima vizită gratuită, de la primul dinte<br>
+      <strong>Slide 3:</strong> CREȘTERE &mdash; 500 RON/an (3-6 ani): 2 controale + 2 igienizări + fluorizare<br>
+      <strong>Slide 4:</strong> SCUT &mdash; 900 RON/an (6-14 ani): tot + sigilare + screening ortodontic
+    </div>
+    <div class="post-caption">
+      Prevenția nu trebuie să fie complicată. Am făcut-o simplă. START &mdash; prima vizită gratuită. CREȘTERE &mdash; abonament anual 3-6 ani. SCUT &mdash; protecție completă 6-14 ani. Fiecare pachet include evaluarea riscului, plan personalizat și Carnetul de Sănătate Dentară.
+    </div>
+    <div class="post-hashtags">#DentalNetKids #PachetePreventive #DentistCopiiOradea #CreștemDințiSănătoși</div>
+    <div class="google-post">
+      <strong>Google Business:</strong> Pachete preventive DentalNet Kids: Prima vizită gratuită, abonament „Creștere" (500 RON/an), abonament „Scut" (900 RON/an). Programări: 0723 336 320.
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>7</span>
+  </div>
+</div>
+
+<!-- PAGE 8: WEEK 4 cont + SUMMARY -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Săptămâna 4 (cont.)</span>
+  </div>
+
+  <!-- Post 14 -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-date">Miercuri, 26 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-ig">Instagram</span>
+        <span class="tag tag-fb">Facebook</span>
+        <span class="tag tag-tt">TikTok</span>
+      </div>
+    </div>
+    <div class="post-type">Reel 20 sec &mdash; „Dr. Șipoș Explică" #4</div>
+    <div class="post-title">Fluorizarea &mdash; e sigură?</div>
+    <div class="script-box">
+      „Fluorul e periculos pentru copii? Întrebarea pe care o primesc cel mai des. Răspunsul: în dozele aplicate profesional, fluorul e sigur și reduce riscul de carie cu până la 60%. Ca orice substanță, contează doza. Profesional, e eficient și sigur."
+    </div>
+    <div class="post-caption">
+      Fluorizarea profesională reduce riscul de carie cu până la 60%. E aplicată în doze controlate, de specialiști, direct pe dinți. Întrebări despre fluor? Vino la un control și discutăm. Fără grabă, fără judecată.
+    </div>
+    <div class="post-hashtags">#DrȘipoșExplică #Fluorizare #DentalNetKids #PrevențieDentară</div>
+  </div>
+
+  <!-- Post 15 Stories -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-date">Vineri, 28 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-stories">Stories</span>
+      </div>
+    </div>
+    <div class="post-type">Stories &mdash; „Știai că...?"</div>
+    <div class="post-title">România vs. Danemarca</div>
+    <div class="post-visual">
+      <strong>Story 1:</strong> „România are indicele de carie la copii de 5x mai mare decât Danemarca."<br>
+      <strong>Story 2:</strong> „Diferența? 50 de ani de prevenție sistematică."<br>
+      <strong>Story 3:</strong> „La DentalNet Kids, aducem prevenția sistematică în Oradea."
+    </div>
+  </div>
+
+  <!-- Post 16 ZEN -->
+  <div class="post-card zen">
+    <div class="post-header">
+      <div class="post-date">Sâmbătă, 28 Martie</div>
+      <div class="post-tags">
+        <span class="tag tag-zen">ZEN</span>
+        <span class="tag tag-ig">Instagram</span>
+        <span class="tag tag-fb">Facebook</span>
+      </div>
+    </div>
+    <div class="post-type">Single Image &mdash; ZEN + CTA</div>
+    <div class="post-title">„Prima vizită e gratuită. De la primul dinte."</div>
+    <div class="post-visual">
+      <strong>Visual:</strong> ZEN pe fundal bej cald. Text: „Prima vizită e gratuită. De la primul dinte. &#x1F49A;"
+    </div>
+    <div class="post-caption">
+      ZEN vrea să vă spună ceva simplu: Prima vizită la DentalNet Kids e gratuită. De la primul dinte. Copilul primește o evaluare, părintele primește un plan clar, și toată familia pleacă cu un Carnet de Sănătate Dentară. Ne vedem? &#x1F49A;
+    </div>
+    <div class="post-hashtags">#ZEN #DentalNetKids #PrimaVizită #DentistCopiiOradea #CreștemDințiSănătoși</div>
+    <div class="google-post">
+      <strong>Google Business:</strong> Prima vizită la DentalNet Kids e gratuită &mdash; de la primul dinte. Evaluare, plan preventiv personalizat și Carnetul de Sănătate Dentară. Programări: 0723 336 320.
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>8</span>
+  </div>
+</div>
+
+<!-- PAGE 9: SUMMARY + NEEDS -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Rezumat + Vizuale Necesare</span>
+  </div>
+
+  <div class="section-title">Rezumatul Lunii</div>
+  <div class="section-subtitle">Toate postările la o privire</div>
+
+  <table>
+    <tr>
+      <th>Săpt.</th>
+      <th>Luni/Marți</th>
+      <th>Joi</th>
+      <th>Sâmbătă</th>
+    </tr>
+    <tr>
+      <td><strong>1</strong></td>
+      <td>Cifre: 66% copii cu carii</td>
+      <td>Dr. Șipoș #1: Periajul</td>
+      <td style="color: #A3C1AD; font-weight: 700;">ZEN &mdash; Introducere</td>
+    </tr>
+    <tr>
+      <td><strong>2</strong></td>
+      <td>Sigilarea dentară</td>
+      <td>Dr. Șipoș #2: Dinți de lapte</td>
+      <td style="color: #A3C1AD; font-weight: 700;">ZEN + Cifra 70-80%</td>
+    </tr>
+    <tr>
+      <td><strong>3</strong></td>
+      <td>Carnetul de Sănătate</td>
+      <td>Dr. Șipoș #3: Prima vizită</td>
+      <td style="color: #A3C1AD; font-weight: 700;">ZEN + Carnetul</td>
+    </tr>
+    <tr>
+      <td><strong>4</strong></td>
+      <td>Pachete preventive</td>
+      <td>Dr. Șipoș #4: Fluorizarea</td>
+      <td style="color: #A3C1AD; font-weight: 700;">ZEN + CTA Programare</td>
+    </tr>
+  </table>
+
+  <div class="highlight-box" style="margin-top: 30px;">
+    <h4>Narativul lunii &mdash; cum se construiește povestea</h4>
+    <p>
+      <strong>Săptămâna 1:</strong> Problema &mdash; „cifrele sunt alarmante, dar se poate diferit"<br>
+      <strong>Săptămâna 2:</strong> Soluția &mdash; „sigilarea, evaluarea riscului, prevenția funcționează"<br>
+      <strong>Săptămâna 3:</strong> Instrumentul &mdash; „Carnetul de Sănătate Dentară = un plan, nu o ghicire"<br>
+      <strong>Săptămâna 4:</strong> Acțiunea &mdash; „iată pachetele, iată cum începi, prima vizită e gratuită"
+    </p>
+  </div>
+
+  <h3 style="font-size: 16px; margin: 30px 0 14px; color: #36454F;">Vizuale Necesare</h3>
+
+  <ul class="needs-list">
+    <li>
+      ZEN &mdash; imaginea originală 3D
+      <span class="status-done">&#10003; GATA</span>
+    </li>
+    <li>
+      ZEN &mdash; variante cu cifre, cu carnet, invitație (Midjourney)
+      <span class="status-todo">DE CREAT</span>
+    </li>
+    <li>
+      ZEN &mdash; versiune 2D flat pentru stories/overlays
+      <span class="status-todo">DE CREAT</span>
+    </li>
+    <li>
+      Fotografii Dr. Șipoș (portret + la cabinet)
+      <span class="status-todo">ȘEDINȚĂ FOTO</span>
+    </li>
+    <li>
+      Fotografii cabinet (atmosferă, detalii, sală așteptare)
+      <span class="status-todo">ȘEDINȚĂ FOTO</span>
+    </li>
+    <li>
+      Template-uri branded (carousel + single post)
+      <span class="status-todo">DESIGNER</span>
+    </li>
+    <li>
+      Mockup Carnet Sănătate Dentară
+      <span class="status-todo">DESIGNER</span>
+    </li>
+    <li>
+      Vizual „cuburi de zahăr" (postarea nutriție)
+      <span class="status-todo">FOTO/DESIGN</span>
+    </li>
+  </ul>
+
+  <div style="margin-top: 30px; padding: 20px; background: #f9f9f4; border-radius: 8px; border: 1px solid #e8e8e0;">
+    <p style="font-size: 12px; color: #888; line-height: 1.6;">
+      <strong style="color: #36454F;">Notă:</strong> Postările existente pe pagina de Facebook și Instagram nu trebuie șterse. Noua direcție se introduce gradual. Până la sfârșitul lunii martie, feedul va avea un ritm clar și recunosibil: educație (luni), Dr. Șipoș (joi), ZEN (sâmbăta).
+    </p>
+  </div>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>9</span>
+  </div>
+</div>
+
+<!-- BACK COVER -->
+<div class="cover" style="background: linear-gradient(160deg, #36454F 0%, #4a5a68 100%);">
+  <div class="cover-logo" style="color: rgba(163,193,173,0.7);">Epic Digital Hub</div>
+  <h1 style="font-size: 32px;">Creștem dinți sănătoși.</h1>
+  <h2 style="font-size: 18px; color: rgba(255,255,255,0.6);">DentalNet Kids &mdash; Oradea</h2>
+  <div class="cover-meta" style="margin-top: 40px;">
+    Epic Digital Hub<br>
+    contact@epicdigitalhub.ro<br><br>
+    Pregătit pentru: Dr. Șipoș Lucian &mdash; Dental Net SRL<br>
+    21.02.2026
+  </div>
+</div>
+
+</body>
+</html>

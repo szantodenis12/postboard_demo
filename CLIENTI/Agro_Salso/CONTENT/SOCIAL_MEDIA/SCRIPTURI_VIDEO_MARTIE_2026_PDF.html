@@ -1,0 +1,2073 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scripturi Video — Filmare Martie 2026 | Agro Salso</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --green-900: #1a3a2a;
+    --green-800: #1e4d35;
+    --green-700: #22603f;
+    --green-600: #2d7a50;
+    --green-500: #38945f;
+    --green-400: #4db076;
+    --green-300: #7dcea0;
+    --green-200: #b8e4cc;
+    --green-100: #e6f5ed;
+    --green-50: #f3faf6;
+    --orange-600: #d97706;
+    --orange-500: #f59e0b;
+    --orange-400: #fbbf24;
+    --orange-100: #fef3c7;
+    --gray-900: #111827;
+    --gray-800: #1f2937;
+    --gray-700: #374151;
+  --gray-600: #4b5563;
+    --gray-500: #6b7280;
+    --gray-400: #9ca3af;
+  --gray-300: #d1d5db;P
+    --gray-200: #e5e7eb;
+    --gray-100: #f3f4f6;
+    --gray-50: #f9fafb;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--gray-800);
+    background: var(--gray-50);
+    line-height: 1.6;
+    font-size: 10.5pt;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ─── COVER PAGE ─── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(160deg, var(--green-900) 0%, var(--green-700) 50%, var(--green-600) 100%);
+    color: var(--white);
+    text-align: center;
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(77, 176, 118, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -15%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .cover-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 100px;
+    padding: 8px 20px;
+    font-size: 11pt;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-bottom: 40px;
+    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-badge .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--orange-400);
+    border-radius: 50%;
+  }
+
+  .cover h1 {
+    font-size: 38pt;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover h1 span {
+    display: block;
+    font-size: 18pt;
+    font-weight: 400;
+    letter-spacing: 0;
+    opacity: 0.7;
+    margin-top: 8px;
+  }
+
+  .cover-divider {
+    width: 60px;
+    height: 3px;
+    background: var(--orange-400);
+    border-radius: 3px;
+    margin: 30px auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    margin-top: 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-meta-item {
+    text-align: center;
+  }
+
+  .cover-meta-item .label {
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.5;
+    margin-bottom: 4px;
+  }
+
+  .cover-meta-item .value {
+    font-size: 12pt;
+    font-weight: 600;
+  }
+
+  .cover-footer {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 8.5pt;
+    opacity: 0.4;
+    z-index: 1;
+  }
+
+  /* ─── TABLE OF CONTENTS ─── */
+  .toc {
+    padding: 50px 60px;
+    page-break-after: always;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 800;
+    color: var(--green-800);
+    margin-bottom: 6px;
+  }
+
+  .toc-subtitle {
+    font-size: 10pt;
+    color: var(--gray-500);
+    margin-bottom: 30px;
+  }
+
+  .toc-section {
+    margin-bottom: 20px;
+  }
+
+  .toc-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--green-700);
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .toc-section-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: var(--green-700);
+    color: var(--white);
+    border-radius: 6px;
+    font-size: 9pt;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .toc-items {
+    padding-left: 34px;
+  }
+
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 3px 0;
+    font-size: 9.5pt;
+    color: var(--gray-600);
+  }
+
+  .toc-item .toc-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8pt;
+    color: var(--gray-400);
+    margin-right: 8px;
+    min-width: 28px;
+  }
+
+  .toc-item .toc-dots {
+    flex: 1;
+    border-bottom: 1px dotted var(--gray-300);
+    margin: 0 6px;
+    min-width: 20px;
+  }
+
+  .toc-item .toc-dur {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8pt;
+    color: var(--gray-400);
+    white-space: nowrap;
+  }
+
+  /* ─── RULES PAGE ─── */
+  .rules-page {
+    padding: 50px 60px;
+    page-break-after: always;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .rules-page h2 {
+    font-size: 18pt;
+    font-weight: 800;
+    color: var(--green-800);
+    margin-bottom: 24px;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+
+  .info-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .info-card .info-label {
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gray-400);
+    margin-bottom: 4px;
+  }
+
+  .info-card .info-value {
+    font-size: 11pt;
+    font-weight: 600;
+    color: var(--gray-900);
+  }
+
+  .rules-list {
+    list-style: none;
+    counter-reset: rule;
+  }
+
+  .rules-list li {
+    counter-increment: rule;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .rules-list li:last-child { border-bottom: none; }
+
+  .rules-list li::before {
+    content: counter(rule);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 26px;
+    background: var(--green-100);
+    color: var(--green-700);
+    border-radius: 50%;
+    font-size: 9pt;
+    font-weight: 700;
+    margin-top: 1px;
+  }
+
+  .rules-list li strong {
+    color: var(--green-800);
+  }
+
+  /* ─── SECTION HEADERS ─── */
+  .section-header {
+    background: linear-gradient(135deg, var(--green-800) 0%, var(--green-600) 100%);
+    color: var(--white);
+    padding: 30px 60px;
+    page-break-before: always;
+    margin-bottom: 0;
+  }
+
+  .section-header .section-num {
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.5;
+    margin-bottom: 6px;
+  }
+
+  .section-header h2 {
+    font-size: 22pt;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+
+  .section-header .section-desc {
+    font-size: 10pt;
+    opacity: 0.7;
+    max-width: 600px;
+    line-height: 1.5;
+  }
+
+  /* ─── SCRIPT CARDS ─── */
+  .scripts-body {
+    padding: 20px 60px 40px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .script-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+
+  .script-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .script-card-header .script-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9pt;
+    font-weight: 600;
+    color: var(--green-600);
+    background: var(--green-100);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .script-card-header h3 {
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--gray-900);
+    flex: 1;
+    margin-left: 10px;
+  }
+
+  .script-tags {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .tag {
+    font-size: 7.5pt;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 100px;
+    letter-spacing: 0.3px;
+  }
+
+  .tag-duration {
+    background: var(--orange-100);
+    color: var(--orange-600);
+  }
+
+  .tag-type {
+    background: var(--gray-100);
+    color: var(--gray-600);
+  }
+
+  .script-card-body {
+    padding: 16px 18px;
+  }
+
+  .stage-direction {
+    font-size: 9pt;
+    font-style: italic;
+    color: var(--gray-500);
+    background: var(--gray-50);
+    padding: 6px 10px;
+    border-radius: 6px;
+    border-left: 3px solid var(--green-300);
+    margin-bottom: 10px;
+  }
+
+  .script-text {
+    font-size: 10.5pt;
+    line-height: 1.7;
+    color: var(--gray-800);
+    white-space: pre-line;
+  }
+
+  .script-text em {
+    font-style: italic;
+    color: var(--gray-500);
+    font-size: 9pt;
+  }
+
+  /* ─── CHECKLIST ─── */
+  .checklist-section {
+    padding: 40px 60px;
+    max-width: 800px;
+    margin: 0 auto;
+    page-break-before: always;
+  }
+
+  .checklist-section h2 {
+    font-size: 18pt;
+    font-weight: 800;
+    color: var(--green-800);
+    margin-bottom: 24px;
+  }
+
+  .checklist-group {
+    margin-bottom: 24px;
+  }
+
+  .checklist-group h3 {
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--green-200);
+  }
+
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 10pt;
+    color: var(--gray-700);
+  }
+
+  .checkbox {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--gray-300);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ─── FOOTER ─── */
+  .page-footer {
+    text-align: center;
+    padding: 30px 60px;
+    font-size: 8pt;
+    color: var(--gray-400);
+    border-top: 1px solid var(--gray-200);
+  }
+
+  /* ─── MULTI-CLIP CARD ─── */
+  .multi-clip .clip-block {
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--gray-200);
+  }
+  .multi-clip .clip-block:last-child { border-bottom: none; }
+
+  .clip-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8pt;
+    font-weight: 600;
+    color: var(--green-500);
+    margin-bottom: 4px;
+  }
+
+  /* ─── PRINT ─── */
+  @media print {
+    body { background: white; }
+    .cover { min-height: 100vh; }
+    .section-header { -webkit-print-color-adjust: exact; }
+    .script-card { box-shadow: none; border: 1px solid #ddd; }
+    .scripts-body { padding: 20px 40px 30px; }
+    .toc, .rules-page, .checklist-section { padding: 40px; }
+    .section-header { padding: 24px 40px; }
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════ COVER ════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-badge">
+    <span class="dot"></span>
+    AGRO SALSO × EPIC DIGITAL HUB
+  </div>
+  <h1>
+    Scripturi Video
+    <span>Filmare Martie 2026</span>
+  </h1>
+  <div class="cover-divider"></div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="label">Data filmării</div>
+      <div class="value">04.03.2026</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Format</div>
+      <div class="value">Reels / TikTok / Shorts</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Total scripturi</div>
+      <div class="value">50+</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Durată clipuri</div>
+      <div class="value">10–60 sec</div>
+    </div>
+  </div>
+  <div class="cover-footer">Pregătit de Epic Digital Hub — Document confidențial</div>
+</div>
+
+<!-- ════════════════════════════════════════ TOC ════════════════════════════════════════ -->
+<div class="toc">
+  <h2>Cuprins</h2>
+  <p class="toc-subtitle">8 secțiuni · 50+ scripturi video gata de filmat</p>
+
+  <div class="toc-section">
+    <div class="toc-section-title"><span class="toc-section-num">1</span> Dexwal Mamut — Grapă cu discuri</div>
+    <div class="toc-items">
+      <div class="toc-item"><span class="toc-code">M1</span> Grapa care mănâncă argilă <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+      <div class="toc-item"><span class="toc-code">M2</span> Cel mai vândut utilaj la noi <span class="toc-dots"></span> <span class="toc-dur">25 sec</span></div>
+      <div class="toc-item"><span class="toc-code">M3</span> Care Mamut ți se potrivește? <span class="toc-dots"></span> <span class="toc-dur">30 sec</span></div>
+      <div class="toc-item"><span class="toc-code">M4</span> POV: Ești fermier și ai nevoie de grapă <span class="toc-dots"></span> <span class="toc-dur">15 sec</span></div>
+      <div class="toc-item"><span class="toc-code">M5</span> 3 motive să alegi Mamut <span class="toc-dots"></span> <span class="toc-dur">12 sec</span></div>
+      <div class="toc-item"><span class="toc-code">M6</span> Am 25 de ani și vând grape <span class="toc-dots"></span> <span class="toc-dur">30 sec</span></div>
+      <div class="toc-item"><span class="toc-code">M7</span> Sunetul satisfăcător <span class="toc-dots"></span> <span class="toc-dur">10 sec</span></div>
+      <div class="toc-item"><span class="toc-code">M8</span> Ce tăvălug alegi? <span class="toc-dots"></span> <span class="toc-dur">25 sec</span></div>
+      <div class="toc-item"><span class="toc-code">M9</span> Greșeala pe care o fac fermierii <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+      <div class="toc-item"><span class="toc-code">M10</span> Mamut WT — cea pliabilă <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+    </div>
+  </div>
+
+  <div class="toc-section">
+    <div class="toc-section-title"><span class="toc-section-num">2</span> Dexwal Żuk — Grapă mică</div>
+    <div class="toc-items">
+      <div class="toc-item"><span class="toc-code">Z1</span> Ai tractor mic? Am grapă pentru tine <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+      <div class="toc-item"><span class="toc-code">Z2</span> Cea mai mică grapă din curte <span class="toc-dots"></span> <span class="toc-dur">15 sec</span></div>
+      <div class="toc-item"><span class="toc-code">Z3</span> Żuk sau Mamut? <span class="toc-dots"></span> <span class="toc-dur">25 sec</span></div>
+      <div class="toc-item"><span class="toc-code">Z4</span> 8 variante de Żuk <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+      <div class="toc-item"><span class="toc-code">Z5</span> Pentru cine e Żuk? <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+    </div>
+  </div>
+
+  <div class="toc-section">
+    <div class="toc-section-title"><span class="toc-section-num">3</span> Combinatoare — K-420, Lion, Żubr</div>
+    <div class="toc-items">
+      <div class="toc-item"><span class="toc-code">C1</span> Ce e un combinator? <span class="toc-dots"></span> <span class="toc-dur">25 sec</span></div>
+      <div class="toc-item"><span class="toc-code">C2</span> K-420 — de ce e special <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+      <div class="toc-item"><span class="toc-code">C3</span> Lion — combinator + semănătoare <span class="toc-dots"></span> <span class="toc-dur">25 sec</span></div>
+      <div class="toc-item"><span class="toc-code">C4</span> Żubr — economie de combustibil <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+      <div class="toc-item"><span class="toc-code">C5</span> Patul germinativ perfect <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+      <div class="toc-item"><span class="toc-code">C6</span> K-420 — cea mai spectaculoasă mașinărie <span class="toc-dots"></span> <span class="toc-dur">15 sec</span></div>
+      <div class="toc-item"><span class="toc-code">C7</span> Żubr 2.5 — pentru 70 CP <span class="toc-dots"></span> <span class="toc-dur">15 sec</span></div>
+    </div>
+  </div>
+
+  <div class="toc-section">
+    <div class="toc-section-title"><span class="toc-section-num">4</span> Grubere — Grunt, Dzik</div>
+    <div class="toc-items">
+      <div class="toc-item"><span class="toc-code">G1</span> Ce e un gruber? <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+      <div class="toc-item"><span class="toc-code">G2</span> Grunt — 4 mărimi, o problemă rezolvată <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+      <div class="toc-item"><span class="toc-code">G3</span> Dzik — cultivatorul universal <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+      <div class="toc-item"><span class="toc-code">G4</span> Agricultura de conservare <span class="toc-dots"></span> <span class="toc-dur">30 sec</span></div>
+      <div class="toc-item"><span class="toc-code">G5</span> Grunt vs. Plug <span class="toc-dots"></span> <span class="toc-dur">25 sec</span></div>
+      <div class="toc-item"><span class="toc-code">G6</span> Dzik — nume amuzant, treabă serioasă <span class="toc-dots"></span> <span class="toc-dur">15 sec</span></div>
+    </div>
+  </div>
+
+  <div class="toc-section">
+    <div class="toc-section-title"><span class="toc-section-num">5</span> Fonduri Europene — AFIR DR-14</div>
+    <div class="toc-items">
+      <div class="toc-item"><span class="toc-code">F1</span> 85% din utilaj — gratis? <span class="toc-dots"></span> <span class="toc-dur">25 sec</span></div>
+      <div class="toc-item"><span class="toc-code">F2</span> Cine poate accesa fonduri AFIR? <span class="toc-dots"></span> <span class="toc-dur">30 sec</span></div>
+      <div class="toc-item"><span class="toc-code">F3</span> 3 greșeli cu AFIR <span class="toc-dots"></span> <span class="toc-dur">25 sec</span></div>
+      <div class="toc-item"><span class="toc-code">F4</span> Nu-ți permiți? Ba da. <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+      <div class="toc-item"><span class="toc-code">F5</span> Ce documente îți facem noi <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+      <div class="toc-item"><span class="toc-code">F6</span> Fonduri europene pe înțelesul tuturor <span class="toc-dots"></span> <span class="toc-dur">30 sec</span></div>
+      <div class="toc-item"><span class="toc-code">F7</span> Sesiunea e deschisă! <span class="toc-dots"></span> <span class="toc-dur">15 sec</span></div>
+    </div>
+  </div>
+
+  <div class="toc-section">
+    <div class="toc-section-title"><span class="toc-section-num">6</span> Subsoliere — Raptor, Kret</div>
+    <div class="toc-items">
+      <div class="toc-item"><span class="toc-code">S1</span> De ce trebuie să decompactezi solul <span class="toc-dots"></span> <span class="toc-dur">25 sec</span></div>
+      <div class="toc-item"><span class="toc-code">S2</span> Raptor — pentru ferme mari <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+    </div>
+  </div>
+
+  <div class="toc-section">
+    <div class="toc-section-title"><span class="toc-section-num">7</span> Clipuri generale / Personalitate</div>
+    <div class="toc-items">
+      <div class="toc-item"><span class="toc-code">B1</span> Bine ai venit la Agro Salso <span class="toc-dots"></span> <span class="toc-dur">20 sec</span></div>
+      <div class="toc-item"><span class="toc-code">B2</span> De ce să cumperi de la noi <span class="toc-dots"></span> <span class="toc-dur">25 sec</span></div>
+      <div class="toc-item"><span class="toc-code">B3</span> Piese de schimb — pe stoc <span class="toc-dots"></span> <span class="toc-dur">15 sec</span></div>
+      <div class="toc-item"><span class="toc-code">B4</span> Ce fac eu într-o zi normală <span class="toc-dots"></span> <span class="toc-dur">30 sec</span></div>
+      <div class="toc-item"><span class="toc-code">B5</span> Cea mai des pusă întrebare <span class="toc-dots"></span> <span class="toc-dur">15 sec</span></div>
+      <div class="toc-item"><span class="toc-code">B6</span> Testul cel mai simplu <span class="toc-dots"></span> <span class="toc-dur">15 sec</span></div>
+      <div class="toc-item"><span class="toc-code">B7</span> Serie „Știai că...?" (5 clipuri) <span class="toc-dots"></span> <span class="toc-dur">10 sec/clip</span></div>
+      <div class="toc-item"><span class="toc-code">B8</span> Reply la comentarii (template) <span class="toc-dots"></span> <span class="toc-dur">15 sec</span></div>
+    </div>
+  </div>
+
+  <div class="toc-section">
+    <div class="toc-section-title"><span class="toc-section-num">8</span> Weeder & Spreader</div>
+    <div class="toc-items">
+      <div class="toc-item"><span class="toc-code">W1</span> Buruienile nu au nicio șansă <span class="toc-dots"></span> <span class="toc-dur">15 sec</span></div>
+      <div class="toc-item"><span class="toc-code">SP1</span> Împrăștietorul — simplu și eficient <span class="toc-dots"></span> <span class="toc-dur">15 sec</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ RULES ════════════════════════════════════════ -->
+<div class="rules-page">
+  <h2>Informații Filmare</h2>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-label">Data filmării</div>
+      <div class="info-value">04.03.2026</div>
+    </div>
+    <div class="info-card">
+      <div class="info-label">Format</div>
+      <div class="info-value">15–60 sec | Reels / TikTok / Shorts</div>
+    </div>
+    <div class="info-card">
+      <div class="info-label">Locație</div>
+      <div class="info-value">Curtea Agro Salso, DN79 Mădăras</div>
+    </div>
+    <div class="info-card">
+      <div class="info-label">Ton</div>
+      <div class="info-value">Informal, amuzant, direct — vorbim la „tu"</div>
+    </div>
+  </div>
+
+  <h2>Reguli Generale</h2>
+  <ol class="rules-list">
+    <li><strong>Primele 2 secunde</strong> = hook-ul. Dacă nu captezi atenția instant, lumea dă scroll.</li>
+    <li>Vorbire <strong>direct la cameră</strong>, natural, ca și cum ai vorbi cu un prieten fermier.</li>
+    <li><strong>Arată utilajul</strong> cât vorbești — nu filma doar fața, arată fierul.</li>
+    <li>Filmează <strong>și vertical (9:16)</strong> și <strong>orizontal (16:9)</strong> — se folosesc pe platforme diferite.</li>
+    <li><strong>Fundal:</strong> utilajele din curte, nu perete gol. Showroom-ul e decor.</li>
+    <li>La fiecare clip, la final: <strong>logo/text cu numărul de telefon</strong> (se adaugă la editare).</li>
+    <li><strong>Dezinvolt > serios.</strong> Dacă râzi, dacă greșești, dacă zici ceva spontan — PĂSTREAZĂ.</li>
+  </ol>
+</div>
+
+
+<!-- ═══════════════════════════════════ SECȚIUNEA 1: MAMUT ═══════════════════════════════════ -->
+<div class="section-header">
+  <div class="section-num">Secțiunea 1</div>
+  <h2>Dexwal Mamut — Grapă cu discuri</h2>
+  <p class="section-desc">Produsul vedetă. 6 modele, de la 2.5m la 4m, discuri oțel boron 510mm, butucuri fără întreținere.</p>
+</div>
+
+<div class="scripts-body">
+
+  <!-- M1 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">M1</span>
+      <h3>„Grapa care mănâncă argilă"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Hook amuzant + demo</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Stai lângă Mamut, mângâie discurile</div>
+      <div class="script-text">„Asta e Mamut. Și nu, nu e un animal de companie...
+deși mănâncă argilă grea de mic dejun.
+
+Discuri din oțel boron, 510 milimetri.
+Butucuri fără întreținere — zero bătăi de cap.
+
+De la 2.5 la 4 metri lățime.
+Treci pe la noi pe DN79, Mădăras."
+
+<em>[Bate cu palma pe disc, sunet metalic satisfăcător]</em></div>
+    </div>
+  </div>
+
+  <!-- M2 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">M2</span>
+      <h3>„Ăsta e cel mai vândut utilaj la noi"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">25 sec</span>
+        <span class="tag tag-type">Storytime casual</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Merge prin curte spre Mamut</div>
+      <div class="script-text">„Știi care e cel mai vândut utilaj la noi de 13 ani?
+Nu, nu e plug. Nu e semănătoare.
+
+E ĂSTA. Dexwal Mamut. Grapă cu discuri.
+
+De ce? Pentru că pe argilă grea din Bihor,
+astea nu se înfundă, nu se blochează, nu te lasă la greu.
+
+Mamut 3.0 — 24 de discuri, 2-3 hectare pe oră.
+Și e pe stoc. Chiar ACUM, în curtea asta."
+
+<em>[Arată larg spre showroom]</em></div>
+    </div>
+  </div>
+
+  <!-- M3 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">M3</span>
+      <h3>„Care Mamut ți se potrivește?"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">30 sec</span>
+        <span class="tag tag-type">Educativ cu mișcare</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Merge de la un model la altul</div>
+      <div class="script-text">„Hai să-ți arăt care Mamut e pentru tine.
+
+<em>[Lângă Mamut 2.5]</em>
+Ai tractor de 70 de cai? Asta. Mamut 2.5. 20 de discuri.
+Perfect pentru ferme mici.
+
+<em>[Merge la Mamut 3.0]</em>
+Ai 90-130 de cai? Cel mai popular — Mamut 3.0.
+24 de discuri, faci 2-3 hectare pe oră.
+
+<em>[Merge la Mamut 4.0]</em>
+Ai peste 120 de cai și multă treabă?
+Mamut 4.0 — 32 de discuri, productivitate maximă.
+
+Nu știi care e pentru tine? Sună-mă, te sfătuiesc gratuit."</div>
+    </div>
+  </div>
+
+  <!-- M4 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">M4</span>
+      <h3>„POV: Ești fermier și ai nevoie de grapă"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">15 sec</span>
+        <span class="tag tag-type">Trending POV</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Text pe ecran: „POV: Ai tractor dar nu ai grapă și vine primăvara" — apoi apare din spatele Mamut-ului, cu brațele deschise</div>
+      <div class="script-text">„Bună! Eu sunt aici, pe DN79, Mădăras.
+Dexwal Mamut, pe stoc, gata de livrare.
+Sună-mă și vii s-o vezi cu ochii tăi."
+
+<em>[Zâmbește și bate pe utilaj]</em></div>
+    </div>
+  </div>
+
+  <!-- M5 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">M5</span>
+      <h3>„3 motive să alegi Mamut în 10 secunde"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">12 sec</span>
+        <span class="tag tag-type">Rapid-fire</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Numără pe degete, ritmul e rapid</div>
+      <div class="script-text">„Trei motive să alegi Dexwal Mamut:
+
+UNU — Discuri din oțel boron. Taie ORICE sol.
+DOI — Butucuri fără întreținere. Nu ungi nimic, niciodată.
+TREI — E PE STOC. Chiar acum. Chiar aici."
+
+<em>[Arată în spatele ei]</em></div>
+    </div>
+  </div>
+
+  <!-- M6 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">M6</span>
+      <h3>„Am 25 de ani și vând grape cu discuri"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">30 sec</span>
+        <span class="tag tag-type">Personal / relatable</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Stă pe un tăvălug Mamut, casual</div>
+      <div class="script-text">„Oamenii când aud ce fac: «Tu? Vinzi utilaje agricole?»
+
+Da. Eu. Am crescut printre grape și cultivatoare.
+Știu ce e oțel boron, știu ce e un butuc fără întreținere,
+și știu exact ce utilaj îți trebuie pe solul din Bihor.
+
+Deci dacă ai nevoie de o grapă cu discuri,
+și vrei pe cineva care chiar se pricepe —
+sună-mă. 0742 936 959."
+
+<em>[Se ridică de pe tăvălug, face cu mâna]</em></div>
+    </div>
+  </div>
+
+  <!-- M7 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">M7</span>
+      <h3>„Sunetul ăsta e satisfăcător"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">10 sec</span>
+        <span class="tag tag-type">ASMR / satisfying</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Close-up pe discuri Mamut — lovește ușor, sunet metalic</div>
+      <div class="script-text">„Sunetul ăsta? E sunetul a 510 milimetri de oțel boron.
+
+Dexwal Mamut. Disponibil pe DN79."
+
+<em>[Lovește încă o dată, sunet. Zâmbet.]</em></div>
+    </div>
+  </div>
+
+  <!-- M8 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">M8</span>
+      <h3>„Ce tăvălug alegi?"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">25 sec</span>
+        <span class="tag tag-type">Educativ / opțiuni</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Lângă mai multe tăvălugi</div>
+      <div class="script-text">„Știai că grapa Mamut vine cu mai multe tipuri de tăvălugi?
+
+<em>[Arată pe rând]</em>
+— Tubular — clasic, merge pe orice.
+— Packer — pentru compactare mai bună.
+— V-ring — dacă vrei sol bine mărunțit.
+— String — varianta economică și eficientă.
+
+Configurezi cum ai nevoie.
+Sună-mă și îți zic care e cel mai bun pentru solul tău."</div>
+    </div>
+  </div>
+
+  <!-- M9 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">M9</span>
+      <h3>„Greșeala pe care o fac fermierii"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Hook negativ (curiozitate)</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Serioasă, arată spre cameră</div>
+      <div class="script-text">„Cea mai mare greșeală pe care o fac fermierii?
+Cumpără grapă ieftină, și-o schimbă în 2 ani.
+
+Mamut-ul ăsta? Are butucuri fără întreținere
+și discuri care nu se tocesc pe argilă.
+
+Cumperi o dată, lucrezi ani de zile.
+Asta înseamnă investiție."</div>
+    </div>
+  </div>
+
+  <!-- M10 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">M10</span>
+      <h3>„Mamut WT — cea pliabilă"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Demo produs special</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Lângă Mamut WT</div>
+      <div class="script-text">„Asta e Mamut WT. Și ce are ea special?
+Se pliază hidraulic. Vine cu cărucior de transport.
+
+Dacă ai ferma departe și trebuie să circuli pe drum public —
+asta e soluția.
+
+Mamut WT. La Agro Salso, pe DN79."</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════ SECȚIUNEA 2: ŻUK ═══════════════════════════════════ -->
+<div class="section-header">
+  <div class="section-num">Secțiunea 2</div>
+  <h2>Dexwal Żuk — Grapă cu discuri mică</h2>
+  <p class="section-desc">Grapă pentru ferme mici și tractoare mici. De la 1m la 2.4m, 6-20 discuri, de la 20 CP.</p>
+</div>
+
+<div class="scripts-body">
+
+  <!-- Z1 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">Z1</span>
+      <h3>„Ai tractor mic? Am grapă pentru tine"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Hook adresat direct</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Lângă Żuk, utilaj vizibil mai mic</div>
+      <div class="script-text">„«Eu am tractor de 30 de cai, nu am ce grapă să iau.»
+BA DA. Ai.
+
+Asta e Dexwal Żuk. Grapă cu discuri de la 1 metru lățime.
+Merge cu tractoare de la 20 de cai putere.
+
+Żuk 1.0 — 6 discuri. Perfect pentru livadă, grădină mare, fermă mică.
+Și da, e pe stoc."</div>
+    </div>
+  </div>
+
+  <!-- Z2 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">Z2</span>
+      <h3>„Cea mai mică grapă din curtea noastră"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">15 sec</span>
+        <span class="tag tag-type">Curiozitate + demo</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Se aplecă lângă Żuk 1.0</div>
+      <div class="script-text">„Cea mai mică grapă din curtea noastră.
+Dar nu te uita la dimensiune.
+
+Fiecare disc are amortizare individuală.
+Taie, amestecă, pregătește solul — și cu tractor de 20 de cai.
+
+Żuk. De la Dexwal. De la noi."</div>
+    </div>
+  </div>
+
+  <!-- Z3 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">Z3</span>
+      <h3>„Żuk sau Mamut? Care e pentru tine?"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">25 sec</span>
+        <span class="tag tag-type">Comparație</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Între cele două utilaje</div>
+      <div class="script-text">„Întrebarea zilei: Żuk sau Mamut?
+
+<em>[Arată Żuk]</em>
+Żuk — de la 1 la 2.4 metri. Tractor mic, fermă mică.
+Cosiri, teren după recoltă, buruieni.
+
+<em>[Arată Mamut]</em>
+Mamut — de la 2.5 la 4 metri. Tractor mare, producție serioasă.
+Argilă grea, discuri oțel boron.
+
+Nu știi? Sună-mă. Îți zic eu."</div>
+    </div>
+  </div>
+
+  <!-- Z4 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">Z4</span>
+      <h3>„8 variante de Żuk"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Educativ rapid</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Numără repede pe degete, ritmul e alert</div>
+      <div class="script-text">„Żuk vine în 8 variante. OPT.
+
+De la 1 metru — 6 discuri, 20 de cai putere.
+Până la 2.4 metri — 20 de discuri, 120 de cai.
+
+Practic, orice tractor ai, există un Żuk pentru el.
+Vino să-l vezi. DN79, Mădăras."</div>
+    </div>
+  </div>
+
+  <!-- Z5 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">Z5</span>
+      <h3>„Pentru cine e Żuk?"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Targetat</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Merge relaxat prin curte</div>
+      <div class="script-text">„Ai livadă? Żuk.
+Ai vie? Żuk.
+Ai grădină mare și un tractor mic? Tot Żuk.
+
+E grapa care intră unde nu intră altele.
+De la 1 metru lățime. Discuri cu amortizare individuală.
+
+Și nu, nu costă cât o grapă mare.
+Hai pe la noi, discutăm."</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════ SECȚIUNEA 3: COMBINATOARE ═══════════════════════════════════ -->
+<div class="section-header">
+  <div class="section-num">Secțiunea 3</div>
+  <h2>Combinatoare — K-420, Lion, Żubr</h2>
+  <p class="section-desc">Agregate de cultivare și semănat. Pregătesc patul germinativ. K-420 e cel mare (4.2m), Lion și Żubr sunt medii (2.5-3m).</p>
+</div>
+
+<div class="scripts-body">
+
+  <!-- C1 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">C1</span>
+      <h3>„Ce e un combinator și de ce ai nevoie de el?"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">25 sec</span>
+        <span class="tag tag-type">Educativ cu hook</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Lângă K-420</div>
+      <div class="script-text">„Ai arat. Ai trecut cu grapa. Și acum?
+
+ACUM ai nevoie de combinator. Asta pregătește patul germinativ.
+Sfărâmă bulgării, nivelează, compactează ușor.
+Practic, face solul perfect pentru semănat.
+
+Ăsta e K-420. Lățime de lucru 4.2 metri.
+36 de dinți dubli, 9 tăvălugi. Monstru.
+
+80-100 de cai putere și gata."</div>
+    </div>
+  </div>
+
+  <!-- C2 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">C2</span>
+      <h3>„Noul K-420 — de ce e special"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Produs nou / hype</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Se apropie dramatic de K-420</div>
+      <div class="script-text">„Cel mai nou utilaj Dexwal. K-420.
+Și nu, nu e o glumă cu numele.
+
+4.2 metri lățime. Ramă de 80x80 mm.
+4 rânduri de dinți dubli ranforsați.
+3 mături pentru sfărâmarea bulgărilor.
+
+Dacă vrei pat germinativ perfect —
+ăsta e."</div>
+    </div>
+  </div>
+
+  <!-- C3 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">C3</span>
+      <h3>„Lion — combinator + semănătoare"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">25 sec</span>
+        <span class="tag tag-type">Two-in-one</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Lângă Lion</div>
+      <div class="script-text">„Ăsta face două lucruri deodată.
+Se numește Lion și e agregat de cultivare ȘI semănat.
+
+Îl cuplezi cu o semănătoare de aceeași lățime
+și gata — o singură trecere, solul e pregătit și semănat.
+
+Mai puțin motorină. Mai puțin timp în câmp.
+Și solul nu se mai compactează de la treceri multiple.
+
+Lion. De la 2.5 la 3 metri. Pe stoc."</div>
+    </div>
+  </div>
+
+  <!-- C4 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">C4</span>
+      <h3>„Żubr — economie de combustibil"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Beneficiu clar</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Lângă Żubr</div>
+      <div class="script-text">„Câtă motorină arzi pe hectar?
+Mult, nu? Treceri, treceri, treceri...
+
+Żubr. Agregat de cultivare și semănat.
+O singură trecere — cultivi și semeni în același timp.
+
+Consumi mai puțin. Compactezi mai puțin solul.
+Și termini mai repede.
+
+De la 2.5 la 3 metri. Tractor de la 70 de cai."</div>
+    </div>
+  </div>
+
+  <!-- C5 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">C5</span>
+      <h3>„Cum arată patul germinativ perfect"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Vizual satisfying + educativ</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Close-up pe sol prelucrat cu combinatorul, apoi pe utilaj</div>
+      <div class="script-text">„Asta e un pat germinativ pregătit cu combinatorul.
+Vezi textura? Uniform, afânat, fără bulgări.
+
+Exact ce trebuie ca sămânța să germineze bine.
+
+Dacă solul tău NU arată așa la semănat...
+hai să vorbim despre un combinator.
+Agro Salso, DN79."</div>
+    </div>
+  </div>
+
+  <!-- C6 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">C6</span>
+      <h3>„K-420 — cea mai spectaculoasă mașinărie"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">15 sec</span>
+        <span class="tag tag-type">Wow factor</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Se uită la K-420, impresionată exagerat</div>
+      <div class="script-text">„4.2 metri lățime.
+36 de dinți.
+9 tăvălugi.
+1.270 de kilograme de fier.
+
+Și se cheamă K-420.
+Cred că e cel mai impresionant utilaj din curtea noastră."
+
+<em>[Se întoarce la cameră]</em> „Vino să-l vezi live."</div>
+    </div>
+  </div>
+
+  <!-- C7 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">C7</span>
+      <h3>„Żubr 2.5 — pentru tractorul tău de 70 CP"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">15 sec</span>
+        <span class="tag tag-type">Targetat direct</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Lângă Żubr 2.5</div>
+      <div class="script-text">„Ai tractor de 70-110 cai? Ascultă.
+
+Żubr 2.5 — agregat de cultivare, 2 rânduri de dinți,
+suporți pentru semănătoare, 1.4-1.9 hectare pe oră.
+
+Pregătești patul germinativ, cuplezi semănătoarea,
+și gata — o singură trecere.
+
+Pe stoc. Sună-mă."</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════ SECȚIUNEA 4: GRUBERE ═══════════════════════════════════ -->
+<div class="section-header">
+  <div class="section-num">Secțiunea 4</div>
+  <h2>Grubere — Grunt, Dzik</h2>
+  <p class="section-desc">Cultivatoare / grape cu discuri tip chisel. Grunt = discuri 460mm cu protecție arc/pin. Dzik = cultivator multifuncțional.</p>
+</div>
+
+<div class="scripts-body">
+
+  <!-- G1 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">G1</span>
+      <h3>„Ce e un gruber?"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Educativ cu umor</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Lângă Grunt</div>
+      <div class="script-text">„«Ce-i ăla un gruber?»
+Ok. Stai.
+
+E un utilaj care sparge solul,
+amestecă resturile vegetale de pe câmp,
+și pregătește terenul FĂRĂ să-l arăți clasic.
+
+Practic, lucrare minimă a solului. Eficient, rapid, economic.
+
+Ăsta e Grunt. De la Dexwal.
+Discuri de 460 mm, protecție pe arc."</div>
+    </div>
+  </div>
+
+  <!-- G2 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">G2</span>
+      <h3>„Grunt — 4 mărimi, o singură problemă rezolvată"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Soluție la problemă</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Merge pe lângă mai multe modele</div>
+      <div class="script-text">„Ai resturi vegetale pe câmp după recoltă?
+Le ari? Pierzi timp și motorină.
+
+Sau... treci cu Grunt-ul.
+
+<em>[Arată dimensiunile]</em>
+1.8 metri — 5 discuri — 60 de cai.
+Până la 3 metri — 8 discuri — 140 de cai.
+
+Taie, amestecă, încorporează. Rapid."</div>
+    </div>
+  </div>
+
+  <!-- G3 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">G3</span>
+      <h3>„Dzik — cultivatorul universal"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Produs versatil</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Lângă Dzik</div>
+      <div class="script-text">„Dzik. Cultivatorul care face tot.
+
+Funcționează ca o grapă. Ca un cultivator. Ca o freză.
+Sfărâmă, afânează, pregătește solul.
+
+2.6 sau 3 metri, 11 sau 13 cuțite.
+Tractor de 80-140 de cai.
+
+Dacă nu vrei 3 utilaje diferite —
+ia unul care le face pe toate."</div>
+    </div>
+  </div>
+
+  <!-- G4 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">G4</span>
+      <h3>„Agricultură de conservare — de ce contează"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">30 sec</span>
+        <span class="tag tag-type">Educativ, trend agricol</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Pe câmp sau lângă Grunt</div>
+      <div class="script-text">„Hai să vorbim serios 30 de secunde.
+
+Agricultura de conservare nu e modă. E viitor.
+Lucrare minimă a solului. Mai puțină eroziune.
+Mai multă materie organică. Sol mai sănătos pe termen lung.
+
+Și ca să faci asta, ai nevoie de utilaje ca Grunt-ul.
+Discuri care taie resturile vegetale
+și le încorporează FĂRĂ să întorci tot solul.
+
+La Agro Salso avem grubere Dexwal
+de la 1.8 la 3 metri. Hai să discutăm."</div>
+    </div>
+  </div>
+
+  <!-- G5 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">G5</span>
+      <h3>„Grunt vs. Plug — adevărul"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">25 sec</span>
+        <span class="tag tag-type">Comparație provocatoare</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Între un Grunt și cameră</div>
+      <div class="script-text">„«Eu ar de 30 de ani, de ce să schimb?»
+
+Ok, dar uite:
+— Aratul consumă de 2-3 ori mai multă motorină.
+— Aratul durează de 2 ori mai mult.
+— Aratul compactează în profunzime.
+
+Grunt-ul? O trecere. Resturile vegetale se amestecă.
+Solul rămâne mai sănătos.
+
+Nu zic să arunci plugul. Zic doar... gândește-te."</div>
+    </div>
+  </div>
+
+  <!-- G6 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">G6</span>
+      <h3>„Dzik — numele amuzant, treaba serioasă"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">15 sec</span>
+        <span class="tag tag-type">Umor pe nume</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Zâmbește la cameră</div>
+      <div class="script-text">„Dzik. Da, așa se cheamă.
+Nu întrebați de ce, întrebați ce face.
+
+<em>[Se întoarce spre utilaj, serioasă]</em>
+11 cuțite. 2.6 metri. 870 de kile de fier pur.
+Sfărâmă, afânează, nivelează.
+
+Dzik. Nume ciudat, treabă serioasă."</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════ SECȚIUNEA 5: AFIR ═══════════════════════════════════ -->
+<div class="section-header">
+  <div class="section-num">Secțiunea 5</div>
+  <h2>Fonduri Europene — AFIR DR-14</h2>
+  <p class="section-desc">Submăsura 4.1 AFIR — până la 85% fonduri nerambursabile pentru utilaje agricole noi. Sesiune deschisă.</p>
+</div>
+
+<div class="scripts-body">
+
+  <!-- F1 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">F1</span>
+      <h3>„85% din utilaj — GRATIS?"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">25 sec</span>
+        <span class="tag tag-type">Hook puternic pe bani</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Uimită exagerat la cameră</div>
+      <div class="script-text">„Imaginează-ți că vrei un utilaj de 5.000 de euro.
+Și plătești doar 750.
+
+Nu e glumă. E AFIR DR-14.
+Fonduri nerambursabile de până la 85%
+pentru utilaje agricole noi.
+
+Grape, cultivatoare, combinatoare, semănători —
+TOATE sunt eligibile.
+
+La Agro Salso îți facem oferta conformă AFIR
+în maxim 24 de ore. Sună-mă."</div>
+    </div>
+  </div>
+
+  <!-- F2 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">F2</span>
+      <h3>„Cine poate accesa fonduri AFIR?"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">30 sec</span>
+        <span class="tag tag-type">Educativ structurat</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Numără pe degete</div>
+      <div class="script-text">„Cine poate accesa fonduri DR-14? Hai:
+
+UNU — Ferme mici și mijlocii.
+DOI — PFA, II sau IF agricole.
+TREI — Trebuie să ai minimum 8.000 de euro producție standard.
+
+Ce poți cumpăra?
+Utilaje agricole NOI. Grape cu discuri, cultivatoare,
+combinatoare, semănători, subsoliere.
+
+Cât primești?
+Până la 85% din valoare. Fonduri NERAMBURSABILE.
+
+La noi primești ofertă conformă, factură proformă,
+fișă tehnică — tot ce-ți trebuie pentru dosar.
+
+0742 936 959."</div>
+    </div>
+  </div>
+
+  <!-- F3 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">F3</span>
+      <h3>„3 greșeli cu AFIR"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">25 sec</span>
+        <span class="tag tag-type">Educativ cu hook negativ</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Serioasă</div>
+      <div class="script-text">„Trei greșeli pe care le fac fermierii cu AFIR:
+
+UNU — Depun târziu. Cine depune primul, are prioritate.
+Bugetul e limitat.
+
+DOI — Nu au oferte conforme de la dealeri.
+Și dosarul se respinge.
+
+TREI — Nu știu că pot accesa bani și pentru grape,
+cultivatoare, combinatoare — nu doar pentru tractoare.
+
+Nu face aceste greșeli. Sună-mă,
+te ajut cu oferta în 24 de ore."</div>
+    </div>
+  </div>
+
+  <!-- F4 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">F4</span>
+      <h3>„Nu-ți permiți? Ba da."</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Hook motivational</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Direct la cameră</div>
+      <div class="script-text">„«Nu-mi permit utilaje noi.»
+
+Asta aud de 10 ori pe săptămână.
+Dar ai auzit de DR-14?
+
+Statul îți dă până la 85% din bani.
+Tu pui restul.
+
+Un Mamut 2.5 cu AFIR te costă practic
+cât un utilaj second hand.
+
+Doar că ăsta e NOU. Cu garanție.
+Hai să facem calculul împreună."</div>
+    </div>
+  </div>
+
+  <!-- F5 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">F5</span>
+      <h3>„Ce documente îți facem noi"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Serviciu concret</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">La birou, cu hârtii / sau lângă utilaj cu clipboard</div>
+      <div class="script-text">„Dacă depui proiect AFIR, de la noi primești:
+
+<em>[Numără]</em>
+— Ofertă conformă cerințelor AFIR.
+— Factură proformă cu specificații complete.
+— Fișa tehnică oficială Dexwal.
+— Catalog produse.
+
+Tot dosarul tehnic, pregătit.
+În maxim 24 de ore de la apel.
+
+Tu te ocupi de restul dosarului,
+noi ne ocupăm de partea cu utilajele."</div>
+    </div>
+  </div>
+
+  <!-- F6 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">F6</span>
+      <h3>„Fonduri europene pe înțelesul tuturor"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">30 sec</span>
+        <span class="tag tag-type">Simplificat, accesibil</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Stă pe un utilaj sau lângă el, relaxată</div>
+      <div class="script-text">„Hai să-ți explic AFIR în 30 de secunde.
+Fără termeni complicați.
+
+Statul zice: «Vrei utilaje noi? Îți dau eu banii. Aproape toți.»
+
+Tu trebuie doar să:
+1. Ai o fermă sau un PFA agricol.
+2. Depui un dosar cu oferte de la dealeri.
+3. Aștepți aprobarea.
+
+Dacă e aprobat — cumperi utilajul,
+statul îți dă înapoi până la 85% din bani.
+
+Sună pe la noi, te ajutăm cu ofertele.
+E mai simplu decât crezi."</div>
+    </div>
+  </div>
+
+  <!-- F7 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">F7</span>
+      <h3>„Sesiunea e DESCHISĂ — nu mai aștepta"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">15 sec</span>
+        <span class="tag tag-type">Urgency</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Alertă, energică</div>
+      <div class="script-text">„DR-14 e DESCHIS. Chiar acum.
+
+108 milioane de euro buget.
+Cine depune primul — are prioritate.
+
+Nu mai sta pe gânduri.
+Sună-mă: 0742 936 959.
+Îți fac oferta azi."</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════ SECȚIUNEA 6: SUBSOLIERE ═══════════════════════════════════ -->
+<div class="section-header">
+  <div class="section-num">Secțiunea 6</div>
+  <h2>Subsoliere — Raptor, Kret</h2>
+  <p class="section-desc">Raptor = subsolier greu (3m, 180-240 CP). Kret = subsolier versatil (1-5 dinți, 30-140 CP).</p>
+</div>
+
+<div class="scripts-body">
+
+  <!-- S1 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">S1</span>
+      <h3>„De ce trebuie să decompactezi solul"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">25 sec</span>
+        <span class="tag tag-type">Educativ</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Lângă Kret, arată spre dinți</div>
+      <div class="script-text">„Dacă recolta ta scade și nu înțelegi de ce —
+s-ar putea ca solul să fie compactat.
+
+Rădăcinile nu mai pot pătrunde.
+Apa nu se mai infiltrează.
+Plantele suferă.
+
+Soluția? Subsolierul.
+Kret-ul ăsta sparge stratul compactat la 60 de centimetri.
+
+De la 1 dinte — 30 de cai putere —
+până la 5 dinți — 140 de cai.
+
+Întreabă-mă de preț. E mai ieftin decât o recoltă proastă."</div>
+    </div>
+  </div>
+
+  <!-- S2 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">S2</span>
+      <h3>„Raptor — pentru ferme mari"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Wow factor</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Lângă Raptor, utilajul e masiv</div>
+      <div class="script-text">„Ăsta e Raptor. Subsolier.
+3 metri lățime. 7 cuțite. 1.890 de kilograme.
+
+Necesită tractor de 180-240 de cai.
+Dar ce face? Sparge tot. La 50 de centimetri adâncime.
+
+Are protecție hidraulică NON-STOP.
+Dacă dă de piatră — se retrage singur.
+
+Raptor. Numele spune tot."</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════ SECȚIUNEA 7: BONUS ═══════════════════════════════════ -->
+<div class="section-header">
+  <div class="section-num">Secțiunea 7</div>
+  <h2>Clipuri Generale / Personalitate</h2>
+  <p class="section-desc">Brand awareness, behind-the-scenes, trust-building, FAQ-uri și serii de conținut.</p>
+</div>
+
+<div class="scripts-body">
+
+  <!-- B1 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">B1</span>
+      <h3>„Bine ai venit la Agro Salso"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">20 sec</span>
+        <span class="tag tag-type">Intro / brand awareness</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">La intrarea pe DN79, arată curtea</div>
+      <div class="script-text">„Bine ai venit la Agro Salso!
+Suntem pe DN79, în Mădăras, județul Bihor.
+
+De 13 ani vindem utilaje agricole.
+Grape cu discuri, cultivatoare, combinatoare,
+subsoliere, semănători.
+
+Intră, uită-te, pune întrebări.
+Nu mușcăm. Utilajele... poate."
+
+<em>[Zâmbește]</em></div>
+    </div>
+  </div>
+
+  <!-- B2 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">B2</span>
+      <h3>„De ce să cumperi de la noi"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">25 sec</span>
+        <span class="tag tag-type">Trust / autenticitate</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Sinceră la cameră</div>
+      <div class="script-text">„De ce să vii la Agro Salso și nu la un dealer mare?
+
+Simplu.
+— La noi nu ești un număr de comandă. Vorbești cu MINE.
+— Îți arăt utilajul, îți explic, te sfătuiesc sincer.
+— Dacă nu e pentru tine, îți zic.
+
+Suntem aici de 13 ani. Nu de ieri.
+Și ne cunoaștem toți fermierii din zonă.
+
+DN79, Mădăras. Treci pe la noi."</div>
+    </div>
+  </div>
+
+  <!-- B3 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">B3</span>
+      <h3>„Piese de schimb — pe stoc"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">15 sec</span>
+        <span class="tag tag-type">Serviciu</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">În depozit, lângă rafturi cu piese</div>
+      <div class="script-text">„Ți s-a stricat ceva? Nu mai funcționează o piesă?
+
+La noi ai piese de schimb PE STOC.
+Nu aștepți săptămâni. Vii, iei, pleci.
+
+Piese pentru utilaje Dexwal și nu numai.
+0742 936 959."</div>
+    </div>
+  </div>
+
+  <!-- B4 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">B4</span>
+      <h3>„Ce fac eu într-o zi normală"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">30 sec</span>
+        <span class="tag tag-type">Behind-the-scenes</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Secvențe rapide din zi</div>
+      <div class="script-text">„7 dimineața — deschid porțile.
+<em>[Filmare poartă]</em>
+
+8 — vine primul client. Vrea Mamut 3.0.
+<em>[Lângă utilaj cu client]</em>
+
+10 — fac o ofertă AFIR. Documente, specificații.
+<em>[La birou]</em>
+
+12 — un fermier sună: «Ai piese pentru disc 510?»
+Da, am.
+<em>[La telefon]</em>
+
+16 — vine un tractor să ridice o grapă.
+<em>[Filmare livrare]</em>
+
+Asta e o zi la Agro Salso.
+Nicio zi nu e la fel. Și îmi place."</div>
+    </div>
+  </div>
+
+  <!-- B5 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">B5</span>
+      <h3>„Cea mai des pusă întrebare"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">15 sec</span>
+        <span class="tag tag-type">FAQ amuzant</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Râde</div>
+      <div class="script-text">„Cea mai des pusă întrebare:
+«Dar tractoare aveți?»
+
+NU. Nu vindem tractoare.
+Vindem tot ce se ATAȘEAZĂ la tractor.
+
+Grape, cultivatoare, combinatoare, semănători,
+subsoliere, tocătoare.
+
+Deci dacă ai tractor dar n-ai cu ce lucra —
+sună-mă."</div>
+    </div>
+  </div>
+
+  <!-- B6 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">B6</span>
+      <h3>„Testul cel mai simplu"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">15 sec</span>
+        <span class="tag tag-type">Engagement / CTA</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Directă la cameră</div>
+      <div class="script-text">„Vrei să testezi un utilaj Dexwal?
+Nici o problemă. Vino cu tractorul.
+
+Serios. Atașăm utilajul la tractorul tău,
+și vezi cum merge pe loc.
+
+Nu vindem poze de catalog.
+Vindem fier pe care îl poți testa.
+
+DN79, Mădăras."</div>
+    </div>
+  </div>
+
+  <!-- B7 -->
+  <div class="script-card multi-clip">
+    <div class="script-card-header">
+      <span class="script-id">B7</span>
+      <h3>„Știai că...?" — Serie</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">10 sec/clip</span>
+        <span class="tag tag-type">Serie clipuri scurte</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="clip-block">
+        <div class="clip-label">CLIP 1</div>
+        <div class="script-text">„Știai că... discurile Mamut sunt din oțel BORON?
+Cel mai dur tip de oțel pentru utilaje agricole.
+De-aia nu se tocesc pe argilă grea."</div>
+      </div>
+      <div class="clip-block">
+        <div class="clip-label">CLIP 2</div>
+        <div class="script-text">„Știai că... Żuk vine în 8 dimensiuni?
+De la 1 metru la 2.4 metri.
+Cea mai mică grapă merge cu tractor de 20 de cai."</div>
+      </div>
+      <div class="clip-block">
+        <div class="clip-label">CLIP 3</div>
+        <div class="script-text">„Știai că... Żubr poate cultiva ȘI semăna în aceeași trecere?
+O singură trecere = mai puțină motorină + sol mai sănătos."</div>
+      </div>
+      <div class="clip-block">
+        <div class="clip-label">CLIP 4</div>
+        <div class="script-text">„Știai că... prin AFIR poți primi 85% din bani înapoi
+pe un utilaj NOU? Grape, cultivatoare, combinatoare — toate."</div>
+      </div>
+      <div class="clip-block">
+        <div class="clip-label">CLIP 5</div>
+        <div class="script-text">„Știai că... Agro Salso e pe DN79 de 13 ani?
+Și că poți testa orice utilaj cu tractorul tău, pe loc?"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B8 -->
+  <div class="script-card multi-clip">
+    <div class="script-card-header">
+      <span class="script-id">B8</span>
+      <h3>„Reply la comentarii"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">15 sec</span>
+        <span class="tag tag-type">Reply format (template)</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Text pe ecran cu comentariul/întrebarea, apoi răspuns direct la cameră, natural</div>
+      <div class="clip-block">
+        <div class="clip-label">EXEMPLU 1</div>
+        <div class="script-text">„Cineva a întrebat: «Merge Mamut cu tractor de 80 de cai?»
+DA! Mamut 2.5 merge de la 70 de cai. Perfect pentru tine."</div>
+      </div>
+      <div class="clip-block">
+        <div class="clip-label">EXEMPLU 2</div>
+        <div class="script-text">„Cineva a întrebat: «Faceți și transport?»
+Da. Livrăm din Mădăras. Discutăm costul la telefon."</div>
+      </div>
+      <div class="clip-block">
+        <div class="clip-label">EXEMPLU 3</div>
+        <div class="script-text">„Cineva a întrebat: «Aveți și piese?»
+DA. Piese pe stoc. Vii, iei, pleci."</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════ SECȚIUNEA 8: WEEDER & SPREADER ═══════════════════════════════════ -->
+<div class="section-header">
+  <div class="section-num">Secțiunea 8</div>
+  <h2>Weeder (Prășitoare) & Spreader (Împrăștietoare)</h2>
+  <p class="section-desc">Produse complementare — prășitoare mecanică și împrăștietoare de îngrășământ/semințe.</p>
+</div>
+
+<div class="scripts-body">
+
+  <!-- W1 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">W1</span>
+      <h3>„Buruienile nu au nicio șansă"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">15 sec</span>
+        <span class="tag tag-type">Fun + produs</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Lângă Weeder</div>
+      <div class="script-text">„Buruieni între rânduri? Prășitoarea Dexwal.
+
+Elimină buruienile mecanic — fără chimicale.
+Nivelează mușturoaie. Scarifică solul.
+
+De la 1.5 la 12 metri lățime.
+Da, DOUĂSPREZECE metri.
+
+Merge și cu tractor mic, și cu tractor mare."</div>
+    </div>
+  </div>
+
+  <!-- SP1 -->
+  <div class="script-card">
+    <div class="script-card-header">
+      <span class="script-id">SP1</span>
+      <h3>„Împrăștietorul — simplu și eficient"</h3>
+      <div class="script-tags">
+        <span class="tag tag-duration">15 sec</span>
+        <span class="tag tag-type">Produs accesibil</span>
+      </div>
+    </div>
+    <div class="script-card-body">
+      <div class="stage-direction">Lângă Spreader portocaliu</div>
+      <div class="script-text">„Împrăștietor Dexwal. Simplitate maximă.
+
+Împrăștii îngrășământ, semințe, var, sare pe gheață —
+ce vrei tu.
+
+De la 200 la 600 de litri capacitate.
+Montaj universal, transmisie fără întreținere.
+
+Și costă mai puțin decât crezi."</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════ CHECKLIST ═══════════════════════════════════ -->
+<div class="checklist-section">
+  <h2>Checklist Filmări</h2>
+
+  <div class="checklist-group">
+    <h3>Echipament necesar</h3>
+    <div class="checklist-item"><div class="checkbox"></div> Telefon cu cameră bună (iPhone sau Samsung recent)</div>
+    <div class="checklist-item"><div class="checkbox"></div> Microfon lavalieră wireless (sunetul e cel mai important!)</div>
+    <div class="checklist-item"><div class="checkbox"></div> Trepied / stabilizator (sau prieten cu mâna fermă)</div>
+    <div class="checklist-item"><div class="checkbox"></div> Baterie externă pentru telefon</div>
+  </div>
+
+  <div class="checklist-group">
+    <h3>Filmări de bază (obligatorii)</h3>
+    <div class="checklist-item"><div class="checkbox"></div> Vorbire la cameră — minim 3 locații diferite</div>
+    <div class="checklist-item"><div class="checkbox"></div> Close-up-uri pe fiecare utilaj (discuri, dinți, tăvălugi, mărci)</div>
+    <div class="checklist-item"><div class="checkbox"></div> Planuri largi ale curții cu utilaje</div>
+    <div class="checklist-item"><div class="checkbox"></div> B-roll: soare prin fier, mâini pe metal, reflexii pe discuri</div>
+  </div>
+
+  <div class="checklist-group">
+    <h3>Filmări bonus (dacă e timp)</h3>
+    <div class="checklist-item"><div class="checkbox"></div> Utilaj atașat la tractor</div>
+    <div class="checklist-item"><div class="checkbox"></div> Bloopers / momente amuzante</div>
+    <div class="checklist-item"><div class="checkbox"></div> „Tur al curții" — arată fiecare utilaj</div>
+    <div class="checklist-item"><div class="checkbox"></div> La birou — completând o ofertă AFIR</div>
+  </div>
+
+  <div class="checklist-group">
+    <h3>Sfaturi editare</h3>
+    <div class="checklist-item"><div class="checkbox"></div> Text overlay pe hook (primele 2 sec)</div>
+    <div class="checklist-item"><div class="checkbox"></div> Subtitrări pe tot clipul (50%+ oameni au telefonul pe mute)</div>
+    <div class="checklist-item"><div class="checkbox"></div> Contact la final: 0742 936 959 | DN79, Mădăras</div>
+    <div class="checklist-item"><div class="checkbox"></div> Muzică trending dar nu prea tare — vocea e principală</div>
+    <div class="checklist-item"><div class="checkbox"></div> Taguri: @agrosalso + hashtag-uri relevante</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ FOOTER ═══════════════════════════════════ -->
+<div class="page-footer">
+  <strong>Agro Salso × Epic Digital Hub</strong> · Scripturi Video Martie 2026 · 50+ clipuri gata de filmat<br>
+  Contact: 0742 936 959 · DN79, Mădăras 417330, Bihor
+</div>
+
+</body>
+</html>

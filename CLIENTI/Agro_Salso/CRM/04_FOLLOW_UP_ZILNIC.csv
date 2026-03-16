@@ -1,0 +1,4 @@
+Data,Oră planificată,Cine trebuie sunat,Telefon,Motiv apel,Tip (Client existent / Lead nou / AFIR),Prioritate (Urgentă / Normală / Scăzută),Rezultat apel,Următoarea acțiune,Făcut (Da/Nu)
+"2026-02-25","08:00","Gheorghe Moldovan","07XX XXX XXX","Întreabă dacă are nevoie de piese + recomandări","Client existent","Normală","A răspuns — vecinul caută cultivator","Sună vecinul Ion (07XX XXX XXX)","Da"
+"2026-02-25","09:00","Ionel Popa (lead Meta)","07XX XXX XXX","Follow-up lead — grapă Mamut 3.0","Lead nou","Urgentă","Vine sâmbătă la sediu","Pregătește Mamut 3.0 pentru demonstrație","Da"
+"2026-02-25","10:00","Maria Ionescu (consultant AFIR)","07XX XXX XXX","Întreabă dacă are fermieri care caută oferte utilaje","AFIR","Urgentă","Are 3 fermieri care depun proiecte — trimite contacte","Sună cei 3 fermieri mâine","Da"

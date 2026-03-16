@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>thermX — Agrement Tehnic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6B00;
+      --orange-light: #FFF3E8;
+      --blue: #1B3A5C;
+      --blue-light: #E8F0F8;
+      --green: #2E7D32;
+      --green-light: #E8F5E9;
+      --text: #1a1a1a;
+      --text-muted: #555;
+      --border: #e0e0e0;
+      --bg: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    @page {
+      size: A4;
+      margin: 20mm 18mm 25mm 18mm;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 16px;
+      border-bottom: 3px solid var(--orange);
+      margin-bottom: 28px;
+    }
+
+    .doc-header__logo img { height: 52px; }
+
+    .doc-header__company {
+      text-align: right;
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .doc-header__company strong {
+      color: var(--text);
+      font-size: 9pt;
+    }
+
+    .doc-title {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .doc-title h1 {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 22pt;
+      font-weight: 800;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .doc-title .subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 12pt;
+      font-weight: 600;
+      color: var(--orange);
+      text-transform: uppercase;
+    }
+
+    .doc-title .doc-ref {
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .section-title {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 12pt;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 8px 14px;
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      margin: 24px 0 12px;
+    }
+
+    .section-title span.num {
+      color: var(--orange);
+      margin-right: 6px;
+    }
+
+    .sub-title {
+      font-weight: 600;
+      font-size: 10.5pt;
+      color: var(--text);
+      margin: 14px 0 6px;
+    }
+
+    p { margin-bottom: 10px; }
+
+    .lead {
+      font-size: 11pt;
+      font-weight: 600;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .highlight-box {
+      background: var(--orange-light);
+      border-left: 4px solid var(--orange);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .info-box {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .info-box p { margin-bottom: 4px; }
+
+    .safe-box {
+      background: var(--green-light);
+      border-left: 4px solid var(--green);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .safe-box strong { color: var(--green); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 10pt;
+    }
+
+    th, td {
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--blue);
+      color: #fff;
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 600;
+      font-size: 9.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    tr:nth-child(even) { background: #f8f9fa; }
+
+    td:first-child { font-weight: 500; }
+
+    .table-value { font-weight: 600; color: var(--text); }
+
+    ul, ol {
+      margin: 8px 0 12px 22px;
+    }
+
+    li { margin-bottom: 5px; }
+
+    .cols-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 14px 0;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 10pt;
+    }
+
+    .field-row__label {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 9.5pt;
+    }
+
+    .field-row__value { font-weight: 500; }
+
+    .validity-banner {
+      background: linear-gradient(135deg, var(--blue), #2a5580);
+      color: #fff;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    .validity-banner__label {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 9pt;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      opacity: 0.8;
+    }
+
+    .validity-banner__dates {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 16pt;
+      font-weight: 800;
+      margin-top: 6px;
+    }
+
+    .validity-banner__note {
+      font-size: 8.5pt;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    .doc-footer {
+      margin-top: 32px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8pt;
+      color: var(--text-muted);
+    }
+
+    .doc-footer a {
+      color: var(--orange);
+      text-decoration: none;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    .signature-block {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .signature-block__item {
+      border-top: 2px solid var(--blue);
+      padding-top: 12px;
+    }
+
+    .signature-block__role {
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 700;
+      font-size: 9pt;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .signature-block__name { font-weight: 600; font-size: 10pt; }
+    .signature-block__detail { font-size: 8.5pt; color: var(--text-muted); }
+
+    @media print {
+      body { font-size: 9.5pt; line-height: 1.45; }
+      .doc-header { margin-bottom: 16px; padding-bottom: 12px; }
+      .section-title { margin-top: 16px; margin-bottom: 8px; page-break-after: avoid; }
+      .no-print { display: none; }
+      .page-break { page-break-before: always; }
+      a { color: var(--text) !important; text-decoration: none; }
+      table { page-break-inside: avoid; }
+      tr { page-break-inside: avoid; }
+      .highlight-box, .info-box, .safe-box { page-break-inside: avoid; }
+      .validity-banner { page-break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .cols-2 { page-break-inside: avoid; }
+      p { orphans: 3; widows: 3; }
+      h2, h3 { page-break-after: avoid; }
+    }
+
+    @media screen {
+      body {
+        max-width: 210mm;
+        margin: 20px auto;
+        padding: 30px 28px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border-radius: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Nano Revolution SRL</strong><br>
+      Str. Ogorului Nr. 3, Oradea<br>
+      Jud. Bihor, 410554, România<br>
+      <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a><br>
+      +40 771 445 577
+    </div>
+  </header>
+
+  <!-- ═══ TITLE ═══ -->
+  <div class="doc-title">
+    <h1>Agrement Tehnic</h1>
+    <div class="subtitle">Evaluare Tehnică pentru Produse de Construcții</div>
+    <div class="doc-ref">Ref. AT-THERMX-2026-001 &nbsp;|&nbsp; Rev. 01 &nbsp;|&nbsp; Data: 08.03.2026</div>
+  </div>
+
+  <div class="validity-banner">
+    <div class="validity-banner__label">Perioada de valabilitate</div>
+    <div class="validity-banner__dates">08.03.2026 — 08.03.2031</div>
+    <div class="validity-banner__note">5 ani de la data emiterii, cu posibilitate de prelungire</div>
+  </div>
+
+
+  <!-- ═══ 1. OBIECT ═══ -->
+  <div class="section-title"><span class="num">1.</span> Obiectul agrementului tehnic</div>
+
+  <p class="lead">Prezentul agrement tehnic stabilește aptitudinea de utilizare în construcții a produsului <strong>thermX Insulation Coating</strong> — membrană termoizolantă și hidroizolantă pe bază de nanotehnologie ceramică.</p>
+
+  <div class="field-row">
+    <div class="field-row__label">Produs evaluat:</div>
+    <div class="field-row__value"><strong>thermX Insulation Coating</strong></div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Producător / Titular:</div>
+    <div class="field-row__value"><strong>Nano Revolution SRL</strong> — Oradea, jud. Bihor</div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Categoria de produs:</div>
+    <div class="field-row__value">Material compozit cu funcție de membrană termoizolantă și hidroizolantă</div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Standard de referință:</div>
+    <div class="field-row__value">EN 15824:2017 — Tencuieli pe bază de lianți organici</div>
+  </div>
+
+
+  <!-- ═══ 2. DESCRIERE ═══ -->
+  <div class="section-title"><span class="num">2.</span> Descrierea produsului</div>
+
+  <p>thermX este un material compozit fluid, pe bază de apă, cu funcție de membrană termoizolantă și hidroizolantă. Compoziția include:</p>
+
+  <ul>
+    <li><strong>Liant stiren-acrilic</strong> — ~20% stiren (duritate) + ~80% acrilic (elasticitate, rezistență la intemperii)</li>
+    <li><strong>Microsfere ceramice</strong> — umplute cu gaz rarefiat, reprezentând ~75% din volumul materialului uscat — responsabile pentru performanța termoizolantă</li>
+    <li><strong>Aditivi bioprotectori</strong> — biocizi, conservanți, antifungici, agenți antiîngheț</li>
+  </ul>
+
+  <p>Materialul se aplică sub formă lichidă (pensulă, trafalet sau pistol airless) și formează o membrană continuă, elastică și aderentă, cu grosime de 0,5–3,5 mm. Acționează simultan asupra celor trei mecanisme de transfer termic: conducție, radiație infraroșie și convecție.</p>
+
+  <div class="highlight-box">
+    <p><strong>Proprietăți combinate într-un singur material:</strong> izolație termică + impermeabilitate + protecție anticorozivă. Produsul este ecologic (bază de apă) și necombustibil în stare uscată (Clasa A).</p>
+  </div>
+
+
+  <!-- ═══ 3. DOMENIU ═══ -->
+  <div class="section-title"><span class="num">3.</span> Domeniu de utilizare</div>
+
+  <p class="sub-title">3.1 Utilizări aprobate</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:35%">Domeniu de aplicare</th>
+        <th style="width:20%">Grosime recom.</th>
+        <th>Substraturi compatibile</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Fațade exterioare (clădiri noi și renovări)</td>
+        <td>1,0–1,5 mm</td>
+        <td>Beton, tencuială, cărămidă, BCA, lemn, metal</td>
+      </tr>
+      <tr>
+        <td>Pereți interiori</td>
+        <td>0,5–1,0 mm</td>
+        <td>Tencuială, gips-carton, ceramică, finisaje existente</td>
+      </tr>
+      <tr>
+        <td>Acoperișuri și terase</td>
+        <td>1,0–1,5 mm</td>
+        <td>Bitumos, metal, ceramică, membrane EPDM/PVC</td>
+      </tr>
+      <tr>
+        <td>Plafoane</td>
+        <td>0,5–1,0 mm</td>
+        <td>Tencuială, OSB, lemn, PVC, plafoane false</td>
+      </tr>
+      <tr>
+        <td>Pardoseli</td>
+        <td>1,0 mm</td>
+        <td>Beton, ceramică, metal, compozit, lemn</td>
+      </tr>
+      <tr>
+        <td>Instalații HVAC / conducte</td>
+        <td>0,5–1,5 mm</td>
+        <td>Metal, fitinguri, schimbătoare de căldură</td>
+      </tr>
+      <tr>
+        <td>Punți termice</td>
+        <td>1,0–2,0 mm</td>
+        <td>Beton, metal (stâlpi, grinzi, balcoane, cornișe)</td>
+      </tr>
+      <tr>
+        <td>Aplicații industriale</td>
+        <td>0,5–3,5 mm</td>
+        <td>Conducte petrol/gaze, rezervoare, echipamente</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="sub-title">3.2 Restricții de utilizare</p>
+  <ul>
+    <li>Nu se aplică pe suprafețe grase, uleioase sau acoperite cu teflon</li>
+    <li>Nu se aplică la temperaturi ale suprafeței sub +1°C sau peste +150°C</li>
+    <li>Nu se aplică în condiții de ploaie, ceață sau umiditate relativă peste 80%</li>
+    <li>Pentru diferențe de temperatură peste 35°C cu umiditate peste 70%, se recomandă sistem combinat (thermX + spumă poliuretanică)</li>
+  </ul>
+
+
+  <!-- ═══ PAGE 2 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Agrement Tehnic</strong> — thermX Insulation Coating &nbsp;|&nbsp; Pag. 2/3
+    </div>
+  </header>
+
+
+  <!-- ═══ 4. PERFORMANȚĂ ═══ -->
+  <div class="section-title"><span class="num">4.</span> Caracteristici de performanță</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:42%">Caracteristică</th>
+        <th style="width:15%">Unitate</th>
+        <th style="width:20%">Valoare</th>
+        <th>Metodă de testare</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Conductivitate termică la 20°C</td>
+        <td>W/m·K</td>
+        <td class="table-value">0,001</td>
+        <td>СНиП 41-103-2000</td>
+      </tr>
+      <tr>
+        <td>Coeficient de emisie termică</td>
+        <td>W/m²·°C</td>
+        <td class="table-value">1,29–2,2</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Reflexie IR</td>
+        <td>%</td>
+        <td class="table-value">85</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Densitate strat uscat</td>
+        <td>kg/m³</td>
+        <td class="table-value">380–410</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Densitate stare lichidă</td>
+        <td>kg/m³</td>
+        <td class="table-value">470–590</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Reacție la foc (polimerizat)</td>
+        <td>Clasă</td>
+        <td class="table-value">Clasa A</td>
+        <td>EN 15824</td>
+      </tr>
+      <tr>
+        <td>Aderență pe beton</td>
+        <td>MPa</td>
+        <td class="table-value">≥ 1,84</td>
+        <td>EN 1542</td>
+      </tr>
+      <tr>
+        <td>Aderență pe metal</td>
+        <td>MPa</td>
+        <td class="table-value">≥ 1,53</td>
+        <td>EN 1542</td>
+      </tr>
+      <tr>
+        <td>Rezistență la tracțiune</td>
+        <td>MPa</td>
+        <td class="table-value">2,0 → 3,0</td>
+        <td>EN ISO 527</td>
+      </tr>
+      <tr>
+        <td>Alungire relativă la rupere</td>
+        <td>%</td>
+        <td class="table-value">≥ 12</td>
+        <td>EN ISO 527</td>
+      </tr>
+      <tr>
+        <td>Absorbție de apă</td>
+        <td>g/cm³</td>
+        <td class="table-value">≤ 0,03</td>
+        <td>EN ISO 62</td>
+      </tr>
+      <tr>
+        <td>Permeabilitate la vapori</td>
+        <td>mg/m·h·Pa</td>
+        <td class="table-value">0,0014</td>
+        <td>EN ISO 7783</td>
+      </tr>
+      <tr>
+        <td>Temperatură de exploatare</td>
+        <td>°C</td>
+        <td class="table-value">−60 → +260</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Durabilitate garantată</td>
+        <td>ani</td>
+        <td class="table-value">≥ 20</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══ 5. EFICIENȚĂ ═══ -->
+  <div class="section-title"><span class="num">5.</span> Eficiență energetică documentată</div>
+
+  <p>Pe baza studiilor efectuate pe clădiri rezidențiale, performanța termică în funcție de grosimea stratului:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Grosime strat aplicat</th>
+        <th>Reducere pierderi de căldură</th>
+        <th>Observații</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="table-value">0,25 mm</td>
+        <td class="table-value">~15%</td>
+        <td>Aplicație minimală, un singur strat</td>
+      </tr>
+      <tr>
+        <td class="table-value">0,50 mm</td>
+        <td class="table-value">~25%</td>
+        <td>Grosime standard per strat</td>
+      </tr>
+      <tr>
+        <td class="table-value">1,00 mm</td>
+        <td class="table-value">~40%</td>
+        <td>Aplicație rezidențială tipică (2 straturi)</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══ 6. CONDIȚII ═══ -->
+  <div class="section-title"><span class="num">6.</span> Condiții de punere în operă</div>
+
+  <div class="cols-2">
+    <div>
+      <p class="sub-title">6.1 Pregătirea suprafeței</p>
+      <ul>
+        <li>Suprafață curată, uscată, fără praf sau grăsimi</li>
+        <li>Suprafețe metalice: grunduire prealabilă</li>
+        <li>Beton: maturare completă (min. 28 zile), umiditate reziduală &lt;5%</li>
+      </ul>
+    </div>
+    <div>
+      <p class="sub-title">6.2 Aplicare</p>
+      <ul>
+        <li>Metode: pensulă, trafalet, pistol airless</li>
+        <li>Grosime per strat: 0,5 mm</li>
+        <li>Uscare între straturi: min. 24h (20°C, 60% UR)</li>
+        <li>Consum: ~1 L/m² per strat de 0,5 mm</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="sub-title">6.3 Condiții ambientale la aplicare</p>
+  <ul>
+    <li>Temperatura suprafeței: +1°C → +150°C</li>
+    <li>Temperatura ambientală: +5°C → +35°C</li>
+    <li>Umiditate relativă: &lt;80%</li>
+    <li>Fără precipitații sau condensare pe suprafață</li>
+  </ul>
+
+
+  <!-- ═══ PAGE 3 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Agrement Tehnic</strong> — thermX Insulation Coating &nbsp;|&nbsp; Pag. 3/3
+    </div>
+  </header>
+
+
+  <!-- ═══ 7. DURABILITATE ═══ -->
+  <div class="section-title"><span class="num">7.</span> Durabilitate și garanție</div>
+
+  <div class="safe-box">
+    <p><strong>Garanție producător: 20 de ani</strong></p>
+    <p>Durabilitate documentată: peste 35 de ani (pe baza utilizării în sectoarele petrochimic, naval și automotive).</p>
+  </div>
+
+  <ul>
+    <li>Rezistența la tracțiune crește în timp — de la 2,0 MPa la aplicare, la 3,0 MPa după polimerizare completă</li>
+    <li>Gradul de reflexie difuză: 93% la aplicare → 90% după 10 ani de îmbătrânire accelerată</li>
+    <li>Alungirea la rupere se menține peste 12% și după 10 ani de îmbătrânire accelerată</li>
+    <li>Materialul nu necesită întreținere periodică în condiții normale de utilizare</li>
+  </ul>
+
+
+  <!-- ═══ 8. CLASIFICARE ═══ -->
+  <div class="section-title"><span class="num">8.</span> Clasificare privind securitatea și mediul</div>
+
+  <div class="cols-2">
+    <div>
+      <p class="sub-title">Securitate</p>
+      <ul>
+        <li>Nu este clasificat ca amestec periculos (REACH)</li>
+        <li>Necombustibil în stare polimerizată (Clasa A)</li>
+        <li>Nu necesită protecție respiratorie specială</li>
+        <li>Netoxic la utilizare conformă</li>
+      </ul>
+    </div>
+    <div>
+      <p class="sub-title">Mediu</p>
+      <ul>
+        <li>Produs ecologic — pe bază de apă</li>
+        <li>Nu conține substanțe persistente, bioacumulative sau toxice (PBT)</li>
+        <li>Cod deșeu: 08 02 03 (suspensie apoasă cu ceramică)</li>
+        <li>Nu se descarcă în ape sau canalizare</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- ═══ 9. CONCLUZII ═══ -->
+  <div class="section-title"><span class="num">9.</span> Concluzii și aviz</div>
+
+  <div class="safe-box">
+    <p><strong>Aviz favorabil.</strong> Produsul <strong>thermX Insulation Coating</strong> este apt pentru utilizare în construcții, în domeniile de aplicare specificate la punctul 3, cu respectarea condițiilor de punere în operă de la punctul 6.</p>
+  </div>
+
+  <p>Prezentul agrement tehnic este valabil <strong>5 ani</strong> de la data emiterii, cu posibilitate de prelungire la cererea titularului, sub rezerva menținerii caracteristicilor de performanță declarate.</p>
+
+  <div class="highlight-box">
+    <p><strong>Obligațiile titularului:</strong> Nano Revolution SRL se obligă să mențină controlul intern al producției (FPC), să informeze organismul emitent asupra oricărei modificări a formulei sau procesului de fabricație, și să furnizeze certificatele de calitate per lot pentru fiecare livrare.</p>
+  </div>
+
+
+  <!-- ═══ SEMNĂTURI ═══ -->
+  <div class="signature-block">
+    <div class="signature-block__item">
+      <div class="signature-block__role">Titular Agrement</div>
+      <div class="signature-block__name">Alexandru Țucudean-Șușman</div>
+      <div class="signature-block__detail">Nano Revolution SRL</div>
+      <div class="signature-block__detail" style="margin-top:30px;">Semnătura: ________________________</div>
+    </div>
+    <div class="signature-block__item">
+      <div class="signature-block__role">Organism de Evaluare</div>
+      <div class="signature-block__name">________________________</div>
+      <div class="signature-block__detail">Nr. acreditare: ________</div>
+      <div class="signature-block__detail" style="margin-top:30px;">Semnătura: ________________________</div>
+    </div>
+  </div>
+
+
+  <!-- ═══ DISCLAIMER ═══ -->
+  <div class="divider"></div>
+
+  <p style="font-size: 8.5pt; color: var(--text-muted); line-height: 1.5;">
+    Prezentul agrement tehnic nu constituie o garanție a calității produsului. El exprimă avizul favorabil asupra aptitudinii de utilizare a produsului în domeniile menționate. Agrementul nu dispensa producătorul, proiectanții sau executanții de obligațiile și responsabilitățile ce le revin conform legislației în vigoare. Reproducerea integrală sau parțială a documentului se face doar cu acordul emitentului.
+  </p>
+
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="doc-footer">
+    <div>&copy; 2026 Nano Revolution SRL — Toate drepturile rezervate</div>
+    <div>
+      <a href="https://nanorevolution.ro">nanorevolution.ro</a> &nbsp;|&nbsp;
+      <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a>
+    </div>
+  </footer>
+
+</body>
+</html>

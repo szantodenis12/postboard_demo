@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>thermX — Prezentare Lansare 26.03.2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
+
+/* ═══════════════════════════════════════
+   SLIDE ENGINE
+   ═══════════════════════════════════════ */
+.deck{width:100vw;height:100vh;position:relative}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:60px 80px;
+  opacity:0;visibility:hidden;
+  transition:opacity .5s ease,visibility .5s ease;
+  background:#000;overflow:hidden;
+}
+.slide.center{align-items:center;text-align:center}
+.slide.active{opacity:1;visibility:visible}
+
+/* Animations triggered on active */
+.slide.active .fi{animation:fadeIn .7s ease forwards}
+.slide.active .fi-d1{animation:fadeIn .7s .15s ease forwards;opacity:0}
+.slide.active .fi-d2{animation:fadeIn .7s .3s ease forwards;opacity:0}
+.slide.active .fi-d3{animation:fadeIn .7s .5s ease forwards;opacity:0}
+.slide.active .fi-d4{animation:fadeIn .7s .7s ease forwards;opacity:0}
+.slide.active .fi-d5{animation:fadeIn .7s .9s ease forwards;opacity:0}
+.slide.active .pop{animation:popIn .8s .3s ease forwards;opacity:0}
+.slide.active .grow-bar{animation:growX 1.2s .4s ease forwards;transform:scaleX(0)}
+.slide.active .grow-h{animation:growY 1s .4s ease forwards;transform:scaleY(0)}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{opacity:0;transform:scale(.4)}60%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
+@keyframes growX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes growY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
+@keyframes flicker{0%{opacity:0}10%{opacity:.3}20%{opacity:0}40%{opacity:.6}50%{opacity:0}70%{opacity:.8}100%{opacity:1}}
+@keyframes ringFill{from{stroke-dashoffset:var(--circumference)}to{stroke-dashoffset:var(--target)}}
+
+/* ═══════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════ */
+.t-orb{font-family:'Orbitron',sans-serif}
+h1{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(40px,6vw,80px);line-height:1.05;letter-spacing:1px;text-transform:uppercase}
+h2{font-family:'Orbitron',sans-serif;font-weight:700;font-size:clamp(28px,4.5vw,64px);line-height:1.1;text-transform:uppercase}
+h3{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(18px,2.5vw,32px);line-height:1.3}
+.sub{font-family:'Inter',sans-serif;font-weight:400;font-size:clamp(14px,1.6vw,22px);color:#888;line-height:1.5;margin-top:12px}
+.overline{font-family:'Inter',sans-serif;font-weight:600;font-size:clamp(10px,1vw,14px);letter-spacing:4px;text-transform:uppercase;color:#555;margin-bottom:16px}
+.unit{font-family:'Inter',sans-serif;font-weight:500;font-size:clamp(14px,1.8vw,24px);color:#aaa;margin-top:4px}
+
+/* ═══════════════════════════════════════
+   WATERMARK (big background text)
+   ═══════════════════════════════════════ */
+.watermark{
+  position:absolute;font-family:'Orbitron',sans-serif;font-weight:900;
+  color:rgba(255,255,255,.04);font-size:clamp(80px,15vw,220px);
+  text-transform:uppercase;pointer-events:none;user-select:none;
+  line-height:.9;letter-spacing:-2px;
+}
+.wm-center{top:50%;left:50%;transform:translate(-50%,-50%)}
+.wm-left{top:50%;left:5%;transform:translateY(-50%)}
+.wm-right{top:50%;right:5%;transform:translateY(-50%)}
+.wm-top{top:8%;left:50%;transform:translateX(-50%)}
+
+/* ═══════════════════════════════════════
+   COLORS
+   ═══════════════════════════════════════ */
+.accent{color:#FF4500}
+.gray{color:#888}
+.dim{color:#555}
+.glow-text{text-shadow:0 0 30px rgba(255,69,0,.5),0 0 60px rgba(255,69,0,.2)}
+
+/* ═══════════════════════════════════════
+   BIG NUMBERS
+   ═══════════════════════════════════════ */
+.big-num{
+  font-family:'Orbitron',sans-serif;font-weight:900;
+  font-size:clamp(64px,14vw,200px);color:#FF4500;
+  line-height:.9;
+}
+.mid-num{
+  font-family:'Orbitron',sans-serif;font-weight:900;
+  font-size:clamp(48px,8vw,120px);color:#FF4500;
+  line-height:.9;
+}
+
+/* ═══════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════ */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:40px;width:100%;align-items:center}
+.row{display:flex;gap:30px;align-items:center;flex-wrap:wrap}
+.row-center{display:flex;gap:30px;align-items:center;justify-content:center;flex-wrap:wrap}
+.col{display:flex;flex-direction:column}
+.gap-sm{gap:8px}.gap-md{gap:16px}.gap-lg{gap:32px}
+.mb-sm{margin-bottom:12px}.mb-md{margin-bottom:24px}.mb-lg{margin-bottom:40px}
+.mt-md{margin-top:24px}.mt-lg{margin-top:40px}
+
+/* ═══════════════════════════════════════
+   BARS & CHARTS
+   ═══════════════════════════════════════ */
+.bar-wrap{width:100%;max-width:700px}
+.bar-row{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.bar-label{width:160px;text-align:right;font-size:14px;font-weight:600;color:#aaa;flex-shrink:0}
+.bar-track{flex:1;height:28px;background:#1a1a1a;border-radius:3px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:3px;transform-origin:left}
+.bar-val{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:700;color:#fff}
+.fill-orange{background:linear-gradient(90deg,#FF4500,#ff6633)}
+.fill-gray{background:#333}
+.fill-red{background:linear-gradient(90deg,#661111,#aa2222)}
+.fill-green{background:linear-gradient(90deg,#116633,#22aa44)}
+
+/* ═══════════════════════════════════════
+   CARDS
+   ═══════════════════════════════════════ */
+.card{
+  background:#0d0d0d;border:1px solid #222;border-radius:12px;
+  padding:28px 24px;text-align:center;flex:1;min-width:160px;
+  transition:border-color .3s;
+}
+.card:hover{border-color:#FF4500}
+.card-icon{font-size:28px;margin-bottom:12px;color:#FF4500;font-family:'Orbitron',sans-serif;font-weight:700}
+.card-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:6px}
+.card-desc{font-size:12px;color:#666;line-height:1.4}
+
+/* sector cards */
+.sector-card{
+  background:#0a0a0a;border:1px solid #1a1a1a;border-radius:8px;
+  padding:20px;flex:1;min-width:140px;
+}
+.sector-card h4{font-size:14px;font-weight:700;color:#FF4500;margin-bottom:8px;font-family:'Orbitron',sans-serif}
+.sector-card ul{list-style:none;padding:0}
+.sector-card li{font-size:12px;color:#888;padding:3px 0;padding-left:14px;position:relative}
+.sector-card li::before{content:'';position:absolute;left:0;top:9px;width:6px;height:6px;background:#FF4500;border-radius:50%;opacity:.5}
+
+/* ═══════════════════════════════════════
+   COMPARISON TABLE
+   ═══════════════════════════════════════ */
+.cmp-table{width:100%;max-width:900px;border-collapse:collapse;font-size:13px}
+.cmp-table th{padding:10px 14px;text-align:left;color:#555;font-weight:600;border-bottom:1px solid #222;font-size:11px;text-transform:uppercase;letter-spacing:1px}
+.cmp-table td{padding:10px 14px;border-bottom:1px solid #111;color:#aaa}
+.cmp-table .col-tx{color:#FF4500;font-weight:700}
+.cmp-table tr:hover td{background:#0a0a0a}
+
+/* ═══════════════════════════════════════
+   SPEC GRID (summary slide)
+   ═══════════════════════════════════════ */
+.spec-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+  width:100%;max-width:900px;
+}
+.spec-item{text-align:center;padding:16px}
+.spec-val{font-family:'Orbitron',sans-serif;font-weight:700;font-size:clamp(24px,3vw,40px);color:#FF4500}
+.spec-label{font-size:12px;color:#666;margin-top:6px}
+
+/* ═══════════════════════════════════════
+   TIMELINE
+   ═══════════════════════════════════════ */
+.timeline{width:100%;max-width:700px;height:10px;background:#1a1a1a;border-radius:5px;position:relative;margin:30px 0}
+.timeline-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#FF4500,#ff6633);position:absolute;left:0;top:0}
+.timeline-dot{position:absolute;top:-6px;width:22px;height:22px;background:#FF4500;border-radius:50%;border:3px solid #fff;transform:translateX(-50%)}
+.timeline-lbl{position:absolute;top:20px;transform:translateX(-50%);font-size:12px;font-weight:600;white-space:nowrap;color:#888}
+
+/* ═══════════════════════════════════════
+   GRADIENT BAR (temperature)
+   ═══════════════════════════════════════ */
+.temp-bar{
+  width:100%;max-width:700px;height:40px;border-radius:6px;
+  background:linear-gradient(90deg,#003366 0%,#0066aa 20%,#228844 40%,#ccaa00 60%,#FF4500 80%,#cc2200 100%);
+  position:relative;
+}
+
+/* ═══════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════ */
+.nav-counter{position:fixed;bottom:20px;right:30px;font-family:'Orbitron',sans-serif;font-size:13px;color:#333;z-index:100;user-select:none}
+.nav-arrows{position:fixed;bottom:20px;left:30px;z-index:100;display:flex;gap:8px}
+.nav-btn{
+  width:36px;height:36px;border-radius:50%;border:1px solid #222;
+  background:rgba(10,10,10,.8);color:#555;font-size:16px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.nav-btn:hover{border-color:#FF4500;color:#FF4500}
+.progress{position:fixed;top:0;left:0;height:2px;background:#FF4500;z-index:100;transition:width .4s ease}
+
+/* ═══════════════════════════════════════
+   SPEAKER NOTES
+   ═══════════════════════════════════════ */
+.notes-panel{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(0,0,0,.96);border-top:2px solid #FF4500;
+  padding:16px 30px;font-size:13px;color:#999;
+  transform:translateY(100%);transition:transform .3s ease;
+  z-index:200;max-height:25vh;overflow-y:auto;
+}
+.notes-panel.open{transform:translateY(0)}
+.notes-panel strong{color:#FF4500;font-size:11px;letter-spacing:2px;text-transform:uppercase}
+
+/* ═══════════════════════════════════════
+   PRINT
+   ═══════════════════════════════════════ */
+@media print{
+  .slide{position:relative!important;opacity:1!important;visibility:visible!important;page-break-after:always;height:100vh}
+  .nav-counter,.nav-arrows,.progress,.notes-panel{display:none!important}
+}
+@media (max-width:768px){
+  .slide{padding:30px 24px}
+  .split{grid-template-columns:1fr;gap:20px}
+  .spec-grid{grid-template-columns:repeat(2,1fr)}
+  .cmp-table{font-size:11px}
+  .cmp-table th,.cmp-table td{padding:6px 8px}
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="prog"></div>
+<div class="deck" id="deck">
+
+<!-- ████████████████████████████████████████████████████████
+     ACT I — PROBLEMA (1-5)
+     ████████████████████████████████████████████████████████ -->
+
+<!-- S1 — TITLE -->
+<section class="slide center active" data-n="Pauză 3 secunde. Lăsați logo-ul să respire.">
+  <div class="fi" style="margin-bottom:20px">
+    <span style="font-family:'Orbitron';font-weight:900;font-size:clamp(56px,10vw,140px);letter-spacing:2px;">therm<span class="accent">X</span></span>
+  </div>
+  <div class="fi-d1" style="height:3px;width:100px;background:#FF4500;margin:0 auto 20px"></div>
+  <p class="fi-d2" style="font-size:clamp(16px,2vw,28px);color:#aaa;letter-spacing:6px;font-weight:300;">milimetrul care contează</p>
+  <p class="fi-d3" style="margin-top:50px;color:#333;font-size:12px;letter-spacing:3px">26.03.2026 — LANSARE OFICIALĂ</p>
+</section>
+
+<!-- S2 — PARADIGMA VOLUMULUI -->
+<section class="slide center" data-n="Industria izolațiilor echivalează grosimea cu eficiența. thermX sparge această paradigmă.">
+  <div class="watermark wm-center">VOLUM</div>
+  <h1 class="fi">PARADIGMA VOLUMULUI</h1>
+  <div class="fi-d1 row-center mt-lg" style="gap:60px">
+    <!-- Thick block -->
+    <div style="text-align:center">
+      <svg width="100" height="160" viewBox="0 0 100 160">
+        <rect x="10" y="10" width="80" height="140" fill="#1a1a1a" stroke="#333" stroke-width="2" rx="4"/>
+        <circle cx="35" cy="50" r="2" fill="#333"/><circle cx="60" cy="70" r="3" fill="#333"/>
+        <circle cx="45" cy="100" r="2" fill="#333"/><circle cx="70" cy="40" r="2" fill="#333"/>
+        <circle cx="30" cy="130" r="3" fill="#333"/>
+      </svg>
+      <div style="color:#555;font-size:13px;margin-top:8px">100 mm</div>
+    </div>
+    <p class="sub" style="margin:0;font-size:20px;color:#555">grosime = eficiență<span style="color:#FF4500;margin-left:4px">?</span></p>
+    <!-- Thin line = thermX -->
+    <div style="text-align:center">
+      <svg width="20" height="160" viewBox="0 0 20 160">
+        <line x1="10" y1="5" x2="10" y2="155" stroke="#FF4500" stroke-width="3"/>
+        <circle cx="10" cy="5" r="2" fill="#FF4500"/><circle cx="10" cy="155" r="2" fill="#FF4500"/>
+      </svg>
+      <div style="color:#FF4500;font-size:13px;margin-top:8px;font-weight:600">1 mm</div>
+    </div>
+  </div>
+</section>
+
+<!-- S3 — INAMICUL INVIZIBIL -->
+<section class="slide center" data-n="Trei mecanisme de transfer termic. thermX le combate pe toate simultan: reflexie IR, vid microsferă, matrice polimerică.">
+  <div class="watermark wm-center" style="font-size:clamp(60px,12vw,180px)">INVIZIBIL</div>
+  <h1 class="fi">INAMICUL <span class="accent">INVIZIBIL</span></h1>
+  <div class="fi-d1 row-center mt-lg" style="gap:50px">
+    <div style="text-align:center">
+      <svg width="120" height="100" viewBox="0 0 120 100">
+        <line x1="90" y1="10" x2="30" y2="50" stroke="#FF4500" stroke-width="2.5"/>
+        <line x1="30" y1="50" x2="10" y2="20" stroke="#FF4500" stroke-width="1.5" opacity=".7"/>
+        <line x1="30" y1="50" x2="5" y2="50" stroke="#FF4500" stroke-width="1.5" opacity=".6"/>
+        <line x1="30" y1="50" x2="15" y2="80" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+        <line x1="20" y1="50" x2="120" y2="50" stroke="#444" stroke-width="1"/>
+        <rect x="20" y="46" width="100" height="8" fill="#222" rx="1"/>
+      </svg>
+      <div style="color:#aaa;font-size:14px;margin-top:8px">reflexie</div>
+    </div>
+    <div style="text-align:center">
+      <svg width="120" height="100" viewBox="0 0 120 100">
+        <path d="M40,80 Q50,60 45,40 Q50,20 55,10" fill="none" stroke="#888" stroke-width="2" opacity=".6"/>
+        <path d="M60,80 Q70,55 65,35 Q70,15 75,5" fill="none" stroke="#888" stroke-width="2" opacity=".4"/>
+        <path d="M80,80 Q85,60 78,45 Q85,25 88,15" fill="none" stroke="#888" stroke-width="1.5" opacity=".3"/>
+        <rect x="20" y="76" width="80" height="8" fill="#222" rx="1"/>
+      </svg>
+      <div style="color:#aaa;font-size:14px;margin-top:8px">convecție</div>
+    </div>
+    <div style="text-align:center">
+      <svg width="120" height="100" viewBox="0 0 120 100">
+        <rect x="20" y="20" width="80" height="60" fill="#1a1a1a" stroke="#333" stroke-width="1" rx="2"/>
+        <path d="M30,30 Q50,50 30,70" fill="none" stroke="#FF4500" stroke-width="2" opacity=".6"/>
+        <path d="M60,30 Q80,50 60,70" fill="none" stroke="#FF4500" stroke-width="2" opacity=".4"/>
+        <circle cx="50" cy="40" r="8" fill="none" stroke="#555" stroke-width="1"/>
+        <circle cx="75" cy="55" r="6" fill="none" stroke="#555" stroke-width="1"/>
+        <circle cx="40" cy="60" r="7" fill="none" stroke="#555" stroke-width="1"/>
+      </svg>
+      <div style="color:#aaa;font-size:14px;margin-top:8px">conducție</div>
+    </div>
+  </div>
+</section>
+
+<!-- S4 — PUNTEA TERMICĂ -->
+<section class="slide" data-n="Puntea termică = zona unde izolația e întreruptă. Camera termică arată pierderile masive la îmbinări.">
+  <div class="watermark wm-right" style="font-size:clamp(60px,10vw,150px)">PIERDERE</div>
+  <h1 class="fi">PUNTEA <span class="accent">TERMICĂ</span></h1>
+  <div class="fi-d1 mt-lg" style="max-width:500px">
+    <svg viewBox="0 0 500 280" width="100%">
+      <defs>
+        <linearGradient id="therm" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#003"/>
+          <stop offset="25%" stop-color="#048"/>
+          <stop offset="45%" stop-color="#2a4"/>
+          <stop offset="65%" stop-color="#ca0"/>
+          <stop offset="85%" stop-color="#F40"/>
+          <stop offset="100%" stop-color="#c00"/>
+        </linearGradient>
+      </defs>
+      <!-- House outline -->
+      <polygon points="250,20 60,100 60,250 440,250 440,100" fill="#111" stroke="#333" stroke-width="1.5"/>
+      <polygon points="250,20 60,100 440,100" fill="#0d0d0d" stroke="#333" stroke-width="1.5"/>
+      <!-- Thermal overlay -->
+      <rect x="80" y="110" width="340" height="120" rx="4" fill="url(#therm)" opacity=".5"/>
+      <!-- Bridge zones -->
+      <rect x="140" y="110" width="20" height="120" fill="#FF4500" opacity=".4"/>
+      <rect x="300" y="110" width="20" height="120" fill="#FF4500" opacity=".4"/>
+      <!-- Labels -->
+      <text x="150" y="260" fill="#FF4500" font-size="10" text-anchor="middle" font-family="Inter" font-weight="600">PUNTE</text>
+      <text x="310" y="260" fill="#FF4500" font-size="10" text-anchor="middle" font-family="Inter" font-weight="600">PUNTE</text>
+    </svg>
+  </div>
+  <p class="sub fi-d2">Continuitate compromisă — pierderile se concentrează la îmbinări</p>
+</section>
+
+<!-- S5 — PROVOCAREA -->
+<section class="slide center" data-n="Creați suspans: cum poate 1 milimetru să facă diferența? Răspunsul vine în Act II.">
+  <div class="watermark wm-center" style="font-size:clamp(100px,18vw,280px);opacity:.03">1mm</div>
+  <h1 class="fi">PROVOCAREA</h1>
+  <p class="fi-d1" style="font-size:clamp(18px,2.5vw,32px);color:#aaa;margin-top:16px">
+    CUM FACE FAȚĂ <span class="accent" style="font-weight:700">1 MILIMETRU</span>?
+  </p>
+  <div class="fi-d2 mt-lg">
+    <svg width="300" height="120" viewBox="0 0 300 120">
+      <!-- Caliper body -->
+      <rect x="20" y="52" width="260" height="4" fill="#333" rx="2"/>
+      <!-- Upper jaw -->
+      <rect x="110" y="15" width="5" height="42" fill="#666" rx="1"/>
+      <rect x="50" y="12" width="68" height="5" fill="#555" rx="1"/>
+      <!-- Lower jaw -->
+      <rect x="110" y="59" width="5" height="42" fill="#666" rx="1"/>
+      <rect x="50" y="98" width="68" height="5" fill="#555" rx="1"/>
+      <!-- Right jaw -->
+      <rect x="185" y="15" width="5" height="42" fill="#666" rx="1"/>
+      <rect x="185" y="59" width="5" height="42" fill="#666" rx="1"/>
+      <!-- Digital display -->
+      <rect x="200" y="38" width="80" height="32" fill="#0d0d0d" stroke="#333" stroke-width="1" rx="4"/>
+      <text x="240" y="60" fill="#FF4500" font-size="20" text-anchor="middle" font-family="Orbitron" font-weight="700">1.00</text>
+      <text x="240" y="80" fill="#555" font-size="10" text-anchor="middle" font-family="Inter">mm</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ████████████████████████████████████████████████████████
+     ACT II — CE ESTE thermX (6-9)
+     ████████████████████████████████████████████████████████ -->
+
+<!-- S6 — REVELAȚIA -->
+<section class="slide" data-n="thermX nu e vopsea — e membrană termoizolantă fluidă cu microsfere ceramice vidate.">
+  <div class="watermark wm-left" style="font-size:clamp(60px,12vw,180px)">REVELAȚIA</div>
+  <div class="split" style="height:70%">
+    <div>
+      <h1 class="fi" style="font-size:clamp(36px,5vw,72px)">REVELAȚIA</h1>
+      <p class="fi-d1 sub" style="margin-top:20px;font-size:clamp(14px,1.5vw,20px);color:#ccc;text-transform:uppercase;letter-spacing:3px">Membrana termoizolantă fluidă</p>
+    </div>
+    <div class="fi-d2" style="display:flex;gap:20px;align-items:center;justify-content:center">
+      <!-- Drop -->
+      <svg width="140" height="200" viewBox="0 0 140 200">
+        <defs>
+          <radialGradient id="drop" cx="40%" cy="35%" r="55%">
+            <stop offset="0%" stop-color="#fff" stop-opacity=".95"/>
+            <stop offset="50%" stop-color="#ddd" stop-opacity=".7"/>
+            <stop offset="100%" stop-color="#888" stop-opacity=".2"/>
+          </radialGradient>
+        </defs>
+        <path d="M70,15 Q70,15 40,80 Q20,120 30,150 Q40,180 70,185 Q100,180 110,150 Q120,120 100,80 Z" fill="url(#drop)"/>
+      </svg>
+      <!-- Microsphere texture -->
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <rect width="140" height="140" fill="#111" rx="8"/>
+        <circle cx="25" cy="25" r="14" fill="none" stroke="#555" stroke-width="1"/><circle cx="55" cy="20" r="12" fill="none" stroke="#555" stroke-width="1"/>
+        <circle cx="85" cy="28" r="15" fill="none" stroke="#555" stroke-width="1"/><circle cx="115" cy="22" r="13" fill="none" stroke="#555" stroke-width="1"/>
+        <circle cx="15" cy="55" r="13" fill="none" stroke="#555" stroke-width="1"/><circle cx="45" cy="50" r="14" fill="none" stroke="#555" stroke-width="1"/>
+        <circle cx="75" cy="58" r="12" fill="none" stroke="#555" stroke-width="1"/><circle cx="105" cy="52" r="14" fill="none" stroke="#555" stroke-width="1"/>
+        <circle cx="30" cy="85" r="14" fill="none" stroke="#555" stroke-width="1"/><circle cx="60" cy="80" r="13" fill="none" stroke="#555" stroke-width="1"/>
+        <circle cx="90" cy="88" r="15" fill="none" stroke="#555" stroke-width="1"/><circle cx="120" cy="82" r="12" fill="none" stroke="#555" stroke-width="1"/>
+        <circle cx="20" cy="115" r="13" fill="none" stroke="#555" stroke-width="1"/><circle cx="50" cy="110" r="14" fill="none" stroke="#555" stroke-width="1"/>
+        <circle cx="80" cy="118" r="12" fill="none" stroke="#555" stroke-width="1"/><circle cx="110" cy="112" r="14" fill="none" stroke="#555" stroke-width="1"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- S7 — COMPOZIȚIA -->
+<section class="slide center" data-n="75% din volum = microsfere ceramice vidate. Structură compactă. Restul = matrice polimer.">
+  <div class="watermark wm-center" style="font-size:clamp(80px,14vw,200px)">COMPOZIȚIA</div>
+  <div class="split" style="max-width:900px;margin:0 auto">
+    <div class="fi" style="display:flex;justify-content:center">
+      <svg width="220" height="220" viewBox="0 0 220 220">
+        <defs>
+          <radialGradient id="sphere" cx="40%" cy="35%" r="55%">
+            <stop offset="0%" stop-color="#ddd"/>
+            <stop offset="60%" stop-color="#888"/>
+            <stop offset="100%" stop-color="#333"/>
+          </radialGradient>
+        </defs>
+        <circle cx="110" cy="110" r="100" fill="url(#sphere)"/>
+        <ellipse cx="110" cy="180" rx="60" ry="8" fill="#FF4500" opacity=".15"/>
+      </svg>
+    </div>
+    <div style="text-align:left">
+      <h2 class="fi-d1">COMPOZIȚIA</h2>
+      <div class="pop" style="margin-top:20px">
+        <span class="big-num" style="font-size:clamp(56px,10vw,120px)">75%</span>
+      </div>
+      <p class="fi-d2" style="font-size:clamp(14px,1.5vw,20px);color:#aaa;text-transform:uppercase;letter-spacing:2px;margin-top:8px">nanosfere ceramice</p>
+    </div>
+  </div>
+</section>
+
+<!-- S8 — VIDUL -->
+<section class="slide" data-n="Microsferele sunt vidate — gaz rarefiat interior elimină transferul convectiv la nivel microscopic.">
+  <div class="watermark wm-right" style="font-size:clamp(80px,14vw,200px)">VIDUL</div>
+  <div class="split" style="max-width:900px;margin:0 auto">
+    <div>
+      <h1 class="fi" style="font-size:clamp(40px,6vw,90px)">VIDUL</h1>
+      <p class="sub fi-d1" style="font-size:16px;max-width:350px">Gaz rarefiat în interiorul fiecărei microsfere. Transfer convectiv eliminat la nivel molecular.</p>
+      <p class="fi-d2" style="color:#FF4500;font-size:14px;font-weight:600;margin-top:16px">CONVECȚIE → ZERO</p>
+    </div>
+    <div class="fi-d2" style="display:flex;justify-content:center">
+      <svg width="220" height="220" viewBox="0 0 220 220">
+        <circle cx="110" cy="110" r="90" fill="none" stroke="#333" stroke-width="3"/>
+        <circle cx="110" cy="110" r="88" fill="none" stroke="#FF4500" stroke-width="1" opacity=".15"/>
+        <circle cx="110" cy="110" r="50" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="5,4"/>
+        <text x="110" y="105" fill="#555" font-size="12" text-anchor="middle" font-family="Inter" font-weight="600">GAZ</text>
+        <text x="110" y="122" fill="#888" font-size="12" text-anchor="middle" font-family="Inter" font-weight="600">RAREFIAT</text>
+        <!-- Orange glow on rim -->
+        <circle cx="110" cy="110" r="90" fill="none" stroke="#FF4500" stroke-width="1" opacity=".2">
+          <animate attributeName="opacity" values=".1;.3;.1" dur="3s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- S9 — MATRICEA -->
+<section class="slide" data-n="Matricea polimer: latex stiren-acrilic. 80% acrilic = flexibilitate, 20% stiren = duritate mecanică.">
+  <div class="watermark wm-left" style="font-size:clamp(60px,10vw,160px)">MATRICEA</div>
+  <h1 class="fi" style="font-size:clamp(36px,5vw,72px)">MATRICEA</h1>
+  <p class="fi-d1" style="color:#888;font-size:16px;text-transform:uppercase;letter-spacing:3px;margin-top:8px">Latex stiren-acrilic</p>
+  <div class="fi-d2 mt-lg" style="display:flex;gap:60px;align-items:center">
+    <svg width="260" height="180" viewBox="0 0 260 180">
+      <!-- Orange mesh network -->
+      <line x1="20" y1="30" x2="80" y2="20" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <line x1="80" y1="20" x2="150" y2="35" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <line x1="150" y1="35" x2="230" y2="25" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <line x1="20" y1="30" x2="40" y2="90" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <line x1="80" y1="20" x2="90" y2="85" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <line x1="150" y1="35" x2="160" y2="90" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <line x1="230" y1="25" x2="220" y2="85" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <line x1="40" y1="90" x2="90" y2="85" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <line x1="90" y1="85" x2="160" y2="90" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <line x1="160" y1="90" x2="220" y2="85" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <line x1="40" y1="90" x2="60" y2="150" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <line x1="90" y1="85" x2="120" y2="155" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <line x1="160" y1="90" x2="180" y2="150" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <line x1="220" y1="85" x2="240" y2="148" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <!-- White spheres -->
+      <circle cx="80" cy="55" r="16" fill="#ddd" stroke="#bbb" stroke-width=".5"/><circle cx="150" cy="60" r="18" fill="#ddd" stroke="#bbb" stroke-width=".5"/>
+      <circle cx="40" cy="90" r="14" fill="#ccc" stroke="#bbb" stroke-width=".5"/><circle cx="120" cy="95" r="15" fill="#ddd" stroke="#bbb" stroke-width=".5"/>
+      <circle cx="200" cy="55" r="14" fill="#ccc" stroke="#bbb" stroke-width=".5"/><circle cx="220" cy="90" r="13" fill="#ccc" stroke="#bbb" stroke-width=".5"/>
+    </svg>
+    <div>
+      <div style="margin-bottom:20px">
+        <span class="t-orb" style="font-size:clamp(32px,5vw,56px);color:#FF4500;font-weight:700">80%</span>
+        <span style="color:#aaa;font-size:16px;margin-left:12px">acrilic</span>
+      </div>
+      <div>
+        <span class="t-orb" style="font-size:clamp(32px,5vw,56px);color:#555;font-weight:700">20%</span>
+        <span style="color:#666;font-size:16px;margin-left:12px">stiren</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ████████████████████████████████████████████████████████
+     ACT III — PERFORMANȚĂ TEHNICĂ (10-18)
+     ████████████████████████████████████████████████████████ -->
+
+<!-- S10 — OGLINDA TERMICĂ -->
+<section class="slide" data-n="Radiația IR lovește stratul thermX și este reflectată difuz — 85% nu trece. Principiul oglinzii termice.">
+  <div class="watermark wm-right" style="font-size:clamp(60px,10vw,150px)">OGLINDĂ</div>
+  <h1 class="fi" style="font-size:clamp(36px,5vw,68px)">OGLINDA <span class="accent">TERMICĂ</span></h1>
+  <p class="overline fi-d1" style="margin-top:12px;margin-bottom:0">REFLEXIE IR & DISPERSIE</p>
+  <div class="fi-d2 mt-lg">
+    <svg width="460" height="200" viewBox="0 0 460 200">
+      <!-- thermX slab -->
+      <rect x="160" y="60" width="140" height="90" fill="#1a1a1a" stroke="#FF4500" stroke-width="2" rx="3"/>
+      <text x="230" y="110" fill="#FF4500" font-size="14" text-anchor="middle" font-family="Orbitron" font-weight="700">thermX</text>
+      <!-- Incoming beam -->
+      <line x1="30" y1="30" x2="175" y2="100" stroke="#ffaa00" stroke-width="3"/>
+      <polygon points="170,95 180,98 175,105" fill="#ffaa00"/>
+      <text x="60" y="22" fill="#ffaa00" font-size="11" font-family="Inter" font-weight="600">IR →</text>
+      <!-- Reflected beams -->
+      <line x1="175" y1="100" x2="50" y2="150" stroke="#FF4500" stroke-width="2" opacity=".7"/>
+      <line x1="175" y1="100" x2="70" y2="190" stroke="#FF4500" stroke-width="1.5" opacity=".5"/>
+      <line x1="175" y1="100" x2="25" y2="120" stroke="#FF4500" stroke-width="1.5" opacity=".4"/>
+      <text x="20" y="180" fill="#FF4500" font-size="12" font-family="Inter" font-weight="700">85% REFLECTAT</text>
+      <!-- Transmitted -->
+      <line x1="300" y1="105" x2="430" y2="115" stroke="#444" stroke-width="1.5" stroke-dasharray="5,4"/>
+      <text x="390" y="140" fill="#444" font-size="10" font-family="Inter">15%</text>
+    </svg>
+  </div>
+</section>
+
+<!-- S11 — CONDUCTIVITATE TERMICĂ -->
+<section class="slide center" data-n="Lambda ≤ 0,001 W/mK. EPS: 0,040. Vată minerală: 0,035. thermX e cu ordine de mărime mai jos.">
+  <div class="watermark wm-center" style="font-size:clamp(100px,20vw,300px);opacity:.03">λ</div>
+  <h2 class="fi" style="font-size:clamp(24px,3.5vw,52px)">CONDUCTIVITATE <span class="accent">TERMICĂ</span></h2>
+  <div class="big-num pop" style="margin:20px 0">0,001</div>
+  <p class="unit fi-d1">W/(m·K)</p>
+  <div class="fi-d2 mt-lg row-center" style="gap:40px">
+    <div style="text-align:center"><div style="width:40px;height:120px;background:#222;border-radius:3px 3px 0 0;margin:0 auto"></div><div style="font-size:11px;color:#555;margin-top:6px">EPS<br>0,040</div></div>
+    <div style="text-align:center"><div style="width:40px;height:100px;background:#222;border-radius:3px 3px 0 0;margin:0 auto"></div><div style="font-size:11px;color:#555;margin-top:6px">Vată<br>0,035</div></div>
+    <div style="text-align:center"><div style="width:40px;height:3px;background:#FF4500;margin:0 auto;box-shadow:0 0 12px rgba(255,69,0,.8);margin-top:117px"></div><div style="font-size:11px;color:#FF4500;margin-top:6px;font-weight:700">thermX<br>0,001</div></div>
+  </div>
+</section>
+
+<!-- S12 — REFLEXIE 85% -->
+<section class="slide center" data-n="85% reflexie difuză IR — confirmat de client 22.02.2026.">
+  <div class="watermark wm-center" style="font-size:clamp(100px,20vw,300px);opacity:.03">85</div>
+  <div class="split" style="max-width:900px;margin:0 auto;text-align:left">
+    <div>
+      <h1 class="fi" style="font-size:clamp(32px,4.5vw,64px)">REFLEXIE</h1>
+    </div>
+    <div style="text-align:right">
+      <p class="fi-d1" style="color:#888;font-size:14px;text-transform:uppercase;letter-spacing:2px">de până la:</p>
+      <div class="big-num pop" style="font-size:clamp(80px,16vw,220px)">85<span style="font-size:.5em">%</span></div>
+      <p class="fi-d2" style="color:#888;font-size:13px">radiație infraroșu reflectată difuz</p>
+    </div>
+  </div>
+</section>
+
+<!-- S13 — GAMA DE OPERARE -->
+<section class="slide center" data-n="Interval de operare: -60°C până la +260°C. Fără fisuri, bule sau delaminare. Confirmat 22.02.2026.">
+  <div class="watermark wm-center" style="font-size:clamp(60px,10vw,160px)">OPERARE</div>
+  <h1 class="fi" style="font-size:clamp(30px,4.5vw,64px)">GAMA DE <span class="accent">OPERARE</span></h1>
+  <div class="fi-d1 mt-lg">
+    <div class="temp-bar grow-bar" style="transform-origin:left"></div>
+    <div style="display:flex;justify-content:space-between;max-width:700px;width:100%;margin-top:16px">
+      <span class="t-orb fi-d2" style="font-size:clamp(20px,3vw,36px);color:#4488cc;font-weight:700">-60°C</span>
+      <span class="t-orb fi-d3" style="font-size:clamp(20px,3vw,36px);color:#FF4500;font-weight:700">+260°C</span>
+    </div>
+  </div>
+  <p class="sub fi-d4" style="margin-top:30px">Fără fisuri, bule sau delaminare la temperaturi extreme</p>
+</section>
+
+<!-- S14 — IMPERMEABILITATE -->
+<section class="slide" data-n="Permeabilitate la vapori: 0,0014 mg/(m·h·Pa). Absorbție apă: 0,03 g/cm³. Barieră hidroizolatoare completă.">
+  <div class="watermark wm-center" style="font-size:clamp(50px,8vw,130px)">IMPERMEABIL</div>
+  <h1 class="fi" style="font-size:clamp(32px,5vw,68px)">IMPERMEABILITATE</h1>
+  <div class="fi-d1 mt-lg row" style="gap:60px">
+    <div style="text-align:center">
+      <div class="t-orb" style="font-size:clamp(28px,4vw,48px);color:#FF4500;font-weight:700">0,0014</div>
+      <div style="color:#888;font-size:13px;margin-top:6px">mg/(m·h·Pa)</div>
+      <div style="color:#555;font-size:12px;margin-top:4px">permeabilitate vapori</div>
+    </div>
+    <div style="text-align:center">
+      <div class="t-orb" style="font-size:clamp(28px,4vw,48px);color:#FF4500;font-weight:700">0,03</div>
+      <div style="color:#888;font-size:13px;margin-top:6px">g/cm³</div>
+      <div style="color:#555;font-size:12px;margin-top:4px">absorbție apă</div>
+    </div>
+  </div>
+  <p class="sub fi-d2" style="max-width:600px;margin-top:30px">Barieră hidroizolatoare completă. Elimină condensul și deplasează punctul de rouă.</p>
+</section>
+
+<!-- S15 — DENSITATE -->
+<section class="slide center" data-n="0,4 kg/m² la 1 mm grosime. Nu încarcă structura. Ideal pentru acoperișuri și patrimoniu.">
+  <div class="watermark wm-center" style="font-size:clamp(80px,14vw,200px);opacity:.03">UȘOR</div>
+  <h2 class="fi">DENSITATE</h2>
+  <div class="mid-num pop" style="margin:16px 0">0,4 <span style="font-size:.5em">kg/m²</span></div>
+  <p class="sub fi-d1">la 1 mm grosime — sarcină structurală neglijabilă</p>
+  <div class="fi-d2 mt-lg row-center" style="gap:80px">
+    <div style="text-align:center">
+      <svg width="50" height="80" viewBox="0 0 50 80"><path d="M25,5 Q15,30 25,75 Q35,30 25,5 Z" fill="none" stroke="#FF4500" stroke-width="2"/><line x1="25" y1="5" x2="25" y2="75" stroke="#FF4500" stroke-width="1"/></svg>
+      <div style="color:#FF4500;font-size:12px;margin-top:4px;font-weight:600">thermX</div>
+      <div style="color:#888;font-size:11px">0,4 kg/m²</div>
+    </div>
+    <div style="color:#333;font-size:20px">vs</div>
+    <div style="text-align:center">
+      <svg width="60" height="80" viewBox="0 0 60 80"><rect x="5" y="15" width="50" height="50" fill="#1a1a1a" stroke="#333" stroke-width="2" rx="2"/></svg>
+      <div style="color:#555;font-size:12px;margin-top:4px">EPS clasic</div>
+      <div style="color:#888;font-size:11px">15-25 kg/m²</div>
+    </div>
+  </div>
+</section>
+
+<!-- S16 — ELASTICITATE -->
+<section class="slide center" data-n="Elasticitate > 12%. Elongație liniară 65%. Acomodează dilatarea substratului fără fisurare.">
+  <div class="watermark wm-center" style="font-size:clamp(60px,12vw,180px)">ELASTIC</div>
+  <h2 class="fi">ELASTICITATE</h2>
+  <div class="mid-num pop" style="margin:16px 0">&gt;12<span style="font-size:.5em">%</span></div>
+  <p class="sub fi-d1">elongație la rupere</p>
+  <div class="fi-d2 mt-lg">
+    <svg width="360" height="100" viewBox="0 0 360 100">
+      <ellipse cx="60" cy="25" rx="30" ry="10" fill="none" stroke="#555" stroke-width="2"/>
+      <ellipse cx="60" cy="75" rx="30" ry="10" fill="none" stroke="#555" stroke-width="2"/>
+      <line x1="30" y1="25" x2="30" y2="75" stroke="#555" stroke-width="2"/>
+      <line x1="90" y1="25" x2="90" y2="75" stroke="#555" stroke-width="2"/>
+      <text x="155" y="55" fill="#FF4500" font-size="28" font-family="Inter" font-weight="300">→</text>
+      <ellipse cx="270" cy="15" rx="22" ry="8" fill="none" stroke="#FF4500" stroke-width="2"/>
+      <ellipse cx="270" cy="85" rx="22" ry="8" fill="none" stroke="#FF4500" stroke-width="2"/>
+      <path d="M248,15 Q240,50 248,85" fill="none" stroke="#FF4500" stroke-width="2"/>
+      <path d="M292,15 Q300,50 292,85" fill="none" stroke="#FF4500" stroke-width="2"/>
+      <text x="270" y="55" fill="#FF4500" font-size="13" text-anchor="middle" font-family="Inter" font-weight="600">+12%</text>
+    </svg>
+  </div>
+  <p class="fi-d3 sub" style="font-size:13px">Acomodează dilatarea substratului fără fisurare</p>
+</section>
+
+<!-- S17 — COMPARAȚIE -->
+<section class="slide center" data-n="Comparație directă thermX vs EPS vs Vată Minerală pe parametrii cheie.">
+  <h2 class="fi" style="font-size:clamp(24px,3.5vw,48px)">COMPARAȚIE <span class="accent">CU ALTE PRODUSE</span></h2>
+  <div class="fi-d1 mt-lg" style="overflow-x:auto;width:100%">
+    <table class="cmp-table" style="margin:0 auto">
+      <thead>
+        <tr><th>Parametru</th><th class="col-tx">thermX</th><th>EPS 100mm</th><th>Vată minerală</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Grosime</td><td class="col-tx">0,5–1 mm</td><td>100 mm</td><td>100 mm</td></tr>
+        <tr><td>λ W/(m·K)</td><td class="col-tx">≤ 0,001</td><td>0,040</td><td>0,035</td></tr>
+        <tr><td>Greutate</td><td class="col-tx">0,4 kg/m²</td><td>~2 kg/m²</td><td>~5 kg/m²</td></tr>
+        <tr><td>Punți termice</td><td class="col-tx">Eliminate</td><td>La îmbinări</td><td>La îmbinări</td></tr>
+        <tr><td>Aplicare</td><td class="col-tx">Airless specializat</td><td>Montaj mecanic</td><td>Montaj mecanic</td></tr>
+        <tr><td>Timp instalare</td><td class="col-tx">80% mai rapid</td><td>Referință</td><td>Referință</td></tr>
+        <tr><td>Geometrii complexe</td><td class="col-tx">Da</td><td>Limitat</td><td>Limitat</td></tr>
+        <tr><td>Temp. operare</td><td class="col-tx">-60 / +260°C</td><td>-50 / +80°C</td><td>-40 / +250°C</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- S18 — FIȘA TEHNICĂ (summary) -->
+<section class="slide center" data-n="Rezumatul tuturor specificațiilor tehnice pe un singur slide. Poate fi fotografiat de audiență.">
+  <h2 class="fi" style="font-size:clamp(22px,3vw,40px)">FIȘA <span class="accent">TEHNICĂ</span></h2>
+  <div class="spec-grid fi-d1 mt-lg" style="margin:24px auto 0">
+    <div class="spec-item"><div class="spec-val">0,001</div><div class="spec-label">λ W/(m·K)</div></div>
+    <div class="spec-item"><div class="spec-val">85%</div><div class="spec-label">Reflexie IR</div></div>
+    <div class="spec-item"><div class="spec-val">+260°C</div><div class="spec-label">Temp. maximă</div></div>
+    <div class="spec-item"><div class="spec-val">0,4</div><div class="spec-label">kg/m² la 1 mm</div></div>
+    <div class="spec-item"><div class="spec-val">&gt;12%</div><div class="spec-label">Elasticitate</div></div>
+    <div class="spec-item"><div class="spec-val">1,84</div><div class="spec-label">MPa aderență beton</div></div>
+    <div class="spec-item"><div class="spec-val">40%</div><div class="spec-label">Reducere pierderi</div></div>
+    <div class="spec-item"><div class="spec-val">0,0014</div><div class="spec-label">mg/(m·h·Pa) vapori</div></div>
+    <div class="spec-item"><div class="spec-val">Clasa A</div><div class="spec-label">Reacție la foc (uscat)</div></div>
+  </div>
+</section>
+
+<!-- ████████████████████████████████████████████████████████
+     ACT IV — APLICABILITATE PE SECTOARE (19-23)
+     ████████████████████████████████████████████████████████ -->
+
+<!-- S19 — REZIDENȚIAL -->
+<section class="slide" data-n="Sector rezidențial: fațade, interioare, pardoseli, acoperișuri. Cel mai mare segment de piață.">
+  <div class="watermark wm-right" style="font-size:clamp(60px,10vw,150px)">REZIDENȚIAL</div>
+  <div class="overline fi">APLICABILITATE — SECTOR 1</div>
+  <h1 class="fi-d1" style="font-size:clamp(30px,4.5vw,60px)">REZIDENȚIAL</h1>
+  <div class="fi-d2 mt-lg row" style="gap:20px;flex-wrap:wrap;max-width:900px">
+    <div class="sector-card">
+      <h4>Fațade</h4>
+      <ul><li>Izolare exterioară continuă</li><li>Eliminare punți termice</li><li>Zero sarcină pe structură</li></ul>
+    </div>
+    <div class="sector-card">
+      <h4>Interioare</h4>
+      <ul><li>Câștig spațiu util (1 mm vs 100 mm)</li><li>Eliminare condens & mucegai</li><li>Compatibil orice finisaj</li></ul>
+    </div>
+    <div class="sector-card">
+      <h4>Pardoseli</h4>
+      <ul><li>Rupere capilaritate termică</li><li>Compatibil încălzire pardoseală</li><li>Sub șapă sau peste placă</li></ul>
+    </div>
+    <div class="sector-card">
+      <h4>Acoperișuri</h4>
+      <ul><li>Membrană monolitică</li><li>Reflexie solară</li><li>Greutate neglijabilă</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- S20 — COMERCIAL -->
+<section class="slide" data-n="Sector comercial: birouri, centre comerciale, hoteluri, spitale. ROI rapid și certificări energetice.">
+  <div class="watermark wm-right" style="font-size:clamp(60px,10vw,150px)">COMERCIAL</div>
+  <div class="overline fi">APLICABILITATE — SECTOR 2</div>
+  <h1 class="fi-d1" style="font-size:clamp(30px,4.5vw,60px)">COMERCIAL</h1>
+  <div class="fi-d2 mt-lg row" style="gap:20px;flex-wrap:wrap;max-width:900px">
+    <div class="sector-card">
+      <h4>Birouri</h4>
+      <ul><li>Eficiență energetică clasa A</li><li>Instalare fără oprire activitate</li><li>Reducere costuri HVAC</li></ul>
+    </div>
+    <div class="sector-card">
+      <h4>Centre comerciale</h4>
+      <ul><li>Suprafețe mari — aplicare rapidă</li><li>Fără schele pe termen lung</li><li>Estetică neafectată</li></ul>
+    </div>
+    <div class="sector-card">
+      <h4>Hoteluri & Spitale</h4>
+      <ul><li>Fără miros, fără praf</li><li>Aplicare pe ture / etaje</li><li>Conformitate norme sanitare</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- S21 — INDUSTRIAL -->
+<section class="slide" data-n="Sector industrial: conducte, hale, depozite, rezervoare. Grosime până la 3,5 mm. Rezistență chimică.">
+  <div class="watermark wm-right" style="font-size:clamp(60px,10vw,150px)">INDUSTRIAL</div>
+  <div class="overline fi">APLICABILITATE — SECTOR 3</div>
+  <h1 class="fi-d1" style="font-size:clamp(30px,4.5vw,60px)">INDUSTRIAL</h1>
+  <div class="fi-d2 mt-lg row" style="gap:20px;flex-wrap:wrap;max-width:900px">
+    <div class="sector-card">
+      <h4>Conducte</h4>
+      <ul><li>Aplicare pe orice diametru</li><li>Anticoroziv integrat</li><li>Grosime până la 3,5 mm</li></ul>
+    </div>
+    <div class="sector-card">
+      <h4>Hale & depozite</h4>
+      <ul><li>Acoperișuri metalice</li><li>Reflexie solară — răcire pasivă</li><li>Reducere condens interior</li></ul>
+    </div>
+    <div class="sector-card">
+      <h4>Rezervoare</h4>
+      <ul><li>Geometrii cilindrice / sferice</li><li>Rezistență chimică</li><li>Mentenanță vizuală fără demontare</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- S22 — OIL & GAS / TERMOFICĂRI -->
+<section class="slide" data-n="Sector Oil & Gas: experiență Gazprom, Rosneft, Lukoil. Rețele termice. Aplicare pe conducte active.">
+  <div class="watermark wm-right" style="font-size:clamp(50px,8vw,120px)">OIL&GAS</div>
+  <div class="overline fi">APLICABILITATE — SECTOR 4</div>
+  <h1 class="fi-d1" style="font-size:clamp(26px,4vw,52px)">OIL & GAS <span class="accent">/ TERMOFICĂRI</span></h1>
+  <div class="fi-d2 mt-lg row" style="gap:20px;flex-wrap:wrap;max-width:900px">
+    <div class="sector-card">
+      <h4>Conducte petrol & gaz</h4>
+      <ul><li>-60°C → +260°C</li><li>Anticoroziune integrată</li><li>Experiență: Gazprom, Rosneft, Lukoil</li></ul>
+    </div>
+    <div class="sector-card">
+      <h4>Rafinării</h4>
+      <ul><li>Rezistență chimică</li><li>Aplicare pe echipamente active</li><li>Fără oprirea procesului</li></ul>
+    </div>
+    <div class="sector-card">
+      <h4>Rețele termice</h4>
+      <ul><li>Izolare conducte termoficare</li><li>Reducere pierderi în rețea</li><li>Acces la inspecție vizuală</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- S23 — PATRIMONIU & SPECIAL -->
+<section class="slide" data-n="Patrimoniu istoric: zero alterare vizuală. Plus: sere, silozuri, geometrii complexe unde panoul rigid nu funcționează.">
+  <div class="watermark wm-right" style="font-size:clamp(50px,8vw,120px)">SPECIAL</div>
+  <div class="overline fi">APLICABILITATE — SECTOR 5</div>
+  <h1 class="fi-d1" style="font-size:clamp(26px,4vw,52px)">PATRIMONIU <span class="accent">& SPECIAL</span></h1>
+  <div class="fi-d2 mt-lg row" style="gap:20px;flex-wrap:wrap;max-width:900px">
+    <div class="sector-card">
+      <h4>Clădiri istorice</h4>
+      <ul><li>1 mm — zero alterare vizuală</li><li>Fără ancoraje mecanice</li><li>Aprobări restaurare</li></ul>
+    </div>
+    <div class="sector-card">
+      <h4>Sere & silozuri</h4>
+      <ul><li>Control termic precis</li><li>Reflexie solară selectivă</li><li>Rezistență umiditate</li></ul>
+    </div>
+    <div class="sector-card">
+      <h4>Geometrii complexe</h4>
+      <ul><li>Curbe, unghiuri, spații înguste</li><li>Izolare imposibilă cu panou rigid</li><li>Strat continuu — fără rosturi</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ████████████████████████████████████████████████████████
+     ACT V — DE CE ACUM (24-31)
+     ████████████████████████████████████████████████████████ -->
+
+<!-- S24 — TESTAT ÎN CONDIȚII REALE -->
+<section class="slide center" data-n="Testat în condiții reale: sectoare petrochimic, naval, auto, rezidențial.">
+  <div class="watermark wm-center" style="font-size:clamp(80px,14vw,200px);opacity:.03">thermX</div>
+  <div class="overline fi">ACTUL V — DE CE ACUM</div>
+  <div class="big-num pop" style="font-size:clamp(32px,5vw,64px)">Testat în condiții reale</div>
+  <h3 class="fi-d1" style="margin-top:16px;letter-spacing:2px">APLICAT ÎN SECTOARE MULTIPLE</h3>
+  <div class="fi-d2 mt-lg row-center" style="gap:30px">
+    <div class="card"><div class="card-icon">P</div><div class="card-title">Petrochimic</div></div>
+    <div class="card"><div class="card-icon">N</div><div class="card-title">Naval</div></div>
+    <div class="card"><div class="card-icon">A</div><div class="card-title">Auto</div></div>
+    <div class="card"><div class="card-icon">R</div><div class="card-title">Rezidențial</div></div>
+  </div>
+</section>
+
+<!-- S25 — IMPACT: 40% / 80% / 30% -->
+<section class="slide center" data-n="Trei cifre de impact: 40% reducere pierderi, 80% mai rapid, 30% economie cost total.">
+  <h2 class="fi" style="font-size:clamp(22px,3vw,40px)">IMPACTUL <span class="accent">MĂSURABIL</span></h2>
+  <div class="fi-d1 mt-lg row-center" style="gap:50px">
+    <div style="text-align:center">
+      <div class="mid-num pop">40%</div>
+      <p style="color:#888;font-size:14px;margin-top:8px">reducere<br>pierderi termice</p>
+      <p style="color:#555;font-size:11px;margin-top:4px">la 1 mm grosime</p>
+    </div>
+    <div style="text-align:center">
+      <div class="mid-num pop" style="animation-delay:.5s">80%</div>
+      <p style="color:#888;font-size:14px;margin-top:8px">mai rapid<br>la instalare</p>
+      <p style="color:#555;font-size:11px;margin-top:4px">spray airless</p>
+    </div>
+    <div style="text-align:center">
+      <div class="mid-num pop" style="animation-delay:.7s">30%</div>
+      <p style="color:#888;font-size:14px;margin-top:8px">economie<br>cost total</p>
+      <p style="color:#555;font-size:11px;margin-top:4px">vs. izolație clasică</p>
+    </div>
+  </div>
+</section>
+
+<!-- S26 — GARANȚIE -->
+<section class="slide center" data-n="Garanție producător: 20 ani. Durabilitate estimată: 35+ ani.">
+  <div class="watermark wm-center" style="font-size:clamp(80px,14vw,200px);opacity:.03">20</div>
+  <h2 class="fi">GARANȚIE <span class="accent">20 ANI</span></h2>
+  <div class="fi-d1 mt-lg" style="width:100%;max-width:700px">
+    <div class="timeline">
+      <div class="timeline-fill" style="width:57%;"></div>
+      <div class="timeline-dot" style="left:57%"></div>
+      <div class="timeline-lbl" style="left:0%">0</div>
+      <div class="timeline-lbl" style="left:57%;color:#FF4500;font-weight:700">20 ani<br><span style="font-size:10px;color:#666;font-weight:400">garanție</span></div>
+      <div class="timeline-lbl" style="left:100%">35+ ani<br><span style="font-size:10px">durabilitate</span></div>
+    </div>
+  </div>
+  <div class="fi-d2 row-center" style="gap:60px;margin-top:80px">
+    <div style="text-align:center"><span class="t-orb accent" style="font-size:36px;font-weight:700">20</span><br><span style="color:#888;font-size:13px">ani garanție</span></div>
+    <div style="text-align:center"><span class="t-orb" style="font-size:36px;font-weight:700;color:#aaa">35+</span><br><span style="color:#888;font-size:13px">ani durabilitate</span></div>
+  </div>
+</section>
+
+<!-- S27 — CERTIFICĂRI -->
+<section class="slide center" data-n="Certificări și validări: EMI, Universitatea Debrecen, TÜV SÜD. Standarde SNIП, ASTM, ASHRAE.">
+  <h2 class="fi" style="font-size:clamp(22px,3.5vw,48px)">VALIDAT <span class="accent">INDEPENDENT</span></h2>
+  <div class="fi-d1 mt-lg row-center" style="gap:24px">
+    <div class="card" style="min-width:180px">
+      <div class="card-icon">EMI</div>
+      <div class="card-title">Institutul EMI</div>
+      <div class="card-desc">Cercetare materiale de construcții</div>
+    </div>
+    <div class="card" style="min-width:180px">
+      <div class="card-icon" style="font-size:18px">DEBRECEN</div>
+      <div class="card-title">Universitatea Debrecen</div>
+      <div class="card-desc">Testare independentă</div>
+    </div>
+    <div class="card" style="min-width:180px">
+      <div class="card-icon" style="color:#0060a0">TÜV SÜD</div>
+      <div class="card-title">TÜV SÜD</div>
+      <div class="card-desc">Certificare internațională</div>
+    </div>
+  </div>
+  <p class="sub fi-d2" style="margin-top:24px">Standarde: SNIП 41-103-2000 · ASTM · ASHRAE/ANSI · MSZ-EN 15824:2009</p>
+</section>
+
+<!-- S28 — DISPONIBIL ACUM -->
+<section class="slide center" data-n="Produs disponibil pe piața din România prin Nano Revolution SRL, Oradea.">
+  <h2 class="fi" style="font-size:clamp(28px,4.5vw,60px)">DISPONIBIL <span class="accent">ACUM</span></h2>
+  <div class="fi-d1 mt-lg">
+    <div style="width:200px;height:200px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#222,#0d0d0d);border:2px solid #FF4500;display:flex;align-items:center;justify-content:center;box-shadow:0 0 50px rgba(255,69,0,.2);margin:0 auto">
+      <div style="text-align:center">
+        <span class="t-orb" style="font-size:32px;font-weight:900;color:#fff">therm<span class="accent">X</span></span>
+        <div style="font-size:10px;color:#555;margin-top:6px;letter-spacing:2px">NANO REVOLUTION</div>
+      </div>
+    </div>
+  </div>
+  <p class="fi-d2 sub" style="margin-top:24px">Membrană nanoceramică termoizolantă</p>
+  <p class="fi-d3" style="color:#555;font-size:13px;margin-top:8px">Grosime 0,5–3,5 mm · Aplicare exclusiv cu echipament airless specializat</p>
+</section>
+
+<!-- S29 — DEVENIȚI PARTENER -->
+<section class="slide center" data-n="Invitație pentru constructori, aplicatori, distribuitori. Rețea națională în expansiune.">
+  <h2 class="fi" style="font-size:clamp(26px,4vw,56px)">DEVENIȚI <span class="accent">PARTENER</span></h2>
+  <div class="fi-d1 mt-lg">
+    <svg width="360" height="250" viewBox="0 0 360 250">
+      <path d="M60,60 L110,35 L180,28 L250,35 L310,60 L320,100 L305,145 L265,170 L220,190 L160,195 L100,180 L65,150 L50,115 Z" fill="none" stroke="#222" stroke-width="2"/>
+      <circle cx="180" cy="80" r="5" fill="#FF4500"><animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite"/></circle>
+      <circle cx="130" cy="105" r="3.5" fill="#FF4500" opacity=".7"/>
+      <circle cx="230" cy="70" r="3.5" fill="#FF4500" opacity=".7"/>
+      <circle cx="100" cy="135" r="3.5" fill="#FF4500" opacity=".6"/>
+      <circle cx="255" cy="110" r="3.5" fill="#FF4500" opacity=".7"/>
+      <circle cx="200" cy="150" r="3.5" fill="#FF4500" opacity=".6"/>
+      <circle cx="150" cy="160" r="3" fill="#FF4500" opacity=".5"/>
+      <circle cx="280" cy="85" r="3" fill="#FF4500" opacity=".5"/>
+      <circle cx="215" cy="110" r="4" fill="#FF4500" opacity=".8"/>
+      <line x1="180" y1="80" x2="130" y2="105" stroke="#FF4500" stroke-width="1" opacity=".2"/>
+      <line x1="180" y1="80" x2="230" y2="70" stroke="#FF4500" stroke-width="1" opacity=".2"/>
+      <line x1="180" y1="80" x2="215" y2="110" stroke="#FF4500" stroke-width="1" opacity=".2"/>
+      <line x1="130" y1="105" x2="100" y2="135" stroke="#FF4500" stroke-width="1" opacity=".15"/>
+      <line x1="230" y1="70" x2="280" y2="85" stroke="#FF4500" stroke-width="1" opacity=".15"/>
+      <line x1="230" y1="70" x2="255" y2="110" stroke="#FF4500" stroke-width="1" opacity=".15"/>
+      <line x1="215" y1="110" x2="200" y2="150" stroke="#FF4500" stroke-width="1" opacity=".15"/>
+      <text x="180" y="230" fill="#555" font-size="11" text-anchor="middle" font-family="Inter">Rețea de parteneri în expansiune</text>
+    </svg>
+  </div>
+</section>
+
+<!-- S30 — CONTACT -->
+<section class="slide center" data-n="Slide de contact. Lăsați pe ecran în timpul Q&A.">
+  <div class="fi">
+    <span class="t-orb" style="font-size:clamp(48px,8vw,110px);font-weight:900">therm<span class="accent">X</span></span>
+  </div>
+  <div class="fi-d1" style="height:3px;width:100px;background:#FF4500;margin:20px auto"></div>
+  <p class="fi-d2" style="font-size:clamp(14px,1.8vw,24px);color:#aaa;letter-spacing:5px">milimetrul care contează</p>
+  <div class="fi-d3 col gap-md" style="margin-top:40px;align-items:center">
+    <span style="color:#ccc;font-size:18px;font-weight:500">nanorevolution.ro</span>
+    <span style="color:#888;font-size:15px">contact@nanorevolution.ro</span>
+    <span style="color:#888;font-size:15px">+40 771 445 577</span>
+  </div>
+</section>
+
+<!-- S31 — ÎNCĂ CEVA... -->
+<section class="slide center" style="background:#000" data-n="Slide dramatic. Pauză 5 sec pe textul mic. CTA-ul apare cu efect flicker.">
+  <div style="opacity:0;animation:fadeIn 1s .5s ease forwards">
+    <p style="color:#333;font-size:14px;letter-spacing:6px;margin-bottom:60px">ÎNCĂ CEVA...</p>
+  </div>
+  <div style="opacity:0;animation:flicker 2s 2s ease forwards">
+    <h2 style="font-size:clamp(24px,3.5vw,48px)">VIITORUL IZOLAȚIEI</h2>
+    <div style="height:3px;width:80px;background:#FF4500;margin:16px auto"></div>
+    <h2 style="font-size:clamp(20px,3vw,40px);margin-top:12px">SE MĂSOARĂ ÎN <span class="accent glow-text">MILIMETRI</span></h2>
+  </div>
+  <div style="opacity:0;animation:fadeIn 1s 3.5s ease forwards">
+    <div id="ctaBtn" style="margin-top:50px;padding:14px 36px;border:2px solid #FF4500;border-radius:4px;display:inline-block;cursor:pointer;transition:all .3s">
+      <span class="t-orb" style="font-size:15px;letter-spacing:3px;color:#FF4500;transition:color .3s">SOLICITAȚI CONSULTANȚĂ</span>
+    </div>
+    <p style="color:#333;font-size:12px;margin-top:20px">nanorevolution.ro · +40 771 445 577</p>
+  </div>
+</section>
+
+</div><!-- /deck -->
+
+<!-- NAV UI -->
+<div class="nav-counter" id="ctr">1 / 31</div>
+<div class="nav-arrows">
+  <button class="nav-btn" onclick="go(-1)" aria-label="Anterior">&#8592;</button>
+  <button class="nav-btn" onclick="go(1)" aria-label="Următorul">&#8594;</button>
+</div>
+<div class="notes-panel" id="notes"><strong>Note prezentator</strong><p id="ntxt"></p></div>
+
+<script>
+const S=document.querySelectorAll('.slide'),C=document.getElementById('ctr'),P=document.getElementById('prog'),NP=document.getElementById('notes'),NT=document.getElementById('ntxt');
+let cur=0,nv=false;
+function show(i){if(i<0||i>=S.length)return;S[cur].classList.remove('active');cur=i;S[cur].classList.add('active');C.textContent=(cur+1)+' / '+S.length;P.style.width=((cur+1)/S.length*100)+'%';NT.textContent=S[cur].getAttribute('data-n')||''}
+function go(d){show(cur+d)}
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();go(1)}
+  else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();go(-1)}
+  else if(e.key==='Home'){e.preventDefault();show(0)}
+  else if(e.key==='End'){e.preventDefault();show(S.length-1)}
+  else if(e.key==='n'||e.key==='N'){nv=!nv;NP.classList.toggle('open',nv)}
+  else if(e.key==='Escape'){nv=false;NP.classList.remove('open')}
+});
+document.querySelector('.deck').addEventListener('click',function(e){
+  if(e.target.closest('.nav-arrows')||e.target.closest('.notes-panel')||e.target.closest('#ctaBtn'))return;
+  e.clientX<window.innerWidth*.35?go(-1):e.clientX>window.innerWidth*.5&&go(1);
+});
+let tx=0;
+document.addEventListener('touchstart',function(e){tx=e.changedTouches[0].screenX});
+document.addEventListener('touchend',function(e){const d=e.changedTouches[0].screenX-tx;Math.abs(d)>50&&go(d<0?1:-1)});
+// CTA hover
+const cta=document.getElementById('ctaBtn');
+if(cta){cta.onmouseover=function(){this.style.background='#FF4500';this.querySelector('span').style.color='#fff'};cta.onmouseout=function(){this.style.background='transparent';this.querySelector('span').style.color='#FF4500'}}
+show(0);
+</script>
+</body>
+</html>

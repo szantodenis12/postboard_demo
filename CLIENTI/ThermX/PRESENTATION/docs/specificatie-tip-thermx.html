@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>thermX — Specificație Tip pentru Caiet de Sarcini</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6B00;
+      --orange-light: #FFF3E8;
+      --blue: #1B3A5C;
+      --blue-light: #E8F0F8;
+      --text: #1a1a1a;
+      --text-muted: #555;
+      --border: #e0e0e0;
+      --bg: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    @page {
+      size: A4;
+      margin: 20mm 18mm 25mm 18mm;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 16px;
+      border-bottom: 3px solid var(--orange);
+      margin-bottom: 28px;
+    }
+
+    .doc-header__logo img { height: 52px; }
+
+    .doc-header__company {
+      text-align: right;
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .doc-header__company strong {
+      color: var(--text);
+      font-size: 9pt;
+    }
+
+    .doc-title {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .doc-title h1 {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 20pt;
+      font-weight: 800;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .doc-title .subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 11pt;
+      font-weight: 600;
+      color: var(--orange);
+    }
+
+    .doc-title .doc-ref {
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .section-title {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 12pt;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--orange);
+      margin: 24px 0 12px;
+    }
+
+    .section-title--sm {
+      font-size: 10.5pt;
+      border-bottom: 1px solid var(--border);
+    }
+
+    p { margin-bottom: 10px; }
+
+    .lead {
+      font-size: 11pt;
+      font-weight: 600;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .highlight-box {
+      background: var(--orange-light);
+      border-left: 4px solid var(--orange);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .info-box {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .copy-box {
+      background: #f8f9fa;
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 16px 0;
+      position: relative;
+    }
+
+    .copy-box::before {
+      content: 'TEXT CAIET DE SARCINI — COPY / PASTE';
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      background: var(--bg);
+      padding: 0 8px;
+      font-family: 'Exo 2', sans-serif;
+      font-size: 8pt;
+      font-weight: 700;
+      color: var(--orange);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .copy-box p {
+      font-size: 10pt;
+      margin-bottom: 8px;
+    }
+
+    .copy-box .spec-line {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      padding: 4px 0;
+      border-bottom: 1px dotted var(--border);
+      font-size: 9.5pt;
+    }
+
+    .copy-box .spec-line:last-child { border-bottom: none; }
+
+    .copy-box .spec-line dt {
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .copy-box .spec-line dd {
+      font-weight: 600;
+      text-align: right;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 10pt;
+    }
+
+    th, td {
+      padding: 8px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--blue);
+      color: #fff;
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 600;
+      font-size: 9.5pt;
+      text-transform: uppercase;
+    }
+
+    tr:nth-child(even) { background: #f8f9fa; }
+
+    ul, ol {
+      margin: 8px 0 12px 22px;
+    }
+
+    li { margin-bottom: 5px; }
+
+    .cols-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin: 12px 0;
+    }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    .doc-footer {
+      margin-top: 32px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8pt;
+      color: var(--text-muted);
+    }
+
+    .doc-footer a {
+      color: var(--orange);
+      text-decoration: none;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 18px 0;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: 'Exo 2', sans-serif;
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+      background: var(--orange);
+      color: #fff;
+    }
+
+    @media print {
+      body { font-size: 9.5pt; line-height: 1.45; }
+      .doc-header { margin-bottom: 16px; padding-bottom: 12px; }
+      .section-title { margin-top: 16px; margin-bottom: 8px; page-break-after: avoid; }
+      .section-title--sm { page-break-after: avoid; }
+      .no-print { display: none; }
+      .page-break { page-break-before: always; }
+      a { color: var(--text) !important; text-decoration: none; }
+      table { page-break-inside: avoid; }
+      tr { page-break-inside: avoid; }
+      .copy-box { page-break-inside: avoid; }
+      .info-box, .highlight-box { page-break-inside: avoid; }
+      .cols-2 { page-break-inside: avoid; }
+      p { orphans: 3; widows: 3; }
+      h2, h3 { page-break-after: avoid; }
+    }
+
+    @media screen {
+      body {
+        max-width: 210mm;
+        margin: 20px auto;
+        padding: 30px 28px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border-radius: 4px;
+      }
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 10pt;
+    }
+
+    .field-row__label {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 9pt;
+    }
+
+    .field-row__value {
+      font-weight: 500;
+    }
+
+    .field-row__value--editable {
+      border-bottom: 1px dashed var(--orange);
+      min-height: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Nano Revolution SRL</strong><br>
+      Str. Ogorului Nr. 3, Oradea<br>
+      Jud. Bihor, 410554, România<br>
+      <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a><br>
+      +40 771 445 577
+    </div>
+  </header>
+
+  <!-- ═══ TITLE ═══ -->
+  <div class="doc-title">
+    <h1>Specificație Tip</h1>
+    <div class="subtitle">Izolație Termică Nanoceramică thermX — Caiet de Sarcini</div>
+    <div class="doc-ref">Ref. SPEC-THERMX-2026 &nbsp;|&nbsp; Rev. 01 &nbsp;|&nbsp; Data: 07.03.2026</div>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong>Acest document</strong> este un text tip pentru caietul de sarcini, pregătit pentru integrare directă în documentația de proiect. Arhitecții și proiectanții pot copia secțiunile relevante și le pot adapta la specificul proiectului.</p>
+  </div>
+
+
+  <!-- ═══ IDENTIFICARE ═══ -->
+  <h2 class="section-title">Date de identificare proiect</h2>
+
+  <div class="field-row">
+    <div class="field-row__label">Proiect:</div>
+    <div class="field-row__value field-row__value--editable"></div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Beneficiar:</div>
+    <div class="field-row__value field-row__value--editable"></div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Proiectant:</div>
+    <div class="field-row__value field-row__value--editable"></div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Faza:</div>
+    <div class="field-row__value field-row__value--editable"></div>
+  </div>
+  <div class="field-row">
+    <div class="field-row__label">Data:</div>
+    <div class="field-row__value field-row__value--editable"></div>
+  </div>
+
+
+  <!-- ═══ 1. GENERALITĂȚI ═══ -->
+  <h2 class="section-title">1. Generalități</h2>
+
+  <div class="copy-box">
+    <p>Izolația termică a elementelor constructive specificate în prezentul proiect se realizează cu membrană termoizolantă și hidroizolantă pe bază de nanotehnologie ceramică, tip <strong>thermX</strong> (producător: Nano Revolution SRL, distribuitor autorizat).</p>
+    <p>thermX este un material compozit cu funcție de membrană termoizolantă și hidroizolantă, conținând microsfere ceramice umplute cu gaz rarefiat (aproximativ 75% din volumul materialului uscat), liant stiren-acrilic, și aditivi bioprotectori (antifungici, biocizi, conservanți, agenți antiîngheț).</p>
+    <p>Materialul se aplică direct pe suprafața elementelor constructive, sub formă lichidă, prin pensulă, trafalet sau pistol airless, formând o membrană continuă, elastică și aderentă, cu proprietăți simultane de izolație termică, hidroizolație și protecție anticorozivă.</p>
+  </div>
+
+
+  <!-- ═══ 2. SPECIFICAȚII TEHNICE ═══ -->
+  <h2 class="section-title">2. Specificații tehnice obligatorii</h2>
+
+  <p>Materialul utilizat trebuie să îndeplinească următoarele specificații tehnice minime:</p>
+
+  <div class="copy-box">
+    <table style="margin:0;">
+      <thead>
+        <tr>
+          <th style="width:48%">Proprietate</th>
+          <th style="width:17%">Unitate</th>
+          <th>Valoare minimă / cerință</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Conductivitate termică la 20°C</td>
+          <td>W/m·°K</td>
+          <td><strong>≤ 0,001</strong></td>
+        </tr>
+        <tr>
+          <td>Densitate strat uscat</td>
+          <td>kg/m³</td>
+          <td>380–410</td>
+        </tr>
+        <tr>
+          <td>Aderență pe beton (durabilitate la rupere)</td>
+          <td>MPa</td>
+          <td><strong>≥ 1,84</strong></td>
+        </tr>
+        <tr>
+          <td>Aderență pe metal (durabilitate la rupere)</td>
+          <td>MPa</td>
+          <td>≥ 1,53</td>
+        </tr>
+        <tr>
+          <td>Rezistență la tracțiune, după aplicare</td>
+          <td>MPa</td>
+          <td>≥ 2,0</td>
+        </tr>
+        <tr>
+          <td>Rezistență la tracțiune, după 10 ani</td>
+          <td>MPa</td>
+          <td>≥ 3,0</td>
+        </tr>
+        <tr>
+          <td>Alungire relativă la rupere</td>
+          <td>%</td>
+          <td><strong>≥ 12</strong></td>
+        </tr>
+        <tr>
+          <td>Absorbție de apă</td>
+          <td>g/cm³</td>
+          <td>≤ 0,03</td>
+        </tr>
+        <tr>
+          <td>Temperatură de exploatare</td>
+          <td>°C</td>
+          <td><strong>−60 → +230</strong></td>
+        </tr>
+        <tr>
+          <td>Reacție la foc (EN 15824), stare uscată</td>
+          <td>—</td>
+          <td><strong>Clasa A</strong></td>
+        </tr>
+        <tr>
+          <td>Coeficient de emisie termică</td>
+          <td>W/m²·°C</td>
+          <td>≤ 2,2</td>
+        </tr>
+        <tr>
+          <td>Permeabilitate la vapori</td>
+          <td>mg/m·h·Pa</td>
+          <td>≤ 0,0014</td>
+        </tr>
+        <tr>
+          <td>Durabilitate garantată producător</td>
+          <td>ani</td>
+          <td><strong>≥ 20</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- ═══ PAGE 2 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Specificație Tip</strong> — thermX Izolație Nanoceramică &nbsp;|&nbsp; Pag. 2/3
+    </div>
+  </header>
+
+
+  <!-- ═══ 3. CONDIȚII DE APLICARE ═══ -->
+  <h2 class="section-title">3. Condiții de aplicare</h2>
+
+  <div class="copy-box">
+    <p class="lead" style="font-size:10pt;">Lucrările de aplicare a izolației termice nanoceramice se execută cu respectarea următoarelor condiții:</p>
+
+    <h3 class="section-title section-title--sm" style="margin-top:8px;">3.1 Pregătirea suprafeței</h3>
+    <ul>
+      <li>Suprafața suport trebuie să fie curată, uscată, fără praf, grăsimi, uleiuri sau particule neaderente.</li>
+      <li>Suprafețele metalice se pregătesc prin curățare mecanică și/sau chimică și se grunduiesc conform recomandărilor producătorului.</li>
+      <li>Suprafețele de beton trebuie să fie complet maturate (min. 28 zile) și cu umiditate reziduală sub 5%.</li>
+    </ul>
+
+    <h3 class="section-title section-title--sm">3.2 Condiții ambientale</h3>
+    <ul>
+      <li>Temperatura suprafeței la aplicare: <strong>+1°C → +150°C</strong></li>
+      <li>Temperatura ambientală recomandată: <strong>+5°C → +35°C</strong></li>
+      <li>Umiditate relativă a aerului: <strong>&lt; 80%</strong></li>
+      <li>Nu se aplică pe suprafețe umede, în ploaie, sau pe timp de ceață.</li>
+    </ul>
+
+    <h3 class="section-title section-title--sm">3.3 Metode de aplicare</h3>
+    <ul>
+      <li>Aplicare cu pensula, trafaletul sau pistolul airless</li>
+      <li>Grosime recomandată per strat: <strong>0,5 mm</strong></li>
+      <li>Grosime totală recomandată: <strong>0,5–3,5 mm</strong> (în funcție de cerințele termice ale proiectului)</li>
+      <li>Timp de uscare între straturi: <strong>minim 24 ore</strong> (la 20°C și 60% umiditate relativă)</li>
+      <li>Număr de straturi: conform calculului termic specific proiectului</li>
+    </ul>
+
+    <h3 class="section-title section-title--sm">3.4 Consum estimat</h3>
+    <ul>
+      <li>~1 litru / m² per strat de 0,5 mm</li>
+      <li>Consumul efectiv poate varia în funcție de rugozitatea și porozitatea suportului</li>
+    </ul>
+  </div>
+
+
+  <!-- ═══ 4. DOCUMENTE DE REFERINȚĂ ═══ -->
+  <h2 class="section-title">4. Documente de referință</h2>
+
+  <div class="copy-box">
+    <p>Furnizorul materialului va pune la dispoziția proiectantului și beneficiarului următoarele documente:</p>
+    <ul>
+      <li>Fișa tehnică a produsului (TDS) — în vigoare la data livrării</li>
+      <li>Fișa de securitate (SDS) — conformă Reg. (CE) nr. 1907/2006 (REACH)</li>
+      <li>Declarație de conformitate</li>
+      <li>Certificat de calitate per lot de livrare</li>
+      <li>Instrucțiuni de aplicare detaliate</li>
+      <li>Calcul termic personalizat pentru proiectul specific (la cerere)</li>
+    </ul>
+
+    <p><strong>Standarde aplicabile:</strong></p>
+    <ul>
+      <li>EN 15824 — Specificații pentru tencuieli exterioare și interioare pe bază de lianți organici</li>
+      <li>СНиП 41-103-2000 — Standard de calcul pentru izolație termică pe suprafețe fierbinți</li>
+      <li>Regulamentul (CE) nr. 1907/2006 (REACH)</li>
+      <li>Regulamentul (CE) nr. 1272/2008 (CLP)</li>
+    </ul>
+  </div>
+
+
+  <!-- ═══ 5. GARANȚII ═══ -->
+  <h2 class="section-title">5. Garanții și durabilitate</h2>
+
+  <div class="copy-box">
+    <ul>
+      <li><strong>Garanție producător:</strong> 20 de ani</li>
+      <li><strong>Durabilitate documentată:</strong> peste 35 de ani</li>
+      <li>Performanța se îmbunătățește în primii ani — rezistența la tracțiune crește de la 2,0 la 3,0 MPa odată cu polimerizarea completă</li>
+      <li>Gradul de reflexie difuză se menține peste 90% și după 10 ani de îmbătrânire accelerată</li>
+    </ul>
+  </div>
+
+
+  <!-- ═══ 6. ZONE TIPICE DE APLICARE ═══ -->
+  <h2 class="section-title">6. Zone tipice de aplicare în proiect</h2>
+
+  <p>Selectați și completați zonele relevante pentru proiectul specific:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:5%"></th>
+        <th style="width:35%">Zonă de aplicare</th>
+        <th style="width:20%">Grosime recomandată</th>
+        <th>Observații</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Fațade exterioare</td>
+        <td>1,0–1,5 mm</td>
+        <td>Sub/peste tencuială, pe suprafețe finisate</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Pereți interiori</td>
+        <td>0,5–1,0 mm</td>
+        <td>Peste finisaje, sub tencuială, pe ceramică</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Acoperiș / Terasă</td>
+        <td>1,0–1,5 mm</td>
+        <td>Pe bitumos, metal, ceramică, membrane</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Plafoane</td>
+        <td>0,5–1,0 mm</td>
+        <td>Plafoane false, decorative, sub tencuială</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Pardoseli</td>
+        <td>1,0 mm</td>
+        <td>Pe ceramică, metal, compozit, lemn</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Conducte HVAC</td>
+        <td>0,5–1,5 mm</td>
+        <td>Conducte calde/reci, fitinguri, schimbătoare</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Conducte industriale</td>
+        <td>0,5–3,5 mm</td>
+        <td>Petrol, gaze, abur — conform calcul termic</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Punți termice</td>
+        <td>1,0–2,0 mm</td>
+        <td>Stâlpi, grinzi, balcoane, cornișe</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══ PAGE 3 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Specificație Tip</strong> — thermX Izolație Nanoceramică &nbsp;|&nbsp; Pag. 3/3
+    </div>
+  </header>
+
+
+  <!-- ═══ 7. RECEPȚIE ═══ -->
+  <h2 class="section-title">7. Condiții de recepție și control calitate</h2>
+
+  <div class="copy-box">
+    <p>La recepția lucrărilor de izolație termică cu thermX se verifică:</p>
+    <ol>
+      <li><strong>Grosimea stratului aplicat</strong> — se măsoară cu etalon de grosime în minimum 3 puncte per element constructiv</li>
+      <li><strong>Continuitatea membranei</strong> — inspecție vizuală pentru zone neacoperite, fisuri sau exfolieri</li>
+      <li><strong>Aderența</strong> — test de aderență prin tracțiune (pull-off) conform EN 1542, pe epruvete reprezentative</li>
+      <li><strong>Documentație</strong> — verificarea existenței certificatelor de calitate per lot, fișei tehnice și fișei de securitate</li>
+      <li><strong>Condiții de aplicare</strong> — verificarea jurnalului de lucrări pentru respectarea temperaturii, umidității și timpilor de uscare</li>
+    </ol>
+
+    <p style="margin-top:12px;"><strong>Criterii de respingere:</strong></p>
+    <ul>
+      <li>Grosimea stratului sub valoarea specificată în proiect cu mai mult de 10%</li>
+      <li>Zone vizibile de discontinuitate, bășicări, exfoliere sau lipsă de acoperire</li>
+      <li>Aderență sub 1,5 MPa pe beton sau sub 1,2 MPa pe metal</li>
+      <li>Lipsa documentației de calitate obligatorii</li>
+    </ul>
+  </div>
+
+
+  <!-- ═══ 8. DEPOZITARE ═══ -->
+  <h2 class="section-title">8. Transport, depozitare și manipulare pe șantier</h2>
+
+  <div class="copy-box">
+    <ul>
+      <li><strong>Transport:</strong> materialul se transportă în ambalajul original, ferit de temperaturi sub +5°C și de expunere directă la soare</li>
+      <li><strong>Depozitare:</strong> în spații ventilate, la temperaturi între +5°C și +26°C, ferit de umezeală</li>
+      <li><strong>Termen de valabilitate:</strong> conform indicațiilor producătorului de pe ambalaj</li>
+      <li><strong>Manipulare:</strong> se respectă prevederile fișei de securitate (SDS), se utilizează echipament individual de protecție (mănuși, ochelari)</li>
+      <li>Materialul este pe bază de apă, clasificat ecologic, netoxic la utilizare conformă</li>
+    </ul>
+  </div>
+
+
+  <!-- ═══ 9. CONTACT ═══ -->
+  <h2 class="section-title">9. Suport tehnic și calcul termic</h2>
+
+  <div class="info-box">
+    <p><strong>Nano Revolution SRL</strong> oferă gratuit următoarele servicii de suport pentru proiectele care specifică thermX:</p>
+    <ul style="margin-top:8px;">
+      <li>Calcul termic personalizat — rezultat în 48h de la primirea proiectului</li>
+      <li>Asistență tehnică în redactarea caietelor de sarcini</li>
+      <li>Mostre fizice de material pentru evaluare</li>
+      <li>Obiecte BIM pentru integrare în proiect</li>
+      <li>Vizite tehnice pe șantier (la cerere)</li>
+    </ul>
+  </div>
+
+  <div class="cols-2" style="margin-top:16px;">
+    <div>
+      <p class="lead" style="font-size:10pt;">Contact tehnic:</p>
+      <p>E-mail: <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a><br>
+      Tel: +40 771 445 577<br>
+      Web: nanorevolution.ro</p>
+    </div>
+    <div>
+      <p class="lead" style="font-size:10pt;">Solicitare calcul termic:</p>
+      <p>Trimiteți planurile de proiect (format .dwg sau .pdf) la adresa de email de mai sus, specificând:</p>
+      <ul>
+        <li>Tipul clădirii / obiectului</li>
+        <li>Zona climatică</li>
+        <li>Suprafața estimată de izolat</li>
+        <li>Cerințe termice specifice</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- ═══ DISCLAIMER ═══ -->
+  <div class="divider"></div>
+
+  <p style="font-size: 8.5pt; color: var(--text-muted); line-height: 1.5;">
+    Acest document este un model orientativ pentru caietul de sarcini. Proiectantul este responsabil pentru adaptarea specificațiilor la cerințele proiectului specific, la normativele în vigoare și la condițiile locale. Datele tehnice sunt cele furnizate de producător la data emiterii acestui document. Pentru cele mai recente specificații, se solicită fișa tehnică actualizată de la producător.
+  </p>
+
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="doc-footer">
+    <div>&copy; 2026 Nano Revolution SRL — Toate drepturile rezervate</div>
+    <div>
+      <a href="https://nanorevolution.ro">nanorevolution.ro</a> &nbsp;|&nbsp;
+      <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a>
+    </div>
+  </footer>
+
+</body>
+</html>

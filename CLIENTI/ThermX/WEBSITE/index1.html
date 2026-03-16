@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>thermX | Membrană Nanoceramică Fluidă</title>
+    <style>
+        /* CSS Variables for Premium & Technical Look */
+        :root {
+            --bg-dark: #0a0a0c;
+            --bg-panel: #141418;
+            --text-main: #e0e0e0;
+            --text-muted: #888890;
+            --accent-platinum: #E5E4E2; /* Subtle premium reference */
+            --accent-blue: #2a6fb3;
+            --border-color: #2a2a35;
+            --font-sans: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5%;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(10, 10, 12, 0.9);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-main);
+        }
+
+        .logo span {
+            color: var(--accent-platinum);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--accent-platinum);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 5%;
+            margin-top: 60px;
+            background: radial-gradient(circle at 80% 20%, rgba(42, 111, 179, 0.1) 0%, transparent 40%);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-platinum);
+            margin-bottom: 1.5rem;
+            width: fit-content;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+            max-width: 800px;
+        }
+
+        .hero h1 strong {
+            font-weight: 700;
+            background: linear-gradient(90deg, #E5E4E2, #888890);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: var(--accent-platinum);
+            border: 1px solid var(--accent-platinum);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--accent-platinum);
+            color: var(--bg-dark);
+        }
+
+        /* Interactive Tabs Section */
+        .tech-section {
+            padding: 8rem 5%;
+            background-color: var(--bg-panel);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            margin-bottom: 4rem;
+            text-align: center;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .tabs-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .tabs-nav {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 1.5rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 2px solid transparent;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-platinum);
+            border-bottom: 2px solid var(--accent-platinum);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .tech-data {
+            background: var(--bg-dark);
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-row:last-child {
+            border-bottom: none;
+        }
+
+        .data-label {
+            color: var(--text-muted);
+        }
+
+        .data-value {
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: var(--accent-platinum);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Application Grid */
+        .applications {
+            padding: 8rem 5%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .card {
+            background: var(--bg-panel);
+            padding: 3rem 2rem;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-platinum);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-platinum);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5%;
+            background: var(--bg-panel);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .tab-content.active { grid-template-columns: 1fr; }
+            nav ul { display: none; } /* Simplified for mobile, would need a hamburger menu in prod */
+            .tabs-nav { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">therm<span>X</span></div>
+        <nav>
+            <ul>
+                <li><a href="#produs">Produs</a></li>
+                <li><a href="#tehnologie">Tehnologie</a></li>
+                <li><a href="#aplicatii">Aplicații</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="produs">
+        <div class="hero-badge">Standardul de platină în eficiența energetică</div>
+        <h1>Membrană <strong>nanoceramică</strong> termoizolantă și hidroizolantă fluidă.</h1>
+        <p>Compozit fluid pe bază de latex stiren-acrilic. Protecție și izolație prin barieră conductivă cu microsfere ceramice vidate, aplicabilă la o grosime de 0,5 mm – 1 mm.</p>
+        <a href="#tehnologie" class="btn">Analizează Specificațiile</a>
+    </section>
+
+    <section class="tech-section" id="tehnologie">
+        <div class="section-header">
+            <h2>Parametri și Rigoare Tehnică</h2>
+            <p style="color: var(--text-muted);">Performanță verificabilă conform standardelor SNiP 41-103-2000 și ASTM/ASHRAE.</p>
+        </div>
+
+        <div class="tabs-container">
+            <div class="tabs-nav">
+                <button class="tab-btn active" data-tab="tab1">Principiul Fizic</button>
+                <button class="tab-btn" data-tab="tab2">Managementul Punților</button>
+                <button class="tab-btn" data-tab="tab3">Specificații Exacte</button>
+            </div>
+
+            <div class="tab-content active" id="tab1">
+                <div>
+                    <h3 style="font-size: 1.8rem; margin-bottom: 1rem; font-weight: 300;">Barieră Conductivă & Reflexie</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                        Aproximativ 75% din volumul materialului este ocupat de microsfere ceramice vidate. Acestea replică condițiile de vid spațial pentru a minimiza transferul termic convectiv și conductiv. 
+                    </p>
+                    <p style="color: var(--text-muted);">
+                        Nu discutăm despre o simplă izolație, ci despre o barieră termică avansată care gestionează reflexia radiației termice (infraroșu) și dispersia radiativă, menținând ROI-ul la 3-5 ani în aplicațiile industriale și comerciale.
+                    </p>
+                </div>
+                <div class="tech-data">
+                    <div class="data-row">
+                        <span class="data-label">Reflexie Termică</span>
+                        <span class="data-value">&gt; 80%</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label">Grosime Aplicare</span>
+                        <span class="data-value">0,5 - 1 mm</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label">Masă Structurală</span>
+                        <span class="data-value">~0,4 kg/m²</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab2">
+                <div>
+                    <h3 style="font-size: 1.8rem; margin-bottom: 1rem; font-weight: 300;">Eliminarea Rosturilor și a Punților Termice</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                        <strong>Problema fizică:</strong> Întreruperile în stratul termoizolant convențional la îmbinări generează punți termice liniare, compromițând eficiența energetică globală a anvelopei clădirii sau a infrastructurii.
+                    </p>
+                    <p style="color: var(--text-muted);">
+                        <strong>Soluția tehnică:</strong> Spre deosebire de izolațiile convenționale fibroase, aplicarea fluidă a compozitului thermX creează o membrană continuă, polimerizată direct pe stratul suport. Fără dibluri, fără rosturi, fără pierderi necalculate de căldură.
+                    </p>
+                </div>
+                <div class="tech-data">
+                    <div class="data-row">
+                        <span class="data-label">Formare Membrană</span>
+                        <span class="data-value">Continuă / Monolitică</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label">Componentă Acrilică</span>
+                        <span class="data-value">~80% (Elasticitate)</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label">Componentă Stiren</span>
+                        <span class="data-value">~20% (Duritate)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab3">
+                <div>
+                    <h3 style="font-size: 1.8rem; margin-bottom: 1rem; font-weight: 300;">Date Fundamentale de Material</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                        Demonstrarea eficienței nu se face prin termeni subiectivi, ci prin matematică aplicată și rezistență la permeabilitate. Structura microporoasă este concepută pentru a reduce componenta convectivă a transferului termic.
+                    </p>
+                    <p style="color: var(--text-muted);">
+                        Validat prin standarde de calcul și simulări (ex. coeficient global U de 0,224 W/m²·K în configurații stratificate specifice). Protejează suprafețele împotriva coroziunii și previne formarea condensului.
+                    </p>
+                </div>
+                <div class="tech-data">
+                    <div class="data-row">
+                        <span class="data-label">Conductivitate (λ) estimat</span>
+                        <span class="data-value">0,001 W/m·K</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label">Durata de Viață Proiectată</span>
+                        <span class="data-value">30-35 Ani</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label">Siguranță (REACH)</span>
+                        <span class="data-value">Non-toxic / Ecologic</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="applications" id="aplicatii">
+        <div class="section-header">
+            <h2>Domenii de Aplicabilitate</h2>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <h3>Infrastructură & Industrie</h3>
+                <p>Izolarea conductelor externe (lichid/abur/gaz), instalații termice, boilere și sisteme HVAC. Aplicarea fluidă permite abordarea geometriilor complexe unde vata minerală este complet ineficientă sau voluminoasă.</p>
+            </div>
+            <div class="card">
+                <h3>Monumente & Fațade Istorice</h3>
+                <p>Datorită grosimii finale de doar 1 mm, profilul arhitectural se menține intact. Nu necesită consolidări structurale suplimentare sau ancorări mecanice distructive pentru fațadă.</p>
+            </div>
+            <div class="card">
+                <h3>Sisteme Mobile & Transport</h3>
+                <p>Autospeciale, camioane frigorifice, vagoane și infrastructuri mobile. Greutatea redusă a membranei scade consumul de combustibil pe termen lung, oferind o soluție superioară materialelor izolante masive.</p>
+            </div>
+            <div class="card">
+                <h3>Rezidențial Premium</h3>
+                <p>Protecție la nivelul acoperișurilor, eliminarea punților termice din interior și protecție anti-condens, oferind un coeficient ridicat de eficiență energetică menținând în același timp la maximum spațiul util din incintă.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="logo" style="margin-bottom: 1rem;">therm<span>X</span></div>
+        <p>Membrană termoizolantă nanoceramică fluidă.</p>
+        <p style="margin-top: 2rem; font-size: 0.8rem;">© 2026 Toate drepturile rezervate. Conform cu standardele SNiP și ASTM.</p>
+    </footer>
+
+    <script>
+        // Interactive Tabs Logic
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons and contents
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                // Add active class to clicked button
+                btn.classList.add('active');
+
+                // Show corresponding tab content
+                const tabId = btn.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Smooth Scrolling for Anchors
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

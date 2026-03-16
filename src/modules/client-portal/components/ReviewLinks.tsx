@@ -220,7 +220,7 @@ export function ReviewLinks() {
                       {/* Actions */}
                       <div className="flex items-center gap-1 shrink-0">
                         <a
-                          href={`${REVIEW_BASE}/review/${t.token}`}
+                          href={appUrl(`/review/${t.token}`)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="p-2 rounded-lg text-white/20 hover:text-white/60 hover:bg-white/[0.04] transition-all"

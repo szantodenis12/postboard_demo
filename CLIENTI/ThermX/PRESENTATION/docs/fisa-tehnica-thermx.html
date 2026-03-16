@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>thermX — Fișă Tehnică</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6B00;
+      --orange-light: #FFF3E8;
+      --blue: #1B3A5C;
+      --blue-light: #E8F0F8;
+      --text: #1a1a1a;
+      --text-muted: #555;
+      --border: #e0e0e0;
+      --bg: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    @page {
+      size: A4;
+      margin: 20mm 18mm 25mm 18mm;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    /* — HEADER — */
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 16px;
+      border-bottom: 3px solid var(--orange);
+      margin-bottom: 28px;
+    }
+
+    .doc-header__logo img {
+      height: 52px;
+    }
+
+    .doc-header__company {
+      text-align: right;
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .doc-header__company strong {
+      color: var(--text);
+      font-size: 9pt;
+    }
+
+    /* — TITLE — */
+    .doc-title {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .doc-title h1 {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 22pt;
+      font-weight: 800;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .doc-title .subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 12pt;
+      font-weight: 600;
+      color: var(--orange);
+      text-transform: uppercase;
+    }
+
+    .doc-title .doc-ref {
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* — SECTIONS — */
+    .section-title {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 13pt;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--orange);
+      margin: 28px 0 14px;
+    }
+
+    .section-title--sm {
+      font-size: 11pt;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* — LEAD TEXT — */
+    .lead {
+      font-size: 11pt;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    p { margin-bottom: 10px; }
+
+    /* — HIGHLIGHT BOX — */
+    .highlight-box {
+      background: var(--orange-light);
+      border-left: 4px solid var(--orange);
+      padding: 14px 18px;
+      margin: 16px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .highlight-box p { margin-bottom: 0; }
+
+    .info-box {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 14px 18px;
+      margin: 16px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .info-box p { margin-bottom: 4px; }
+
+    /* — TABLES — */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 10pt;
+    }
+
+    th, td {
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--blue);
+      color: #fff;
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 600;
+      font-size: 9.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    tr:nth-child(even) { background: #f8f9fa; }
+
+    td:first-child { font-weight: 500; }
+
+    .table-unit {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 9.5pt;
+    }
+
+    .table-value {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* — LISTS — */
+    ul, ol {
+      margin: 8px 0 12px 22px;
+    }
+
+    li { margin-bottom: 5px; }
+
+    ul.check-list {
+      list-style: none;
+      margin-left: 0;
+    }
+
+    ul.check-list li {
+      padding-left: 22px;
+      position: relative;
+    }
+
+    ul.check-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--orange);
+      font-weight: 700;
+    }
+
+    /* — TWO COLUMNS — */
+    .cols-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 14px 0;
+    }
+
+    /* — KEY SPECS GRID — */
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .spec-card {
+      background: var(--blue-light);
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .spec-card__value {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 16pt;
+      font-weight: 800;
+      color: var(--orange);
+      line-height: 1.2;
+    }
+
+    .spec-card__label {
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* — FORMULA — */
+    .formula-block {
+      background: #f8f9fa;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 24px;
+      margin: 14px 0;
+      text-align: center;
+    }
+
+    .formula-block .formula {
+      font-family: 'Cambria Math', 'Times New Roman', serif;
+      font-size: 13pt;
+      font-style: italic;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+
+    .formula-block .formula-legend {
+      font-size: 9pt;
+      color: var(--text-muted);
+      text-align: left;
+    }
+
+    .formula-block .formula-legend dt {
+      font-weight: 600;
+      color: var(--text);
+      float: left;
+      width: 70px;
+    }
+
+    .formula-block .formula-legend dd {
+      margin-left: 80px;
+      margin-bottom: 3px;
+    }
+
+    /* — FOOTER — */
+    .doc-footer {
+      margin-top: 32px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8pt;
+      color: var(--text-muted);
+    }
+
+    .doc-footer a {
+      color: var(--orange);
+      text-decoration: none;
+    }
+
+    /* — PAGE BREAKS — */
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    /* — PRINT — */
+    @media print {
+      body { font-size: 9.5pt; line-height: 1.45; }
+      .doc-header { margin-bottom: 16px; padding-bottom: 12px; }
+      .section-title { margin-top: 18px; margin-bottom: 10px; page-break-after: avoid; }
+      .section-title--sm { page-break-after: avoid; }
+      .no-print { display: none; }
+      .page-break { page-break-before: always; }
+      a { color: var(--text) !important; text-decoration: none; }
+      table { page-break-inside: avoid; }
+      tr { page-break-inside: avoid; }
+      .highlight-box, .info-box { page-break-inside: avoid; }
+      .specs-grid { page-break-inside: avoid; }
+      .economy-row { page-break-inside: avoid; }
+      .formula-block { page-break-inside: avoid; }
+      .cols-2 { page-break-inside: avoid; }
+      p { orphans: 3; widows: 3; }
+      h2, h3 { page-break-after: avoid; }
+    }
+
+    /* — SCREEN ONLY — */
+    @media screen {
+      body {
+        max-width: 210mm;
+        margin: 20px auto;
+        padding: 30px 28px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border-radius: 4px;
+      }
+    }
+
+    /* — BADGE — */
+    .badge {
+      display: inline-block;
+      background: var(--orange);
+      color: #fff;
+      font-family: 'Exo 2', sans-serif;
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge--blue {
+      background: var(--blue);
+    }
+
+    /* — DIVIDER — */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    /* — ECONOMY TABLE — */
+    .economy-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 6px 0;
+    }
+
+    .economy-row__thickness {
+      background: var(--blue);
+      color: #fff;
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 700;
+      font-size: 11pt;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    .economy-row__value {
+      padding: 10px 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+
+    .economy-row__value .pct {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 14pt;
+      font-weight: 800;
+      color: var(--orange);
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Nano Revolution SRL</strong><br>
+      Str. Ogorului Nr. 3, Oradea<br>
+      Jud. Bihor, 410554, România<br>
+      <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a><br>
+      +40 771 445 577
+    </div>
+  </header>
+
+  <!-- ═══ TITLE ═══ -->
+  <div class="doc-title">
+    <h1>Fișă Tehnică</h1>
+    <div class="subtitle">Izolație nanoceramică thermX</div>
+    <div class="doc-ref">Ref. TDS-THERMX-2026 &nbsp;|&nbsp; Rev. 03 &nbsp;|&nbsp; Data: 07.03.2026</div>
+  </div>
+
+
+  <!-- ═══ 1. DESCRIERE PRODUS ═══ -->
+  <h2 class="section-title">1. Descriere produs</h2>
+
+  <p class="lead">thermX este un material compozit cu funcție de membrană termoizolantă și hidroizolantă, bazat pe tehnologie nanoceramică cu aditivi speciali — agenți bioprotectori, antireactivi și antiîngheț.</p>
+
+  <p>Latexul stiren-acrilic este utilizat în compoziție ca element de legătură pentru a obține caracteristicile specifice unei membrane. Stirenul (aproximativ 20%) conferă duritate, în timp ce componenta acrilică (aproximativ 80%) asigură elasticitate și rezistență la intemperii.</p>
+
+  <p>Membrana deține toate proprietățile unui liant acrilic, inclusiv rezistență ridicată la condițiile climatice (<strong>durabilitate garantată de producător: minim 20 de ani</strong>), elasticitate de 12%, și aderență puternică la toate suprafețele, cu excepția celor grase sau acoperite cu teflon.</p>
+
+  <div class="highlight-box">
+    <p><strong>Umplutura ceramică</strong> este alcătuită din microsfere umplute cu gaz rarefiat, reprezentând aproximativ 75% din volumul materialului uscat. Această componentă este responsabilă pentru eficiența ridicată a izolației termice.</p>
+  </div>
+
+  <p>Materialul conține aditivi bioprotectori (biocizi, conservanți, antifungici). Fiind pe bază de apă, se încadrează în categoria produselor ecologice și nu poluează mediul înconjurător.</p>
+
+
+  <!-- ═══ 2. PRINCIPIU DE FUNCȚIONARE ═══ -->
+  <h2 class="section-title">2. Principiu de funcționare</h2>
+
+  <p>thermX acționează simultan asupra tuturor celor trei mecanisme de transfer termic:</p>
+
+  <div class="cols-2">
+    <div>
+      <h3 class="section-title section-title--sm">Conductivitate termică</h3>
+      <p>thermX este un material capilar și poros. Spațiul interporos este umplut cu sfere ceramice aflate într-o stare nepotențată. Gazul conținut în microsfere nu conduce practic căldura.</p>
+      <p>În procesul de transfer termic, energia este absorbită de peretele exterior al microsferei, apoi încălzește gazul din interior, traversează peretele opus și se transmite microsferelor vecine — cu pierdere de energie la fiecare trecere. Diametrul sferei fiind microscopic (~10 μm), fluxul termic urmează o cale lungă și sinuoasă prin grosimea de doar 0,5–3,5 mm.</p>
+    </div>
+    <div>
+      <h3 class="section-title section-title--sm">Radiație infraroșie</h3>
+      <p>thermX are proprietăți de absorbție, radiație și dispersie a IR, modificând fundamental structura pierderilor de căldură ale unei suprafețe acoperite.</p>
+      <p>Coeficientul de emisie termică: <strong>1,29–2,2 W/m²·°C</strong>, semnificativ mai mic decât cel al materialelor de construcție și izolație convenționale (9–23 W/m²·°C).</p>
+
+      <h3 class="section-title section-title--sm" style="margin-top:18px">Convecție</h3>
+      <p>Rarefierea spațiului interporos reduce componenta convectivă a transferului termic. În condiții de gravitație zero, schimbul termic convectiv este inexistent.</p>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <p><strong>Proprietăți combinate într-un singur material:</strong> izolație termică + impermeabilitate + protecție anticorozivă.</p>
+  </div>
+
+
+  <!-- ═══ 3. KEY SPECS GRID ═══ -->
+  <h2 class="section-title">3. Specificații tehnice principale</h2>
+
+  <div class="specs-grid">
+    <div class="spec-card">
+      <div class="spec-card__value">0,001</div>
+      <div class="spec-card__label">Conductivitate termică<br>(W/m·°K)</div>
+    </div>
+    <div class="spec-card">
+      <div class="spec-card__value">−60 → +230°C</div>
+      <div class="spec-card__label">Temperatură de exploatare</div>
+    </div>
+    <div class="spec-card">
+      <div class="spec-card__value">1,84 MPa</div>
+      <div class="spec-card__label">Aderență pe beton</div>
+    </div>
+    <div class="spec-card">
+      <div class="spec-card__value">2,0 → 3,0 MPa</div>
+      <div class="spec-card__label">Tracțiune<br>(crește în timp)</div>
+    </div>
+    <div class="spec-card">
+      <div class="spec-card__value">&gt;12%</div>
+      <div class="spec-card__label">Elasticitate la rupere</div>
+    </div>
+    <div class="spec-card">
+      <div class="spec-card__value">380–410</div>
+      <div class="spec-card__label">Densitate strat uscat<br>(kg/m³)</div>
+    </div>
+  </div>
+
+
+  <!-- ═══ PAGE 2 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Fișă Tehnică</strong> — thermX Izolație Nanoceramică &nbsp;|&nbsp; Pag. 2/5
+    </div>
+  </header>
+
+
+  <!-- ═══ 4. TABEL COMPLET ═══ -->
+  <h2 class="section-title">4. Tabel complet de specificații</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:48%">Proprietate</th>
+        <th style="width:18%" class="table-unit">Unitate</th>
+        <th style="width:34%">Valoare</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Conductivitate termică la 20°C, maxim</td>
+        <td class="table-unit">W/m·°K</td>
+        <td class="table-value">0,001</td>
+      </tr>
+      <tr>
+        <td>Densitate în stare uscată</td>
+        <td class="table-unit">kg/m³</td>
+        <td class="table-value">380–410</td>
+      </tr>
+      <tr>
+        <td>Densitate în stare lichidă</td>
+        <td class="table-unit">kg/m³</td>
+        <td class="table-value">470–590</td>
+      </tr>
+      <tr>
+        <td>Coeficient de permeabilitate la vapori</td>
+        <td class="table-unit">mg/m·h·Pa</td>
+        <td class="table-value">0,0014</td>
+      </tr>
+      <tr>
+        <td>Capacitate calorică specifică</td>
+        <td class="table-unit">kJ/kg·°C</td>
+        <td class="table-value">1,08</td>
+      </tr>
+      <tr>
+        <td>Rezistență la temperatura de 230°C</td>
+        <td class="table-unit">—</td>
+        <td class="table-value">Fără crăpături, umflături sau stratificări</td>
+      </tr>
+      <tr>
+        <td>Absorbție de apă</td>
+        <td class="table-unit">g/cm³</td>
+        <td class="table-value">0,03</td>
+      </tr>
+      <tr>
+        <td>Alungire relativă la rupere, maxim</td>
+        <td class="table-unit">%</td>
+        <td class="table-value">&gt;12</td>
+      </tr>
+      <tr>
+        <td>Alungire relativă la rupere după îmbătrânire accelerată (10 ani)</td>
+        <td class="table-unit">%</td>
+        <td class="table-value">&gt;12</td>
+      </tr>
+      <tr>
+        <td>Alungire liniară</td>
+        <td class="table-unit">%</td>
+        <td class="table-value">65</td>
+      </tr>
+      <tr>
+        <td>Durabilitate la rupere, minimă:<br>— cu metal<br>— cu beton<br>— cu lemn</td>
+        <td class="table-unit">MPa</td>
+        <td class="table-value"><br>1,53<br>1,84<br>1,84</td>
+      </tr>
+      <tr>
+        <td>Durabilitate la întindere, minimă:<br>— după aplicare<br>— după îmbătrânire accelerată (10 ani)</td>
+        <td class="table-unit">MPa</td>
+        <td class="table-value"><br>2,0<br>3,0</td>
+      </tr>
+      <tr>
+        <td>Durabilitate la șoc</td>
+        <td class="table-unit">kg/cm</td>
+        <td class="table-value">50</td>
+      </tr>
+      <tr>
+        <td>Grad de albire (reflexie difuză):<br>— după aplicare<br>— după îmbătrânire accelerată (10 ani)</td>
+        <td class="table-unit">%</td>
+        <td class="table-value"><br>93,0<br>90,0</td>
+      </tr>
+      <tr>
+        <td>Temperatură de transport și depozitare</td>
+        <td class="table-unit">°C</td>
+        <td class="table-value">+5 (minim)</td>
+      </tr>
+      <tr>
+        <td>Temperatură suprafață la aplicare</td>
+        <td class="table-unit">°C</td>
+        <td class="table-value">de la +1 la +150</td>
+      </tr>
+      <tr>
+        <td>Temperatură de exploatare</td>
+        <td class="table-unit">°C</td>
+        <td class="table-value">de la −60 la +230</td>
+      </tr>
+      <tr>
+        <td>Reacție la foc (EN 15824)</td>
+        <td class="table-unit">—</td>
+        <td class="table-value">Clasa A (uscat / polimerizat)<br>Clasa C (lichid / înainte de aplicare)</td>
+      </tr>
+      <tr>
+        <td>Coeficient de emisie termică</td>
+        <td class="table-unit">W/m²·°C</td>
+        <td class="table-value">1,29–2,2</td>
+      </tr>
+      <tr>
+        <td>Duritate superficială</td>
+        <td class="table-unit">N/m²</td>
+        <td class="table-value">~0,4 (superior acrilaților standard: 0,2 N/m²)</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══ 5. ECONOMIE ═══ -->
+  <h2 class="section-title">5. Eficiență energetică documentată</h2>
+
+  <p>Studiile efectuate pe clădiri rezidențiale demonstrează următoarea performanță, în funcție de grosimea stratului aplicat:</p>
+
+  <div class="economy-row">
+    <div class="economy-row__thickness">0,25 mm</div>
+    <div class="economy-row__value"><span class="pct">15%</span> reducere a pierderilor de căldură</div>
+  </div>
+  <div class="economy-row">
+    <div class="economy-row__thickness">0,50 mm</div>
+    <div class="economy-row__value"><span class="pct">25%</span> economie energetică</div>
+  </div>
+  <div class="economy-row">
+    <div class="economy-row__thickness">1,00 mm</div>
+    <div class="economy-row__value"><span class="pct">40%</span> economie pe factura de energie</div>
+  </div>
+
+
+  <!-- ═══ PAGE 3 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Fișă Tehnică</strong> — thermX Izolație Nanoceramică &nbsp;|&nbsp; Pag. 3/5
+    </div>
+  </header>
+
+
+  <!-- ═══ 6. CALCUL TERMIC ═══ -->
+  <h2 class="section-title">6. Calcul termic</h2>
+
+  <p>Calculul grosimii stratului de izolație termică thermX se efectuează conform СНиП 41-103-2000, utilizând următoarele formule:</p>
+
+  <h3 class="section-title section-title--sm">A. Formula grosimii stratului de izolație</h3>
+
+  <div class="formula-block">
+    <div class="formula">δ<sub>ThermX</sub> = (λ<sub>ThermX</sub> · (T<sub>H</sub> − T<sub>n</sub>)) / (α<sup>(1,2)</sup><sub>ThermX</sub> · (T<sub>n</sub> − T<sub>0</sub>))</div>
+    <dl class="formula-legend">
+      <dt>δ<sub>ThermX</sub></dt>
+      <dd>= grosimea stratului de izolație thermX (m)</dd>
+      <dt>λ<sub>ThermX</sub></dt>
+      <dd>= conductivitatea termică a materialului thermX (W/m·°C)</dd>
+      <dt>T<sub>H</sub></dt>
+      <dd>= temperatura agentului termic din interiorul conductei sau sistemului (°C)</dd>
+      <dt>T<sub>0</sub></dt>
+      <dd>= temperatura mediului exterior (°C)</dd>
+      <dt>T<sub>n</sub></dt>
+      <dd>= temperatura dorită a suprafeței exterioare a conductei (°C)</dd>
+      <dt>α<sup>(1,2)</sup><sub>ThermX</sub></dt>
+      <dd>= coeficientul de transfer termic prin radiație și convecție al stratului thermX (W/m²·°C)</dd>
+    </dl>
+  </div>
+
+  <h3 class="section-title section-title--sm">B. Formula fluxului termic</h3>
+
+  <div class="formula-block">
+    <div class="formula">Q = α<sup>(1,2)</sup><sub>ThermX</sub> · (T<sub>n</sub> − T<sub>0</sub>)</div>
+    <dl class="formula-legend">
+      <dt>Q</dt>
+      <dd>= densitatea fluxului termic (W/m²)</dd>
+      <dt>T<sub>n</sub></dt>
+      <dd>= temperatura suprafeței exterioare a conductei izolate (°C)</dd>
+      <dt>T<sub>0</sub></dt>
+      <dd>= temperatura mediului exterior (°C)</dd>
+    </dl>
+  </div>
+
+  <h3 class="section-title section-title--sm">C. Formula grosimii minime anti-condensare</h3>
+
+  <p>Pentru suprafețe reci (conducte, rezervoare, țevi), grosimea minimă necesară pentru evitarea condensului:</p>
+
+  <div class="formula-block">
+    <div class="formula">δ<sub>ThermX</sub> = (λ<sub>ThermX</sub> / α<sub>ThermX</sub>) · ((T<sub>o</sub> − T<sub>h</sub>) / (T<sub>o</sub> + T<sub>h</sub>)) − 1</div>
+    <dl class="formula-legend">
+      <dt>λ<sub>ThermX</sub></dt>
+      <dd>= 0,001 W/m·K — conductivitate termică</dd>
+      <dt>α<sub>ThermX</sub></dt>
+      <dd>= 1,29 (interior) sau 2,2 (exterior) — coeficient de transfer termic (W/m²·K)</dd>
+    </dl>
+  </div>
+
+  <div class="info-box">
+    <p><strong>Observație:</strong> Când diferența de temperatură depășește 35°C și umiditatea aerului este peste 70%, eliminarea completă a condensului poate fi imposibilă. În aceste cazuri se recomandă combinarea thermX cu spumă poliuretanică.</p>
+  </div>
+
+
+  <!-- ═══ 7. TABEL CONDENSARE ═══ -->
+  <h2 class="section-title">7. Perioadă estimată anti-condensare (T<sub>n</sub> − T)</h2>
+
+  <p>Valorile din tabel indică diferența estimată între temperatura punctului de rouă (T<sub>n</sub>) și temperatura reală a suprafeței izolate (T). Cu cât valoarea este mai mică, cu atât riscul de condensare este mai mare.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>T<sub>o</sub> (°C)</th>
+        <th>40%</th>
+        <th>50%</th>
+        <th>60%</th>
+        <th>70%</th>
+        <th>80%</th>
+        <th>90%</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="table-value">10</td>
+        <td>13,4</td><td>10,4</td><td>7,8</td><td>5,5</td><td>3,5</td><td>1,6</td>
+      </tr>
+      <tr>
+        <td class="table-value">15</td>
+        <td>14,2</td><td>10,9</td><td>9,1</td><td>5,7</td><td>3,6</td><td>1,7</td>
+      </tr>
+      <tr>
+        <td class="table-value">20</td>
+        <td>14,8</td><td>11,3</td><td>8,4</td><td>5,9</td><td>3,7</td><td>1,8</td>
+      </tr>
+      <tr>
+        <td class="table-value">25</td>
+        <td>15,3</td><td>11,7</td><td>8,7</td><td>6,1</td><td>3,8</td><td>1,9</td>
+      </tr>
+      <tr>
+        <td class="table-value">30</td>
+        <td>15,9</td><td>12,2</td><td>9,0</td><td>6,3</td><td>4,0</td><td>2,0</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:9pt; color:var(--text-muted);">Coloanele reprezintă umiditatea relativă a aerului (%). Cu cât valorile sunt mai mici, cu atât este necesară o izolație mai eficientă.</p>
+
+
+  <!-- ═══ PAGE 4 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Fișă Tehnică</strong> — thermX Izolație Nanoceramică &nbsp;|&nbsp; Pag. 4/5
+    </div>
+  </header>
+
+
+  <!-- ═══ 8. ZONE DE APLICARE ═══ -->
+  <h2 class="section-title">8. Zone de aplicare</h2>
+
+  <div class="cols-2">
+    <div>
+      <h3 class="section-title section-title--sm">Acoperișuri</h3>
+      <p>Bitumos, ceramică, metal, bazalt, fibrociment, ardezie, sticlă, lemn, membrane EPDM și PVC.</p>
+
+      <h3 class="section-title section-title--sm">Izolație interioară pereți</h3>
+      <p>Peste finisaje, sub tencuială, pe suprafețe ceramice.</p>
+
+      <h3 class="section-title section-title--sm">Izolație exterioară</h3>
+      <p>Fațade arhitecturale (inclusiv clădiri istorice), elemente structurale, pereți ceramici, pereți despărțitori, sub/peste tencuială, pe pereți finisați.</p>
+
+      <h3 class="section-title section-title--sm">Plafoane</h3>
+      <p>Plafoane decorative istorice, sub/peste tencuială, panouri OSB, plafoane false, lemn, PVC, sticlă.</p>
+    </div>
+    <div>
+      <h3 class="section-title section-title--sm">Pardoseli</h3>
+      <p>Bitumos, acrilic/compozit, ceramică, metal, bazalt, fibrociment, ardezie, sticlă, lemn, membrane EPDM/PVC.</p>
+
+      <h3 class="section-title section-title--sm">Instalații HVAC</h3>
+      <p>Fitinguri, conducte exterioare (lichid/abur/gaz), conducte de încălzire, centrale termice, substatii, conducte apă rece (prevenire condens), hidranți, boilere, tancuri de abur, schimbătoare de căldură, canale HVAC.</p>
+
+      <h3 class="section-title section-title--sm">Vehicule</h3>
+      <p>Autoturisme, camioane frigorifice, remorci, vagoane/tramvaie, autobuze, vehicule blindate, vehicule de pompieri, echipamente aerospațiale.</p>
+
+      <h3 class="section-title section-title--sm">Clădiri industriale</h3>
+      <p>Sisteme de refrigerare/congelare, încăperi tehnice, depozite, ateliere, grinzi pod-rulant, hangare, garaje, infrastructura podurilor.</p>
+    </div>
+  </div>
+
+
+  <!-- ═══ 9. AVANTAJE ═══ -->
+  <h2 class="section-title">9. Avantaje față de izolația convențională</h2>
+
+  <div class="cols-2">
+    <ul class="check-list">
+      <li>Rezistență ridicată la intemperii și variații extreme de temperatură</li>
+      <li>Rezistență excelentă la radiația solară UV</li>
+      <li>Conductivitate termică extrem de scăzută (λ = 0,001 W/m·°K)</li>
+      <li>Durabilitate: garanție 20 ani, durată de viață documentată 35+ ani</li>
+      <li>Aderență puternică pe diverse substraturi</li>
+      <li>Rezistență la coroziune și apă</li>
+      <li>Interval larg de temperatură de operare: −60°C → +230°C</li>
+    </ul>
+    <ul class="check-list">
+      <li>Instalare rapidă și simplă — timp de montaj cu 80% mai scurt</li>
+      <li>Ușor de reparat și inspectat</li>
+      <li>Rezistent la impact mecanic</li>
+      <li>Potrivit pentru geometrii complexe și zone greu accesibile</li>
+      <li>Ecologic și rezistent la foc (Clasa A uscat)</li>
+      <li>Cost cu 30% mai mic decât sistemele tradiționale</li>
+      <li>Nu necesită demontarea izolației vechi pentru reparații</li>
+    </ul>
+  </div>
+
+
+  <!-- ═══ 10. APLICARE ═══ -->
+  <h2 class="section-title">10. Instrucțiuni de aplicare</h2>
+
+  <div class="cols-2">
+    <div>
+      <h3 class="section-title section-title--sm">Pregătirea suprafeței</h3>
+      <ul>
+        <li>Suprafața trebuie să fie curată, uscată, fără praf, grăsimi sau particule neaderente</li>
+        <li>Suprafețele metalice se grunduiesc conform recomandărilor</li>
+        <li>Temperatura suprafeței: +1°C → +150°C</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="section-title section-title--sm">Aplicare</h3>
+      <ul>
+        <li>Se aplică cu pensula, trafaletul sau pistolul airless</li>
+        <li>Grosime recomandată per strat: 0,5 mm</li>
+        <li>Grosime totală recomandată: 0,5–3,5 mm (în funcție de aplicație)</li>
+        <li>Timp de uscare între straturi: 24h (la 20°C, 60% umiditate)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong>Depozitare:</strong> în ambalajul original, la temperatură peste +5°C, în loc uscat și ventilat. La temperaturi peste 60°C, calitatea materialului poate fi afectată.</p>
+  </div>
+
+
+  <!-- ═══ PAGE 5 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Fișă Tehnică</strong> — thermX Izolație Nanoceramică &nbsp;|&nbsp; Pag. 5/5
+    </div>
+  </header>
+
+
+  <!-- ═══ 11. INDUSTRIE ═══ -->
+  <h2 class="section-title">11. Aplicații industriale</h2>
+
+  <h3 class="section-title section-title--sm">Industria petrol și gaze</h3>
+  <p>thermX poate fi utilizat pentru izolația termică a conductelor de petrol și gaze, atât supraterane cât și subterane. Costul total al aplicării thermX este cu aproximativ <strong>30% mai mic</strong> decât al materialelor convenționale (vată minerală, spumă poliuretanică). Economii suplimentare de până la 40% se obțin prin reducerea pierderilor energetice în operare.</p>
+
+  <h3 class="section-title section-title--sm">Inginerie / Automotive</h3>
+  <p>thermX se utilizează pentru izolația termică a vagoanelor de cale ferată, motoarelor diesel, și a altor vehicule și componente din industria auto.</p>
+
+  <h3 class="section-title section-title--sm">Construcții navale</h3>
+  <p>În sectorul maritim, thermX se utilizează pentru izolația termică a cabinelor, elementele interioare ale coridoarelor navelor, și hidroizolarea structurilor.</p>
+
+
+  <!-- ═══ 12. PERMEABILITATE ═══ -->
+  <h2 class="section-title">12. Permeabilitatea la vapori</h2>
+
+  <p>thermX prezintă un <strong>coeficient scăzut de permeabilitate la vapori</strong> (0,0014 mg/m·h·Pa). Este important de evaluat dacă această caracteristică ar putea împiedica difuzarea vaporilor de la straturile interioare ale peretelui spre exterior, mai ales în ansambluri de perete multistrat, unde rezistența la permeabilitate trebuie să scadă progresiv dinspre interior spre exterior.</p>
+
+
+  <!-- ═══ 13. CONDIȚII SPECIALE ═══ -->
+  <h2 class="section-title">13. Observații tehnice</h2>
+
+  <div class="info-box">
+    <p><strong>Proprietăți optice:</strong> thermX se caracterizează prin coeficienți distincti de absorbție, reflexie și radiație, diferiți de cei ai metalelor negre, materialelor de construcție convenționale sau izolatorilor standard.</p>
+    <p style="margin-top:8px;">Senzorilor de flux termic utilizați în aplicațiile de control tehnic le este necesară calibrare specială din cauza reflectivității ridicate și a nuanței deschise a acoperirilor thermX. Măsurarea temperaturii de suprafață fără corecții metodologice specifice poate conduce la inexactități majore.</p>
+  </div>
+
+
+  <!-- ═══ DISCLAIMER ═══ -->
+  <div class="divider"></div>
+
+  <p style="font-size: 8.5pt; color: var(--text-muted); line-height: 1.5;">
+    Informațiile din această fișă tehnică sunt furnizate cu bună-credință și sunt considerate corecte la data publicării. Datele tehnice sunt valori tipice și nu constituie specificații garantate. Utilizatorul este responsabil pentru verificarea adecvării produsului pentru aplicația specifică. Nano Revolution SRL nu își asumă responsabilitatea pentru utilizarea necorespunzătoare a produsului.
+  </p>
+
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="doc-footer">
+    <div>&copy; 2026 Nano Revolution SRL — Toate drepturile rezervate</div>
+    <div>
+      <a href="https://nanorevolution.ro">nanorevolution.ro</a> &nbsp;|&nbsp;
+      <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a>
+    </div>
+  </footer>
+
+</body>
+</html>

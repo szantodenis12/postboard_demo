@@ -1,0 +1,1897 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>thermX — Campaign Brief — Product Launch 26.03.2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --dark: #121212;
+    --blue: #00509E;
+    --orange: #FF4500;
+    --white: #FFFFFF;
+    --gray: #4A4A4A;
+    --light-gray: #f5f5f7;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--dark);
+    color: var(--white);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ─── NAVIGATION ─── */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: rgba(18, 18, 18, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-brand {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    white-space: nowrap;
+    padding: 14px 16px 14px 0;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+  .nav-brand span { color: var(--orange); }
+  .nav a {
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 14px 12px;
+    white-space: nowrap;
+    transition: color 0.2s;
+    flex-shrink: 0;
+  }
+  .nav a:hover { color: rgba(255,255,255,0.85); }
+  .nav a.active { color: var(--orange); }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--blue) 100%);
+    padding: 80px 60px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 70% 30%, rgba(0,80,158,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 64px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-title span { color: var(--orange); }
+  .hero-subtitle {
+    font-size: 18px;
+    opacity: 0.7;
+    margin-bottom: 32px;
+    font-weight: 400;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-meta {
+    font-size: 13px;
+    opacity: 0.5;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-meta span {
+    margin: 0 8px;
+    opacity: 0.3;
+  }
+
+  /* ─── STATS BAR ─── */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    padding: 24px 60px;
+    background: rgba(0, 80, 158, 0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+    z-index: 1;
+  }
+  .stat { text-align: center; }
+  .stat-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--orange);
+  }
+  .stat-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    margin-top: 4px;
+  }
+
+  /* ─── SECTION SHARED ─── */
+  .section {
+    padding: 60px 60px;
+    scroll-margin-top: 60px;
+  }
+  .section-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--blue);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+  }
+  .section-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+    margin: 0 60px;
+  }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 28px;
+    transition: all 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,80,158,0.2);
+    border-color: rgba(0,80,158,0.25);
+  }
+
+  /* ─── INFO GRID ─── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  /* ─── BADGES ─── */
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Orbitron', sans-serif;
+  }
+  .badge-orange { background: rgba(255,69,0,0.2); color: var(--orange); }
+  .badge-blue { background: rgba(0,80,158,0.2); color: var(--blue); }
+  .badge-gray { background: rgba(233, 186, 186, 0.08); color: rgba(255,255,255,0.5); }
+
+  /* ─── FADE-IN ANIMATION ─── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ═══════════════════════════════════════════
+     SECTION 2: EXECUTIVE SUMMARY
+     ═══════════════════════════════════════════ */
+  .summary-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 40px;
+    margin-bottom: 32px;
+    font-size: 16px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.8);
+  }
+  .highlight-badges {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .highlight-badge {
+    text-align: center;
+    padding: 24px 16px;
+    background: rgba(0,80,158,0.08);
+    border: 1px solid rgba(0,80,158,0.2);
+    border-radius: 12px;
+    transition: all 0.3s;
+  }
+  .highlight-badge:hover {
+    background: rgba(0,80,158,0.15);
+    transform: translateY(-2px);
+  }
+  .highlight-badge .hb-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--orange);
+    margin-bottom: 6px;
+  }
+  .highlight-badge .hb-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.5;
+  }
+
+  /* ═══════════════════════════════════════════
+     SECTION 3: OBJECTIVES
+     ═══════════════════════════════════════════ */
+  .primary-objective {
+    background: linear-gradient(135deg, rgba(0,80,158,0.12), rgba(0,80,158,0.04));
+    border: 1px solid rgba(0,80,158,0.25);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 32px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .primary-objective .po-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: rgba(0,80,158,0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--blue);
+  }
+  .primary-objective .po-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--blue);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .primary-objective .po-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.85);
+  }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .metric-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .metric-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,80,158,0.2);
+    border-color: rgba(0,80,158,0.25);
+  }
+  .metric-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--orange);
+    margin-bottom: 4px;
+  }
+  .metric-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.5;
+  }
+
+  /* ═══════════════════════════════════════════
+     SECTION 4: PERSONAS
+     ═══════════════════════════════════════════ */
+  .persona-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .persona-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 28px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .persona-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,80,158,0.2);
+    border-color: rgba(0,80,158,0.25);
+  }
+  .persona-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .persona-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .persona-avatar.pa-orange { background: rgba(255,69,0,0.15); color: var(--orange); }
+  .persona-avatar.pa-blue { background: rgba(0,80,158,0.15); color: var(--blue); }
+  .persona-avatar.pa-gray { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); }
+  .persona-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .persona-role {
+    font-size: 13px;
+    opacity: 0.6;
+  }
+  .persona-age {
+    font-size: 12px;
+    opacity: 0.4;
+    margin-top: 2px;
+  }
+  .persona-badge-wrap {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  .persona-quote {
+    font-size: 13px;
+    font-style: italic;
+    color: rgba(255,255,255,0.6);
+    border-left: 3px solid var(--blue);
+    padding: 10px 14px;
+    background: rgba(0,80,158,0.05);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+  .persona-channels {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .persona-channel {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    opacity: 0.5;
+    background: rgba(255,255,255,0.04);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+  .persona-channel i { width: 14px; height: 14px; }
+
+  /* ═══════════════════════════════════════════
+     SECTION 5: CORE MESSAGING
+     ═══════════════════════════════════════════ */
+  .message-hierarchy {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 40px;
+  }
+  .message-step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    position: relative;
+    padding: 24px 0;
+  }
+  .message-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 23px;
+    bottom: -2px;
+    width: 2px;
+    height: 28px;
+    background: linear-gradient(to bottom, var(--blue), transparent);
+  }
+  .ms-number {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(0,80,158,0.15);
+    border: 2px solid rgba(0,80,158,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blue);
+  }
+  .ms-content { flex: 1; }
+  .ms-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--orange);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .ms-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.75);
+  }
+
+  /* Audience tabs */
+  .audience-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .audience-tab {
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .audience-tab:hover { color: rgba(255,255,255,0.7); }
+  .audience-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+  .audience-panel {
+    display: none;
+    padding: 24px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+  }
+  .audience-panel.active { display: block; }
+  .audience-panel .ap-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.75);
+  }
+
+  /* ═══════════════════════════════════════════
+     SECTION 6: CHANNEL STRATEGY
+     ═══════════════════════════════════════════ */
+  .channel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .channel-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .channel-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,80,158,0.2);
+    border-color: rgba(0,80,158,0.25);
+  }
+  .channel-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    background: rgba(0,80,158,0.12);
+    color: var(--blue);
+  }
+  .channel-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .channel-role {
+    font-size: 12px;
+    opacity: 0.5;
+    margin-bottom: 10px;
+  }
+  .channel-cadence {
+    font-size: 12px;
+    opacity: 0.4;
+  }
+  .channel-priority {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
+
+  /* ═══════════════════════════════════════════
+     SECTION 7: TIMELINE
+     ═══════════════════════════════════════════ */
+  .timeline-bar-wrapper {
+    margin-bottom: 40px;
+  }
+  .timeline {
+    display: flex;
+    height: 56px;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    margin-bottom: 8px;
+  }
+  .timeline-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    transition: all 0.3s;
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .timeline-segment:hover { filter: brightness(1.25); transform: scaleY(1.05); }
+  .timeline-segment .ts-name { font-size: 11px; }
+  .timeline-segment .ts-date { font-size: 9px; opacity: 0.6; font-family: 'Inter', sans-serif; }
+  .seg-1 { background: #1a1a2e; flex: 7; }
+  .seg-2 { background: #16213e; flex: 7; }
+  .seg-3 { background: #0f3460; flex: 7; }
+  .seg-4 { background: var(--blue); flex: 7; }
+  .seg-5 { background: #e94560; flex: 3; }
+
+  .phase-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .phase-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 28px;
+    transition: all 0.3s;
+    border-left: 4px solid;
+  }
+  .phase-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,80,158,0.15);
+  }
+  .phase-card.pc-1 { border-left-color: #1a1a2e; }
+  .phase-card.pc-2 { border-left-color: #16213e; }
+  .phase-card.pc-3 { border-left-color: #0f3460; }
+  .phase-card.pc-4 { border-left-color: var(--blue); }
+  .phase-card.pc-5 { border-left-color: #e94560; }
+  .phase-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .phase-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    opacity: 0.2;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .phase-info h4 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .phase-info .phase-dates {
+    font-size: 12px;
+    opacity: 0.5;
+    margin-top: 3px;
+  }
+  .phase-concept {
+    font-size: 13px;
+    font-style: italic;
+    color: rgba(255,255,255,0.5);
+    border-left: 3px solid var(--blue);
+    padding: 10px 14px;
+    background: rgba(0,80,158,0.05);
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+  .phase-objective {
+    font-size: 13px;
+    color: var(--orange);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  .phase-content-list {
+    list-style: none;
+    padding: 0;
+  }
+  .phase-content-list li {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    padding: 5px 0 5px 20px;
+    position: relative;
+  }
+  .phase-content-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--blue);
+    opacity: 0.5;
+  }
+
+  /* ═══════════════════════════════════════════
+     SECTION 8: EMAIL SEQUENCE
+     ═══════════════════════════════════════════ */
+  .email-flow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    position: relative;
+  }
+  .email-flow::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 60px;
+    right: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, #1a1a2e, #16213e, var(--blue), var(--orange));
+    z-index: 0;
+  }
+  .email-step {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s;
+  }
+  .email-step:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,80,158,0.2);
+    border-color: rgba(0,80,158,0.25);
+  }
+  .email-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0,80,158,0.15);
+    border: 2px solid rgba(0,80,158,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--blue);
+    margin: 0 auto 14px;
+  }
+  .email-date {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .email-subject {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .email-desc {
+    font-size: 12px;
+    opacity: 0.5;
+    line-height: 1.5;
+  }
+
+  /* ═══════════════════════════════════════════
+     SECTION 9: BUDGET
+     ═══════════════════════════════════════════ */
+  .budget-bar-wrapper {
+    margin-bottom: 32px;
+  }
+  .budget-bar {
+    display: flex;
+    height: 60px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .budget-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .budget-seg:hover { filter: brightness(1.2); }
+  .budget-seg .bs-pct { font-size: 20px; }
+  .budget-seg .bs-label { font-size: 9px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+  .bs-awareness { background: #1a1a2e; flex: 20; }
+  .bs-traffic { background: var(--blue); flex: 35; }
+  .bs-conversion { background: var(--orange); flex: 45; }
+  .budget-legend {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+  }
+  .budget-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    opacity: 0.6;
+  }
+  .budget-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+  .cost-strategies {
+    list-style: none;
+    padding: 0;
+  }
+  .cost-strategies li {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    padding: 10px 0 10px 28px;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .cost-strategies li:last-child { border-bottom: none; }
+  .cost-strategies li .cs-icon {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    color: var(--blue);
+    opacity: 0.7;
+  }
+  .cost-strategies li strong {
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* ═══════════════════════════════════════════
+     SECTION 10: KPIs
+     ═══════════════════════════════════════════ */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .kpi-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.3s;
+  }
+  .kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,80,158,0.15);
+    border-color: rgba(0,80,158,0.2);
+  }
+  .kpi-icon {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: rgba(0,80,158,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--blue);
+  }
+  .kpi-info { flex: 1; }
+  .kpi-name {
+    font-size: 12px;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .kpi-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--orange);
+  }
+  .kpi-meta {
+    font-size: 11px;
+    opacity: 0.35;
+    margin-top: 3px;
+  }
+
+  /* ═══════════════════════════════════════════
+     SECTION 11: COMPETITIVE POSITIONING
+     ═══════════════════════════════════════════ */
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .comparison-block {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .comparison-block h4 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    color: var(--blue);
+  }
+  .advantage-list {
+    list-style: none;
+    padding: 0;
+  }
+  .advantage-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.5;
+  }
+  .advantage-list li:last-child { border-bottom: none; }
+  .advantage-list li .adv-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--orange);
+    opacity: 0.8;
+  }
+
+  /* ═══════════════════════════════════════════
+     SECTION 12: MATERIALS CHECKLIST
+     ═══════════════════════════════════════════ */
+  .checklist-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .checklist-col {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .checklist-col-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .checklist-col-header .cc-icon {
+    color: var(--blue);
+  }
+  .checklist-col-header h4 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.5;
+  }
+  .checklist-item .ci-icon {
+    flex-shrink: 0;
+    margin-top: 3px;
+    opacity: 0.3;
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    text-align: center;
+    padding: 40px 60px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    opacity: 0.4;
+    font-size: 12px;
+  }
+  .footer .footer-brand {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .hero { padding: 60px 24px 40px; }
+    .hero-title { font-size: 36px; }
+    .stats-bar { flex-wrap: wrap; gap: 24px; padding: 20px 24px; }
+    .section { padding: 40px 24px; }
+    .section-title { font-size: 22px; }
+    .nav { padding: 0 16px; }
+    .highlight-badges { grid-template-columns: repeat(2, 1fr); }
+    .metrics-grid { grid-template-columns: 1fr; }
+    .persona-grid { grid-template-columns: 1fr; }
+    .email-flow {
+      grid-template-columns: 1fr;
+    }
+    .email-flow::before { display: none; }
+    .kpi-grid { grid-template-columns: 1fr; }
+    .comparison-grid { grid-template-columns: 1fr; }
+    .checklist-grid { grid-template-columns: 1fr; }
+    .channel-grid { grid-template-columns: 1fr; }
+    .section-divider { margin: 0 24px; }
+    .budget-legend { flex-direction: column; align-items: center; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav class="nav">
+  <div class="nav-brand">therm<span>X</span></div>
+  <a href="#summary">Summary</a>
+  <a href="#objectives">Obiective</a>
+  <a href="#audience">Audiență</a>
+  <a href="#messaging">Mesaje</a>
+  <a href="#channels">Canale</a>
+  <a href="#timeline">Timeline</a>
+  <a href="#email">Email</a>
+  <a href="#budget">Buget</a>
+  <a href="#kpis">KPIs</a>
+  <a href="#competitive">Competiție</a>
+  <a href="#materials">Materiale</a>
+</nav>
+
+<!-- ═══ SECTION 1: HERO ═══ -->
+<section class="hero">
+  <div class="hero-label">Campaign Brief</div>
+  <h1 class="hero-title">therm<span>X</span></h1>
+  <p class="hero-subtitle">Product Launch — 26 Martie 2026</p>
+  <p class="hero-meta">Nano Revolution SRL <span>|</span> Epic Digital Hub <span>|</span> Februarie 2026</p>
+
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-value">33</div>
+      <div class="stat-label">Zile campanie</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">5</div>
+      <div class="stat-label">Faze</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">150+</div>
+      <div class="stat-label">Leads target</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">4</div>
+      <div class="stat-label">Canale principale</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 2: EXECUTIVE SUMMARY ═══ -->
+<section class="section fade-in" id="summary">
+  <div class="section-label">01 — Rezumat</div>
+  <h2 class="section-title">Executive Summary</h2>
+
+  <div class="summary-card">
+    Acest brief prezintă strategia campaniei de lansare digitală pentru thermX — membrană nanoceramică termoizolantă produsă de Nano Revolution SRL din Oradea. Lansarea este programată pe 26 martie 2026, cu o campanie teaser de 33 de zile (24 februarie – 26 martie) pe 5 faze, de la mister la conversie.
+    <br><br>
+    thermX este o dispersie lichidă pe bază de apă, aplicabilă prin pulverizare, cu conductivitate termică Lambda de 0,001 W/mK, reflexie IR de 85% și grosime de doar 1 mm. Produsul a fost validat în sectoare industriale exigente (petrochimic, naval, auto, rezidențial) și oferă garanție de 20 de ani.
+    <br><br>
+    Campania vizează piața românească de termoizolație, unde 90% din fondul locativ necesită reabilitare termică. Bugetul este foarte redus, ceea ce înseamnă că strategia se bazează preponderent pe canale organice, conținut de calitate și o campanie teaser structurată în faze progresive de dezvăluire.
+  </div>
+
+  <div class="highlight-badges">
+    <div class="highlight-badge">
+      <div class="hb-value">0,001</div>
+      <div class="hb-label">Lambda W/mK</div>
+    </div>
+    <div class="highlight-badge">
+      <div class="hb-value">85%</div>
+      <div class="hb-label">Reflexie IR</div>
+    </div>
+    <div class="highlight-badge">
+      <div class="hb-value">1 mm</div>
+      <div class="hb-label">Grosime</div>
+    </div>
+    <div class="highlight-badge">
+      <div class="hb-value">20 ani</div>
+      <div class="hb-label">Garanție</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ SECTION 3: OBJECTIVES ═══ -->
+<section class="section fade-in" id="objectives">
+  <div class="section-label">02 — Obiective</div>
+  <h2 class="section-title">Campaign Objectives</h2>
+
+  <div class="primary-objective">
+    <div class="po-icon">
+      <i data-lucide="target" style="width:24px;height:24px;"></i>
+    </div>
+    <div>
+      <div class="po-label">Obiectiv Primar (SMART)</div>
+      <div class="po-text">
+        Generarea a minim 150 de lead-uri calificate (email-uri colectate prin landing page + cereri de ofertă) din segmentele proprietari de case și dezvoltatori imobiliari din România, în primele 6 săptămâni de la lansarea campaniei teaser (24 februarie – 7 aprilie 2026).
+      </div>
+    </div>
+  </div>
+
+  <div class="metrics-grid">
+    <div class="metric-card fade-in">
+      <div class="metric-value">50K+</div>
+      <div class="metric-label">Impresii</div>
+    </div>
+    <div class="metric-card fade-in">
+      <div class="metric-value">3%+</div>
+      <div class="metric-label">Engagement</div>
+    </div>
+    <div class="metric-card fade-in">
+      <div class="metric-value">2.000+</div>
+      <div class="metric-label">Vizite landing page</div>
+    </div>
+    <div class="metric-card fade-in">
+      <div class="metric-value">300+</div>
+      <div class="metric-label">Abonați email</div>
+    </div>
+    <div class="metric-card fade-in">
+      <div class="metric-value">150+</div>
+      <div class="metric-label">Leads calificate</div>
+    </div>
+    <div class="metric-card fade-in">
+      <div class="metric-value">10+</div>
+      <div class="metric-label">Conversații B2B</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ SECTION 4: TARGET AUDIENCE ═══ -->
+<section class="section fade-in" id="audience">
+  <div class="section-label">03 — Audiență</div>
+  <h2 class="section-title">Target Audience</h2>
+
+  <div class="persona-grid">
+    <!-- Mihai -->
+    <div class="persona-card fade-in">
+      <div class="persona-badge-wrap"><span class="badge badge-orange">Principal</span></div>
+      <div class="persona-header">
+        <div class="persona-avatar pa-orange">
+          <i data-lucide="home" style="width:24px;height:24px;"></i>
+        </div>
+        <div>
+          <div class="persona-name">Mihai</div>
+          <div class="persona-role">Proprietarul de Casă</div>
+          <div class="persona-age">35–55 ani</div>
+        </div>
+      </div>
+      <div class="persona-quote">
+        „Reducere documentată de până la 40% la pierderi de căldură. Un strat de 1mm, fără schele, fără praf. Garanție 20 de ani."
+      </div>
+      <div class="persona-channels">
+        <div class="persona-channel"><i data-lucide="facebook" style="width:12px;height:12px;"></i> Facebook</div>
+        <div class="persona-channel"><i data-lucide="youtube" style="width:12px;height:12px;"></i> YouTube</div>
+        <div class="persona-channel"><i data-lucide="search" style="width:12px;height:12px;"></i> Google</div>
+      </div>
+    </div>
+
+    <!-- Andrei -->
+    <div class="persona-card fade-in">
+      <div class="persona-badge-wrap"><span class="badge badge-blue">Strategic</span></div>
+      <div class="persona-header">
+        <div class="persona-avatar pa-blue">
+          <i data-lucide="building-2" style="width:24px;height:24px;"></i>
+        </div>
+        <div>
+          <div class="persona-name">Andrei</div>
+          <div class="persona-role">Dezvoltatorul Imobiliar</div>
+          <div class="persona-age">35–50 ani</div>
+        </div>
+      </div>
+      <div class="persona-quote">
+        „Timp de aplicare redus cu 80%. Grosime 1mm vs 10cm EPS — câștigi suprafață utilă. Zero reclamații condens."
+      </div>
+      <div class="persona-channels">
+        <div class="persona-channel"><i data-lucide="linkedin" style="width:12px;height:12px;"></i> LinkedIn</div>
+        <div class="persona-channel"><i data-lucide="mail" style="width:12px;height:12px;"></i> Email B2B</div>
+      </div>
+    </div>
+
+    <!-- Alexandru -->
+    <div class="persona-card fade-in">
+      <div class="persona-badge-wrap"><span class="badge badge-blue">Influencer</span></div>
+      <div class="persona-header">
+        <div class="persona-avatar pa-blue">
+          <i data-lucide="ruler" style="width:24px;height:24px;"></i>
+        </div>
+        <div>
+          <div class="persona-name">Alexandru</div>
+          <div class="persona-role">Inginerul Proiectant</div>
+          <div class="persona-age">32–48 ani</div>
+        </div>
+      </div>
+      <div class="persona-quote">
+        „Lambda 0,001 W/mK. Reflexie IR 85%. Fișă tehnică completă și calculator de eficiență energetică disponibile."
+      </div>
+      <div class="persona-channels">
+        <div class="persona-channel"><i data-lucide="linkedin" style="width:12px;height:12px;"></i> LinkedIn</div>
+        <div class="persona-channel"><i data-lucide="book-open" style="width:12px;height:12px;"></i> Publicații</div>
+      </div>
+    </div>
+
+    <!-- Doina -->
+    <div class="persona-card fade-in">
+      <div class="persona-badge-wrap"><span class="badge badge-gray">Creștere</span></div>
+      <div class="persona-header">
+        <div class="persona-avatar pa-gray">
+          <i data-lucide="building" style="width:24px;height:24px;"></i>
+        </div>
+        <div>
+          <div class="persona-name">Doina</div>
+          <div class="persona-role">Administratorul de Bloc</div>
+          <div class="persona-age">45–65 ani</div>
+        </div>
+      </div>
+      <div class="persona-quote">
+        „Termoizolație completă în zile, nu luni. Eligibil pentru programele guvernamentale de renovare. Până la 50% economie la încălzire."
+      </div>
+      <div class="persona-channels">
+        <div class="persona-channel"><i data-lucide="facebook" style="width:12px;height:12px;"></i> Facebook</div>
+        <div class="persona-channel"><i data-lucide="newspaper" style="width:12px;height:12px;"></i> Presa locală</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ SECTION 5: CORE MESSAGING ═══ -->
+<section class="section fade-in" id="messaging">
+  <div class="section-label">04 — Mesaje Cheie</div>
+  <h2 class="section-title">Core Messaging</h2>
+
+  <div class="message-hierarchy">
+    <div class="message-step fade-in">
+      <div class="ms-number">1</div>
+      <div class="ms-content">
+        <div class="ms-label">Why Care?</div>
+        <div class="ms-text">Pereții tăi pierd căldură. 90% din casele din România au nevoie de reabilitare termică. Facturile cresc, condensul și mucegaiul avansează.</div>
+      </div>
+    </div>
+    <div class="message-step fade-in">
+      <div class="ms-number">2</div>
+      <div class="ms-content">
+        <div class="ms-label">Solution</div>
+        <div class="ms-text">thermX — membrană nanoceramică termoizolantă, aplicată într-un strat de 1 mm prin pulverizare. Lambda 0,001 W/mK. Reflexie IR 85%. Reducere pierderi căldură până la 40%.</div>
+      </div>
+    </div>
+    <div class="message-step fade-in">
+      <div class="ms-number">3</div>
+      <div class="ms-content">
+        <div class="ms-label">Why thermX?</div>
+        <div class="ms-text">Fără schele, fără dibluri, fără punți termice. Greutate 0,4 kg/m². Garanție 20 ani. Testat în sectoare industriale exigente. Produs local, suport tehnic direct.</div>
+      </div>
+    </div>
+    <div class="message-step fade-in">
+      <div class="ms-number">4</div>
+      <div class="ms-content">
+        <div class="ms-label">CTA</div>
+        <div class="ms-text">Cere o ofertă personalizată / Descarcă fișa tehnică / Înscrie-te pentru demonstrație</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audience tabs -->
+  <div class="audience-tabs">
+    <button class="audience-tab active" onclick="switchAudienceTab(event, 'tab-proprietari')">Proprietari</button>
+    <button class="audience-tab" onclick="switchAudienceTab(event, 'tab-dezvoltatori')">Dezvoltatori</button>
+    <button class="audience-tab" onclick="switchAudienceTab(event, 'tab-ingineri')">Ingineri</button>
+    <button class="audience-tab" onclick="switchAudienceTab(event, 'tab-administratori')">Administratori</button>
+  </div>
+  <div class="audience-panel active" id="tab-proprietari">
+    <div class="ap-text">„Reducere documentată de până la 40% la pierderi de căldură. Un strat de 1mm, fără schele, fără praf, fără săptămâni de șantier. Garanție 20 de ani."</div>
+  </div>
+  <div class="audience-panel" id="tab-dezvoltatori">
+    <div class="ap-text">„Timp de aplicare redus cu 80%. Grosime 1mm vs 10cm EPS — câștigi suprafață utilă. Zero reclamații condens. 20 ani garanție."</div>
+  </div>
+  <div class="audience-panel" id="tab-ingineri">
+    <div class="ap-text">„Lambda 0,001 W/mK. Reflexie IR 85%. Fișă tehnică completă și calculator de eficiență energetică disponibile."</div>
+  </div>
+  <div class="audience-panel" id="tab-administratori">
+    <div class="ap-text">„Termoizolație completă în zile, nu luni. Fără schele, fără deranj. Eligibil pentru programele guvernamentale de renovare."</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ SECTION 6: CHANNEL STRATEGY ═══ -->
+<section class="section fade-in" id="channels">
+  <div class="section-label">05 — Canale</div>
+  <h2 class="section-title">Channel Strategy</h2>
+
+  <div class="channel-grid">
+    <div class="channel-card fade-in">
+      <div class="channel-priority"><span class="badge badge-orange">High</span></div>
+      <div class="channel-icon"><i data-lucide="instagram" style="width:20px;height:20px;"></i></div>
+      <div class="channel-name">Instagram</div>
+      <div class="channel-role">Awareness, engagement, demo vizual</div>
+      <div class="channel-cadence">4–5 postări / săptămână</div>
+    </div>
+    <div class="channel-card fade-in">
+      <div class="channel-priority"><span class="badge badge-orange">High</span></div>
+      <div class="channel-icon"><i data-lucide="linkedin" style="width:20px;height:20px;"></i></div>
+      <div class="channel-name">LinkedIn</div>
+      <div class="channel-role">B2B, thought leadership</div>
+      <div class="channel-cadence">3–4 postări / săptămână</div>
+    </div>
+    <div class="channel-card fade-in">
+      <div class="channel-priority"><span class="badge badge-orange">High</span></div>
+      <div class="channel-icon"><i data-lucide="facebook" style="width:20px;height:20px;"></i></div>
+      <div class="channel-name">Facebook</div>
+      <div class="channel-role">Reach, grupuri construcții</div>
+      <div class="channel-cadence">3–4 postări / săptămână</div>
+    </div>
+    <div class="channel-card fade-in">
+      <div class="channel-priority"><span class="badge badge-blue">Medium</span></div>
+      <div class="channel-icon"><i data-lucide="clapperboard" style="width:20px;height:20px;"></i></div>
+      <div class="channel-name">TikTok</div>
+      <div class="channel-role">Viral, demo content</div>
+      <div class="channel-cadence">2–3 postări / săptămână</div>
+    </div>
+    <div class="channel-card fade-in">
+      <div class="channel-priority"><span class="badge badge-orange">High</span></div>
+      <div class="channel-icon"><i data-lucide="mail" style="width:20px;height:20px;"></i></div>
+      <div class="channel-name">Email</div>
+      <div class="channel-role">Nurture, conversie</div>
+      <div class="channel-cadence">4 emailuri în campanie</div>
+    </div>
+    <div class="channel-card fade-in">
+      <div class="channel-priority"><span class="badge badge-blue">Medium</span></div>
+      <div class="channel-icon"><i data-lucide="file-text" style="width:20px;height:20px;"></i></div>
+      <div class="channel-name">Blog / SEO</div>
+      <div class="channel-role">Educație, trafic long-term</div>
+      <div class="channel-cadence">2–4 articole / lună</div>
+    </div>
+    <div class="channel-card fade-in">
+      <div class="channel-priority"><span class="badge badge-gray">Low</span></div>
+      <div class="channel-icon"><i data-lucide="megaphone" style="width:20px;height:20px;"></i></div>
+      <div class="channel-name">Paid Ads</div>
+      <div class="channel-role">Retargeting, conversie</div>
+      <div class="channel-cadence">Faza 4–5</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ SECTION 7: CAMPAIGN TIMELINE ═══ -->
+<section class="section fade-in" id="timeline">
+  <div class="section-label">06 — Timeline</div>
+  <h2 class="section-title">Campaign Timeline — 5 Faze</h2>
+
+  <div class="timeline-bar-wrapper">
+    <div class="timeline">
+      <div class="timeline-segment seg-1">
+        <span class="ts-name">MISTER</span>
+        <span class="ts-date">24.02–02.03</span>
+      </div>
+      <div class="timeline-segment seg-2">
+        <span class="ts-name">PROBLEMA</span>
+        <span class="ts-date">03.03–09.03</span>
+      </div>
+      <div class="timeline-segment seg-3">
+        <span class="ts-name">ȘTIINȚĂ</span>
+        <span class="ts-date">10.03–16.03</span>
+      </div>
+      <div class="timeline-segment seg-4">
+        <span class="ts-name">INDICII</span>
+        <span class="ts-date">17.03–23.03</span>
+      </div>
+      <div class="timeline-segment seg-5">
+        <span class="ts-name">LANSARE</span>
+        <span class="ts-date">24–26.03</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-cards">
+    <!-- Phase 1 -->
+    <div class="phase-card pc-1 fade-in">
+      <div class="phase-top">
+        <div class="phase-num">01</div>
+        <div class="phase-info">
+          <h4>MISTER</h4>
+          <div class="phase-dates">24 februarie – 2 martie 2026</div>
+        </div>
+      </div>
+      <div class="phase-concept">„Ce se întâmplă la 1 mm?"</div>
+      <div class="phase-objective">Curiozitate. Vizualuri dark, fără reveal de produs. Cifre fără explicație.</div>
+      <ul class="phase-content-list">
+        <li>2–3 postări mystery (Instagram + LinkedIn)</li>
+        <li>1 clip teaser 10–15s</li>
+        <li>Stories cu cifre: 0,001 / 85% / 1 mm + „26.03.2026"</li>
+      </ul>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase-card pc-2 fade-in">
+      <div class="phase-top">
+        <div class="phase-num">02</div>
+        <div class="phase-info">
+          <h4>PROBLEMA</h4>
+          <div class="phase-dates">3 – 9 martie 2026</div>
+        </div>
+      </div>
+      <div class="phase-concept">„Pereții tăi pierd căldură"</div>
+      <div class="phase-objective">Conștientizarea problemei. Imagini termoviziune, statistici risipă energie, pain points.</div>
+      <ul class="phase-content-list">
+        <li>3–4 postări pe toate platformele</li>
+        <li>Stories polls — interacțiune</li>
+        <li>Primul email din secvență</li>
+        <li>Lansare campanie awareness (video teaser)</li>
+      </ul>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase-card pc-3 fade-in">
+      <div class="phase-top">
+        <div class="phase-num">03</div>
+        <div class="phase-info">
+          <h4>ȘTIINȚĂ</h4>
+          <div class="phase-dates">10 – 16 martie 2026</div>
+        </div>
+      </div>
+      <div class="phase-concept">„Nanotehnologie. Testat în condiții reale."</div>
+      <div class="phase-objective">Credibilitate. Reveal parțial al tehnologiei, filmări laborator, date de credibilitate.</div>
+      <ul class="phase-content-list">
+        <li>3–4 postări tehnice</li>
+        <li>Clip laborator 15–20s</li>
+        <li>Al doilea email din secvență</li>
+        <li>Primul articol de blog SEO</li>
+      </ul>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase-card pc-4 fade-in">
+      <div class="phase-top">
+        <div class="phase-num">04</div>
+        <div class="phase-info">
+          <h4>INDICII</h4>
+          <div class="phase-dates">17 – 23 martie 2026</div>
+        </div>
+      </div>
+      <div class="phase-concept">„1 mm schimbă totul"</div>
+      <div class="phase-objective">Dorință + colectare emailuri. Before/after cameră termică, fragmente demo, countdown.</div>
+      <ul class="phase-content-list">
+        <li>4–5 postări (before/after, demo)</li>
+        <li>Stories zilnice countdown</li>
+        <li>Al treilea email din secvență</li>
+        <li>Campanie retargeting + trafic landing page</li>
+      </ul>
+    </div>
+
+    <!-- Phase 5 -->
+    <div class="phase-card pc-5 fade-in">
+      <div class="phase-top">
+        <div class="phase-num">05</div>
+        <div class="phase-info">
+          <h4>LANSARE</h4>
+          <div class="phase-dates">24 – 26 martie 2026</div>
+        </div>
+      </div>
+      <div class="phase-concept">„thermX este aici"</div>
+      <div class="phase-objective">Conversie + reach maxim. Tot conținutul live simultan pe toate canalele.</div>
+      <ul class="phase-content-list">
+        <li>24.03 — Video teaser 30s produs</li>
+        <li>25.03 — Reveal specificații complete</li>
+        <li>26.03 — LANSARE: video 60–90s, email blast, landing page, comunicat de presă</li>
+        <li>Ads pe conversie la maxim</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ SECTION 8: EMAIL SEQUENCE ═══ -->
+<section class="section fade-in" id="email">
+  <div class="section-label">07 — Email</div>
+  <h2 class="section-title">Email Sequence</h2>
+
+  <div class="email-flow">
+    <div class="email-step fade-in">
+      <div class="email-num">1</div>
+      <div class="email-date">~03.03</div>
+      <div class="email-subject">„Ceva se pregătește"</div>
+      <div class="email-desc">Teaser minimal — cifre fără context + data 26.03</div>
+    </div>
+    <div class="email-step fade-in">
+      <div class="email-num">2</div>
+      <div class="email-date">~12.03</div>
+      <div class="email-subject">„Știința din spatele a 1 mm"</div>
+      <div class="email-desc">Reveal parțial nanotehnologie, date de credibilitate</div>
+    </div>
+    <div class="email-step fade-in">
+      <div class="email-num">3</div>
+      <div class="email-date">~20.03</div>
+      <div class="email-subject">„Fii primul care descoperă thermX"</div>
+      <div class="email-desc">Before/after, specificații teaser, CTA înscriere</div>
+    </div>
+    <div class="email-step fade-in">
+      <div class="email-num">4</div>
+      <div class="email-date">26.03</div>
+      <div class="email-subject">„thermX este aici"</div>
+      <div class="email-desc">Lansare completă — video, specificații, CTA cerere ofertă</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ SECTION 9: BUDGET ═══ -->
+<section class="section fade-in" id="budget">
+  <div class="section-label">08 — Buget</div>
+  <h2 class="section-title">Budget Allocation</h2>
+
+  <div class="budget-bar-wrapper">
+    <div class="budget-bar">
+      <div class="budget-seg bs-awareness">
+        <span class="bs-pct">20%</span>
+        <span class="bs-label">Awareness</span>
+      </div>
+      <div class="budget-seg bs-traffic">
+        <span class="bs-pct">35%</span>
+        <span class="bs-label">Traffic</span>
+      </div>
+      <div class="budget-seg bs-conversion">
+        <span class="bs-pct">45%</span>
+        <span class="bs-label">Conversion</span>
+      </div>
+    </div>
+    <div class="budget-legend">
+      <div class="budget-legend-item">
+        <div class="budget-legend-dot" style="background:#1a1a2e;"></div>
+        Faza 1–2 — Awareness
+      </div>
+      <div class="budget-legend-item">
+        <div class="budget-legend-dot" style="background:var(--blue);"></div>
+        Faza 3–4 — Traffic
+      </div>
+      <div class="budget-legend-item">
+        <div class="budget-legend-dot" style="background:var(--orange);"></div>
+        Faza 5 — Conversion
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Orbitron',sans-serif;font-size:13px;letter-spacing:1px;margin-bottom:16px;color:var(--blue);">Cost-Saving Strategies</h3>
+  <ul class="cost-strategies">
+    <li>
+      <span class="cs-icon"><i data-lucide="sparkles" style="width:16px;height:16px;"></i></span>
+      <strong>Organic first:</strong> tot conținutul social media este produs in-house, optimizat pentru algoritmi (Reels, carousel, video nativ)
+    </li>
+    <li>
+      <span class="cs-icon"><i data-lucide="repeat" style="width:16px;height:16px;"></i></span>
+      <strong>Retargeting focusat:</strong> ads doar către persoane care au interacționat deja (cost per click mai mic)
+    </li>
+    <li>
+      <span class="cs-icon"><i data-lucide="mail-check" style="width:16px;height:16px;"></i></span>
+      <strong>Email marketing organic:</strong> secvență automată de 4 emailuri (cost zero după setup)
+    </li>
+    <li>
+      <span class="cs-icon"><i data-lucide="search" style="width:16px;height:16px;"></i></span>
+      <strong>SEO content:</strong> articole de blog cu target pe cuvinte cheie long-tail (trafic gratuit pe termen lung)
+    </li>
+    <li>
+      <span class="cs-icon"><i data-lucide="users" style="width:16px;height:16px;"></i></span>
+      <strong>UGC și community:</strong> încurajarea distribuției organice prin conținut tehnic surprinzător
+    </li>
+  </ul>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ SECTION 10: KPIs ═══ -->
+<section class="section fade-in" id="kpis">
+  <div class="section-label">09 — Metrici</div>
+  <h2 class="section-title">KPIs Dashboard</h2>
+
+  <div class="kpi-grid">
+    <div class="kpi-card fade-in">
+      <div class="kpi-icon"><i data-lucide="eye" style="width:20px;height:20px;"></i></div>
+      <div class="kpi-info">
+        <div class="kpi-name">Total Impressions</div>
+        <div class="kpi-value">50.000+</div>
+        <div class="kpi-meta">Meta / LI Analytics — Weekly</div>
+      </div>
+    </div>
+    <div class="kpi-card fade-in">
+      <div class="kpi-icon"><i data-lucide="heart" style="width:20px;height:20px;"></i></div>
+      <div class="kpi-info">
+        <div class="kpi-name">Engagement Rate</div>
+        <div class="kpi-value">3%+</div>
+        <div class="kpi-meta">Native analytics — Weekly</div>
+      </div>
+    </div>
+    <div class="kpi-card fade-in">
+      <div class="kpi-icon"><i data-lucide="mouse-pointer-click" style="width:20px;height:20px;"></i></div>
+      <div class="kpi-info">
+        <div class="kpi-name">Landing Page Visits</div>
+        <div class="kpi-value">2.000+</div>
+        <div class="kpi-meta">Google Analytics — Weekly</div>
+      </div>
+    </div>
+    <div class="kpi-card fade-in">
+      <div class="kpi-icon"><i data-lucide="mail-plus" style="width:20px;height:20px;"></i></div>
+      <div class="kpi-info">
+        <div class="kpi-name">Email Subscribers</div>
+        <div class="kpi-value">300+</div>
+        <div class="kpi-meta">Email platform — Weekly</div>
+      </div>
+    </div>
+    <div class="kpi-card fade-in">
+      <div class="kpi-icon"><i data-lucide="user-check" style="width:20px;height:20px;"></i></div>
+      <div class="kpi-info">
+        <div class="kpi-name">Qualified Leads</div>
+        <div class="kpi-value">150+</div>
+        <div class="kpi-meta">CRM — Weekly</div>
+      </div>
+    </div>
+    <div class="kpi-card fade-in">
+      <div class="kpi-icon"><i data-lucide="mail-open" style="width:20px;height:20px;"></i></div>
+      <div class="kpi-info">
+        <div class="kpi-name">Email Open Rate</div>
+        <div class="kpi-value">25%+</div>
+        <div class="kpi-meta">Email platform — Per send</div>
+      </div>
+    </div>
+    <div class="kpi-card fade-in">
+      <div class="kpi-icon"><i data-lucide="external-link" style="width:20px;height:20px;"></i></div>
+      <div class="kpi-info">
+        <div class="kpi-name">Email CTR</div>
+        <div class="kpi-value">3%+</div>
+        <div class="kpi-meta">Email platform — Per send</div>
+      </div>
+    </div>
+    <div class="kpi-card fade-in">
+      <div class="kpi-icon"><i data-lucide="message-square" style="width:20px;height:20px;"></i></div>
+      <div class="kpi-info">
+        <div class="kpi-name">B2B Conversations</div>
+        <div class="kpi-value">10+</div>
+        <div class="kpi-meta">CRM / LinkedIn — Bi-weekly</div>
+      </div>
+    </div>
+    <div class="kpi-card fade-in">
+      <div class="kpi-icon"><i data-lucide="coins" style="width:20px;height:20px;"></i></div>
+      <div class="kpi-info">
+        <div class="kpi-name">Cost per Lead</div>
+        <div class="kpi-value">Sub 15 RON</div>
+        <div class="kpi-meta">Ads manager — Weekly</div>
+      </div>
+    </div>
+    <div class="kpi-card fade-in">
+      <div class="kpi-icon"><i data-lucide="play-circle" style="width:20px;height:20px;"></i></div>
+      <div class="kpi-info">
+        <div class="kpi-name">Video View Rate</div>
+        <div class="kpi-value">15%+</div>
+        <div class="kpi-meta">Platform analytics — Weekly</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ SECTION 11: COMPETITIVE POSITIONING ═══ -->
+<section class="section fade-in" id="competitive">
+  <div class="section-label">10 — Competiție</div>
+  <h2 class="section-title">Competitive Positioning</h2>
+
+  <div class="comparison-grid">
+    <div class="comparison-block">
+      <h4>vs Izolație Tradițională (EPS / Vată Minerală)</h4>
+      <ul class="advantage-list">
+        <li>
+          <span class="adv-icon"><i data-lucide="check" style="width:16px;height:16px;"></i></span>
+          <span><strong>Grosime:</strong> 1 mm vs 10–20 cm — nu reduce suprafața utilă</span>
+        </li>
+        <li>
+          <span class="adv-icon"><i data-lucide="check" style="width:16px;height:16px;"></i></span>
+          <span><strong>Aplicare:</strong> pulverizare rapidă vs schele + săptămâni de șantier</span>
+        </li>
+        <li>
+          <span class="adv-icon"><i data-lucide="check" style="width:16px;height:16px;"></i></span>
+          <span><strong>Punți termice:</strong> zero (membrană continuă) vs inevitabile (panouri rigide)</span>
+        </li>
+        <li>
+          <span class="adv-icon"><i data-lucide="check" style="width:16px;height:16px;"></i></span>
+          <span><strong>Greutate:</strong> 0,4 kg/m² vs 15–30 kg/m² — ideal pentru clădiri istorice</span>
+        </li>
+        <li>
+          <span class="adv-icon"><i data-lucide="check" style="width:16px;height:16px;"></i></span>
+          <span><strong>Rezistență UV:</strong> nu necesită protecție suplimentară</span>
+        </li>
+      </ul>
+    </div>
+    <div class="comparison-block">
+      <h4>vs Competitori Direcți (Thermoshield, Bronya)</h4>
+      <ul class="advantage-list">
+        <li>
+          <span class="adv-icon"><i data-lucide="check" style="width:16px;height:16px;"></i></span>
+          <span><strong>Lambda superior:</strong> 0,001 W/mK — valoare mai mică decât concurenții</span>
+        </li>
+        <li>
+          <span class="adv-icon"><i data-lucide="check" style="width:16px;height:16px;"></i></span>
+          <span><strong>Prezență locală:</strong> produs și aplicat din Oradea, suport tehnic direct</span>
+        </li>
+        <li>
+          <span class="adv-icon"><i data-lucide="check" style="width:16px;height:16px;"></i></span>
+          <span><strong>Garanție 20 ani</strong> (durabilitate estimată 35+ ani)</span>
+        </li>
+        <li>
+          <span class="adv-icon"><i data-lucide="check" style="width:16px;height:16px;"></i></span>
+          <span><strong>Bronya:</strong> percepție negativă post-2022 (origine rusă), calitate inconsistentă</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ SECTION 12: MATERIALS CHECKLIST ═══ -->
+<section class="section fade-in" id="materials">
+  <div class="section-label">11 — Materiale</div>
+  <h2 class="section-title">Materials Checklist</h2>
+
+  <div class="checklist-grid">
+    <!-- Design -->
+    <div class="checklist-col">
+      <div class="checklist-col-header">
+        <span class="cc-icon"><i data-lucide="palette" style="width:20px;height:20px;"></i></span>
+        <h4>Design & Visual</h4>
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        6–8 vizualuri teaser dark (1080×1080 + 1080×1350)
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        5–10 imagini/footage cameră termică
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        9 grafice countdown (1080×1080)
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        3–4 variante imagine hero produs
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        4 bannere ziua lansării (FB cover, LI, web)
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        1 carusel „Cum funcționează" + 1–2 infografice
+      </div>
+    </div>
+
+    <!-- Video -->
+    <div class="checklist-col">
+      <div class="checklist-col-header">
+        <span class="cc-icon"><i data-lucide="video" style="width:20px;height:20px;"></i></span>
+        <h4>Video</h4>
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        Clip teaser #1: mister/textură (10–15s)
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        Clip teaser #2: cameră termică (15–20s)
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        Clip teaser #3: laborator/microscop (15–20s)
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        Clip teaser #4: fragment demo aplicare (20–30s)
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        VIDEO LANSARE: demo complet (60–90s, profesional)
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        Adaptări Reels/TikTok (15–30s vertical)
+      </div>
+    </div>
+
+    <!-- Digital -->
+    <div class="checklist-col">
+      <div class="checklist-col-header">
+        <span class="cc-icon"><i data-lucide="monitor" style="width:20px;height:20px;"></i></span>
+        <h4>Digital / Technical</h4>
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        Landing page cu countdown + formular email
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        Setup email automation (secvență drip 4 emailuri)
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        Meta Pixel + tracking pe landing page
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        3 seturi campanii ads (awareness → traffic → conversion)
+      </div>
+      <div class="checklist-item">
+        <span class="ci-icon"><i data-lucide="circle" style="width:14px;height:14px;"></i></span>
+        Structură UTM per canal, per fază
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="footer-brand">Epic Digital Hub</div>
+  <div>Prepared for Nano Revolution SRL — Februarie 2026 — Confidential</div>
+</footer>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  // Initialize Lucide icons
+  lucide.createIcons();
+
+  // Fade-in on scroll via IntersectionObserver
+  const fadeEls = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  fadeEls.forEach(el => observer.observe(el));
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('.section[id]');
+  const navLinks = document.querySelectorAll('.nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 100;
+      if (window.scrollY >= top) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  });
+
+  // Audience tabs
+  function switchAudienceTab(e, tabId) {
+    document.querySelectorAll('.audience-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.audience-panel').forEach(p => p.classList.remove('active'));
+    e.target.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+  }
+</script>
+</body>
+</html>

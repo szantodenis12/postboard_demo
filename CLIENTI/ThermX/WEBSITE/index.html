@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>thermX | Membrană Nanoceramică Termoizolantă — Nano Revolution SRL</title>
+    <meta name="description" content="thermX — membrană nanoceramică termoizolantă cu conductivitate termică λ ≤ 0,001 W/(m·K) și 85% reflexie IR. Izolație termică de înaltă performanță la grosimi milimetrice.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;900&family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===========================================
+           CSS CUSTOM PROPERTIES — Brand Palette
+           =========================================== */
+        :root {
+            /* Official brand colors */
+            --orange: #FF4500;
+            --orange-hover: #E03D00;
+            --white: #FFFFFF;
+            --gray: #4A4A4A;
+            --black: #121212;
+            --blue: #00509E;
+            --blue-hover: #003D7A;
+
+            /* Derived opacities */
+            --blue-10: rgba(0, 80, 158, 0.10);
+            --blue-20: rgba(0, 80, 158, 0.20);
+            --black-5: rgba(18, 18, 18, 0.05);
+            --black-8: rgba(18, 18, 18, 0.08);
+            --black-12: rgba(18, 18, 18, 0.12);
+            --orange-10: rgba(255, 69, 0, 0.10);
+
+            /* Gradients */
+            --gradient-premium: linear-gradient(135deg, #121212 0%, #00509E 100%);
+            --gradient-overlay: linear-gradient(180deg, rgba(18,18,18,0.85) 0%, rgba(18,18,18,0.2) 100%);
+            --gradient-accent: linear-gradient(90deg, #00509E 0%, #FF4500 100%);
+
+            /* Typography */
+            --font-display: 'Orbitron', 'Arial Black', 'Helvetica Neue', sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+            /* Spacing (8px grid) */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --space-3xl: 64px;
+            --space-4xl: 96px;
+
+            /* Shadows */
+            --shadow-card: 0 1px 3px rgba(18, 18, 18, 0.08);
+            --shadow-hover: 0 4px 12px rgba(18, 18, 18, 0.12);
+
+            /* Transitions */
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ===========================================
+           RESET & BASE
+           =========================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--black);
+            background-color: var(--white);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* ===========================================
+           TYPOGRAPHY — Brand Type Scale
+           =========================================== */
+        h1, h2 {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+        }
+
+        /* H1 — Orbitron Black 900, 48-64px, lh 1.1 */
+        h1 {
+            font-weight: 900;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        /* H2 — Orbitron Medium 500, 32-40px, lh 1.2 */
+        h2 {
+            font-weight: 500;
+            font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+            line-height: 1.2;
+        }
+
+        /* H3 — Inter ExtraBold 800, 24-28px, lh 1.3 */
+        h3 {
+            font-family: var(--font-body);
+            font-weight: 800;
+            font-size: clamp(1.25rem, 2vw, 1.75rem);
+            line-height: 1.3;
+        }
+
+        /* H4 — Inter SemiBold 600, 18-20px, lh 1.4 */
+        h4 {
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: clamp(1rem, 1.5vw, 1.25rem);
+            line-height: 1.4;
+        }
+
+        p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* Label / Overline */
+        .overline {
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* Data / Numbers — Orbitron Medium 500 */
+        .data-number {
+            font-family: var(--font-display);
+            font-weight: 500;
+        }
+
+        /* ===========================================
+           BUTTONS — Brand UI System
+           =========================================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px 24px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+
+        /* Primary — Blue */
+        .btn-primary {
+            background-color: var(--blue);
+            color: var(--white);
+        }
+        .btn-primary:hover {
+            background-color: var(--blue-hover);
+        }
+
+        /* CTA Urgent — Orange (only for conversion) */
+        .btn-cta {
+            background-color: var(--orange);
+            color: var(--white);
+        }
+        .btn-cta:hover {
+            background-color: var(--orange-hover);
+        }
+
+        /* Secondary — Outlined Blue */
+        .btn-secondary {
+            background-color: transparent;
+            border: 1.5px solid var(--blue);
+            color: var(--blue);
+        }
+        .btn-secondary:hover {
+            background-color: var(--blue);
+            color: var(--white);
+        }
+
+        /* Ghost — on dark backgrounds */
+        .btn-ghost {
+            background-color: transparent;
+            border: 1.5px solid var(--white);
+            color: var(--white);
+        }
+        .btn-ghost:hover {
+            background-color: var(--white);
+            color: var(--black);
+        }
+
+        /* ===========================================
+           CARDS — Brand UI System
+           =========================================== */
+        .card {
+            background: var(--white);
+            border: 1px solid var(--black-8);
+            border-radius: 10px;
+            box-shadow: var(--shadow-card);
+            padding: var(--space-xl);
+            transition: box-shadow var(--transition), transform var(--transition);
+        }
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        /* ===========================================
+           LAYOUT UTILITIES
+           =========================================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        .section {
+            padding: var(--space-4xl) 0;
+        }
+
+        .section-alt {
+            background-color: var(--blue-10);
+        }
+
+        .section-dark {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .section-dark p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .section-header {
+            margin-bottom: var(--space-3xl);
+        }
+
+        .section-header .overline {
+            color: var(--blue);
+            margin-bottom: var(--space-md);
+            display: block;
+        }
+
+        .section-header p {
+            max-width: 640px;
+            margin-top: var(--space-md);
+        }
+
+        .section-header.text-center p {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ===========================================
+           NAVIGATION
+           =========================================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(18, 18, 18, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0 var(--space-lg);
+        }
+
+        .navbar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 72px;
+        }
+
+        .navbar-brand {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        .navbar-brand span {
+            color: var(--orange);
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xl);
+            list-style: none;
+        }
+
+        .navbar-links a {
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color var(--transition);
+            cursor: pointer;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .navbar-links a:hover,
+        .navbar-links a.active {
+            color: var(--white);
+        }
+
+        .navbar-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--orange);
+        }
+
+        .navbar-cta {
+            font-family: var(--font-body) !important;
+            font-weight: 600 !important;
+            font-size: 0.75rem !important;
+            letter-spacing: 1px !important;
+            text-transform: uppercase !important;
+            background-color: var(--blue) !important;
+            color: var(--white) !important;
+            padding: 8px 18px !important;
+            border-radius: 4px !important;
+            transition: background-color var(--transition) !important;
+        }
+
+        .navbar-cta:hover {
+            background-color: var(--blue-hover) !important;
+        }
+
+        /* Mobile hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--white);
+            transition: all var(--transition);
+        }
+
+        /* ===========================================
+           PAGE SYSTEM (SPA)
+           =========================================== */
+        .page {
+            display: none;
+            padding-top: 72px;
+        }
+
+        .page.active {
+            display: block;
+            animation: pageIn 0.35s ease-out;
+        }
+
+        @keyframes pageIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ===========================================
+           HERO — Homepage
+           Dark gradient #121212 → #00509E
+           =========================================== */
+        .hero {
+            background: var(--gradient-premium);
+            min-height: calc(100vh - 72px);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 69, 0, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 720px;
+        }
+
+        .hero .overline {
+            color: var(--orange);
+            margin-bottom: var(--space-lg);
+            display: inline-block;
+        }
+
+        .hero h1 {
+            color: var(--white);
+            margin-bottom: var(--space-lg);
+        }
+
+        .hero p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            max-width: 580px;
+            margin-bottom: var(--space-xl);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-3xl);
+        }
+
+        /* Hero stats row */
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-lg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: var(--space-xl);
+        }
+
+        .hero-stat {
+            text-align: left;
+        }
+
+        .hero-stat .data-number {
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+            color: var(--white);
+            display: block;
+            margin-bottom: var(--space-xs);
+        }
+
+        .hero-stat .data-number .accent {
+            color: var(--orange);
+        }
+
+        .hero-stat p {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+        }
+
+        /* ===========================================
+           INTRO SECTION — White bg
+           =========================================== */
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3xl);
+            align-items: center;
+        }
+
+        .intro-text h2 {
+            color: var(--black);
+            margin-bottom: var(--space-lg);
+        }
+
+        .intro-text p {
+            margin-bottom: var(--space-md);
+        }
+
+        .intro-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+
+        .intro-feature {
+            padding: var(--space-lg);
+            background: var(--blue-10);
+            border-radius: 8px;
+        }
+
+        .intro-feature h4 {
+            color: var(--blue);
+            margin-bottom: var(--space-sm);
+        }
+
+        .intro-feature p {
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        /* ===========================================
+           TECHNOLOGY PAGE
+           =========================================== */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-xl);
+        }
+
+        .tech-card {
+            padding: var(--space-xl);
+        }
+
+        .tech-card .overline {
+            color: var(--blue);
+            margin-bottom: var(--space-md);
+            display: block;
+        }
+
+        .tech-card h3 {
+            color: var(--black);
+            margin-bottom: var(--space-md);
+        }
+
+        .tech-card p {
+            font-size: 0.9375rem;
+        }
+
+        .tech-card .data-highlight {
+            display: inline-block;
+            font-family: var(--font-body);
+            font-weight: 600;
+            color: var(--orange);
+            background: var(--orange-10);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+
+        /* Mechanism diagram section */
+        .mechanism-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-xl);
+            margin-top: var(--space-2xl);
+        }
+
+        .mechanism-step {
+            text-align: center;
+            padding: var(--space-xl);
+        }
+
+        .mechanism-step .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--blue);
+            color: var(--white);
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 1.25rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .mechanism-step h4 {
+            color: var(--black);
+            margin-bottom: var(--space-sm);
+        }
+
+        .mechanism-step p {
+            font-size: 0.875rem;
+        }
+
+        /* ===========================================
+           SPECS PAGE — Data Table
+           =========================================== */
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+
+        .specs-table thead {
+            background: var(--black);
+        }
+
+        .specs-table th {
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--white);
+            padding: var(--space-md) var(--space-lg);
+            text-align: left;
+        }
+
+        .specs-table td {
+            padding: var(--space-md) var(--space-lg);
+            border-bottom: 1px solid var(--black-8);
+            font-size: 0.9375rem;
+            color: var(--black);
+        }
+
+        .specs-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .specs-table tbody tr:hover {
+            background-color: var(--blue-10);
+        }
+
+        .specs-table .value {
+            font-family: var(--font-body);
+            font-weight: 600;
+            color: var(--blue);
+        }
+
+        /* Energy performance mini-table */
+        .energy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--space-xl);
+        }
+
+        .energy-table th {
+            background: var(--blue);
+            color: var(--white);
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: var(--space-md) var(--space-lg);
+            text-align: left;
+        }
+
+        .energy-table td {
+            padding: var(--space-md) var(--space-lg);
+            border-bottom: 1px solid var(--black-8);
+            font-size: 0.9375rem;
+        }
+
+        .energy-table .value {
+            font-weight: 600;
+            color: var(--blue);
+        }
+
+        /* Certification badges */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-2xl);
+        }
+
+        .cert-card {
+            padding: var(--space-lg);
+            border-left: 3px solid var(--blue);
+        }
+
+        .cert-card h4 {
+            color: var(--black);
+            margin-bottom: var(--space-sm);
+        }
+
+        .cert-card p {
+            font-size: 0.875rem;
+        }
+
+        /* ===========================================
+           ADVANTAGES SECTION
+           =========================================== */
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-xl);
+        }
+
+        .advantage-card {
+            padding: var(--space-xl);
+        }
+
+        .advantage-card .icon-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--blue-10);
+            margin-bottom: var(--space-md);
+        }
+
+        .advantage-card .icon-circle svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--blue);
+            fill: none;
+            stroke-width: 1.75;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .advantage-card h3 {
+            color: var(--black);
+            margin-bottom: var(--space-sm);
+        }
+
+        .advantage-card p {
+            font-size: 0.9375rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .advantage-card .stat-inline {
+            font-weight: 600;
+            color: var(--orange);
+            font-size: 0.875rem;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--space-2xl);
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+
+        .comparison-table th {
+            padding: var(--space-md) var(--space-lg);
+            text-align: left;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .comparison-table thead th {
+            background: var(--black);
+            color: var(--white);
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .comparison-table thead th.highlight {
+            background: var(--blue);
+        }
+
+        .comparison-table td {
+            padding: var(--space-md) var(--space-lg);
+            border-bottom: 1px solid var(--black-8);
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .comparison-table td.highlight {
+            background: var(--blue-10);
+            color: var(--black);
+            font-weight: 600;
+        }
+
+        .comparison-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ===========================================
+           CONTACT PAGE
+           =========================================== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: var(--space-3xl);
+        }
+
+        .contact-info-block {
+            margin-bottom: var(--space-xl);
+        }
+
+        .contact-info-block .overline {
+            color: var(--blue);
+            margin-bottom: var(--space-sm);
+            display: block;
+        }
+
+        .contact-info-block p,
+        .contact-info-block a {
+            font-size: 1.1rem;
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .contact-info-block a:hover {
+            color: var(--blue);
+        }
+
+        .contact-form .form-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .contact-form label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: var(--space-sm);
+        }
+
+        .contact-form input,
+        .contact-form textarea,
+        .contact-form select {
+            width: 100%;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            padding: 14px var(--space-md);
+            background: var(--white);
+            border: 1.5px solid var(--black-8);
+            border-radius: 6px;
+            color: var(--black);
+            transition: border-color var(--transition);
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus,
+        .contact-form select:focus {
+            outline: none;
+            border-color: var(--blue);
+        }
+
+        .contact-form textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: rgba(74, 74, 74, 0.5);
+        }
+
+        /* ===========================================
+           FOOTER — Dark (#121212)
+           =========================================== */
+        .footer {
+            background: var(--black);
+            color: var(--white);
+            padding: var(--space-3xl) 0 var(--space-xl);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: var(--space-3xl);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .footer-brand {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: var(--white);
+            margin-bottom: var(--space-md);
+        }
+
+        .footer-brand span {
+            color: var(--orange);
+        }
+
+        .footer-desc {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+            max-width: 360px;
+        }
+
+        .footer h4 {
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: var(--space-lg);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .footer-links a {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color var(--transition);
+            cursor: pointer;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: var(--space-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+
+        .footer-bottom p {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .footer-tagline {
+            font-family: var(--font-display);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* ===========================================
+           RESPONSIVE
+           =========================================== */
+        @media (max-width: 968px) {
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .intro-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mechanism-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-xl);
+            }
+
+            .comparison-table {
+                font-size: 0.8rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: var(--space-sm) var(--space-md);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-links {
+                display: none;
+                position: absolute;
+                top: 72px;
+                left: 0;
+                right: 0;
+                background: rgba(18, 18, 18, 0.97);
+                flex-direction: column;
+                padding: var(--space-lg);
+                gap: var(--space-lg);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            }
+
+            .navbar-links.open {
+                display: flex;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hamburger.open span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+            .hamburger.open span:nth-child(2) {
+                opacity: 0;
+            }
+            .hamburger.open span:nth-child(3) {
+                transform: rotate(-45deg) translate(5px, -5px);
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .advantages-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: var(--space-3xl) 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ====================================
+         NAVIGATION
+         ==================================== -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a class="navbar-brand" onclick="navigate('home')">therm<span>X</span></a>
+            <div class="navbar-links" id="navLinks">
+                <a class="active" onclick="navigate('home')">Acasă</a>
+                <a onclick="navigate('technology')">Tehnologie</a>
+                <a onclick="navigate('specs')">Specificații</a>
+                <a onclick="navigate('advantages')">Avantaje</a>
+                <a onclick="navigate('contact')" class="navbar-cta">Solicită Ofertă</a>
+            </div>
+            <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Meniu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ====================================
+         PAGE: ACASĂ (HOME)
+         ==================================== -->
+    <div id="home" class="page active">
+
+        <!-- HERO — Dark gradient -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <span class="overline">Nano Revolution SRL</span>
+                    <h1>Membrana Nanoceramică Termoizolantă</h1>
+                    <p>Barieră conductivă de înaltă precizie bazată pe microsfere ceramice vidate în matrice de latex stiren-acrilic. Izolație termică la grosimi de 0,5 – 1 mm, cu reflexie a 85% din radiația infraroșu.</p>
+                    <div class="hero-buttons">
+                        <a class="btn btn-cta" onclick="navigate('specs')">Descarcă Fișa Tehnică</a>
+                        <a class="btn btn-ghost" onclick="navigate('contact')">Solicită Consultanță</a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <span class="data-number">λ ≤ 0<span class="accent">,</span>001</span>
+                            <p>W/(m·K) conductivitate</p>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="data-number"><span class="accent">85</span>%</span>
+                            <p>Reflexie infraroșu</p>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="data-number"><span class="accent">40</span>%</span>
+                            <p>Reducere pierderi termice</p>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="data-number"><span class="accent">20</span> ani</span>
+                            <p>Garanție producător</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTRO — White background -->
+        <section class="section">
+            <div class="container">
+                <div class="intro-grid">
+                    <div class="intro-text">
+                        <span class="overline" style="color: var(--blue); display: block; margin-bottom: var(--space-md);">Ce este thermX</span>
+                        <h2>Compozit fluid nanoceraamic pentru izolație termică</h2>
+                        <p>thermX este o membrană nanoceramică aplicabilă sub formă de dispersie lichidă pe bază de apă (latex stiren-acrilic), conținând microsfere ceramice vidate. Se aplică exclusiv cu echipament airless specializat, formând o barieră termică continuă la grosimi de 0,5 – 1 mm (standard construcții) sau până la 3,5 mm (aplicații industriale).</p>
+                        <p>Mecanismul de acțiune combină bariera conductivă a microsferelor vidate cu reflexia radiației termice în spectrul infraroșu, oferind o conductivitate termică de λ ≤ 0,001 W/(m·K).</p>
+                    </div>
+                    <div class="intro-features">
+                        <div class="intro-feature">
+                            <h4>λ ≤ 0,001</h4>
+                            <p>Conductivitate termică W/(m·K) — barieră conductivă prin microsfere vidate</p>
+                        </div>
+                        <div class="intro-feature">
+                            <h4>~0,4 kg/m²</h4>
+                            <p>Greutate la 1 mm grosime — sarcină structurală neglijabilă</p>
+                        </div>
+                        <div class="intro-feature">
+                            <h4>-60°C → +260°C</h4>
+                            <p>Interval de operare — aplicații rezidențiale și industriale</p>
+                        </div>
+                        <div class="intro-feature">
+                            <h4>35+ ani</h4>
+                            <p>Durabilitate estimată — rezistență confirmată la factori de mediu și UV</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KEY ADVANTAGES — Alt background -->
+        <section class="section section-alt">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="overline">De ce thermX</span>
+                    <h2>Performanță verificabilă, nu promisiuni</h2>
+                    <p>Fiecare parametru este măsurabil conform standardelor internaționale SNiP și ASTM/ASHRAE. Datele provin din fișa tehnică verificată.</p>
+                </div>
+                <div class="advantages-grid">
+                    <div class="card">
+                        <h3>Continuitate termică</h3>
+                        <p>Aplicarea fluidă creează o anvelopă monolitică continuă, eliminând punțile termice liniare cauzate de rosturi, dibluri sau sisteme de prindere mecanică.</p>
+                        <span class="stat-inline" style="font-weight: 600; color: var(--orange); font-size: 0.875rem;">40% reducere pierderi termice la 1 mm</span>
+                    </div>
+                    <div class="card">
+                        <h3>Greutate neglijabilă</h3>
+                        <p>Cu aproximativ 0,4 kg/m² la 1 mm grosime, thermX nu încarcă structura de rezistență — soluție ideală pentru clădiri de patrimoniu și structuri cu restricții de masă.</p>
+                        <span class="stat-inline" style="font-weight: 600; color: var(--orange); font-size: 0.875rem;">~0,4 kg/m² vs. 15-25 kg/m² (vată minerală)</span>
+                    </div>
+                    <div class="card">
+                        <h3>Instalare rapidă</h3>
+                        <p>Aplicare exclusiv prin echipament airless specializat. Fără structură de susținere mecanică, fără dibluri, fără rosturi de dilatare. Reducerea timpului de instalare cu 80% față de izolația convențională.</p>
+                        <span class="stat-inline" style="font-weight: 600; color: var(--orange); font-size: 0.875rem;">80% mai rapid vs. izolație convențională</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section — Dark -->
+        <section class="section section-dark">
+            <div class="container text-center">
+                <span class="overline" style="color: var(--orange); display: block; margin-bottom: var(--space-md);">Proiectul tău</span>
+                <h2 style="color: var(--white); margin-bottom: var(--space-lg);">Solicită evaluarea termică gratuită</h2>
+                <p style="max-width: 560px; margin: 0 auto var(--space-xl);">Echipa noastră tehnică calculează coeficientul energetic exact și recomandă grosimea optimă de aplicare pentru fiecare proiect.</p>
+                <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+                    <a class="btn btn-cta" onclick="navigate('contact')">Solicită Ofertă</a>
+                    <a class="btn btn-ghost" onclick="navigate('specs')">Vezi Specificații</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ====================================
+         PAGE: TEHNOLOGIE
+         ==================================== -->
+    <div id="technology" class="page">
+
+        <!-- Header — Dark -->
+        <section class="section section-dark" style="padding-bottom: var(--space-3xl);">
+            <div class="container">
+                <div class="section-header">
+                    <span class="overline" style="color: var(--orange);">Mecanismul thermX</span>
+                    <h1 style="color: var(--white);">Fizica izolării nanoceramice</h1>
+                    <p style="max-width: 600px;">Analiza detaliată a modului în care structura microporoasă a compozitului thermX reduce drastic componenta convectivă și radiativă a transferului termic.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mechanism steps — White -->
+        <section class="section">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="overline">Proces de izolare</span>
+                    <h2>Trei mecanisme simultane</h2>
+                </div>
+                <div class="mechanism-steps">
+                    <div class="mechanism-step card">
+                        <span class="step-number">1</span>
+                        <h4>Barieră conductivă</h4>
+                        <p>Microsferele ceramice vidate din structura compozitului creează o matrice cu conductivitate termică extrem de redusă: λ ≤ 0,001 W/(m·K). Vidul din interiorul microsferelor minimizează transferul termic prin conducție.</p>
+                    </div>
+                    <div class="mechanism-step card">
+                        <span class="step-number">2</span>
+                        <h4>Reflexie radiativă IR</h4>
+                        <p>Suprafața ceramică reflectă până la 85% din radiația termică în spectrul infraroșu, reducând semnificativ pierderea căldurii radiante către exterior.</p>
+                    </div>
+                    <div class="mechanism-step card">
+                        <span class="step-number">3</span>
+                        <h4>Polimerizare continuă</h4>
+                        <p>Latexul stiren-acrilic polimerizează direct pe stratul suport, formând o membrană elastică (12% elongație relativă) impermeabilă dar permeabilă la vapori (0,0014 mg/(m·h·Pa)).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech cards — Alt background -->
+        <section class="section section-alt">
+            <div class="container">
+                <div class="section-header">
+                    <span class="overline">Analiză tehnică</span>
+                    <h2>Principii fizice de funcționare</h2>
+                </div>
+                <div class="tech-grid">
+                    <div class="card tech-card">
+                        <span class="overline">Problemă</span>
+                        <h3>Eliminarea punților termice</h3>
+                        <p>Întreruperile în stratul termoizolant convențional generează punți termice liniare la rosturi, dibluri și elemente de prindere. Aplicarea fluidă a compozitului thermX creează o membrană continuă, polimerizată direct pe stratul suport, eliminând pierderile necontrolate.</p>
+                        <span class="data-highlight">Aderență: 1,53 MPa (metal) / 1,84 MPa (beton / lemn)</span>
+                    </div>
+                    <div class="card tech-card">
+                        <span class="overline">Soluție</span>
+                        <h3>Controlul condensului</h3>
+                        <p>Aplicarea thermX menține temperatura suprafeței interioare (Tn) peste punctul de rouă, prevenind formarea condensului conform diagramei psihrometrice. Membrana este impermeabilă dar permeabilă la vapori, eliminând mediul propice dezvoltării fungice.</p>
+                        <span class="data-highlight">Permeabilitate vapori: 0,0014 mg/(m·h·Pa)</span>
+                    </div>
+                    <div class="card tech-card">
+                        <span class="overline">Date</span>
+                        <h3>Eficiență la grosime minimă</h3>
+                        <p>La diferență de izolațiile fibroase masive (vată minerală, polistiren), thermX oferă performanță termică la grosimi milimetrice. Greutatea redusă de ~0,4 kg/m² la 1 mm nu modifică parametrii geometrici ai structurii.</p>
+                        <span class="data-highlight">Absorbție apă: 0,03 g/cm³</span>
+                    </div>
+                    <div class="card tech-card">
+                        <span class="overline">Rezistență</span>
+                        <h3>Durabilitate și protecție UV</h3>
+                        <p>Polimerul acrilic rezistă radiației ultraviolete și factorilor meteorologici fără necesitatea unui strat suplimentar de tencuială de protecție. Interval de operare: -60°C → +260°C, reacție la foc: Clasa A uscat (MSZ-EN 15824:2009).</p>
+                        <span class="data-highlight">Durabilitate estimată: 35+ ani</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="section">
+            <div class="container text-center">
+                <h2 style="margin-bottom: var(--space-lg);">Solicită fișa tehnică completă</h2>
+                <p style="max-width: 500px; margin: 0 auto var(--space-xl);">Toate datele tehnice verificabile, formule de calcul conform SNiP și ASTM/ASHRAE, și recomandări de aplicare per tip de substrat.</p>
+                <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+                    <a class="btn btn-primary" onclick="navigate('specs')">Specificații Complete</a>
+                    <a class="btn btn-secondary" onclick="navigate('contact')">Consultanță Tehnică</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ====================================
+         PAGE: SPECIFICAȚII
+         ==================================== -->
+    <div id="specs" class="page">
+
+        <!-- Header — Dark -->
+        <section class="section section-dark" style="padding-bottom: var(--space-3xl);">
+            <div class="container">
+                <div class="section-header">
+                    <span class="overline" style="color: var(--orange);">Date certificate</span>
+                    <h1 style="color: var(--white);">Specificații tehnice verificabile</h1>
+                    <p style="max-width: 600px;">Parametri certificați conform standardelor internaționale de calcul energetic (СНиП 41-103-2000, ASTM/ASHRAE/ANSI). Valorile sunt extrase din fișa tehnică oficială.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main specs table — White -->
+        <section class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="overline">Parametri fizici</span>
+                    <h2>Fișa tehnică thermX</h2>
+                </div>
+                <table class="specs-table">
+                    <thead>
+                        <tr>
+                            <th>Parametru</th>
+                            <th>Valoare</th>
+                            <th>Observații</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Conductivitate termică (λ)</td>
+                            <td class="value">≤ 0,001 W/(m·K)</td>
+                            <td>Prin barieră conductivă cu microsfere vidate</td>
+                        </tr>
+                        <tr>
+                            <td>Reflexie termică IR</td>
+                            <td class="value">85%</td>
+                            <td>După aplicare — spectru infraroșu</td>
+                        </tr>
+                        <tr>
+                            <td>Interval de operare</td>
+                            <td class="value">-60°C → +260°C</td>
+                            <td>Rezidențial și industrial</td>
+                        </tr>
+                        <tr>
+                            <td>Permeabilitate vapori</td>
+                            <td class="value">0,0014 mg/(m·h·Pa)</td>
+                            <td>Impermeabilă la apă, permeabilă la vapori</td>
+                        </tr>
+                        <tr>
+                            <td>Absorbție apă</td>
+                            <td class="value">0,03 g/cm³</td>
+                            <td>Rezistență la umiditate</td>
+                        </tr>
+                        <tr>
+                            <td>Elasticitate (elongație relativă)</td>
+                            <td class="value">12%</td>
+                            <td>Matrice latex stiren-acrilic</td>
+                        </tr>
+                        <tr>
+                            <td>Greutate la 1 mm grosime</td>
+                            <td class="value">~0,4 kg/m²</td>
+                            <td>Sarcină structurală neglijabilă</td>
+                        </tr>
+                        <tr>
+                            <td>Aderență — metal</td>
+                            <td class="value">1,53 MPa</td>
+                            <td>Prindere directă, fără dibluri</td>
+                        </tr>
+                        <tr>
+                            <td>Aderență — beton</td>
+                            <td class="value">1,84 MPa</td>
+                            <td>Aplicare directă pe substrat mineral</td>
+                        </tr>
+                        <tr>
+                            <td>Aderență — lemn</td>
+                            <td class="value">1,84 MPa</td>
+                            <td>Compatibil cu structuri din lemn</td>
+                        </tr>
+                        <tr>
+                            <td>Reacție la foc (uscat)</td>
+                            <td class="value">Clasa A</td>
+                            <td>MSZ-EN 15824:2009</td>
+                        </tr>
+                        <tr>
+                            <td>Garanție producător</td>
+                            <td class="value">20 ani</td>
+                            <td>Garanție oficială</td>
+                        </tr>
+                        <tr>
+                            <td>Durabilitate estimată</td>
+                            <td class="value">35+ ani</td>
+                            <td>Bazat pe teste de îmbătrânire accelerată</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Energy performance — Alt bg -->
+        <section class="section section-alt">
+            <div class="container">
+                <div class="section-header">
+                    <span class="overline">Performanță energetică</span>
+                    <h2>Reducerea pierderilor termice per grosime</h2>
+                    <p>Eficiența termică crește proporțional cu grosimea stratului aplicat. Valorile sunt măsurate conform standardelor SNiP.</p>
+                </div>
+                <table class="energy-table" style="background: var(--white); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-card);">
+                    <thead>
+                        <tr>
+                            <th>Grosime strat aplicat</th>
+                            <th>Reducere pierderi termice</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0,50 mm</td>
+                            <td class="value">~25%</td>
+                        </tr>
+                        <tr>
+                            <td>1,00 mm</td>
+                            <td class="value">până la 40%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Certifications -->
+        <section class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="overline">Certificări</span>
+                    <h2>Standarde și conformitate</h2>
+                </div>
+                <div class="cert-grid">
+                    <div class="card cert-card">
+                        <h4>СНиП 41-103-2000</h4>
+                        <p>Standard rusesc pentru calculul grosimii izolației termice — formule de referință pentru dimensionarea stratului thermX</p>
+                    </div>
+                    <div class="card cert-card">
+                        <h4>ASTM / ASHRAE / ANSI</h4>
+                        <p>Standarde americane pentru calculul performanței termice — formule alternative de verificare</p>
+                    </div>
+                    <div class="card cert-card">
+                        <h4>MSZ-EN 15824:2009</h4>
+                        <p>Reacție la foc: Clasa A (uscat/polimerizat) — material necombustibil. Clasa C în formă lichidă, înainte de aplicare.</p>
+                    </div>
+                    <div class="card cert-card">
+                        <h4>REACH Compliant</h4>
+                        <p>Produs neclasificat ca amestec periculos — conformitate cu regulamentul european privind substanțele chimice</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: var(--space-2xl); padding: var(--space-xl); background: var(--black-5); border-radius: 10px;">
+                    <h4 style="margin-bottom: var(--space-sm);">Referințe industriale</h4>
+                    <p>Produs utilizat de operatori industriali de referință: Gazprom, Rosneft, Lukoil. Aplicat în sectoare multiple: petrochimic, naval, auto, rezidențial.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="section section-dark">
+            <div class="container text-center">
+                <h2 style="color: var(--white); margin-bottom: var(--space-lg);">Descarcă fișa tehnică completă</h2>
+                <p style="max-width: 500px; margin: 0 auto var(--space-xl);">Document PDF cu toate specificațiile, formulele de calcul și recomandările de aplicare per substrat.</p>
+                <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+                    <a class="btn btn-cta">Descarcă PDF</a>
+                    <a class="btn btn-ghost" onclick="navigate('contact')">Consultanță Tehnică</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ====================================
+         PAGE: AVANTAJE
+         ==================================== -->
+    <div id="advantages" class="page">
+
+        <!-- Header — Dark -->
+        <section class="section section-dark" style="padding-bottom: var(--space-3xl);">
+            <div class="container">
+                <div class="section-header">
+                    <span class="overline" style="color: var(--orange);">Analiză comparativă</span>
+                    <h1 style="color: var(--white);">Avantaje față de izolația convențională</h1>
+                    <p style="max-width: 600px;">Comparație obiectivă bazată pe parametri fizici măsurabili între membrana nanoceramică thermX și sistemele tradiționale de izolație (vată minerală, EPS/polistiren).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advantage cards — White -->
+        <section class="section">
+            <div class="container">
+                <div class="advantages-grid">
+                    <div class="card advantage-card">
+                        <div class="icon-circle">
+                            <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                        </div>
+                        <h3>Integritate structurală</h3>
+                        <p>Fără dibluri sau fixare mecanică. Aplicarea fluidă nu perforează fațada și nu compromite etanșeitatea anvelopei termice.</p>
+                        <span class="stat-inline">Aderență: 1,53 – 1,84 MPa</span>
+                    </div>
+                    <div class="card advantage-card">
+                        <div class="icon-circle">
+                            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                        </div>
+                        <h3>Greutate minimă</h3>
+                        <p>Aproximativ 0,4 kg/m² la 1 mm grosime — sarcină structurală neglijabilă. Soluție ideală pentru clădiri de patrimoniu unde masa suplimentară este restricționată.</p>
+                        <span class="stat-inline">~0,4 kg/m² vs. 15-25 kg/m²</span>
+                    </div>
+                    <div class="card advantage-card">
+                        <div class="icon-circle">
+                            <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        </div>
+                        <h3>Continuitate termică</h3>
+                        <p>Aplicarea monolitică continuă elimină punțile termice liniare cauzate de îmbinări, rosturi sau elemente de fixare mecanică ale izolațiilor convenționale.</p>
+                        <span class="stat-inline">40% reducere pierderi la 1 mm</span>
+                    </div>
+                    <div class="card advantage-card">
+                        <div class="icon-circle">
+                            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </div>
+                        <h3>Inspecție vizuală a substratului</h3>
+                        <p>Spre deosebire de plăcile de polistiren sau vata minerală, stratul subțire de thermX permite inspecția vizuală a substratului fără demontarea izolației.</p>
+                        <span class="stat-inline">Grosime: 0,5 – 1 mm</span>
+                    </div>
+                    <div class="card advantage-card">
+                        <div class="icon-circle">
+                            <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="10"/></svg>
+                        </div>
+                        <h3>Rezistență chimică și UV</h3>
+                        <p>Polimerul acrilic rezistă radiației ultraviolete și factorilor meteorologici fără necesitatea unui strat suplimentar de tencuială protectoare. Interval de operare: -60°C → +260°C.</p>
+                        <span class="stat-inline">Durabilitate: 35+ ani</span>
+                    </div>
+                    <div class="card advantage-card">
+                        <div class="icon-circle">
+                            <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        </div>
+                        <h3>Instalare rapidă</h3>
+                        <p>Aplicare exclusiv prin echipament airless specializat, direct pe substrat. Fără structură metalică, fără rosturi, fără tencuială de protecție.</p>
+                        <span class="stat-inline">80% mai rapid / 30% cost mai redus</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison table — Alt bg -->
+        <section class="section section-alt">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="overline">Tabel comparativ</span>
+                    <h2>thermX vs. izolație convențională</h2>
+                </div>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Criteriu</th>
+                            <th class="highlight">thermX</th>
+                            <th>Vată minerală</th>
+                            <th>EPS (polistiren)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Grosime aplicare</th>
+                            <td class="highlight">0,5 – 1 mm</td>
+                            <td>50 – 200 mm</td>
+                            <td>50 – 200 mm</td>
+                        </tr>
+                        <tr>
+                            <th>Greutate/m²</th>
+                            <td class="highlight">~0,4 kg</td>
+                            <td>15 – 25 kg</td>
+                            <td>1 – 3 kg</td>
+                        </tr>
+                        <tr>
+                            <th>Punți termice</th>
+                            <td class="highlight">Eliminate (aplicare continuă)</td>
+                            <td>Prezente la rosturi/dibluri</td>
+                            <td>Prezente la rosturi/dibluri</td>
+                        </tr>
+                        <tr>
+                            <th>Perforare fațadă</th>
+                            <td class="highlight">Nu</td>
+                            <td>Da (dibluri)</td>
+                            <td>Da (dibluri)</td>
+                        </tr>
+                        <tr>
+                            <th>Reflexie IR</th>
+                            <td class="highlight">85%</td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <th>Interval temperatură</th>
+                            <td class="highlight">-60°C → +260°C</td>
+                            <td>-40°C → +700°C</td>
+                            <td>-50°C → +75°C</td>
+                        </tr>
+                        <tr>
+                            <th>Timp instalare</th>
+                            <td class="highlight">80% mai rapid</td>
+                            <td>Standard (referință)</td>
+                            <td>Standard (referință)</td>
+                        </tr>
+                        <tr>
+                            <th>Cost instalare</th>
+                            <td class="highlight">30% mai redus</td>
+                            <td>Standard (referință)</td>
+                            <td>Standard (referință)</td>
+                        </tr>
+                        <tr>
+                            <th>Inspecție substrat</th>
+                            <td class="highlight">Da (strat transparent)</td>
+                            <td>Nu (demontare necesară)</td>
+                            <td>Nu (demontare necesară)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="section">
+            <div class="container text-center">
+                <h2 style="margin-bottom: var(--space-lg);">Calculează eficiența pentru proiectul tău</h2>
+                <p style="max-width: 520px; margin: 0 auto var(--space-xl);">Echipa Nano Revolution evaluează parametrii specifici ai fiecărui proiect pentru a determina grosimea optimă de aplicare și coeficientul energetic rezultat.</p>
+                <a class="btn btn-cta" onclick="navigate('contact')">Solicită Evaluare Gratuită</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- ====================================
+         PAGE: CONTACT
+         ==================================== -->
+    <div id="contact" class="page">
+
+        <!-- Header — Dark -->
+        <section class="section section-dark" style="padding-bottom: var(--space-3xl);">
+            <div class="container">
+                <div class="section-header">
+                    <span class="overline" style="color: var(--orange);">Contact</span>
+                    <h1 style="color: var(--white);">Inițiază proiectul</h1>
+                    <p style="max-width: 600px;">Echipa tehnică Nano Revolution este pregătită să evalueze specificațiile proiectului tău și să calculeze coeficientul energetic exact.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact form + info — White -->
+        <section class="section">
+            <div class="container">
+                <div class="contact-grid">
+                    <div>
+                        <div class="contact-info-block">
+                            <span class="overline">Companie</span>
+                            <p><strong>Nano Revolution SRL</strong></p>
+                        </div>
+                        <div class="contact-info-block">
+                            <span class="overline">Adresă</span>
+                            <p>Str. Ogorului, Nr. 3<br>Oradea, Bihor 410554<br>România</p>
+                        </div>
+                        <div class="contact-info-block">
+                            <span class="overline">Telefon</span>
+                            <a href="tel:+40771445577">+40 771 445 577</a>
+                        </div>
+                        <div class="contact-info-block">
+                            <span class="overline">Email</span>
+                            <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a>
+                        </div>
+
+                        <div style="margin-top: var(--space-2xl); padding: var(--space-lg); background: var(--blue-10); border-radius: 8px;">
+                            <h4 style="margin-bottom: var(--space-sm);">Program consultanță</h4>
+                            <p style="font-size: 0.9375rem;">Luni – Vineri: 08:00 – 17:00<br>Răspundem la solicitări în maximum 24 de ore.</p>
+                        </div>
+                    </div>
+
+                    <form class="contact-form" onsubmit="event.preventDefault(); this.querySelector('.btn-cta').textContent = 'CERERE ÎNREGISTRATĂ ✓'; this.querySelector('.btn-cta').style.backgroundColor = 'var(--blue)';">
+                        <div class="form-group">
+                            <label for="name">Nume / Companie</label>
+                            <input type="text" id="name" placeholder="ex. SC Construcții SRL" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" placeholder="email@companie.ro" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefon</label>
+                            <input type="tel" id="phone" placeholder="+40 7XX XXX XXX">
+                        </div>
+                        <div class="form-group">
+                            <label for="project-type">Tip proiect</label>
+                            <select id="project-type">
+                                <option value="">Selectează tipul proiectului</option>
+                                <option value="residential">Rezidențial — casă / bloc</option>
+                                <option value="commercial">Comercial — birouri / spații comerciale</option>
+                                <option value="industrial">Industrial — conducte / rezervoare / hale</option>
+                                <option value="heritage">Clădiri de patrimoniu</option>
+                                <option value="other">Altele</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Detalii proiect</label>
+                            <textarea id="message" placeholder="Descrie suprafața estimată (m²), tipul substratului (beton, metal, lemn), destinația (interior/exterior) și orice alte specificații relevante..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-cta" style="width: 100%; justify-content: center;">Trimite Solicitarea</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ====================================
+         FOOTER — Dark (#121212)
+         ==================================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">therm<span>X</span></div>
+                    <p class="footer-desc">Membrană nanoceramică termoizolantă cu conductivitate termică λ ≤ 0,001 W/(m·K). Izolație de înaltă performanță la grosimi milimetrice.</p>
+                </div>
+                <div>
+                    <h4>Navigare</h4>
+                    <ul class="footer-links">
+                        <li><a onclick="navigate('home')">Acasă</a></li>
+                        <li><a onclick="navigate('technology')">Tehnologie</a></li>
+                        <li><a onclick="navigate('specs')">Specificații</a></li>
+                        <li><a onclick="navigate('advantages')">Avantaje</a></li>
+                        <li><a onclick="navigate('contact')">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="tel:+40771445577">+40 771 445 577</a></li>
+                        <li><a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a></li>
+                        <li><a>Str. Ogorului, Nr. 3</a></li>
+                        <li><a>Oradea, Bihor 410554</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Nano Revolution SRL. Toate drepturile rezervate.</p>
+                <span class="footer-tagline">Transforming the future — one breakthrough at a time</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ====================================
+         SPA NAVIGATION SCRIPT
+         ==================================== -->
+    <script>
+        function navigate(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(function(page) {
+                page.classList.remove('active');
+            });
+
+            // Remove active from nav links
+            document.querySelectorAll('.navbar-links a').forEach(function(link) {
+                link.classList.remove('active');
+            });
+
+            // Show target page
+            var targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                // Reset animation
+                targetPage.style.animation = 'none';
+                targetPage.offsetHeight;
+                targetPage.style.animation = null;
+            }
+
+            // Set active nav link
+            var links = document.querySelectorAll('.navbar-links a');
+            links.forEach(function(link) {
+                var onclick = link.getAttribute('onclick');
+                if (onclick && onclick.indexOf(pageId) !== -1 && !link.classList.contains('navbar-cta')) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Close mobile menu
+            document.getElementById('navLinks').classList.remove('open');
+            document.getElementById('hamburger').classList.remove('open');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('open');
+            document.getElementById('hamburger').classList.toggle('open');
+        }
+
+        // Move footer outside pages — it's always visible on the active page
+        // Footer is placed after all pages, so it appears at the bottom of whichever page is active
+    </script>
+
+</body>
+</html>

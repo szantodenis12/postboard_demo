@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>thermX — Membrană Termoizolantă Nanoceramică</title>
+  <meta name="description" content="thermX — Membrană termoizolantă nanoceramică. Lambda echivalent ≤ 0,001 W/(m·K). 1 mm grosime. Până la 40% economie pe factura de energie.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Exo+2:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css?v=2">
+  <link rel="stylesheet" href="css/style2.css?v=7">
+</head>
+<body>
+
+<!-- Scroll Progress Bar -->
+<div class="scroll-progress"></div>
+
+<!-- Ambient background gradients handled via per-section ::before/::after in CSS -->
+
+
+<!-- ════════════════════════════════════════════
+     NAVIGATION
+     ════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav__logo"><img src="thermx-logo-white.png" alt="thermX" style="height:28px;"></div>
+  <div class="nav__links">
+    <a href="#s01">Intro</a>
+    <a href="#s02">Produs</a>
+    <a href="#s03">Știință</a>
+    <a href="#s06">Specificații</a>
+    <a href="#s07">Context</a>
+    <a href="#s14">Aplicare</a>
+    <a href="#s20">Contact</a>
+  </div>
+  <button class="theme-toggle" aria-label="Schimbă tema" title="Schimbă tema">
+    <i data-lucide="sun" class="theme-toggle__icon theme-toggle__icon--light"></i>
+    <i data-lucide="moon" class="theme-toggle__icon theme-toggle__icon--dark"></i>
+  </button>
+  <button class="nav__hamburger" aria-label="Meniu" aria-expanded="false">
+    <i data-lucide="menu" class="nav__hamburger-open"></i>
+    <i data-lucide="x" class="nav__hamburger-close"></i>
+  </button>
+</nav>
+
+<!-- Mobile Nav Overlay -->
+<div class="nav__mobile">
+  <a href="#s01">Intro</a>
+  <a href="#s02">Produs</a>
+  <a href="#s03">Știință</a>
+  <a href="#s06">Specificații</a>
+  <a href="#s07">Context</a>
+  <a href="#scalc">Calculator</a>
+  <a href="#s14">Aplicare</a>
+  <a href="#sfaq">Întrebări</a>
+  <a href="#s20">Contact</a>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PROGRESS DOTS (Enhanced)
+     ════════════════════════════════════════════ -->
+<div class="progress-dots">
+  <div class="progress-line">
+    <div class="progress-line__fill"></div>
+  </div>
+  <div class="progress-dot active" data-label="Hero" data-section="s01"></div>
+  <div class="progress-dot" data-label="Produs" data-section="s02"></div>
+  <div class="progress-dot" data-label="Cifre" data-section="s09"></div>
+  <div class="progress-dot" data-label="Pierderi" data-section="s03"></div>
+  <div class="progress-dot" data-label="Mecanism" data-section="s04"></div>
+  <div class="progress-dot" data-label="Lambda" data-section="s05"></div>
+  <div class="progress-dot" data-label="Specs" data-section="s06"></div>
+  <div class="progress-dot" data-label="Versus" data-section="s10"></div>
+  <div class="progress-dot" data-label="Calcul" data-section="scalc"></div>
+  <div class="progress-dot" data-label="nZEB" data-section="s07"></div>
+  <div class="progress-dot" data-label="Punți" data-section="s08"></div>
+  <div class="progress-dot" data-label="Termografie" data-section="s13"></div>
+  <div class="progress-dot" data-label="Aplicare" data-section="s14"></div>
+  <div class="progress-dot" data-label="Sectoare" data-section="s17"></div>
+  <div class="progress-dot" data-label="Partener" data-section="s16"></div>
+  <div class="progress-dot" data-label="FAQ" data-section="sfaq"></div>
+  <div class="progress-dot" data-label="Pachet" data-section="s19"></div>
+  <div class="progress-dot" data-label="Contact" data-section="s20"></div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════╗
+     ║  ACT I — PRODUS                          ║
+     ╚══════════════════════════════════════════╝ -->
+
+<!-- ── SECTION 01: Hero / Logo ── -->
+<section id="s01" class="section section--dark section--gradient-top">
+  <div class="hero-dots"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow hero-glow--secondary"></div>
+  <div class="section__inner section__centered reveal-scale">
+    <p class="hero-date">Nano Revolution SRL</p>
+    <img src="thermx-logo-white.png" alt="thermX" style="width:min(420px,80vw); height:auto;">
+    <p class="label text-muted" style="letter-spacing:3px;">MEMBRANĂ TERMOIZOLANTĂ NANOCERAMICĂ</p>
+    <p class="hero-tagline">Milimetrul care contează.</p>
+  </div>
+</section>
+
+
+<!-- ── ORANGE WAVE DIVIDER 1 ── -->
+<div class="act-divider">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,40 C120,10 240,70 360,40 C480,10 600,70 720,40 C840,10 960,70 1080,40 C1200,10 1320,70 1440,40" />
+  </svg>
+</div>
+
+
+<!-- ── SECTION 02: What is thermX (Product First) ── -->
+<section id="s02" class="section section--dark section--glow-blue">
+  <div class="section__inner">
+    <div class="split">
+      <div class="reveal">
+        <p class="label text-orange mb-16">CE ESTE</p>
+        <h2 class="display-lg" style="margin-bottom:16px;"><img src="thermx-logo-white.png" alt="thermX" class="inline-logo" style="height:1.2em;"></h2>
+        <p class="body-text text-muted">O membrană termoizolantă de doar 0,5–1 mm, aplicată prin pulverizare. Se usucă și formează un strat continuu, fără rosturi — acoperind inclusiv geometrii complexe unde izolația clasică nu ajunge.</p>
+        <p class="body-text text-muted mt-16">Blochează toate cele trei mecanisme de transfer termic: conducție, convecție și radiație infraroșie. Rezultatul: performanță de izolație comparabilă cu 8–10 cm de polistiren, într-un singur milimetru.</p>
+      </div>
+      <div class="product-cards reveal-stagger">
+        <div class="product-card">Grosime aplicată: 0,5–1 mm</div>
+        <div class="product-card">Acoperă și zonele de punți termice</div>
+        <div class="product-card">Aderență pe beton, metal, lemn, cărămidă</div>
+        <div class="product-card">Fără schelă, fără rosturi, fără deșeuri</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── SECTION 09: Performance ── -->
+<section id="s09" class="section section--dark">
+  <div class="section__inner">
+    <div class="reveal" style="text-align:center; margin-bottom:48px;">
+      <p class="label text-orange mb-8">CIFRELE DIN PRACTICĂ</p>
+      <h2 class="heading">Ce înseamnă concret <img src="thermx-logo-white.png" alt="thermX" class="inline-logo"></h2>
+      <p class="body-text text-muted mt-16" style="max-width:600px; margin-left:auto; margin-right:auto;">Date măsurate pe proiecte reale, comparativ cu izolația clasică din polistiren (EPS).</p>
+    </div>
+    <div class="grid-3 reveal-stagger">
+
+      <div class="perf-flip" role="button" tabindex="0">
+        <div class="perf-flip__inner">
+          <div class="perf-card perf-flip__front">
+            <div class="perf-card__value"><span style="font-size:0.35em; font-weight:400; display:block; margin-bottom:4px;">până la</span><span data-target="40" data-suffix="%">0%</span></div>
+            <p class="perf-card__label">Economie pe factura de energie</p>
+            <p class="perf-flip__hint">Apasă pentru detalii</p>
+          </div>
+          <div class="perf-card perf-flip__back">
+            <h3 class="card__title" style="margin-bottom:12px;">Factura de energie</h3>
+            <p class="body-sm text-muted">Membrana reflectă 85% din radiația infraroșie și elimină punțile termice — cele două surse majore de pierderi ignorate de EPS. Economia de până la 40% e documentată pe clădiri rezidențiale cu aplicare de 1 mm.</p>
+            <p class="perf-flip__hint">Apasă pentru cifră</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="perf-flip" role="button" tabindex="0">
+        <div class="perf-flip__inner">
+          <div class="perf-card perf-flip__front">
+            <div class="perf-card__value"><span data-target="80" data-suffix="%">0%</span></div>
+            <p class="perf-card__label">Timp de aplicare mai scurt față de EPS</p>
+            <p class="perf-flip__hint">Apasă pentru detalii</p>
+          </div>
+          <div class="perf-card perf-flip__back">
+            <h3 class="card__title" style="margin-bottom:12px;">Timp de execuție</h3>
+            <p class="body-sm text-muted">Se pulverizează direct, fără schelă și fără montaj mecanic. O casă de 150 m² se finalizează în 2–3 zile cu 1–2 operatori, față de 2–4 săptămâni pentru EPS cu schelă și echipă completă.</p>
+            <p class="perf-flip__hint">Apasă pentru cifră</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="perf-flip" role="button" tabindex="0">
+        <div class="perf-flip__inner">
+          <div class="perf-card perf-flip__front">
+            <div class="perf-card__value"><span data-target="30" data-suffix="%">0%</span></div>
+            <p class="perf-card__label">Cost total de instalare mai mic</p>
+            <p class="perf-flip__hint">Apasă pentru detalii</p>
+          </div>
+          <div class="perf-card perf-flip__back">
+            <h3 class="card__title" style="margin-bottom:12px;">Cost de instalare</h3>
+            <p class="body-sm text-muted">Fără schelă, fără ancore mecanice, fără profil de pornire, fără plasă de armare. Manopera e mai simplă, echipa mai mică, durata mai scurtă — toate se traduc în cost total redus cu ~30%.</p>
+            <p class="perf-flip__hint">Apasă pentru cifră</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ── ORANGE WAVE DIVIDER 2 ── -->
+<div class="act-divider">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,70 C180,70 270,20 480,20 C690,20 720,50 900,30 C1080,10 1260,40 1440,15" />
+  </svg>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════╗
+     ║  ACT II — ȘTIINȚĂ                        ║
+     ╚══════════════════════════════════════════╝ -->
+
+<!-- ── SECTION 03: How Heat Escapes (NEW — Education) ── -->
+<section id="s03" class="section section--dark">
+  <div class="section__inner">
+    <div class="reveal" style="margin-bottom:48px; text-align:center;">
+      <p class="label text-blue mb-8">CE TREBUIE SĂ BLOCHEZE IZOLAȚIA</p>
+      <h2 class="heading">3 mecanisme de transfer termic</h2>
+      <p class="body-text text-muted mt-16" style="max-width:700px; margin-left:auto; margin-right:auto;">Izolația clasică blochează conducția și parțial convecția — dar ignoră radiația, responsabilă pentru până la 40% din pierderile termice. thermX le blochează pe toate trei.</p>
+    </div>
+
+    <div class="heat-grid reveal-stagger">
+
+      <!-- ── RADIAȚIE (hero — left, 2x height) ── -->
+      <div class="heat-grid__hero">
+        <div class="heat-flip" role="button" tabindex="0" aria-label="Radiație infraroșie — apasă pentru detalii">
+          <div class="heat-flip__inner">
+            <div class="heat-flip__front card">
+              <canvas class="heat-flip__canvas" data-sim="radiation"></canvas>
+              <h3 class="heat-flip__title">Radiație infraroșie</h3>
+              <p class="body-sm text-muted" style="margin-top:8px;">Până la 40% din energia pierdută</p>
+              <p class="heat-flip__hint">Apasă pentru detalii</p>
+            </div>
+            <div class="heat-flip__back card">
+              <h3 class="card__title" style="text-align:center; margin-bottom:12px;">Radiație infraroșie</h3>
+              <p class="card__desc">Orice suprafață caldă emite radiație infraroșie — invizibilă, dar responsabilă pentru până la 40% din energia pierdută de o clădire. E cel mai subestimat mecanism de transfer termic.</p>
+              <div class="heat-card__note mt-16">
+                <span class="label text-muted" style="font-size:10px;">IZOLAȚIA CLASICĂ</span>
+                <p class="body-sm text-muted mt-8">EPS și vata minerală nu reflectă radiația infraroșie. O ignoră complet.</p>
+              </div>
+              <div class="heat-card__note mt-16" style="border-color:var(--orange);">
+                <span class="label text-orange" style="font-size:10px;"><img src="thermx-logo-white.png" alt="thermX" class="inline-logo"></span>
+                <p class="body-sm mt-8" style="color:var(--orange);">Reflectă 85% din radiația infraroșie. Aici face diferența — de aceea 1 mm e suficient.</p>
+              </div>
+              <p class="heat-flip__hint">Apasă pentru animație</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CONDUCȚIE (right top) ── -->
+      <div class="heat-flip" role="button" tabindex="0" aria-label="Conducție — apasă pentru detalii">
+        <div class="heat-flip__inner">
+          <div class="heat-flip__front card">
+            <canvas class="heat-flip__canvas" data-sim="conduction"></canvas>
+            <h3 class="heat-flip__title">Conducție</h3>
+            <p class="heat-flip__hint">Apasă pentru detalii</p>
+          </div>
+          <div class="heat-flip__back card">
+            <h3 class="card__title" style="text-align:center; margin-bottom:12px;">Conducție</h3>
+            <p class="card__desc">Căldura trece direct prin materiale solide — pereți, beton, metal, lemn. Cu cât materialul e mai dens, cu atât pierderea e mai mare.</p>
+            <div class="heat-card__note mt-16">
+              <span class="label text-muted" style="font-size:10px;">IZOLAȚIA CLASICĂ</span>
+              <p class="body-sm text-muted mt-8">EPS și vata minerală reduc conducția, dar au nevoie de 8–15 cm grosime și lasă rosturi între plăci.</p>
+            </div>
+            <p class="heat-flip__hint">Apasă pentru animație</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CONVECȚIE (right bottom) ── -->
+      <div class="heat-flip" role="button" tabindex="0" aria-label="Convecție — apasă pentru detalii">
+        <div class="heat-flip__inner">
+          <div class="heat-flip__front card">
+            <canvas class="heat-flip__canvas" data-sim="convection"></canvas>
+            <h3 class="heat-flip__title">Convecție</h3>
+            <p class="heat-flip__hint">Apasă pentru detalii</p>
+          </div>
+          <div class="heat-flip__back card">
+            <h3 class="card__title" style="text-align:center; margin-bottom:12px;">Convecție</h3>
+            <p class="card__desc">Aerul cald se scurge prin fisuri, rosturi, joncțiuni neetanșe și goluri din izolație. Fiecare rost e o cale de evacuare a căldurii.</p>
+            <div class="heat-card__note mt-16">
+              <span class="label text-muted" style="font-size:10px;">IZOLAȚIA CLASICĂ</span>
+              <p class="body-sm text-muted mt-8">Plăcile rigide nu pot fi perfect etanșe la rosturi. Fiecare joncțiune perete–planșeu rămâne vulnerabilă.</p>
+            </div>
+            <p class="heat-flip__hint">Apasă pentru animație</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ── SECTION 04: How thermX Works (NEW — Solution) ── -->
+<section id="s04" class="section section--dark section--glow-orange">
+  <div class="section__inner">
+    <div class="reveal" style="margin-bottom:48px; text-align:center;">
+      <p class="label text-orange mb-8">SOLUȚIA COMPLETĂ</p>
+      <h2 class="heading"><img src="thermx-logo-white.png" alt="thermX" class="inline-logo"> blochează toate cele 3 mecanisme.</h2>
+      <p class="body-text text-muted mt-16" style="max-width:700px; margin-left:auto; margin-right:auto;">Un singur strat de 1 mm care tratează conducția, convecția și radiația simultan.</p>
+    </div>
+
+    <div class="grid-3 reveal-stagger">
+      <div class="card" style="border-top:3px solid var(--orange);">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+          <i data-lucide="circle-dot" style="width:28px; height:28px; color:var(--orange); flex-shrink:0;"></i>
+          <h3 class="card__title" style="margin:0;">Anti-conducție</h3>
+        </div>
+        <p class="body-sm" style="color:var(--orange); font-weight:700; margin-bottom:8px;">Microsfere ceramice cu gaz rarefiat</p>
+        <p class="card__desc">~75% din volumul materialului uscat sunt microsfere ceramice umplute cu gaz rarefiat. Gazul rarefiat are conductivitate termică neglijabilă. Căldura trebuie să parcurgă un traseu sinuos prin milioane de microsfere microscopice (~10 μm), pierzând energie la fiecare transfer. Rezultat: conducție termică echivalentă de ≤ 0,001 W/mK.</p>
+      </div>
+
+      <div class="card" style="border-top:3px solid var(--orange);">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+          <i data-lucide="shield-check" style="width:28px; height:28px; color:var(--orange); flex-shrink:0;"></i>
+          <h3 class="card__title" style="margin:0;">Anti-convecție</h3>
+        </div>
+        <p class="body-sm" style="color:var(--orange); font-weight:700; margin-bottom:8px;">Membrană continuă, fără rosturi</p>
+        <p class="card__desc">thermX se pulverizează ca un strat fluid continuu. Nu există plăci, nu există rosturi între ele, nu există goluri. Membrana sigilează complet suprafața — aerul cald nu mai are pe unde să scape.</p>
+      </div>
+
+      <div class="card" style="border-top:3px solid var(--orange);">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+          <i data-lucide="sun" style="width:28px; height:28px; color:var(--orange); flex-shrink:0;"></i>
+          <h3 class="card__title" style="margin:0;">Anti-radiație</h3>
+        </div>
+        <p class="body-sm" style="color:var(--orange); font-weight:700; margin-bottom:8px;">85% reflexie infraroșu</p>
+        <p class="card__desc">Microsferele ceramice reflectă difuz 85% din radiația infraroșie înapoi în interior. E ca o oglindă termică invizibilă pe toată suprafața peretelui — fără spațiu pierdut.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── SECTION 05: Lambda Comparison (Bar Chart) ── -->
+<section id="s05" class="section section--dark">
+  <div class="section__inner section__centered">
+    <div class="reveal" style="margin-bottom:40px;">
+      <p class="label text-orange mb-8">CONDUCTIVITATE TERMICĂ</p>
+      <h2 class="heading">Lambda (W/mK)</h2>
+      <p class="body-text text-muted mt-16" style="max-width:700px; margin-left:auto; margin-right:auto;">Lambda (λ) măsoară cât de ușor trece căldura printr-un material. Se exprimă în W/(m·K) — wați pe metru-Kelvin. Cu cât valoarea e mai mică, cu atât materialul izolează mai bine. Se determină în laborator conform EN 12667, pe eșantioane uscate, la temperatură medie de 10°C.</p>
+    </div>
+    <div class="lambda-bars" style="width:100%; max-width:600px;">
+      <div class="lambda-bar" data-lambda-bar data-value="0.040" data-percent="100">
+        <div class="lambda-bar__label">Vată minerală bazaltică</div>
+        <div class="lambda-bar__track">
+          <div class="lambda-bar__fill lambda-bar__fill--muted"></div>
+        </div>
+        <div class="lambda-bar__value">0,035–0,045</div>
+        <div class="lambda-bar__tooltip">Fibre minerale bazaltice, densitate 30–100 kg/m³. Lambda variază cu densitatea: 30 kg/m³ → ~0,040; 80 kg/m³ → ~0,035. Grosime necesară: 10–15 cm. Sensibilă la umiditate — lambda crește semnificativ dacă absoarbe apă.</div>
+      </div>
+      <div class="lambda-bar" data-lambda-bar data-value="0.035" data-percent="87">
+        <div class="lambda-bar__label">EPS 70–80</div>
+        <div class="lambda-bar__track">
+          <div class="lambda-bar__fill lambda-bar__fill--muted"></div>
+        </div>
+        <div class="lambda-bar__value">0,035–0,040</div>
+        <div class="lambda-bar__tooltip">Polistiren expandat, clasele 70–80 (densitate 13,5–18 kg/m³) — cele mai folosite în construcții rezidențiale. EPS 60 (densitate mică, λ ~0,042) e mai slab; EPS 100+ și varianta grafitată ajung la 0,031. Grosime uzuală: 8–10 cm. Lasă rosturi între plăci → punți termice.</div>
+      </div>
+      <div class="lambda-bar" data-lambda-bar data-value="0.022" data-percent="55">
+        <div class="lambda-bar__label">PIR / PUR</div>
+        <div class="lambda-bar__track">
+          <div class="lambda-bar__fill lambda-bar__fill--muted"></div>
+        </div>
+        <div class="lambda-bar__value">0,022–0,028</div>
+        <div class="lambda-bar__tooltip">Spumă poliuretanică rigidă (PIR = polyisocyanurate, PUR = polyurethane). Cel mai performant izolant convențional. Grosime necesară: 4–6 cm. Cost per m² semnificativ mai mare decât EPS. Disponibil ca plăci rigide sau spumă expandabilă.</div>
+      </div>
+      <div class="lambda-bar lambda-bar--hero" data-lambda-bar data-value="0.001" data-percent="2.5">
+        <div class="lambda-bar__label"><img src="thermx-logo-white.png" alt="thermX" class="inline-logo"></div>
+        <div class="lambda-bar__track">
+          <div class="lambda-bar__fill lambda-bar__fill--orange"></div>
+        </div>
+        <div class="lambda-bar__value text-orange">&le; 0,001</div>
+        <div class="lambda-bar__tooltip">Lambda echivalent — combină conducția redusă prin microsferele ceramice cu reflexia a 85% din radiația infraroșie. Nu e un lambda clasic de laborator, ci o valoare echivalentă care exprimă performanța termică completă a membranei. Grosime: doar 1 mm. Zero punți termice.</div>
+      </div>
+    </div>
+    <p class="body-sm text-muted mt-16 reveal" style="max-width:600px; margin-left:auto; margin-right:auto;">Valorile λ pentru izolațiile clasice sunt determinate conform EN 12667 pe eșantioane uscate. Lambda thermX este echivalent — combină conducția redusă prin microsferele ceramice cu reflexia de 85% a radiației infraroșii.</p>
+  </div>
+</section>
+
+
+<!-- ── ORANGE WAVE DIVIDER 3 ── -->
+<div class="act-divider">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,60 C240,80 360,10 600,30 C840,50 960,5 1200,25 C1320,35 1380,55 1440,40" />
+  </svg>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════╗
+     ║  ACT III — SPECIFICAȚII                  ║
+     ╚══════════════════════════════════════════╝ -->
+
+<!-- ── SECTION 06: Specs Deep-Dive Accordion ── -->
+<section id="s06" class="section section--dark">
+  <div class="section__inner">
+    <div class="reveal" style="margin-bottom:16px;">
+      <p class="label text-muted mb-8">SPECIFICAȚII TEHNICE</p>
+      <h2 class="heading">Ce spun cifrele</h2>
+    </div>
+    <p class="body-text text-muted reveal" style="max-width:700px; margin: 0 auto 48px;">Fiecare specificație de mai jos răspunde la o întrebare concretă: unde funcționează, cum se comportă mecanic și cât de sigur este materialul.</p>
+
+    <!-- Group 1: Performanță termică -->
+    <div class="specs-group reveal" style="margin-bottom:8px;">
+      <p class="label" style="color:var(--orange); font-size:0.7rem; letter-spacing:0.15em;">PERFORMANȚĂ TERMICĂ</p>
+    </div>
+    <div class="specs-accordion reveal-stagger">
+      <div class="accordion__item" data-accordion-item>
+        <button class="accordion__trigger" data-accordion-trigger>
+          <div class="accordion__trigger-left">
+            <i data-lucide="thermometer" class="accordion__trigger-icon"></i>
+            <div>
+              <div class="accordion__trigger-value">&minus;60°C &rarr; +260°C</div>
+              <div class="accordion__trigger-label">Temperatură operare</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-down" class="accordion__chevron"></i>
+        </button>
+        <div class="accordion__content" data-accordion-content>
+          <div class="accordion__body">
+            <p><strong>De ce contează:</strong> Izolația clasică se fisurează sub &minus;20°C și se degradează peste +80°C. Asta forțează constructorii să folosească produse diferite pe zone de temperatură.</p>
+            <p>thermX funcționează de la depozite frigorifice (&minus;60°C) la conducte industriale cu abur (+260°C). Un singur produs, orice aplicație, fără compromis.</p>
+          </div>
+        </div>
+      </div>
+      <div class="accordion__item" data-accordion-item>
+        <button class="accordion__trigger" data-accordion-trigger>
+          <div class="accordion__trigger-left">
+            <i data-lucide="sun" class="accordion__trigger-icon"></i>
+            <div>
+              <div class="accordion__trigger-value">85% reflexie IR</div>
+              <div class="accordion__trigger-label">Barieră radiație infraroșie</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-down" class="accordion__chevron"></i>
+        </button>
+        <div class="accordion__content" data-accordion-content>
+          <div class="accordion__body">
+            <p><strong>De ce contează:</strong> Peste 50% din pierderile termice ale unei clădiri se produc prin radiație infraroșie — căldură invizibilă emisă de pereți, planșee și acoperiș. Izolația clasică nu adresează acest mecanism.</p>
+            <p>thermX reflectă 85% din radiația IR înapoi în interior. Efectul: până la 40% economie pe factura de energie, fără centimetri suplimentari de grosime.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 2: Rezistență mecanică -->
+    <div class="specs-group reveal" style="margin-top:32px; margin-bottom:8px;">
+      <p class="label" style="color:var(--orange); font-size:0.7rem; letter-spacing:0.15em;">REZISTENȚĂ MECANICĂ</p>
+    </div>
+    <div class="specs-accordion reveal-stagger">
+      <div class="accordion__item" data-accordion-item>
+        <button class="accordion__trigger" data-accordion-trigger>
+          <div class="accordion__trigger-left">
+            <i data-lucide="grip" class="accordion__trigger-icon"></i>
+            <div>
+              <div class="accordion__trigger-value">1,84 MPa</div>
+              <div class="accordion__trigger-label">Aderență pe beton</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-down" class="accordion__chevron"></i>
+        </button>
+        <div class="accordion__content" data-accordion-content>
+          <div class="accordion__body">
+            <p><strong>De ce contează:</strong> Izolația care se desprinde nu mai izolează. Standardele cer minimum 0,25 MPa aderență pentru sisteme de fațadă. Multe produse aplicate prin pulverizare ajung la 0,3–0,5 MPa.</p>
+            <p>thermX atinge 1,84 MPa — de peste 7 ori minimul cerut. Practic, stratul de thermX e mai greu de desprins decât tencuiala pe care a fost aplicat. Nu necesită ancore mecanice suplimentare.</p>
+          </div>
+        </div>
+      </div>
+      <div class="accordion__item" data-accordion-item>
+        <button class="accordion__trigger" data-accordion-trigger>
+          <div class="accordion__trigger-left">
+            <i data-lucide="move-diagonal" class="accordion__trigger-icon"></i>
+            <div>
+              <div class="accordion__trigger-value">&gt;12% elasticitate</div>
+              <div class="accordion__trigger-label">Elongație la rupere</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-down" class="accordion__chevron"></i>
+        </button>
+        <div class="accordion__content" data-accordion-content>
+          <div class="accordion__body">
+            <p><strong>De ce contează:</strong> Clădirile se mișcă constant — dilatări termice, tasări, vibrații din trafic. Izolația rigidă (EPS, vată) fisurează la joncțiuni și creează punți termice exact acolo unde nu vrei.</p>
+            <p>thermX absoarbe mișcarea: peste 12% elongație la rupere înseamnă că un metru de membrană se întinde cu 12 cm înainte de cedare. Zero fisuri, zero punți termice în timp.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 3: Siguranță & Structură -->
+    <div class="specs-group reveal" style="margin-top:32px; margin-bottom:8px;">
+      <p class="label" style="color:var(--orange); font-size:0.7rem; letter-spacing:0.15em;">SIGURANȚĂ & STRUCTURĂ</p>
+    </div>
+    <div class="specs-accordion reveal-stagger">
+      <div class="accordion__item" data-accordion-item>
+        <button class="accordion__trigger" data-accordion-trigger>
+          <div class="accordion__trigger-left">
+            <i data-lucide="layers" class="accordion__trigger-icon"></i>
+            <div>
+              <div class="accordion__trigger-value">380–410 kg/m³</div>
+              <div class="accordion__trigger-label">Densitate strat uscat</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-down" class="accordion__chevron"></i>
+        </button>
+        <div class="accordion__content" data-accordion-content>
+          <div class="accordion__body">
+            <p><strong>De ce contează:</strong> Densitatea arată cât de compactă e structura internă. O densitate prea mică înseamnă goluri și performanță inconsistentă. O densitate prea mare înseamnă greutate excesivă pe fațadă.</p>
+            <p>La 380–410 kg/m³, microsferele ceramice sunt perfect înglobate în matricea polimerică. La 1 mm grosime, asta se traduce în doar 0,4 kg/m² — neglijabil structural, chiar și pe clădiri vechi cu capacitate portantă limitată.</p>
+          </div>
+        </div>
+      </div>
+      <div class="accordion__item" data-accordion-item>
+        <button class="accordion__trigger" data-accordion-trigger>
+          <div class="accordion__trigger-left">
+            <i data-lucide="flame" class="accordion__trigger-icon"></i>
+            <div>
+              <div class="accordion__trigger-value">Clasa A (uscat)</div>
+              <div class="accordion__trigger-label">Reacție la foc (EN 15824)</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-down" class="accordion__chevron"></i>
+        </button>
+        <div class="accordion__content" data-accordion-content>
+          <div class="accordion__body">
+            <p><strong>De ce contează:</strong> Incendiile în clădiri izolate cu EPS sunt un risc real — polistirenul se topește, picură și emană gaze toxice. Colectiv, Grenfell Tower — lecțiile sunt clare.</p>
+            <p>thermX uscat (aplicat și polimerizat) este clasificat Clasa A — material necombustibil. În formă lichidă, înainte de aplicare, clasificarea este Clasa C. După uscare, membrana nu propagă focul, nu se topește, nu picură și nu produce fum toxic. Certificare recunoscută în toată Uniunea Europeană.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 4: Proprietăți material -->
+    <div class="specs-group reveal" style="margin-top:32px; margin-bottom:8px;">
+      <p class="label" style="color:var(--orange); font-size:0.7rem; letter-spacing:0.15em;">PROPRIETĂȚI MATERIAL</p>
+    </div>
+    <div class="specs-accordion reveal-stagger">
+      <div class="accordion__item" data-accordion-item>
+        <button class="accordion__trigger" data-accordion-trigger>
+          <div class="accordion__trigger-left">
+            <i data-lucide="wind" class="accordion__trigger-icon"></i>
+            <div>
+              <div class="accordion__trigger-value">Respirabil</div>
+              <div class="accordion__trigger-label">Permite transferul vaporilor</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-down" class="accordion__chevron"></i>
+        </button>
+        <div class="accordion__content" data-accordion-content>
+          <div class="accordion__body">
+            <p><strong>De ce contează:</strong> Izolația care blochează vaporii creează condens în perete — umiditate, mucegai, degradare structurală în timp. E una dintre cele mai frecvente greșeli de izolare.</p>
+            <p>thermX este permeabil la vapori — permite peretelui să „respire". Umiditatea trece prin membrană și se evaporă natural, fără să se acumuleze în structură.</p>
+          </div>
+        </div>
+      </div>
+      <div class="accordion__item" data-accordion-item>
+        <button class="accordion__trigger" data-accordion-trigger>
+          <div class="accordion__trigger-left">
+            <i data-lucide="shield-off" class="accordion__trigger-icon"></i>
+            <div>
+              <div class="accordion__trigger-value">Antifungic</div>
+              <div class="accordion__trigger-label">Previne formarea mucegaiului</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-down" class="accordion__chevron"></i>
+        </button>
+        <div class="accordion__content" data-accordion-content>
+          <div class="accordion__body">
+            <p><strong>De ce contează:</strong> Mucegaiul apare unde se condensează umiditatea — pe suprafețe reci din interiorul locuinței. E o problemă de sănătate, nu doar estetică.</p>
+            <p>thermX ridică temperatura suprafeței interioare a peretelui, eliminând condensul. În plus, matricea polimerică are proprietăți antifungice native — nu permite dezvoltarea sporilor.</p>
+          </div>
+        </div>
+      </div>
+      <div class="accordion__item" data-accordion-item>
+        <button class="accordion__trigger" data-accordion-trigger>
+          <div class="accordion__trigger-left">
+            <i data-lucide="droplets" class="accordion__trigger-icon"></i>
+            <div>
+              <div class="accordion__trigger-value">Impermeabil</div>
+              <div class="accordion__trigger-label">Rezistent la apă și umiditate</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-down" class="accordion__chevron"></i>
+        </button>
+        <div class="accordion__content" data-accordion-content>
+          <div class="accordion__body">
+            <p><strong>De ce contează:</strong> Vata minerală pierde până la 50% din capacitatea izolantă când absoarbe apă. EPS-ul nu absoarbe mult, dar rosturile dintre plăci permit infiltrarea apei în structură.</p>
+            <p>thermX formează o membrană continuă, impermeabilă la apă lichidă. Poate fi aplicat inclusiv în zone expuse la intemperii sau umiditate ridicată — fundații, subsoluri, zone de contact cu solul.</p>
+          </div>
+        </div>
+      </div>
+      <div class="accordion__item" data-accordion-item>
+        <button class="accordion__trigger" data-accordion-trigger>
+          <div class="accordion__trigger-left">
+            <i data-lucide="shield" class="accordion__trigger-icon"></i>
+            <div>
+              <div class="accordion__trigger-value">Rezistent la impact</div>
+              <div class="accordion__trigger-label">Fără fisuri la impact direct</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-down" class="accordion__chevron"></i>
+        </button>
+        <div class="accordion__content" data-accordion-content>
+          <div class="accordion__body">
+            <p><strong>De ce contează:</strong> EPS-ul se sparge la impact — grindină, lovituri accidentale, vandalisme. Odată spart, expune structura și pierde izolarea local.</p>
+            <p>thermX absoarbe impactul datorită elasticității membranei. Nu se fisurează, nu se sparge, nu se exfoliază. Suprafața rămâne intactă chiar și după lovituri repetate.</p>
+          </div>
+        </div>
+      </div>
+      <div class="accordion__item" data-accordion-item>
+        <button class="accordion__trigger" data-accordion-trigger>
+          <div class="accordion__trigger-left">
+            <i data-lucide="trending-up" class="accordion__trigger-icon"></i>
+            <div>
+              <div class="accordion__trigger-value">Se întărește</div>
+              <div class="accordion__trigger-label">Performanță crește în timp</div>
+            </div>
+          </div>
+          <i data-lucide="chevron-down" class="accordion__chevron"></i>
+        </button>
+        <div class="accordion__content" data-accordion-content>
+          <div class="accordion__body">
+            <p><strong>De ce contează:</strong> Izolația clasică se degradează cu timpul — EPS-ul se micșorează, vata se tasează, performanța scade. Investiția se depreciază.</p>
+            <p>thermX face invers: polimerizarea continuă în primii ani. Aderența crește de la 2,0 la 3,0 MPa, iar densitatea structurală se consolidează. Durabilitate documentată: peste 35 de ani.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── SECTION 10: Tabbed Comparison ── -->
+<section id="s10" class="section section--dark">
+  <div class="section__inner">
+    <div class="reveal" style="margin-bottom:32px;">
+      <h2 class="heading">Izolație convențională <span class="text-muted" style="font-weight:400;">vs.</span> <img src="thermx-logo-white.png" alt="thermX" class="inline-logo"></h2>
+    </div>
+
+    <div class="tabs reveal" data-tabs>
+      <div class="tabs__nav">
+        <button class="tabs__btn active" data-tab="tab-rezidential">Rezidențial</button>
+        <button class="tabs__btn" data-tab="tab-industrial">Industrial</button>
+        <button class="tabs__btn" data-tab="tab-renovare">Bloc / Renovare</button>
+        <button class="tabs__btn" data-tab="tab-all">Toate datele</button>
+      </div>
+
+      <!-- Tab: Rezidențial -->
+      <div class="tabs__panel active" id="tab-rezidential">
+        <div class="table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Parametru</th>
+                <th class="col-thermx"><img src="thermx-logo-white.png" alt="thermX" class="inline-logo"></th>
+                <th>EPS</th>
+                <th>Vată Minerală</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Grosime aplicată</td><td class="col-thermx">0,5–1 mm</td><td class="col-conventional">8–10 cm</td><td class="col-conventional">10–15 cm</td></tr>
+              <tr><td>Greutate/m²</td><td class="col-thermx">0,4 kg</td><td class="col-conventional">1,5–3 kg</td><td class="col-conventional">5–8 kg</td></tr>
+              <tr><td>Punți termice</td><td class="col-thermx">Zero</td><td class="col-conventional">Multiple</td><td class="col-conventional">Moderate</td></tr>
+              <tr><td>Necesită schelă</td><td class="col-thermx">Nu</td><td class="col-conventional">Da</td><td class="col-conventional">Da</td></tr>
+              <tr><td>Timp montaj</td><td class="col-thermx">Ore</td><td class="col-conventional">Săptămâni</td><td class="col-conventional">Zile</td></tr>
+              <tr><td>Durabilitate</td><td class="col-thermx">35+ ani</td><td class="col-conventional">10–15 ani</td><td class="col-conventional">15–25 ani</td></tr>
+              <tr><td>Garanție producător</td><td class="col-thermx">20 ani</td><td class="col-conventional">5–10 ani</td><td class="col-conventional">10–15 ani</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab: Industrial -->
+      <div class="tabs__panel" id="tab-industrial">
+        <div class="table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Parametru</th>
+                <th class="col-thermx"><img src="thermx-logo-white.png" alt="thermX" class="inline-logo"></th>
+                <th>EPS</th>
+                <th>Vată Minerală</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Temperatură operare</td><td class="col-thermx">-60°C &rarr; +260°C</td><td class="col-conventional">-50°C &rarr; +75°C</td><td class="col-conventional">-40°C &rarr; +250°C</td></tr>
+              <tr><td>Lambda (W/mK)</td><td class="col-thermx">&le; 0,001</td><td class="col-conventional">0,031–0,040</td><td class="col-conventional">0,035–0,045</td></tr>
+              <tr><td>Geometrii complexe</td><td class="col-thermx">Da</td><td class="col-conventional">Nu</td><td class="col-conventional">Limitat</td></tr>
+              <tr><td>Conducte / instalații</td><td class="col-thermx">Pulverizare directă</td><td class="col-conventional">Imposibil</td><td class="col-conventional">Cochilii preformate</td></tr>
+              <tr><td>Greutate/m²</td><td class="col-thermx">0,4 kg</td><td class="col-conventional">1,5–3 kg</td><td class="col-conventional">5–8 kg</td></tr>
+              <tr><td>Timp montaj</td><td class="col-thermx">Ore</td><td class="col-conventional">Săptămâni</td><td class="col-conventional">Zile</td></tr>
+              <tr><td>Rezistență chimică</td><td class="col-thermx">Ridicată</td><td class="col-conventional">Scăzută</td><td class="col-conventional">Moderată</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab: Bloc / Renovare -->
+      <div class="tabs__panel" id="tab-renovare">
+        <div class="table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Parametru</th>
+                <th class="col-thermx"><img src="thermx-logo-white.png" alt="thermX" class="inline-logo"></th>
+                <th>EPS</th>
+                <th>Vată Minerală</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Suprafață utilă pierdută</td><td class="col-thermx">~0 cm</td><td class="col-conventional">8–10 cm / perete</td><td class="col-conventional">10–15 cm / perete</td></tr>
+              <tr><td>Greutate structurală</td><td class="col-thermx">0,4 kg/m²</td><td class="col-conventional">1,5–3 kg/m²</td><td class="col-conventional">5–8 kg/m²</td></tr>
+              <tr><td>Necesită schelă</td><td class="col-thermx">Nu</td><td class="col-conventional">Da</td><td class="col-conventional">Da</td></tr>
+              <tr><td>Deranj locatari</td><td class="col-thermx">Minim (ore)</td><td class="col-conventional">Major (săptămâni)</td><td class="col-conventional">Moderat (zile)</td></tr>
+              <tr><td>Se aplică la interior</td><td class="col-thermx">Da</td><td class="col-conventional">Nerecomandat</td><td class="col-conventional">Posibil cu barieră vapori</td></tr>
+              <tr><td>Mucegai / condensare</td><td class="col-thermx">Previne (antifungic)</td><td class="col-conventional">Risc crescut la interior</td><td class="col-conventional">Risc la barieră incompletă</td></tr>
+              <tr><td>Cost per m²</td><td class="col-thermx">~25–35 EUR</td><td class="col-conventional">~15–25 EUR</td><td class="col-conventional">~20–35 EUR</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab: Toate datele -->
+      <div class="tabs__panel" id="tab-all">
+        <div class="table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Parametru</th>
+                <th class="col-thermx"><img src="thermx-logo-white.png" alt="thermX" class="inline-logo"></th>
+                <th>EPS</th>
+                <th>Vată Minerală</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Grosime aplicată</td><td class="col-thermx">0,5–1 mm</td><td class="col-conventional">8–10 cm</td><td class="col-conventional">10–15 cm</td></tr>
+              <tr><td>Greutate/m²</td><td class="col-thermx">0,4 kg</td><td class="col-conventional">1,5–3 kg</td><td class="col-conventional">5–8 kg</td></tr>
+              <tr><td>Lambda (W/mK)</td><td class="col-thermx">&le; 0,001</td><td class="col-conventional">0,031–0,040</td><td class="col-conventional">0,035–0,045</td></tr>
+              <tr><td>Punți termice</td><td class="col-thermx">Zero</td><td class="col-conventional">Multiple</td><td class="col-conventional">Moderate</td></tr>
+              <tr><td>Necesită schelă</td><td class="col-thermx">Nu</td><td class="col-conventional">Da</td><td class="col-conventional">Da</td></tr>
+              <tr><td>Timp montaj</td><td class="col-thermx">Ore</td><td class="col-conventional">Săptămâni</td><td class="col-conventional">Zile</td></tr>
+              <tr><td>Geometrii complexe</td><td class="col-thermx">Da</td><td class="col-conventional">Nu</td><td class="col-conventional">Limitat</td></tr>
+              <tr><td>Temperatură operare</td><td class="col-thermx">-60°C &rarr; +260°C</td><td class="col-conventional">-50°C &rarr; +75°C</td><td class="col-conventional">-40°C &rarr; +250°C</td></tr>
+              <tr><td>Suprafață utilă pierdută</td><td class="col-thermx">~0 cm</td><td class="col-conventional">8–10 cm</td><td class="col-conventional">10–15 cm</td></tr>
+              <tr><td>Conducte / instalații</td><td class="col-thermx">Pulverizare directă</td><td class="col-conventional">Imposibil</td><td class="col-conventional">Cochilii preformate</td></tr>
+              <tr><td>Mucegai / condensare</td><td class="col-thermx">Previne</td><td class="col-conventional">Risc crescut</td><td class="col-conventional">Risc la barieră incompletă</td></tr>
+              <tr><td>Durabilitate</td><td class="col-thermx">35+ ani</td><td class="col-conventional">10–15 ani</td><td class="col-conventional">15–25 ani</td></tr>
+              <tr><td>Garanție producător</td><td class="col-thermx">20 ani</td><td class="col-conventional">5–10 ani</td><td class="col-conventional">10–15 ani</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CALCULATOR: Cost Savings ── -->
+<section id="scalc" class="section section--dark section--glow-blue">
+  <div class="section__inner">
+    <div class="reveal" style="margin-bottom:48px; text-align:center;">
+      <p class="label text-orange mb-8">CALCULATOR ECONOMII</p>
+      <h2 class="heading">Estimează costul și economiile</h2>
+      <p class="body-text text-muted mt-8">Completează datele proiectului pentru o estimare personalizată.</p>
+    </div>
+
+    <div class="calc">
+      <div class="calc__inputs reveal">
+        <!-- Tip clădire -->
+        <div class="calc__field">
+          <label class="calc__label" for="calc-building">Tip clădire</label>
+          <select class="calc__select" id="calc-building">
+            <option value="casa">Casă individuală</option>
+            <option value="bloc">Bloc apartamente</option>
+            <option value="hala">Hală industrială</option>
+            <option value="publica">Clădire publică</option>
+          </select>
+        </div>
+
+        <!-- Suprafață -->
+        <div class="calc__field">
+          <label class="calc__label" for="calc-surface">Suprafață izolabilă (m²)</label>
+          <div class="calc__range-wrap">
+            <input type="range" class="calc__range" id="calc-surface-range" min="10" max="5000" value="150" step="10">
+            <input type="number" class="calc__input" id="calc-surface" min="10" max="5000" value="150">
+            <span class="calc__unit">m²</span>
+          </div>
+        </div>
+
+        <!-- Substrat -->
+        <div class="calc__field">
+          <label class="calc__label" for="calc-substrate">Substrat</label>
+          <select class="calc__select" id="calc-substrate">
+            <option value="beton">Beton</option>
+            <option value="metal">Metal</option>
+            <option value="lemn">Lemn</option>
+            <option value="caramida">Cărămidă</option>
+            <option value="tencuiala">Tencuială existentă</option>
+          </select>
+        </div>
+
+        <!-- Grosime -->
+        <div class="calc__field">
+          <label class="calc__label">Grosime aplicare</label>
+          <div class="calc__radio-group">
+            <label class="calc__radio">
+              <input type="radio" name="calc-thickness" value="0.5">
+              <span class="calc__radio-box"></span>
+              <span>0,5 mm <small class="text-muted">standard</small></span>
+            </label>
+            <label class="calc__radio">
+              <input type="radio" name="calc-thickness" value="1" checked>
+              <span class="calc__radio-box"></span>
+              <span>1 mm <small class="text-orange">recomandat</small></span>
+            </label>
+            <label class="calc__radio">
+              <input type="radio" name="calc-thickness" value="2">
+              <span class="calc__radio-box"></span>
+              <span>2 mm <small class="text-muted">industrial</small></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Zonă climatică -->
+        <div class="calc__field">
+          <label class="calc__label" for="calc-climate">Zonă climatică</label>
+          <select class="calc__select" id="calc-climate">
+            <option value="I">I — Sud / Sud-Est</option>
+            <option value="II" selected>II — Centru</option>
+            <option value="III">III — Nord / Vest</option>
+            <option value="IV">IV — Munte</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="calc__results reveal" style="transition-delay:0.15s;">
+        <div class="calc__result-card">
+          <i data-lucide="thermometer-snowflake" class="calc__result-icon"></i>
+          <div class="calc__result-value" id="calc-r-thermal">—</div>
+          <div class="calc__result-label">Economie pe factura de energie</div>
+        </div>
+        <div class="calc__result-card">
+          <i data-lucide="piggy-bank" class="calc__result-icon"></i>
+          <div class="calc__result-value" id="calc-r-savings">—</div>
+          <div class="calc__result-label">Economie anuală estimată</div>
+        </div>
+        <div class="calc__result-card">
+          <i data-lucide="receipt" class="calc__result-icon"></i>
+          <div class="calc__result-value" id="calc-r-cost">—</div>
+          <div class="calc__result-label">Cost estimativ aplicare</div>
+        </div>
+        <div class="calc__result-card">
+          <i data-lucide="calendar-check" class="calc__result-icon"></i>
+          <div class="calc__result-value" id="calc-r-payback">—</div>
+          <div class="calc__result-label">Perioadă de recuperare</div>
+        </div>
+        <div class="calc__result-card">
+          <i data-lucide="scale" class="calc__result-icon"></i>
+          <div class="calc__result-value" id="calc-r-weight">—</div>
+          <div class="calc__result-label">Greutate adăugată</div>
+        </div>
+        <div class="calc__result-card">
+          <i data-lucide="clock" class="calc__result-icon"></i>
+          <div class="calc__result-value" id="calc-r-time">—</div>
+          <div class="calc__result-label">Timp estimativ aplicare</div>
+        </div>
+        <p class="calc__disclaimer">Valorile sunt estimative și orientative. Calculul exact necesită evaluare la fața locului.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════════════════╗
+     ║  ACT IV — CONTEXT                        ║
+     ╚══════════════════════════════════════════╝ -->
+
+<!-- ── SECTION 07: nZEB Explained (Rewritten) ── -->
+<section id="s07" class="section section--dark">
+  <div class="nzeb-year">2028</div>
+  <div class="section__inner nzeb-content">
+    <div class="reveal" style="margin-bottom:48px;">
+      <p class="label text-blue mb-8">DIRECTIVA EUROPEANĂ</p>
+      <h2 class="heading">Ce este nZEB?</h2>
+      <p class="body-text text-muted mt-16" style="max-width:700px;">nZEB (<strong style="color:var(--text-white);">Nearly Zero-Energy Building</strong>) este standardul european care devine obligatoriu din 2028 pentru toate clădirile noi din România. Înseamnă clădiri cu consum energetic aproape zero — unde pierderile termice sunt minimizate prin anvelopă performantă.</p>
+    </div>
+    <div class="grid-3 reveal-stagger">
+      <div class="card">
+        <div class="card__value">&le; 15</div>
+        <p class="body-sm text-muted">kWh/m²·an — consum energie primară maximă permisă</p>
+      </div>
+      <div class="card">
+        <div class="card__value">A+</div>
+        <p class="body-sm text-muted">Certificat energetic obligatoriu pentru fiecare clădire</p>
+      </div>
+      <div class="card">
+        <div class="card__value">&ge; 30%</div>
+        <p class="body-sm text-muted">Energie din surse regenerabile în mix-ul energetic</p>
+      </div>
+    </div>
+    <div class="reveal mt-32" style="text-align:center;">
+      <p class="body-text text-muted">Rezultat: punțile termice nu mai sunt un detaliu de execuție — devin un <strong style="color:var(--text-white);">criteriu de conformare</strong>. Fiecare joncțiune neetanșă compromite certificarea întregii clădiri.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 08: Thermal Bridges (Expandable) ── -->
+<section id="s08" class="section section--dark">
+  <div class="section__inner">
+    <div class="reveal" style="margin-bottom:40px;">
+      <p class="label text-orange mb-8">DE CE CONTEAZĂ</p>
+      <h2 class="heading">Punțile termice — sursa #1 de pierderi</h2>
+      <p class="body-text text-muted mt-8">6 zone critice unde izolația clasică eșuează. Click pentru detalii.</p>
+    </div>
+    <div class="grid-3 reveal-stagger">
+      <div class="zone-card zone-card--expandable" data-accordion-item>
+        <div class="zone-card__header" data-accordion-trigger>
+          <div class="zone-card__dot"></div>
+          <div>
+            <div class="zone-card__name">Coamă</div>
+            <div class="zone-card__desc">Joncțiune acoperiș</div>
+          </div>
+          <i data-lucide="chevron-down" class="zone-card__chevron"></i>
+        </div>
+        <div class="zone-card__content" data-accordion-content>
+          <p>Coama acoperișului e punctul unde două planuri se întâlnesc. Fără izolație continuă, căldura scapă prin joncțiune — iar EPS-ul nu poate acoperi unghiuri ascuțite. thermX se pulverizează direct pe geometria existentă.</p>
+        </div>
+      </div>
+      <div class="zone-card zone-card--expandable" data-accordion-item>
+        <div class="zone-card__header" data-accordion-trigger>
+          <div class="zone-card__dot"></div>
+          <div>
+            <div class="zone-card__name">Colț acoperiș</div>
+            <div class="zone-card__desc">Intersecție planuri</div>
+          </div>
+          <i data-lucide="chevron-down" class="zone-card__chevron"></i>
+        </div>
+        <div class="zone-card__content" data-accordion-content>
+          <p>Colțurile acoperișului sunt imposibil de izolat cu plăci rigide — rămân mereu goluri. thermX formează o membrană continuă care elimină orice spațiu neizolat.</p>
+        </div>
+      </div>
+      <div class="zone-card zone-card--expandable" data-accordion-item>
+        <div class="zone-card__header" data-accordion-trigger>
+          <div class="zone-card__dot"></div>
+          <div>
+            <div class="zone-card__name">Fereastră</div>
+            <div class="zone-card__desc">Contur tâmplărie</div>
+          </div>
+          <i data-lucide="chevron-down" class="zone-card__chevron"></i>
+        </div>
+        <div class="zone-card__content" data-accordion-content>
+          <p>Conturul ferestrelor e una dintre cele mai frecvente surse de pierderi. Glafurile, tocul și zona de montaj creează punți termice. thermX sigilează complet zona de racord.</p>
+        </div>
+      </div>
+      <div class="zone-card zone-card--expandable" data-accordion-item>
+        <div class="zone-card__header" data-accordion-trigger>
+          <div class="zone-card__dot"></div>
+          <div>
+            <div class="zone-card__name">Perete–planșeu</div>
+            <div class="zone-card__desc">Joncțiune orizontală</div>
+          </div>
+          <i data-lucide="chevron-down" class="zone-card__chevron"></i>
+        </div>
+        <div class="zone-card__content" data-accordion-content>
+          <p>Joncțiunea perete-planșeu întrerupe izolația clasică la fiecare etaj. EPS-ul nu poate fi continuu prin această zonă structurală. thermX acoperă tranziția fără discontinuitate.</p>
+        </div>
+      </div>
+      <div class="zone-card zone-card--expandable" data-accordion-item>
+        <div class="zone-card__header" data-accordion-trigger>
+          <div class="zone-card__dot"></div>
+          <div>
+            <div class="zone-card__name">Fundație</div>
+            <div class="zone-card__desc">Contact cu solul</div>
+          </div>
+          <i data-lucide="chevron-down" class="zone-card__chevron"></i>
+        </div>
+        <div class="zone-card__content" data-accordion-content>
+          <p>Zona de fundație pierde constant căldură în sol. Izolația clasică se degradează la contact cu umiditatea. thermX e impermeabil și se aplică direct pe beton, chiar și în zone umede.</p>
+        </div>
+      </div>
+      <div class="zone-card zone-card--expandable" data-accordion-item>
+        <div class="zone-card__header" data-accordion-trigger>
+          <div class="zone-card__dot"></div>
+          <div>
+            <div class="zone-card__name">Balcon</div>
+            <div class="zone-card__desc">Consolă în exterior</div>
+          </div>
+          <i data-lucide="chevron-down" class="zone-card__chevron"></i>
+        </div>
+        <div class="zone-card__content" data-accordion-content>
+          <p>Balconul e un radiator care evacuează căldura din interior. Placa de beton trece neîntreruptă din interior în exterior. thermX izolează inclusiv fețele laterale ale consolei.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── SECTION 13: Before/After Thermal Imaging ── -->
+<section id="s13" class="section section--light">
+  <div class="section__inner">
+    <div class="reveal" style="margin-bottom:40px;">
+      <p class="label text-blue mb-8">APLICAȚIE DOCUMENTATĂ</p>
+      <h2 class="heading-sm" style="color:var(--text-dark);">Termografie — Înainte și După</h2>
+    </div>
+
+    <div class="ba-slider reveal" data-ba-slider>
+      <div class="ba-slider__before">
+        <div class="ba-slider__image ba-slider__image--before">
+          <div class="ba-slider__label-tag">ÎNAINTE</div>
+        </div>
+      </div>
+      <div class="ba-slider__after">
+        <div class="ba-slider__image ba-slider__image--after">
+          <div class="ba-slider__label-tag">DUPĂ <img src="thermx-logo-white.png" alt="thermX" class="inline-logo"></div>
+        </div>
+      </div>
+      <div class="ba-slider__handle">
+        <div class="ba-slider__handle-line"></div>
+        <div class="ba-slider__handle-circle">
+          <i data-lucide="move-horizontal" style="width:20px;height:20px;color:white;"></i>
+        </div>
+        <div class="ba-slider__handle-line"></div>
+      </div>
+    </div>
+
+    <p class="body-text text-muted-light mt-32 reveal" style="text-align:center;">
+      Termografie FLIR — imagine ilustrativă a diferenței de performanță termică.
+    </p>
+  </div>
+</section>
+
+
+
+
+<!-- ── ORANGE WAVE DIVIDER 4 ── -->
+<div class="act-divider">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,40 C120,70 240,10 360,40 C480,70 600,10 720,40 C840,70 960,10 1080,40 C1200,70 1320,10 1440,40" />
+  </svg>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════╗
+     ║  ACT V — APLICARE + ÎNCREDERE             ║
+     ╚══════════════════════════════════════════╝ -->
+
+<!-- ── SECTION 14: Application Process (Expandable) ── -->
+<section id="s14" class="section section--dark">
+  <div class="section__inner">
+    <div class="reveal" style="margin-bottom:40px;">
+      <p class="label text-orange mb-8">PROCES DE APLICARE</p>
+      <h2 class="heading">3 pași simpli</h2>
+    </div>
+
+    <div class="steps-accordion reveal-stagger">
+      <div class="step-expand" data-accordion-item>
+        <div class="step-expand__header" data-accordion-trigger>
+          <div class="step-expand__number">1</div>
+          <div class="step-expand__info">
+            <h3 class="step-expand__title">Pregătire suprafață</h3>
+            <p class="step-expand__desc">Curățare, uscare, substrat stabil</p>
+          </div>
+          <i data-lucide="chevron-down" class="step-expand__chevron"></i>
+        </div>
+        <div class="step-expand__content" data-accordion-content>
+          <div class="step-expand__body">
+            <div class="step-expand__sub">
+              <strong>Beton:</strong> Curățare mecanică, îndepărtare praf, grunduire cu primer compatibil
+            </div>
+            <div class="step-expand__sub">
+              <strong>Metal:</strong> Degresare, eventual grunduire anti-corozivă (dacă suprafața e oxidată)
+            </div>
+            <div class="step-expand__sub">
+              <strong>Lemn:</strong> Șlefuire, uscare la max 12% umiditate, verificare stabilitate
+            </div>
+            <div class="step-expand__sub">
+              <strong>Tencuială:</strong> Verificare aderență existentă, reparare zone degradate, curățare
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-expand__connector"></div>
+
+      <div class="step-expand" data-accordion-item>
+        <div class="step-expand__header" data-accordion-trigger>
+          <div class="step-expand__number">2</div>
+          <div class="step-expand__info">
+            <h3 class="step-expand__title">Aplicare airless spray</h3>
+            <p class="step-expand__desc">Pulverizare uniformă — 0,5 mm per strat</p>
+          </div>
+          <i data-lucide="chevron-down" class="step-expand__chevron"></i>
+        </div>
+        <div class="step-expand__content" data-accordion-content>
+          <div class="step-expand__body">
+            <div class="step-expand__sub">
+              <strong>Echipament:</strong> Pompă airless cu duză 0.017–0.021, presiune 150–180 bar
+            </div>
+            <div class="step-expand__sub">
+              <strong>Strat 1:</strong> 0,5 mm grosime, uscare 2–4 ore la 20°C
+            </div>
+            <div class="step-expand__sub">
+              <strong>Strat 2 (opțional):</strong> 0,5 mm suplimentar după uscarea completă a primului strat
+            </div>
+            <div class="step-expand__sub">
+              <strong>Condiții:</strong> Temperatura ambientală min +5°C, umiditate aer max 80%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-expand__connector"></div>
+
+      <div class="step-expand" data-accordion-item>
+        <div class="step-expand__header" data-accordion-trigger>
+          <div class="step-expand__number">3</div>
+          <div class="step-expand__info">
+            <h3 class="step-expand__title">Polimerizare</h3>
+            <p class="step-expand__desc">Membrană continuă în ore</p>
+          </div>
+          <i data-lucide="chevron-down" class="step-expand__chevron"></i>
+        </div>
+        <div class="step-expand__content" data-accordion-content>
+          <div class="step-expand__body">
+            <div class="step-expand__sub">
+              <strong>La 20°C:</strong> Uscare la atingere 2–3h, polimerizare completă 24h
+            </div>
+            <div class="step-expand__sub">
+              <strong>La 10°C:</strong> Uscare la atingere 4–6h, polimerizare completă 48h
+            </div>
+            <div class="step-expand__sub">
+              <strong>La 5°C:</strong> Uscare la atingere 8–12h, polimerizare completă 72h
+            </div>
+            <div class="step-expand__sub">
+              <strong>Umiditate:</strong> Max 80% — ventilație adecvată accelerează procesul
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal mt-48" style="text-align:center;">
+      <p class="label text-muted mb-16">Se aplică pe:</p>
+      <div class="substrate-tags" style="justify-content:center;">
+        <span class="substrate-tag">Beton</span>
+        <span class="substrate-tag">Metal</span>
+        <span class="substrate-tag">Lemn</span>
+        <span class="substrate-tag">Cărămidă</span>
+        <span class="substrate-tag">Tencuială existentă</span>
+        <span class="substrate-tag">Fibrociment</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── SECTION 17: Sectors ── -->
+<section id="s17" class="section section--dark">
+  <div class="section__inner">
+    <div class="reveal" style="margin-bottom:40px;">
+      <p class="label text-muted mb-8">SECTOARE DE APLICARE</p>
+      <h2 class="heading">Unde se aplică <img src="thermx-logo-white.png" alt="thermX" class="inline-logo"></h2>
+    </div>
+
+    <!-- ── Category 1: Civil ── -->
+    <div class="sector-group reveal" style="margin-bottom:40px;">
+      <p class="label" style="color:var(--orange); font-size:0.7rem; letter-spacing:0.15em; margin-bottom:16px;">APLICABILITATE CIVILĂ</p>
+
+      <div class="sector-expand" data-accordion-item>
+        <div class="sector-expand__header" data-accordion-trigger>
+          <div class="sector-expand__icon-wrap"><i data-lucide="home" class="sector-expand__icon"></i></div>
+          <div class="sector-expand__info">
+            <span class="sector-expand__name">Rezidențial</span>
+            <span class="sector-expand__sub">Case, vile, blocuri, ansambluri</span>
+          </div>
+          <i data-lucide="chevron-down" class="sector-expand__chevron"></i>
+        </div>
+        <div class="sector-expand__content" data-accordion-content>
+          <div class="sector-expand__body">
+            <div class="sector-expand__examples">
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Fațade case și vile — izolare completă fără schelă</span></div>
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Blocuri de apartamente — aplicare rapidă, deranj minim pentru locatari</span></div>
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Mansarde și poduri — acoperă geometrii complexe unde EPS nu ajunge</span></div>
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Renovări energetice — strat de 1 mm peste tencuiala existentă</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sector-expand" data-accordion-item>
+        <div class="sector-expand__header" data-accordion-trigger>
+          <div class="sector-expand__icon-wrap"><i data-lucide="landmark" class="sector-expand__icon"></i></div>
+          <div class="sector-expand__info">
+            <span class="sector-expand__name">Monumente istorice & Clădiri publice</span>
+            <span class="sector-expand__sub">Patrimoniu, muzee, teatre, școli, spitale</span>
+          </div>
+          <i data-lucide="chevron-down" class="sector-expand__chevron"></i>
+        </div>
+        <div class="sector-expand__content" data-accordion-content>
+          <div class="sector-expand__body">
+            <div class="sector-expand__examples">
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Clădiri de patrimoniu — nu modifică aspectul fațadei, grosime neglijabilă</span></div>
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Școli și grădinițe — aplicare în vacanță, gata înainte de an școlar</span></div>
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Spitale — fără praf, fără zgomot de montaj mecanic</span></div>
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Teatre, muzee, lăcașuri de cult — izolare fără intervenție asupra ornamentelor</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Category 2: Industrial ── -->
+    <div class="sector-group reveal">
+      <p class="label" style="color:var(--orange); font-size:0.7rem; letter-spacing:0.15em; margin-bottom:16px;">APLICABILITATE INDUSTRIALĂ</p>
+
+      <div class="sector-expand" data-accordion-item>
+        <div class="sector-expand__header" data-accordion-trigger>
+          <div class="sector-expand__icon-wrap"><i data-lucide="factory" class="sector-expand__icon"></i></div>
+          <div class="sector-expand__info">
+            <span class="sector-expand__name">Industrial & Petrochimie</span>
+            <span class="sector-expand__sub">Hale, depozite, rafinării, instalații</span>
+          </div>
+          <i data-lucide="chevron-down" class="sector-expand__chevron"></i>
+        </div>
+        <div class="sector-expand__content" data-accordion-content>
+          <div class="sector-expand__body">
+            <div class="sector-expand__examples">
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Hale de producție — izolare pe metal, fără oprirea activității</span></div>
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Depozite frigorifice — funcționare la −60°C, fără condens</span></div>
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Rezervoare și cisterne — aplicare pe suprafețe curbe, aderență pe metal</span></div>
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Instalații petrochimice — rezistență până la +260°C, Clasa A la foc</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sector-expand" data-accordion-item>
+        <div class="sector-expand__header" data-accordion-trigger>
+          <div class="sector-expand__icon-wrap"><i data-lucide="route" class="sector-expand__icon"></i></div>
+          <div class="sector-expand__info">
+            <span class="sector-expand__name">Infrastructură & Sisteme</span>
+            <span class="sector-expand__sub">Conducte, rețele termice, utilități</span>
+          </div>
+          <i data-lucide="chevron-down" class="sector-expand__chevron"></i>
+        </div>
+        <div class="sector-expand__content" data-accordion-content>
+          <div class="sector-expand__body">
+            <div class="sector-expand__examples">
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Conducte de termoficare — reduce pierderile în rețeaua de transport</span></div>
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Instalații HVAC — izolare canale de ventilație și conducte</span></div>
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Rețele de apă caldă — menținerea temperaturii pe distanțe lungi</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sector-expand" data-accordion-item>
+        <div class="sector-expand__header" data-accordion-trigger>
+          <div class="sector-expand__icon-wrap"><i data-lucide="container" class="sector-expand__icon"></i></div>
+          <div class="sector-expand__info">
+            <span class="sector-expand__name">Infrastructuri mobile</span>
+            <span class="sector-expand__sub">Containere, vehicule, structuri temporare</span>
+          </div>
+          <i data-lucide="chevron-down" class="sector-expand__chevron"></i>
+        </div>
+        <div class="sector-expand__content" data-accordion-content>
+          <div class="sector-expand__body">
+            <div class="sector-expand__examples">
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Containere maritime și modulare — izolare completă pe metal</span></div>
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Vehicule frigorifice — menținerea lanțului de frig</span></div>
+              <div class="sector-example"><i data-lucide="check" style="width:14px;height:14px;color:var(--orange);flex-shrink:0;"></i><span>Construcții modulare și prefabricate — izolare în fabrică, gata de montaj</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 16+18: Partnership & Certifications (merged) ── -->
+<section id="s16" class="section section--dark">
+  <div class="section__inner">
+    <div class="partner-certs reveal">
+      <!-- LEFT: Partnership -->
+      <div class="partner-certs__left">
+        <p class="label text-blue mb-8">PENTRU ARHITECȚI ȘI CONSTRUCTORI</p>
+        <h2 class="heading" style="margin-bottom:32px;">Partener tehnic</h2>
+        <div class="partner-benefit">
+          <i data-lucide="headphones" class="partner-benefit__icon"></i>
+          <div class="partner-benefit__info">
+            <span class="partner-benefit__title">Suport tehnic dedicat</span>
+            <span class="partner-benefit__desc">Inginer de proiect alocat pentru consultanță pe specificații, detalii de execuție și monitorizarea aplicării.</span>
+          </div>
+        </div>
+        <div class="partner-benefit">
+          <i data-lucide="map-pin" class="partner-benefit__icon"></i>
+          <div class="partner-benefit__info">
+            <span class="partner-benefit__title">Consultanță la fața locului</span>
+            <span class="partner-benefit__desc">Evaluare gratuită a suprafeței, recomandare grosime și estimare cost — înainte de orice angajament.</span>
+          </div>
+        </div>
+        <div class="partner-benefit">
+          <i data-lucide="users" class="partner-benefit__icon"></i>
+          <div class="partner-benefit__info">
+            <span class="partner-benefit__title">Training echipă de aplicare</span>
+            <span class="partner-benefit__desc">Instruire practică pentru echipa de execuție: echipament airless, tehnici de pulverizare, control grosime.</span>
+          </div>
+        </div>
+        <div class="partner-benefit">
+          <i data-lucide="file-text" class="partner-benefit__icon"></i>
+          <div class="partner-benefit__info">
+            <span class="partner-benefit__title">Integrare în specificații</span>
+            <span class="partner-benefit__desc">Text tip pentru caietul de sarcini, obiecte BIM și fișe tehnice gata de atașat la documentația de proiect.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Certifications -->
+      <div class="partner-certs__right">
+        <p class="label text-orange mb-8">CERTIFICĂRI ȘI STANDARDE</p>
+        <div class="cert-detail">
+          <div class="cert-detail__badge">SNiP</div>
+          <div class="cert-detail__info">
+            <span class="cert-detail__name">Standarde construcții (RU/CSI)</span>
+            <span class="cert-detail__desc">Testat conform normativelor SNiP pentru izolații termice în construcții civile și industriale. Acceptat în proiecte din spațiul CSI.</span>
+          </div>
+        </div>
+        <div class="cert-detail">
+          <div class="cert-detail__badge">ASTM</div>
+          <div class="cert-detail__info">
+            <span class="cert-detail__name">American Society for Testing and Materials</span>
+            <span class="cert-detail__desc">Teste de conductivitate termică, aderență, elongație și rezistență la impact conform standardelor ASTM internaționale.</span>
+          </div>
+        </div>
+        <div class="cert-detail">
+          <div class="cert-detail__badge">ISO 9001</div>
+          <div class="cert-detail__info">
+            <span class="cert-detail__name">Sistem de management al calității</span>
+            <span class="cert-detail__desc">Producția este certificată ISO 9001 — control calitate la fiecare lot, trasabilitate completă materie primă → produs finit.</span>
+          </div>
+        </div>
+        <div class="cert-detail">
+          <div class="cert-detail__badge">CE</div>
+          <div class="cert-detail__info">
+            <span class="cert-detail__name">Conformitate Europeană</span>
+            <span class="cert-detail__desc">Marcaj CE conform EN 15824 — produsul poate fi utilizat legal în orice stat membru UE fără certificări suplimentare.</span>
+          </div>
+        </div>
+        <p class="body-text text-muted" style="margin-top:24px; font-size:0.82rem;">Garanție producător: 20 ani. Durabilitate documentată: 35+ ani.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── FAQ SECTION (by Persona) ── -->
+<section id="sfaq" class="section section--dark">
+  <div class="section__inner">
+    <div class="reveal" style="margin-bottom:40px; text-align:center;">
+      <p class="label text-orange mb-8">ÎNTREBĂRI FRECVENTE</p>
+      <h2 class="heading">Răspunsuri pe care le cauți</h2>
+    </div>
+
+    <div class="tabs reveal" data-tabs>
+      <div class="tabs__nav tabs__nav--centered">
+        <button class="tabs__btn active" data-tab="faq-proprietari">Proprietari</button>
+        <button class="tabs__btn" data-tab="faq-constructori">Constructori</button>
+        <button class="tabs__btn" data-tab="faq-arhitecti">Arhitecți</button>
+        <button class="tabs__btn" data-tab="faq-industrial">Industrial</button>
+      </div>
+
+      <!-- FAQ: Proprietari -->
+      <div class="tabs__panel active" id="faq-proprietari">
+        <div class="faq-accordion">
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>Cu cât se reduce factura la energie?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>Până la 40% economie pe factura de încălzire și răcire, documentat la o aplicare de 1 mm. Economia exactă depinde de tipul încălzirii, starea actuală a izolației și zona climatică. La o casă medie de 150 m², asta poate însemna 2.000–4.000 RON economie anuală.</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>Cât durează aplicarea?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>Ore, nu săptămâni. O echipă de 1–2 operatori acoperă aproximativ 50 m²/zi. O casă medie se finalizează în 2–4 zile, comparativ cu 2–4 săptămâni pentru izolație clasică. Fără schelă, fără deranj major.</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>Se poate aplica pe orice suprafață?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>Da — beton, metal, lemn, cărămidă, tencuială existentă, fibrociment. Practic orice substrat solid și stabil. Singurul lucru necesar: suprafața să fie curată, uscată și fără straturi care se exfoliază.</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>Ce garanție are?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>20 de ani garanție de la producător. Durabilitatea reală documentată depășește 35 de ani. Performanța se îmbunătățește în primii ani — aderența crește de la 2,0 la 3,0 MPa odată cu polimerizarea completă.</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>Elimină mucegaiul?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>Da, prin controlul punctului de rouă. Mucegaiul apare unde se condensează umezeala — adică pe suprafețe reci. thermX ridică temperatura suprafeței interioare a peretelui, eliminând condensul. Plus: membrana are proprietăți antifungice native.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ: Constructori -->
+      <div class="tabs__panel" id="faq-constructori">
+        <div class="faq-accordion">
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>Care e avantajul față de EPS la proiecte noi?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>80% mai rapid ca timp de execuție. Grosime 1 mm vs 10 cm — câștigi spațiu util. Nu necesită schelă, nu necesită echipe mari. Cost de instalare cu 30% mai mic. Elimini complet punțile termice la joncțiuni, ceea ce e imposibil cu EPS.</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>E conform nZEB?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>Da, contribuie la atingerea standardului nZEB. Lambda echivalent de ≤ 0,001 W/mK și eliminarea completă a punților termice ajută la obținerea certificatului energetic A+. Ideal ca soluție complementară sau principală în proiecte nZEB.</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>Cum afectează suprafața utilă?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>Câștig maxim de spațiu. La 1 mm grosime vs 10 cm EPS, diferența pe un apartament de 70 m² poate fi de 2–3 m² suprafață utilă în plus. La prețul actual pe metru pătrat construit, asta se traduce în valoare semnificativă.</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>Ce documente tehnice furnizați?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>Fișă tehnică completă, certificate de conformitate (SNiP, ASTM, CE, ISO 9001), obiecte BIM cu proprietăți termice integrate, specificație tip pentru caietul de sarcini, raport de calcul termic personalizat pe proiect (48h de la trimitere).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ: Arhitecți -->
+      <div class="tabs__panel" id="faq-arhitecti">
+        <div class="faq-accordion">
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>Ce standarde respectă <img src="thermx-logo-white.png" alt="thermX" class="inline-logo">?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>SNiP (standarde construcții), ASTM/ASHRAE (testare materiale și performanță HVAC), EN 15824 (tencuieli exterioare — reacție la foc: Clasa A uscat, Clasa C lichid), ISO 9001 (sistem de management al calității), marcaj CE (conformitate europeană).</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>Pot integra <img src="thermx-logo-white.png" alt="thermX" class="inline-logo"> în BIM?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>Da, furnizăm obiecte BIM (Revit / IFC) cu proprietăți termice complete: lambda, densitate, grosime, aderență, rezistență termică. Se integrează direct în modelul energetic al clădirii. Disponibile la cerere — livrare în 24h.</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>Cum specific <img src="thermx-logo-white.png" alt="thermX" class="inline-logo"> în caietul de sarcini?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>Furnizăm template de specificație tip, gata de copiat în caietul de sarcini. Include: descriere produs, standarde de referință, condiții de aplicare, criterii de recepție, parametri de performanță verificabili. Solicită template-ul de la echipa tehnică.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ: Industrial -->
+      <div class="tabs__panel" id="faq-industrial">
+        <div class="faq-accordion">
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>Funcționează la temperaturi extreme?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>Da — interval de operare -60°C → +260°C. Testat și validat în condiții reale: conducte de abur, instalații criogenice, medii petrochimice. Membrana nu fisurează la frig și nu se degradează la cald. Un singur produs pentru orice regim termic.</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>Se aplică pe conducte și geometrii complexe?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>Da, pulverizare directă pe orice geometrie — conducte, coturi, reductii, supape, echipamente cu forme neregulate. Nu necesită cochilii preformate sau piese speciale. Membrana se conformează perfect oricărei forme.</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion__item" data-accordion-item>
+            <button class="accordion__trigger" data-accordion-trigger>
+              <span>Referințe industriale?</span>
+              <i data-lucide="chevron-down" class="accordion__chevron"></i>
+            </button>
+            <div class="accordion__content" data-accordion-content>
+              <div class="accordion__body">
+                <p>Produs utilizat la nivel global în sectorul petrochimic și energetic. Referințe: Gazprom, Rosneft, Lukoil — conducte și instalații industriale. Portofoliu complet de proiecte disponibil la cerere, cu date tehnice și termografii pre/post aplicare.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── ORANGE WAVE DIVIDER 5 ── -->
+<div class="act-divider">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,65 C200,65 300,15 520,20 C740,25 800,55 1000,30 C1150,10 1300,45 1440,20" />
+  </svg>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════╗
+     ║  ACT VI — ACȚIUNE                        ║
+     ╚══════════════════════════════════════════╝ -->
+
+<!-- ── SECTION 19: Architect Package ── -->
+<section id="s19" class="section section--dark">
+  <div class="section__inner">
+    <div class="reveal" style="margin-bottom:32px;">
+      <p class="label text-orange mb-8">CE PRIMEȘTI</p>
+    </div>
+    <div class="grid-2 reveal-stagger">
+      <div class="pkg-card">
+        <i data-lucide="box" class="pkg-card__icon"></i>
+        <h3 class="pkg-card__title">Documentație tehnică completă + BIM</h3>
+        <p class="pkg-card__desc">Fișă tehnică, fișă de securitate, obiecte BIM</p>
+        <div class="pkg-card__actions">
+          <a href="docs/fisa-tehnica-thermx.html" target="_blank" class="pkg-card__btn"><i data-lucide="file-text" style="width:14px;height:14px;"></i> Fișă Tehnică</a>
+          <a href="docs/fisa-securitate-thermx.html" target="_blank" class="pkg-card__btn pkg-card__btn--outline"><i data-lucide="shield" style="width:14px;height:14px;"></i> Fișă Securitate</a>
+        </div>
+      </div>
+      <div class="pkg-card">
+        <i data-lucide="file-text" class="pkg-card__icon"></i>
+        <h3 class="pkg-card__title">Specificație tip</h3>
+        <p class="pkg-card__desc">Copy/paste în caietul de sarcini</p>
+        <div class="pkg-card__actions">
+          <a href="docs/specificatie-tip-thermx.html" target="_blank" class="pkg-card__btn"><i data-lucide="download" style="width:14px;height:14px;"></i> Descarcă</a>
+        </div>
+      </div>
+      <div class="pkg-card">
+        <i data-lucide="package" class="pkg-card__icon"></i>
+        <h3 class="pkg-card__title">Mostre + fișă tehnică</h3>
+        <p class="pkg-card__desc">Material fizic pentru evaluare</p>
+        <div class="pkg-card__actions">
+          <a href="#s20" class="pkg-card__btn pkg-card__btn--outline"><i data-lucide="send" style="width:14px;height:14px;"></i> Solicită mostre</a>
+        </div>
+      </div>
+      <div class="pkg-card">
+        <i data-lucide="calculator" class="pkg-card__icon"></i>
+        <h3 class="pkg-card__title">Calcul termic personalizat</h3>
+        <p class="pkg-card__desc">Rezultat în 48h de la trimiterea proiectului</p>
+        <div class="pkg-card__actions">
+          <a href="#s20" class="pkg-card__btn"><i data-lucide="arrow-right" style="width:14px;height:14px;"></i> Trimite proiectul</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 20: Premium Contact Form ── -->
+<section id="s20" class="section section--dark section--glow-orange">
+  <div class="section__inner">
+    <div class="reveal" style="text-align:center; margin-bottom:48px;">
+      <h2 class="display-lg">Trimite proiectul.</h2>
+      <p class="body-text text-muted mt-16">Calcul termic personalizat în 48h.</p>
+    </div>
+
+    <form class="contact-form reveal" id="contactForm" novalidate>
+      <div class="contact-form__grid">
+        <!-- Nume -->
+        <div class="form-field">
+          <input type="text" id="cf-name" class="form-field__input" required autocomplete="name">
+          <label for="cf-name" class="form-field__label">Nume complet *</label>
+          <div class="form-field__error">Numele este obligatoriu</div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-field">
+          <input type="email" id="cf-email" class="form-field__input" required autocomplete="email">
+          <label for="cf-email" class="form-field__label">Email *</label>
+          <div class="form-field__error">Adresă de email validă este obligatorie</div>
+        </div>
+
+        <!-- Telefon -->
+        <div class="form-field">
+          <input type="tel" id="cf-phone" class="form-field__input" autocomplete="tel">
+          <label for="cf-phone" class="form-field__label">Telefon</label>
+        </div>
+
+        <!-- Tip proiect -->
+        <div class="form-field">
+          <select id="cf-project" class="form-field__input form-field__select">
+            <option value="" disabled selected></option>
+            <option value="Rezidențial nou">Rezidențial nou</option>
+            <option value="Renovare casă">Renovare casă</option>
+            <option value="Bloc apartamente">Bloc apartamente</option>
+            <option value="Hală industrială">Hală industrială</option>
+            <option value="Conducte / Instalații">Conducte / Instalații</option>
+            <option value="Altul">Altul</option>
+          </select>
+          <label for="cf-project" class="form-field__label form-field__label--select">Tip proiect</label>
+        </div>
+
+        <!-- Suprafață -->
+        <div class="form-field">
+          <input type="number" id="cf-surface" class="form-field__input" min="1" autocomplete="off">
+          <label for="cf-surface" class="form-field__label">Suprafață estimată (m²)</label>
+        </div>
+
+        <!-- Mesaj — full width -->
+        <div class="form-field form-field--full">
+          <textarea id="cf-message" class="form-field__input form-field__textarea" rows="4"></textarea>
+          <label for="cf-message" class="form-field__label">Mesaj</label>
+        </div>
+      </div>
+
+      <div class="contact-form__actions">
+        <button type="submit" class="btn-cta">
+          <i data-lucide="send" style="width:18px;height:18px;"></i>
+          Solicită calcul termic
+        </button>
+      </div>
+
+      <!-- Success state -->
+      <div class="contact-form__success" id="formSuccess">
+        <i data-lucide="check-circle" style="width:48px;height:48px;color:var(--orange);"></i>
+        <p class="heading-sm" style="margin-top:16px;">Mesaj pregătit</p>
+        <p class="body-text text-muted mt-8">Se va deschide clientul tău de email cu datele completate.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ── SECTION 21: Contact ── -->
+<section id="s21" class="section section--dark">
+  <div class="section__inner section__centered">
+    <div class="reveal">
+      <img src="thermx-logo-white.png" alt="thermX" style="width:280px; height:auto; margin-bottom:40px;">
+    </div>
+    <div class="reveal" style="transition-delay:0.15s;">
+      <div class="contact-line">
+        <i data-lucide="phone" class="contact-line__icon"></i>
+        <span>+40 771 445 577</span>
+      </div>
+      <div class="contact-line">
+        <i data-lucide="mail" class="contact-line__icon"></i>
+        <span>contact@nanorevolution.ro</span>
+      </div>
+      <div class="contact-line">
+        <i data-lucide="globe" class="contact-line__icon"></i>
+        <span>nanorevolution.ro/thermx</span>
+      </div>
+    </div>
+    <p class="label text-muted mt-32 reveal" style="transition-delay:0.3s; letter-spacing:2px;">Specifică <img src="thermx-logo-white.png" alt="thermX" class="inline-logo">.</p>
+  </div>
+</section>
+
+<!-- ── SECTION 22: Closing ── -->
+<section id="s22" class="section section--dark section--gradient-close">
+  <div class="section__inner section__centered reveal-scale">
+    <img src="thermx-logo-white.png" alt="thermX" style="width:min(420px,80vw); height:auto;">
+  </div>
+</section>
+
+
+<!-- Footer -->
+<footer style="background:var(--bg-dark); border-top:1px solid var(--border-dark); padding:24px 32px; text-align:center;">
+  <p class="body-sm text-muted">Nano Revolution SRL — Str. Ogorului, Nr 3, Oradea, Bihor 410554</p>
+</footer>
+
+<!-- Scripts -->
+<script src="js/main2.js?v=2"></script>
+</body>
+</html>

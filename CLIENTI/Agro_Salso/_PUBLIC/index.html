@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Client — Agro Salso | Epic Digital Hub</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary:   '#1a1a2e',
+                            accent:    '#e94560',
+                            secondary: '#16213e',
+                            light:     '#f5f5f5',
+                            text:      '#333333',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        :root {
+            --color-primary: #1a1a2e;
+            --color-accent: #e94560;
+            --color-secondary: #16213e;
+        }
+        body { font-family: 'Inter', system-ui, sans-serif; color: #333; }
+        .gradient-hero {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, #0f3460 100%);
+            position: relative; overflow: hidden;
+        }
+        .gradient-hero::before {
+            content: ''; position: absolute; top: -50%; right: -20%;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(233,69,96,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .card-hover { transition: all 0.25s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(26,26,46,0.1); }
+        .category-badge { transition: all 0.2s ease; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-brand-light min-h-screen flex flex-col">
+
+    <header class="gradient-hero text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 relative z-10">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/10">
+                    <i data-lucide="tractor" class="w-6 h-6 text-brand-accent"></i>
+                </div>
+                <span class="text-sm text-white/50 font-medium uppercase tracking-wider">Epic Digital Hub</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 tracking-tight">Agro Salso</h1>
+            <p class="text-white/60 text-lg max-w-xl">
+                Portal de livrabile &mdash; materiale de marketing, calendare editoriale și analize de piață.
+            </p>
+            <div class="flex flex-wrap items-center gap-6 mt-8 text-sm">
+                <div class="flex items-center gap-2 text-white/50">
+                    <i data-lucide="folder" class="w-4 h-4"></i>
+                    <span>4 livrabile disponibile</span>
+                </div>
+                <div class="flex items-center gap-2 text-white/50">
+                    <i data-lucide="clock" class="w-4 h-4"></i>
+                    <span>Ultima actualizare: 28.02.2026</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 flex-1 w-full" x-data="{
+        filter: 'all',
+        deliverables: [
+            {
+                category: 'calendar',
+                icon: 'calendar',
+                title: 'Calendar Editorial Interactiv',
+                description: 'Planificarea completă a postărilor pentru toate platformele social media, organizată pe săptămâni și categorii de conținut.',
+                date: '28.02.2026',
+                url: 'CALENDAR_EDITORIAL_INTERACTIV.html'
+            },
+            {
+                category: 'report',
+                icon: 'bar-chart-2',
+                title: 'Analiză Ads Competiție — Dashboard',
+                description: 'Dashboard interactiv cu analiza campaniilor publicitare ale competiției: bugete estimate, formate, mesaje și strategii.',
+                date: '28.02.2026',
+                url: 'ANALIZA_ADS_COMPETITIE_DASHBOARD.html'
+            },
+            {
+                category: 'campaign',
+                icon: 'file-text',
+                title: 'Ofertă Dexwal Mamut',
+                description: 'Prezentarea ofertei pentru utilajele Dexwal Mamut — specificații, prețuri și argumente de vânzare.',
+                date: '28.02.2026',
+                url: 'OFERTA_DEXWAL_MAMUT.html'
+            },
+            {
+                category: 'strategy',
+                icon: 'globe',
+                title: 'Landing Page Agro Salso',
+                description: 'Pagina de prezentare web pentru Agro Salso — design, conținut și structură optimizată pentru conversii.',
+                date: '28.02.2026',
+                url: 'LANDING_PAGE_INDEX.html'
+            }
+        ],
+        get filteredDeliverables() {
+            if (this.filter === 'all') return this.deliverables;
+            return this.deliverables.filter(d => d.category === this.filter);
+        },
+        getCategoryLabel(cat) {
+            const labels = { calendar: 'Calendar', report: 'Raport', campaign: 'Campanie', strategy: 'Strategie' };
+            return labels[cat] || cat;
+        },
+        getCategoryColor(cat) {
+            const colors = {
+                calendar: 'bg-purple-100 text-purple-700',
+                report: 'bg-blue-100 text-blue-700',
+                campaign: 'bg-brand-accent/10 text-brand-accent',
+                strategy: 'bg-emerald-100 text-emerald-700'
+            };
+            return colors[cat] || 'bg-gray-100 text-gray-700';
+        }
+    }">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+            <div>
+                <h2 class="text-xl font-bold text-brand-primary">Materiale disponibile</h2>
+                <p class="text-sm text-gray-400 mt-1">
+                    <span x-text="filteredDeliverables.length"></span> materiale
+                    <span x-show="filter !== 'all'"> &mdash; filtru activ</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 mb-8">
+            <template x-for="f in [{id:'all',label:'Toate',icon:'layout-grid'},{id:'calendar',label:'Calendare',icon:'calendar'},{id:'report',label:'Rapoarte',icon:'bar-chart-2'},{id:'campaign',label:'Campanii',icon:'megaphone'},{id:'strategy',label:'Strategie',icon:'compass'}]">
+                <button @click="filter = f.id"
+                    :class="filter === f.id ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'bg-white text-gray-500 hover:bg-gray-50 border border-gray-200'"
+                    class="px-4 py-2.5 rounded-xl text-sm font-medium transition-all category-badge">
+                    <span class="flex items-center gap-2">
+                        <i :data-lucide="f.icon" class="w-4 h-4"></i>
+                        <span x-text="f.label"></span>
+                    </span>
+                </button>
+            </template>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <template x-for="(item, index) in filteredDeliverables" :key="index">
+                <a :href="item.url" class="card-hover bg-white rounded-2xl border border-gray-100 p-6 block group">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 bg-brand-primary/5 rounded-xl flex items-center justify-center group-hover:bg-brand-accent/10 transition-colors">
+                            <i :data-lucide="item.icon" class="w-6 h-6 text-brand-primary group-hover:text-brand-accent transition-colors"></i>
+                        </div>
+                        <span class="text-xs text-gray-400 flex items-center gap-1">
+                            <i data-lucide="clock" class="w-3 h-3"></i>
+                            <span x-text="item.date"></span>
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <span class="text-xs font-medium px-2.5 py-1 rounded-full"
+                              :class="getCategoryColor(item.category)"
+                              x-text="getCategoryLabel(item.category)"></span>
+                    </div>
+                    <h3 class="font-bold text-brand-primary text-base mb-2 group-hover:text-brand-accent transition-colors leading-snug" x-text="item.title"></h3>
+                    <p class="text-sm text-gray-500 leading-relaxed line-clamp-3" x-text="item.description"></p>
+                    <div class="mt-4 pt-4 border-t border-gray-50 flex items-center gap-1.5 text-brand-accent text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span>Deschide documentul</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </div>
+                </a>
+            </template>
+        </div>
+
+        <div x-show="filteredDeliverables.length === 0" x-transition class="text-center py-16">
+            <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="folder-open" class="w-8 h-8 text-gray-300"></i>
+            </div>
+            <h3 class="text-gray-600 font-semibold mb-2">Niciun material în această categorie</h3>
+            <p class="text-gray-400 text-sm">Selectează „Toate" pentru a vedea toate materialele disponibile.</p>
+        </div>
+    </main>
+
+    <section class="bg-white border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+                <div>
+                    <h3 class="font-bold text-brand-primary text-lg mb-1">Ai întrebări sau feedback?</h3>
+                    <p class="text-sm text-gray-400">Echipa Epic Digital Hub este disponibilă pentru orice nelămurire.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="mailto:contact@epicdigitalhub.ro" class="inline-flex items-center gap-2 bg-brand-accent text-white px-5 py-3 rounded-xl text-sm font-medium hover:bg-red-600 transition-colors shadow-lg shadow-brand-accent/20">
+                        <i data-lucide="mail" class="w-4 h-4"></i> Trimite un email
+                    </a>
+                    <a href="https://epicdigitalhub.ro" target="_blank" class="inline-flex items-center gap-2 bg-brand-primary text-white px-5 py-3 rounded-xl text-sm font-medium hover:bg-brand-secondary transition-colors">
+                        <i data-lucide="globe" class="w-4 h-4"></i> Website
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="zap" class="w-4 h-4 text-brand-accent"></i>
+                    <span>Epic Digital Hub &mdash; Marketing & Digital Strategy</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="clock" class="w-3 h-3"></i>
+                    <span>Actualizat: 28.02.2026</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        const observer = new MutationObserver(() => lucide.createIcons());
+        observer.observe(document.body, { childList: true, subtree: true });
+    </script>
+</body>
+</html>

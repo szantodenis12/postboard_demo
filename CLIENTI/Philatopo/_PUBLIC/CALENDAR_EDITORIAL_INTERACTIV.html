@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar Editorial — Philatopo · Feb–Mar 2026</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              poppins: ["Poppins", "sans-serif"],
+              inter: ["Inter", "sans-serif"],
+              space: ["Space Grotesk", "sans-serif"],
+            },
+            colors: {
+              slate_deep: "#1B2A3D",
+              orange_topo: "#E8792B",
+              sand: "#F5F0EB",
+              cartographic: "#F8F9FA",
+              edu: "#E8792B",
+              bts: "#3B82F6",
+              act: "#22C55E",
+              int: "#A855F7",
+              brand: "#78716C",
+              blog: "#EC4899",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        --edu: #E8792B;
+        --bts: #3B82F6;
+        --act: #22C55E;
+        --int: #A855F7;
+        --brand: #78716C;
+        --blog: #EC4899;
+        --slate: #1B2A3D;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+      }
+
+      /* Calendar grid */
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
+      }
+
+      .day-cell {
+        min-height: 90px;
+        padding: 6px 8px;
+        background: white;
+        border-radius: 8px;
+        position: relative;
+        transition: all 0.15s ease;
+      }
+
+      .day-cell:not(.empty):hover {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        transform: translateY(-1px);
+      }
+
+      .day-cell.empty {
+        background: transparent;
+        min-height: 0;
+      }
+
+      .day-cell.weekend {
+        background: #f9fafb;
+      }
+
+      .day-cell.today {
+        ring: 2px;
+        box-shadow: inset 0 0 0 2px #E8792B;
+      }
+
+      .day-number {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #94a3b8;
+        margin-bottom: 4px;
+        font-family: "Space Grotesk", sans-serif;
+      }
+
+      .day-cell.today .day-number {
+        color: #E8792B;
+        font-weight: 700;
+      }
+
+      .day-cell.weekend .day-number {
+        color: #cbd5e1;
+      }
+
+      /* Post chips in calendar */
+      .post-chip {
+        font-size: 0.65rem;
+        color: white;
+        padding: 3px 6px;
+        border-radius: 5px;
+        margin-bottom: 3px;
+        cursor: pointer;
+        line-height: 1.3;
+        font-weight: 500;
+        transition: all 0.15s ease;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .post-chip:hover {
+        filter: brightness(1.1);
+        transform: scale(1.02);
+      }
+
+      .post-chip.hidden {
+        display: none;
+      }
+
+      .format-tag {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.25);
+        font-size: 0.55rem;
+        font-weight: 700;
+        padding: 1px 4px;
+        border-radius: 3px;
+        margin-right: 4px;
+        letter-spacing: 0.03em;
+        vertical-align: middle;
+      }
+
+      /* Weekday header row */
+      .weekday-row {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
+        margin-bottom: 2px;
+      }
+
+      .weekday-cell {
+        text-align: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #94a3b8;
+        padding: 8px 0;
+        font-family: "Space Grotesk", sans-serif;
+      }
+
+      /* List view */
+      .list-view {
+        display: none;
+      }
+
+      .list-view.active {
+        display: block;
+      }
+
+      .list-card {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        padding: 16px 20px;
+        background: white;
+        border-radius: 12px;
+        border-left: 4px solid;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-bottom: 8px;
+      }
+
+      .list-card:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        transform: translateX(4px);
+      }
+
+      .list-card.hidden {
+        display: none;
+      }
+
+      .list-date {
+        text-align: center;
+        min-width: 48px;
+        flex-shrink: 0;
+      }
+
+      .list-date .day {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1B2A3D;
+        line-height: 1;
+      }
+
+      .list-date .weekday {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #94a3b8;
+        letter-spacing: 0.05em;
+      }
+
+      .list-date .month-sm {
+        font-size: 0.65rem;
+        color: #cbd5e1;
+        font-weight: 500;
+      }
+
+      .list-content h3 {
+        font-family: "Poppins", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #1B2A3D;
+        margin: 0 0 2px;
+      }
+
+      .list-content .subtitle {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-bottom: 8px;
+      }
+
+      .badge {
+        display: inline-block;
+        font-size: 0.65rem;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 6px;
+        margin-right: 6px;
+        letter-spacing: 0.02em;
+      }
+
+      .badge-format {
+        background: #f1f5f9;
+        color: #475569;
+      }
+
+      /* Modal */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+        padding: 24px;
+      }
+
+      .modal-overlay.open {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .modal {
+        background: white;
+        border-radius: 16px;
+        max-width: 680px;
+        width: 100%;
+        max-height: 85vh;
+        overflow-y: auto;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        transform: translateY(20px) scale(0.98);
+        transition: transform 0.25s ease;
+      }
+
+      .modal-overlay.open .modal {
+        transform: translateY(0) scale(1);
+      }
+
+      .modal-header {
+        padding: 28px 28px 20px;
+        border-bottom: 1px solid #f1f5f9;
+        position: relative;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: #f1f5f9;
+        color: #64748b;
+        border-radius: 8px;
+        font-size: 1.25rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+      }
+
+      .modal-close:hover {
+        background: #e2e8f0;
+        color: #1e293b;
+      }
+
+      .post-number {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 4px;
+      }
+
+      .modal-header h2 {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1B2A3D;
+        margin: 0 0 10px;
+        line-height: 1.3;
+        padding-right: 32px;
+      }
+
+      .modal-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 0.8rem;
+        color: #64748b;
+      }
+
+      .modal-meta span {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .modal-body {
+        padding: 24px 28px 28px;
+      }
+
+      .modal-section {
+        margin-bottom: 24px;
+      }
+
+      .modal-section:last-child {
+        margin-bottom: 0;
+      }
+
+      .modal-section h4 {
+        font-family: "Poppins", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #1B2A3D;
+        margin: 0 0 10px;
+      }
+
+      /* Tabs */
+      .tab-bar {
+        display: flex;
+        gap: 4px;
+        background: #f1f5f9;
+        border-radius: 10px;
+        padding: 4px;
+        margin-bottom: 14px;
+      }
+
+      .tab-btn {
+        flex: 1;
+        padding: 8px 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: none;
+        background: transparent;
+        color: #64748b;
+        border-radius: 7px;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: "Inter", sans-serif;
+      }
+
+      .tab-btn.active {
+        background: white;
+        color: #1B2A3D;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .caption, .linkedin-text, .google-text, .visual-desc, .cta-text {
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: #334155;
+        white-space: pre-wrap;
+        background: #f8fafc;
+        padding: 16px;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .hashtags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .hashtag {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: #3b82f6;
+        background: #eff6ff;
+        padding: 4px 10px;
+        border-radius: 6px;
+        transition: all 0.15s;
+      }
+
+      .hashtag:hover {
+        background: #dbeafe;
+      }
+
+      /* Legend dot */
+      .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      /* Calendar view hidden */
+      .calendar-view.hidden {
+        display: none;
+      }
+
+      /* Scrollbar styling */
+      .modal::-webkit-scrollbar {
+        width: 6px;
+      }
+      .modal::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .modal::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .day-cell {
+          min-height: 70px;
+          padding: 4px 5px;
+        }
+        .post-chip {
+          font-size: 0.55rem;
+          padding: 2px 4px;
+        }
+        .format-tag {
+          display: none;
+        }
+        .modal {
+          max-height: 90vh;
+          border-radius: 12px;
+        }
+        .modal-header, .modal-body {
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .calendar-grid {
+          gap: 1px;
+        }
+        .day-cell {
+          min-height: 56px;
+          padding: 3px 4px;
+          border-radius: 4px;
+        }
+        .post-chip {
+          font-size: 0.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-slate-800 min-h-screen">
+
+    <!-- ───── HEADER ───── -->
+    <div class="bg-gradient-to-br from-slate_deep via-slate-800 to-slate-900 text-white py-12 px-6 text-center relative overflow-hidden">
+      <!-- Subtle grid pattern -->
+      <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,<svg width=\"40\" height=\"40\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M0 0h40v40H0z\" fill=\"none\" stroke=\"white\" stroke-width=\"0.5\"/></svg>');"></div>
+      <div class="relative z-10 max-w-3xl mx-auto">
+        <h1 class="font-poppins text-3xl md:text-4xl font-bold tracking-tight mb-2">
+          Calendar Editorial <span class="text-orange_topo">Philatopo</span>
+        </h1>
+        <p class="text-slate-300 text-sm md:text-base mb-6">
+          23 Februarie – 31 Martie 2026 · Topografie & Cadastru · Oradea
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-3 text-xs md:text-sm">
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/10">
+            <strong class="text-orange_topo">16</strong> postări + <strong class="text-orange_topo">1</strong> articol blog
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/10">
+            Frecvență: <strong>Lun · Mie · Vin</strong>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/10">
+            FB · IG · LinkedIn · Google Business
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───── STATS BAR ───── -->
+    <div class="max-w-4xl mx-auto -mt-6 px-4 relative z-10">
+      <div class="bg-white rounded-2xl shadow-lg shadow-slate-200/50 border border-slate-100 p-5 grid grid-cols-3 md:grid-cols-6 gap-4">
+        <div class="text-center">
+          <div class="font-space text-2xl font-bold text-orange_topo">6</div>
+          <div class="text-xs text-slate-500 font-medium mt-0.5">Educație</div>
+        </div>
+        <div class="text-center">
+          <div class="font-space text-2xl font-bold text-bts">3</div>
+          <div class="text-xs text-slate-500 font-medium mt-0.5">BTS / Proof</div>
+        </div>
+        <div class="text-center">
+          <div class="font-space text-2xl font-bold text-act">3</div>
+          <div class="text-xs text-slate-500 font-medium mt-0.5">Actualitate</div>
+        </div>
+        <div class="text-center">
+          <div class="font-space text-2xl font-bold text-int">2</div>
+          <div class="text-xs text-slate-500 font-medium mt-0.5">Interacțiune</div>
+        </div>
+        <div class="text-center">
+          <div class="font-space text-2xl font-bold text-brand">2</div>
+          <div class="text-xs text-slate-500 font-medium mt-0.5">Brand</div>
+        </div>
+        <div class="text-center">
+          <div class="font-space text-2xl font-bold text-blog">1</div>
+          <div class="text-xs text-slate-500 font-medium mt-0.5">Blog SEO</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───── LEGEND + VIEW TOGGLE ───── -->
+    <div class="max-w-5xl mx-auto px-4 mt-8">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+        <!-- Legend -->
+        <div class="flex flex-wrap gap-2" id="legend">
+          <button class="legend-item active inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 border border-transparent hover:border-slate-300 transition-all cursor-pointer" data-filter="all">
+            <div class="legend-dot" style="background: var(--slate)"></div>
+            Toate
+          </button>
+          <button class="legend-item inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-orange-50 text-orange-700 border border-transparent hover:border-orange-200 transition-all cursor-pointer" data-filter="edu">
+            <div class="legend-dot" style="background: var(--edu)"></div>
+            EDU
+          </button>
+          <button class="legend-item inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 border border-transparent hover:border-blue-200 transition-all cursor-pointer" data-filter="bts">
+            <div class="legend-dot" style="background: var(--bts)"></div>
+            BTS
+          </button>
+          <button class="legend-item inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-green-50 text-green-700 border border-transparent hover:border-green-200 transition-all cursor-pointer" data-filter="act">
+            <div class="legend-dot" style="background: var(--act)"></div>
+            ACT
+          </button>
+          <button class="legend-item inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-purple-50 text-purple-700 border border-transparent hover:border-purple-200 transition-all cursor-pointer" data-filter="int">
+            <div class="legend-dot" style="background: var(--int)"></div>
+            INT
+          </button>
+          <button class="legend-item inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-stone-100 text-stone-600 border border-transparent hover:border-stone-300 transition-all cursor-pointer" data-filter="brand">
+            <div class="legend-dot" style="background: var(--brand)"></div>
+            BRAND
+          </button>
+          <button class="legend-item inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-pink-50 text-pink-700 border border-transparent hover:border-pink-200 transition-all cursor-pointer" data-filter="blog">
+            <div class="legend-dot" style="background: var(--blog)"></div>
+            BLOG
+          </button>
+        </div>
+
+        <!-- View toggle -->
+        <div class="flex bg-slate-100 rounded-lg p-1 gap-1 flex-shrink-0">
+          <button class="view-btn active text-xs font-semibold px-4 py-2 rounded-md transition-all" data-view="calendar">
+            <svg class="w-3.5 h-3.5 inline-block mr-1 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="4" x2="9" y2="2"/><line x1="15" y1="4" x2="15" y2="2"/></svg>
+            Calendar
+          </button>
+          <button class="view-btn text-xs font-semibold px-4 py-2 rounded-md transition-all" data-view="list">
+            <svg class="w-3.5 h-3.5 inline-block mr-1 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>
+            Listă
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───── CALENDAR VIEW ───── -->
+    <div class="max-w-5xl mx-auto px-4 pb-6 calendar-view" id="calendarView">
+      <!-- FEBRUARIE -->
+      <div class="flex items-baseline gap-2 mb-3">
+        <h2 class="font-poppins text-xl font-bold text-slate_deep">Februarie</h2>
+        <span class="text-sm font-medium text-slate-400">2026</span>
+      </div>
+      <div class="bg-slate-50/50 rounded-xl p-3 border border-slate-100 mb-8">
+        <div class="weekday-row">
+          <div class="weekday-cell">Lun</div>
+          <div class="weekday-cell">Mar</div>
+          <div class="weekday-cell">Mie</div>
+          <div class="weekday-cell">Joi</div>
+          <div class="weekday-cell">Vin</div>
+          <div class="weekday-cell">Sâm</div>
+          <div class="weekday-cell">Dum</div>
+        </div>
+        <div class="calendar-grid" id="febGrid"></div>
+      </div>
+
+      <!-- MARTIE -->
+      <div class="flex items-baseline gap-2 mb-3">
+        <h2 class="font-poppins text-xl font-bold text-slate_deep">Martie</h2>
+        <span class="text-sm font-medium text-slate-400">2026</span>
+      </div>
+      <div class="bg-slate-50/50 rounded-xl p-3 border border-slate-100">
+        <div class="weekday-row">
+          <div class="weekday-cell">Lun</div>
+          <div class="weekday-cell">Mar</div>
+          <div class="weekday-cell">Mie</div>
+          <div class="weekday-cell">Joi</div>
+          <div class="weekday-cell">Vin</div>
+          <div class="weekday-cell">Sâm</div>
+          <div class="weekday-cell">Dum</div>
+        </div>
+        <div class="calendar-grid" id="marGrid"></div>
+      </div>
+    </div>
+
+    <!-- ───── LIST VIEW ───── -->
+    <div class="max-w-3xl mx-auto px-4 pb-6 list-view" id="listView"></div>
+
+    <!-- ───── MODAL ───── -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal" id="modal">
+        <div class="modal-header" id="modalHeader">
+          <button class="modal-close" id="modalClose">&times;</button>
+          <div class="post-number" id="modalPostNum"></div>
+          <h2 id="modalTitle"></h2>
+          <div class="modal-meta" id="modalMeta"></div>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+      </div>
+    </div>
+
+    <!-- ───── FOOTER ───── -->
+    <div class="mt-8 border-t border-slate-200 bg-white">
+      <div class="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-slate-400">
+        <strong class="text-slate_deep font-semibold">Philatopo</strong>
+        <span class="mx-1.5 text-slate-300">·</span>
+        Topografie & Cadastru · Oradea
+        <span class="mx-2 text-slate-200">|</span>
+        Pregătit de <span class="font-medium text-slate-500">Epic Digital Hub</span>
+        <span class="mx-2 text-slate-200">|</span>
+        Versiune 1.0 · 21.02.2026
+      </div>
+    </div>
+
+    <script>
+      // ── Post Data ──
+      const posts = [
+        {
+          id: 1,
+          num: "#1",
+          date: "2026-02-24",
+          day: 24,
+          month: 2,
+          weekday: "Luni",
+          pilon: "brand",
+          pilonLabel: "BRAND",
+          pilonEmoji: "\u{1F7E4}",
+          title: "Cine suntem + De ce Philatopo",
+          subject: "Lansare Brand",
+          format: "SI",
+          formatFull: "Single Image 1080\u00D71080",
+          week: "S\u0103pt\u0103m\u00E2na 1 \u2014 Lansare (23\u201328 Feb)",
+          caption: `Philatopo. Iubirea de loc. \u{1F4CD}
+
+Suntem o firm\u0103 de topografie din Oradea \u0219i de azi suntem \u0219i aici \u2014 pe re\u021Belele sociale.
+
+De ce Philatopo?
+Numele vine din grecescul phil (iubire) + topo (loc). Pentru c\u0103 nu doar m\u0103sur\u0103m terenuri \u2014 le \u00EEn\u021Belegem.
+
+Ce facem concret:
+\u2713 Cadastru \u0219i intabulare
+\u2713 Ridic\u0103ri topografice
+\u2713 Trasare limite de proprietate
+\u2713 Dezmembrare \u0219i alipire teren
+\u2713 Plan de situa\u021Bie
+\u2713 Asisten\u021B\u0103 topografic\u0103 pe \u0219antier
+
+Ce ne diferen\u021Biaz\u0103:
+\u2192 Pre\u021Buri publice, defalcate \u2014 onorariu separat de taxe OCPI
+\u2192 R\u0103spuns \u00EEn 30 de minute la orice solicitare
+\u2192 Dosar depus la OCPI \u00EEn 24h de la finalizarea m\u0103sur\u0103torii
+\u2192 Echipamente GNSS de ultim\u0103 genera\u021Bie
+
+Precizie la fiecare punct. Asta facem.
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201ESuntem Philatopo \u2014 partenerul de topografie al dezvoltatorilor, constructorilor \u0219i arhitec\u021Bilor din Oradea \u0219i jude\u021Bul Bihor. Oferim transparen\u021B\u0103 total\u0103, tehnologie GNSS \u0219i comunicare clar\u0103 la fiecare etap\u0103 a proiectului dumneavoastr\u0103.\u201D`,
+          visual: `Fundal: Alb Cartografic #F8F9FA
+Centru: Logo Philatopo complet (wordmark + compas + descriptor portocaliu "TOPOGRAFIE \u00B7 ORADEA")
+Sub logo: Tagline \u201EPrecizie la fiecare punct.\u201D \u00EEn Poppins SemiBold, Slate Profund #1B2A3D
+Partea inferioar\u0103: Band\u0103 sub\u021Bire Portocaliu Topo #E8792B cu textul \u201ECadastru \u00B7 Topografie \u00B7 Oradea\u201D \u00EEn Inter Regular, alb
+Stil: Minimalist, impact maxim \u2014 este prima impresie a brandului
+Op\u021Bional: Textur\u0103 subtil\u0103 de grid topografic \u00EEn fundal (opacitate 5%, Gri Deschis #E8ECF0)`,
+          hashtags: [
+            "#Philatopo",
+            "#TopografieOradea",
+            "#CadastruOradea",
+            "#PrecizieLaFiecarePunct",
+            "#TopografBihor",
+            "#IntabulareOradea",
+            "#DinOradea",
+          ],
+          cta: "Urm\u0103re\u0219te-ne pentru tot ce trebuie s\u0103 \u0219tii despre cadastru, intabulare \u0219i topografie \u00EEn Oradea.",
+          google:
+            "Philatopo \u2014 topografie \u0219i cadastru \u00EEn Oradea. Pre\u021Buri transparente, r\u0103spuns rapid, echipamente GNSS. Cadastru, intabulare, trasare, dezmembrare. Sun\u0103: 0733.777.762 sau viziteaz\u0103 philatopo.ro",
+        },
+        {
+          id: 2,
+          num: "#2",
+          date: "2026-02-26",
+          day: 26,
+          month: 2,
+          weekday: "Miercuri",
+          pilon: "edu",
+          pilonLabel: "EDU",
+          pilonEmoji: "\u{1F7E0}",
+          title: "C\u00E2t cost\u0103 cadastrul \u00EEn 2026? F\u0103r\u0103 surprize.",
+          subject: "C\u00E2t cost\u0103 cadastrul?",
+          format: "CAR 5",
+          formatFull: "Carousel, 5 slide-uri",
+          week: "S\u0103pt\u0103m\u00E2na 1 \u2014 Lansare (23\u201328 Feb)",
+          caption: `\u201EC\u00E2t cost\u0103 cadastrul?\u201D \u2014 cea mai frecvent\u0103 \u00EEntrebare pe care o primim. \u0218i cea la care noi chiar r\u0103spundem. Cu cifre. \u{1F4B0}
+
+Am preg\u0103tit un ghid complet cu pre\u021Burile reale din 2026, defalcate clar:
+\u2192 C\u00E2t pl\u0103te\u0219ti topograful (onorariu Philatopo)
+\u2192 C\u00E2t pl\u0103te\u0219ti statul (taxe OCPI)
+\u2192 Ce include fiecare pre\u021B
+
+Slide 1: \u201EC\u00E2t cost\u0103 cadastrul \u00EEn 2026?\u201D
+Slide 2: Apartament / Garsonier\u0103 \u2014 de la 920 RON (total)
+Slide 3: Cas\u0103 / Teren intravilan \u2014 de la 1.120 RON (total)
+Slide 4: Trasare limite \u2014 de la 100 RON / punct (minim 4 puncte)
+Slide 5: CTA + \u201EVrei detalii? Scrie-ne.\u201D
+
+\u{1F4A1} Important: Pre\u021Bul variaz\u0103 \u00EEn func\u021Bie de suprafa\u021Ba terenului, complexitatea lucr\u0103rii \u0219i regimul (normal sau urgen\u021B\u0103). Dar la Philatopo, \u0219tii pre\u021Bul dinainte. F\u0103r\u0103 surprize.
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201ETransparen\u021Ba pre\u021Burilor este unul dintre principiile noastre. Am publicat structura complet\u0103 de costuri pentru serviciile de cadastru \u00EEn 2026, defalcat\u0103 pe tip de proprietate: onorariu topograf vs. taxe OCPI. Datele sunt din pia\u021Ba din Oradea \u0219i jude\u021Bul Bihor.\u201D`,
+          visual: `Slide 1 \u2014 Cover: Fundal Slate Profund #1B2A3D, Titlu \u201EC\u00C2T COST\u0102 CADASTRUL \u00CEN 2026?\u201D Poppins Bold Alb, Subtitlu \u201EF\u0103r\u0103 surprize. Doar cifre clare.\u201D Inter Regular Gri
+Slide 2 \u2014 Apartament: Icon bloc, Pre\u021B \u201Ede la 920 RON\u201D Space Grotesk Bold Portocaliu, Defalcare onorariu + taxe
+Slide 3 \u2014 Cas\u0103/Teren: Icon cas\u0103, Pre\u021B \u201Ede la 1.120 RON\u201D
+Slide 4 \u2014 Trasare: Icon teren + pichete, \u201Ede la 100 RON / punct\u201D
+Slide 5 \u2014 CTA: Fundal Portocaliu, \u201EVREI S\u0102 \u0218TII PRE\u021AUL EXACT?\u201D Buton WhatsApp`,
+          hashtags: [
+            "#PretCadastru2026",
+            "#CadastruOradea",
+            "#IntabulareOradea",
+            "#PretTransparent",
+            "#Philatopo",
+            "#TopografieOradea",
+            "#FaraSurprize",
+            "#CatCostaIntabularea",
+          ],
+          cta: "Salveaz\u0103 postarea \u0219i trimite-o cuiva care are nevoie de cadastru. Sau scrie-ne direct \u2014 \u00EE\u021Bi spunem pre\u021Bul exact \u00EEn 30 de minute.",
+          google:
+            "Pre\u021Buri cadastru 2026 \u2014 Philatopo Oradea. Apartament: de la 920 RON. Cas\u0103/teren: de la 1.120 RON. Pre\u021Buri transparente: onorariu + taxe OCPI separate. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 3,
+          num: "#3",
+          date: "2026-02-28",
+          day: 28,
+          month: 2,
+          weekday: "Vineri",
+          pilon: "act",
+          pilonLabel: "ACT",
+          pilonEmoji: "\u{1F7E2}",
+          title: "Cadastru gratuit \u00EEn Bihor \u2014 lista localit\u0103\u021Bilor",
+          subject: "Cadastru gratuit \u00EEn Bihor",
+          format: "CAR 4-5",
+          formatFull: "Carousel, 4-5 slide-uri",
+          week: "S\u0103pt\u0103m\u00E2na 1 \u2014 Lansare (23\u201328 Feb)",
+          caption: `\u0218tiai c\u0103 \u00EEn Bihor exist\u0103 peste 50 de localit\u0103\u021Bi unde cadastrul se face gratuit? \u{1F3D8}\uFE0F
+
+Se nume\u0219te Programul Na\u021Bional de Cadastru \u0219i Carte Funciar\u0103 (PNCCF) \u0219i func\u021Bioneaz\u0103 a\u0219a:
+
+\u2705 Statul pl\u0103te\u0219te \u00EEnregistrarea sistematic\u0103 a imobilelor
+\u2705 Tu nu pl\u0103te\u0219ti nimic pentru prima \u00EEnregistrare
+\u2705 P\u00E2n\u0103 acum, peste 10 milioane de imobile au fost cadastrate gratuit la nivel na\u021Bional
+
+DAR \u2014 \u0219i e un "dar" important:
+
+\u274C Programul NU acoper\u0103 dezmembr\u0103ri, alipiri sau actualiz\u0103ri
+\u274C Dac\u0103 vrei s\u0103 vinzi, s\u0103 construe\u0219ti sau s\u0103 dezmembrezi \u2014 ai nevoie de un topograf autorizat
+\u274C Calitatea lucr\u0103rilor sistematice variaz\u0103 \u2014 verific\u0103-\u021Bi datele din cartea funciar\u0103
+
+\u{1F4A1} Ai proprietate \u00EEntr-una din aceste localit\u0103\u021Bi? Scrie-ne \u0219i te ajut\u0103m s\u0103 verifici dac\u0103 totul e \u00EEn regul\u0103.
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201EProgramul Na\u021Bional de Cadastru acoper\u0103 52 de comune din Bihor, dar nu \u00EEnlocuie\u0219te necesitatea unei documenta\u021Bii precise pentru tranzac\u021Bii, dezmembr\u0103ri sau autoriza\u021Bii de construire. Pentru dezvoltatorii care opereaz\u0103 \u00EEn aceste zone, o verificare a datelor cadastrale existente este esen\u021Bial\u0103 \u00EEnainte de orice investi\u021Bie.\u201D`,
+          visual: `Slide 1 \u2014 Cover: Fundal Slate, \u201ECADASTRU GRATUIT \u00CEN BIHOR\u201D Poppins Bold Alb, Subtitlu \u201ELista localit\u0103\u021Bilor\u201D Portocaliu
+Slide 2 \u2014 Cum func\u021Bioneaz\u0103: 3 pa\u0219i vizuali (Statul contracteaz\u0103 \u2192 Se m\u0103soar\u0103 \u2192 Se \u00EEnscriu gratuit)
+Slide 3 \u2014 Harta Bihorului: Puncte portocaliu pe localit\u0103\u021Bile din program, 52 localit\u0103\u021Bi, 6 finalizate
+Slide 4 \u2014 Ce NU acoper\u0103: Lista cu \u274C pe fundal Nisip Cald
+Slide 5 \u2014 CTA: Fundal Portocaliu, Buton WhatsApp`,
+          hashtags: [
+            "#CadastruGratuit",
+            "#PNCCF",
+            "#CadastruBihor",
+            "#Philatopo",
+            "#TopografieOradea",
+            "#CarteaFunciara",
+            "#CadastruOradea",
+            "#BihorImobiliar",
+          ],
+          cta: "Verific\u0103 dac\u0103 localitatea ta e pe list\u0103. Scrie-ne \u0219i te ajut\u0103m cu restul.",
+          google:
+            "Cadastru gratuit \u00EEn Bihor \u2014 52 de localit\u0103\u021Bi \u00EEn Programul Na\u021Bional. Philatopo verific\u0103 dac\u0103 proprietatea ta e corect \u00EEnregistrat\u0103. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 4,
+          num: "#4",
+          date: "2026-03-03",
+          day: 3,
+          month: 3,
+          weekday: "Luni",
+          pilon: "edu",
+          pilonLabel: "EDU",
+          pilonEmoji: "\u{1F7E0}",
+          title: "Ce acte \u00EE\u021Bi trebuie pentru intabulare? Checklist complet",
+          subject: "Acte necesare intabulare",
+          format: "CAR 5",
+          formatFull: "Carousel, 5 slide-uri \u2014 checklist vizual",
+          week: "S\u0103pt\u0103m\u00E2na 2 (2\u20137 Martie)",
+          caption: `\u201ECe acte \u00EEmi trebuie?\u201D \u2014 \u00EEntrebarea pe care o primim de cel pu\u021Bin 5 ori pe zi. A\u0219a c\u0103 am f\u0103cut un checklist complet, pe care \u00EEl po\u021Bi salva \u0219i folosi oric\u00E2nd. \u2705
+
+\u{1F3E2} Apartament:
+\u2192 Act de proprietate
+\u2192 Certificat fiscal de la prim\u0103rie
+\u2192 Extras CF (dac\u0103 exist\u0103 deja)
+\u2192 Buletin / CI proprietar
+
+\u{1F3E0} Cas\u0103 + teren:
+\u2192 Toate cele de mai sus PLUS
+\u2192 Autoriza\u021Bie de construire + PV recep\u021Bie
+\u2192 Certificat de atestare a edificiului (dac\u0103 e construc\u021Bie veche)
+
+\u{1F33F} Teren liber:
+\u2192 Act de proprietate
+\u2192 Certificat fiscal
+\u2192 Buletin / CI
+\u2192 Plan parcelar (dac\u0103 exist\u0103)
+
+\u{1F4A1} Noi ne ocup\u0103m de tot restul: m\u0103sur\u0103toare, documenta\u021Bie tehnic\u0103, depunere la OCPI.
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201EUn dosar incomplet este cea mai frecvent\u0103 cauz\u0103 de \u00EEnt\u00E2rziere la OCPI. Am sintetizat actele necesare pentru intabulare \u00EEn func\u021Bie de tipul de proprietate \u2014 un instrument util pentru notari, agen\u021Bi imobiliari \u0219i dezvoltatori care gestioneaz\u0103 volume mari de tranzac\u021Bii.\u201D`,
+          visual: `Slide 1 \u2014 Cover: Fundal Slate, \u201ECE ACTE \u00CE\u021AI TREBUIE PENTRU INTABULARE?\u201D Poppins Bold Alb, Icon document cu checklist
+Slide 2 \u2014 Apartament: Checklist vizual cu \u2705
+Slide 3 \u2014 Cas\u0103 + teren: Checklist extins
+Slide 4 \u2014 Teren liber: Checklist specific
+Slide 5 \u2014 CTA: Fundal Portocaliu, \u201EAI ACTELE PREG\u0102TITE? NOI NE OCUP\u0102M DE RESTUL.\u201D`,
+          hashtags: [
+            "#IntabulareOradea",
+            "#ActeNecesare",
+            "#CadastruOradea",
+            "#Philatopo",
+            "#ChecklistIntabulare",
+            "#TopografieOradea",
+            "#OCPI",
+            "#CarteaFunciara",
+          ],
+          cta: "Salveaz\u0103 postarea. C\u00E2nd vine momentul, scrie-ne \u0219i rezolv\u0103m rapid.",
+          google:
+            "Acte necesare pentru intabulare \u2014 ghid complet Philatopo. Apartament, cas\u0103 sau teren \u2014 verific\u0103 ce documente ai nevoie. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 5,
+          num: "#5",
+          date: "2026-03-05",
+          day: 5,
+          month: 3,
+          weekday: "Miercuri",
+          pilon: "bts",
+          pilonLabel: "BTS",
+          pilonEmoji: "\u{1F535}",
+          title: "Echipamentele noastre GNSS \u2014 de ce conteaz\u0103 precizia",
+          subject: "Echipamente GNSS (BTS)",
+          format: "CAR 3-4",
+          formatFull: "Carousel, 3-4 slide-uri",
+          week: "S\u0103pt\u0103m\u00E2na 2 (2\u20137 Martie)",
+          caption: `Instrumentele unui topograf fac diferen\u021Ba \u00EEntre \u201Emerge \u0219i a\u0219a\u201D \u0219i \u201Eexact la milimetru\u201D. Noi am ales varianta a doua. \u{1F3AF}
+
+La Philatopo lucr\u0103m cu echipamente GNSS (Global Navigation Satellite System) \u2014 cea mai avansat\u0103 tehnologie pentru determinarea coordonatelor pe teren.
+
+Ce \u00EEnseamn\u0103 asta pentru tine?
+\u2192 Precizie milimetric\u0103, nu centimetric\u0103
+\u2192 M\u0103sur\u0103tori rapide \u2014 mai pu\u021Bin timp pe teren
+\u2192 Coordonate verificabile, acceptate instant de OCPI
+\u2192 Zero erori de trasare \u2014 gardul t\u0103u e exact unde trebuie
+
+Nu e vorba de gadget-uri. E vorba de rezultatul pe care \u021Bi-l livr\u0103m: un dosar corect din prima. \u{1F4CB}
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201EInvesti\u021Bia \u00EEn echipamente GNSS de ultim\u0103 genera\u021Bie nu este un cost \u2014 este o garan\u021Bie. Pentru dezvoltatorii \u0219i constructorii cu care colabor\u0103m, aceasta \u00EEnseamn\u0103 trasare pe coordonate absolute, zero riscuri de execu\u021Bie \u0219i documenta\u021Bie validat\u0103 instant la OCPI.\u201D`,
+          visual: `Slide 1 \u2014 Hero: Fotografie real\u0103 cu echipamentul GNSS, overlay gradient Slate, Text \u201EECHIPAMENTELE NOASTRE\u201D Poppins Bold
+Slide 2 \u2014 Close-up echipament: Annot\u0103ri/etichete tehnice
+Slide 3 \u2014 Beneficii: 4 iconuri (\u{1F3AF} Precizie \u00B7 \u26A1 Rapiditate \u00B7 \u2705 Acceptare OCPI \u00B7 \u{1F6E1}\uFE0F Zero erori)
+Slide 4 \u2014 CTA: \u201EVrei s\u0103 vezi cum lucr\u0103m? Urm\u0103re\u0219te-ne.\u201D`,
+          hashtags: [
+            "#GNSS",
+            "#EchipamenteTopografie",
+            "#Philatopo",
+            "#TopografieOradea",
+            "#PrecizieMaxima",
+            "#TehnologieTopografica",
+            "#CadastruOradea",
+          ],
+          cta: "Vrei s\u0103 vezi cum func\u021Bioneaz\u0103 pe teren? Urm\u0103re\u0219te-ne \u2014 \u00EEn cur\u00E2nd post\u0103m o zi complet\u0103 pe teren.",
+          google:
+            "Philatopo lucreaz\u0103 cu echipamente GNSS de ultim\u0103 genera\u021Bie \u2014 precizie milimetric\u0103 pentru cadastru, trasare \u0219i ridic\u0103ri topografice \u00EEn Oradea. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 6,
+          num: "#6",
+          date: "2026-03-07",
+          day: 7,
+          month: 3,
+          weekday: "Vineri",
+          pilon: "int",
+          pilonLabel: "INT",
+          pilonEmoji: "\u{1F7E3}",
+          title: "POLL: \u0218tii dac\u0103 proprietatea ta e \u00EEn cartea funciar\u0103?",
+          subject: "POLL interac\u021Biune",
+          format: "SI",
+          formatFull: "Single Image 1080\u00D71080",
+          week: "S\u0103pt\u0103m\u00E2na 2 (2\u20137 Martie)",
+          caption: `\u00CEntrebare sincer\u0103: \u0218tii dac\u0103 proprietatea ta este \u00EEnscris\u0103 \u00EEn cartea funciar\u0103? \u{1F914}
+
+\u{1F7E2} Da, totul e la zi
+\u{1F7E1} Cred c\u0103 da... dar nu sunt 100% sigur
+\u{1F534} Nu \u0219tiu / Nu am verificat niciodat\u0103
+
+R\u0103spunde sincer \u00EEn comentarii (sau voteaz\u0103 \u00EEn Story).
+
+De ce conteaz\u0103?
+\u2192 F\u0103r\u0103 intabulare, NU po\u021Bi vinde legal
+\u2192 F\u0103r\u0103 intabulare, NU po\u021Bi ob\u021Bine credit ipotecar
+\u2192 F\u0103r\u0103 intabulare, construc\u021Bia ta NU are existen\u021B\u0103 juridic\u0103
+
+Vestea bun\u0103? Po\u021Bi verifica singur pe eTerra.ro cu ROeID. Sau ne scrii, \u0219i verific\u0103m noi pentru tine \u00EEn 5 minute. Gratuit.
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201EUn procent semnificativ de propriet\u0103\u021Bi din jude\u021Bul Bihor nu sunt \u00EEnc\u0103 intabulate \u2014 ceea ce blocheaz\u0103 tranzac\u021Bii, credit bancar \u0219i autoriza\u021Bii. Verificarea situa\u021Biei cadastrale este primul pas pentru orice investi\u021Bie imobiliar\u0103. Philatopo ofer\u0103 verificare gratuit\u0103 a statutului cadastral.\u201D`,
+          visual: `Fundal: Alb Cartografic #F8F9FA
+Centru: \u201EPROPRIETATEA TA E \u00CEN CARTEA FUNCIAR\u0102?\u201D Poppins Bold Slate
+Trei op\u021Biuni vizuale: \u{1F7E2} DA \u2014 \u{1F7E1} NU SUNT SIGUR \u2014 \u{1F534} NU \u0218TIU
+Footer: Logo + \u201EVerific\u0103 gratuit \u2192 0733.777.762\u201D`,
+          hashtags: [
+            "#CarteaFunciara",
+            "#Intabulare",
+            "#ProprietateaTa",
+            "#Philatopo",
+            "#CadastruOradea",
+            "#VerificaCF",
+            "#TopografieOradea",
+          ],
+          cta: "Voteaz\u0103 \u00EEn comentarii. Dac\u0103 nu e\u0219ti sigur \u2014 scrie-ne, verific\u0103m gratuit.",
+          google:
+            "Nu \u0219tii dac\u0103 proprietatea ta e intabulat\u0103? Philatopo verific\u0103 gratuit situa\u021Bia cadastral\u0103. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 7,
+          num: "#7",
+          date: "2026-03-10",
+          day: 10,
+          month: 3,
+          weekday: "Luni",
+          pilon: "act",
+          pilonLabel: "ACT",
+          pilonEmoji: "\u{1F7E2}",
+          title: "NOU: Bunuri viitoare \u2014 ce \u00EEnseamn\u0103 pentru tine",
+          subject: "Bunuri viitoare",
+          format: "CAR 4-5",
+          formatFull: "Carousel, 4-5 slide-uri",
+          week: "S\u0103pt\u0103m\u00E2na 3 (9\u201314 Martie)",
+          caption: `Ceva important s-a schimbat \u00EEn legisla\u021Bie \u0219i te afecteaz\u0103 direct dac\u0103 vrei s\u0103 cumperi un apartament \u00EEnainte de finalizarea construc\u021Biei. \u2696\uFE0F
+
+Din martie 2026, prin Legea 207/2025, se pot \u00EEnscrie \u201Ebunuri viitoare\u201D \u00EEn cartea funciar\u0103.
+
+Ce \u00EEnseamn\u0103?
+\u2192 Dezvoltatorul poate \u00EEnscrie apartamentele \u00EEnainte ca blocul s\u0103 fie gata
+\u2192 Tu, ca \u0219i cump\u0103r\u0103tor, po\u021Bi avea certitudinea c\u0103 apartamentul t\u0103u exist\u0103 juridic
+\u2192 Se reduce riscul de \u201Edublu-v\u00E2nzare\u201D a acelua\u0219i apartament
+
+Ce trebuie s\u0103 \u0219tii:
+\u26A0\uFE0F \u00CEnscrierea e op\u021Bional\u0103 \u2014 nu to\u021Bi dezvoltatorii o vor face
+\u26A0\uFE0F Ai nevoie de documenta\u021Bie topografic\u0103 specific\u0103
+\u26A0\uFE0F Taxa ANCPI pentru bunuri viitoare este nou\u0103
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201ELegea 207/2025 introduce posibilitatea \u00EEnscrierii bunurilor viitoare \u00EEn cartea funciar\u0103 \u2014 o schimbare major\u0103 pentru pia\u021Ba de dezvoltare imobiliar\u0103 din Rom\u00E2nia. Pentru dezvoltatorii care v\u00E2nd off-plan, aceasta \u00EEnseamn\u0103 o transparen\u021B\u0103 juridic\u0103 crescut\u0103 \u0219i un avantaj competitiv real.\u201D`,
+          visual: `Slide 1 \u2014 Cover: Badge \u201ENOU\u201D portocaliu, \u201EBUNURI VIITOARE \u2014 CE \u00CENSEAMN\u0102?\u201D Poppins Bold
+Slide 2 \u2014 Timeline \u00CEnainte \u2192 Acum
+Slide 3 \u2014 Beneficii cump\u0103r\u0103tori: Certitudine, Protec\u021Bie, \u00CEnregistrare
+Slide 4 \u2014 Aten\u021Bion\u0103ri \u26A0\uFE0F pe fundal Nisip Cald
+Slide 5 \u2014 CTA: \u201ECUMPERI OFF-PLAN? INFORMEAZ\u0102-TE.\u201D`,
+          hashtags: [
+            "#BunuriViitoare",
+            "#Legea207",
+            "#CarteaFunciara",
+            "#ImobiliareOradea",
+            "#Philatopo",
+            "#CadastruOradea",
+            "#OffPlan",
+          ],
+          cta: "Ai \u00EEntreb\u0103ri despre bunurile viitoare? Scrie-ne \u2014 explic\u0103m pe \u00EEn\u021Belesul tuturor.",
+          google:
+            "Noutate legislativ\u0103 2026: bunurile viitoare pot fi \u00EEnscrise \u00EEn cartea funciar\u0103. Philatopo ofer\u0103 documenta\u021Bie topografic\u0103 complet\u0103. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 8,
+          num: "#8",
+          date: "2026-03-12",
+          day: 12,
+          month: 3,
+          weekday: "Miercuri",
+          pilon: "edu",
+          pilonLabel: "EDU",
+          pilonEmoji: "\u{1F7E0}",
+          title: "Cadastru vs. Intabulare \u2014 care e diferen\u021Ba?",
+          subject: "Cadastru vs. Intabulare",
+          format: "REEL",
+          formatFull: "Reel text + muzic\u0103 (30-45s)",
+          week: "S\u0103pt\u0103m\u00E2na 3 (9\u201314 Martie)",
+          caption: `\u201ECadastru\u201D \u0219i \u201Eintabulare\u201D \u2014 le auzi mereu \u00EEmpreun\u0103, dar sunt lucruri diferite. \u{1F447}
+
+\u{1F4D0} Cadastru = partea TEHNIC\u0102
+\u2192 M\u0103sur\u0103toarea terenului sau a cl\u0103dirii
+\u2192 Se ob\u021Bin coordonatele exacte
+\u2192 Se creeaz\u0103 documenta\u021Bia tehnic\u0103
+
+\u{1F4CB} Intabulare = partea JURIDIC\u0102
+\u2192 \u00CEnscrierea dreptului de proprietate \u00EEn cartea funciar\u0103
+\u2192 Pe baza documenta\u021Biei de cadastru
+\u2192 Se depune la OCPI
+
+Pe scurt: cadastrul m\u0103soar\u0103, intabularea \u00EEnregistreaz\u0103.
+Le faci pe am\u00E2ndou\u0103, \u0219i terenul t\u0103u e protejat juridic. \u2705
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201EConfuzia \u00EEntre cadastru \u0219i intabulare este frecvent\u0103. Pe scurt: cadastrul este componenta tehnic\u0103 (m\u0103sur\u0103toare, documenta\u021Bie, coordonate), iar intabularea este componenta juridic\u0103 (\u00EEnscrierea \u00EEn cartea funciar\u0103). Ambele sunt necesare pentru ca un drept de proprietate s\u0103 fie complet \u0219i opozabil.\u201D`,
+          visual: `Reel Storyboard (text + muzic\u0103):
+0-3s: \u201ECADASTRU SAU INTABULARE?\u201D \u2014 efect de apari\u021Bie
+4-8s: Ecran split: CADASTRU (portocaliu) vs INTABULARE (slate)
+9-15s: \u201ECADASTRU = PARTEA TEHNIC\u0102\u201D + 3 bullets animate
+16-22s: \u201EINTABULARE = PARTEA JURIDIC\u0102\u201D + 3 bullets animate
+23-28s: \u201ECADASTRU M\u0102SOAR\u0102. INTABULARE \u00CENREGISTREAZ\u0102.\u201D
+29-35s: Logo Philatopo + telefon + tagline`,
+          hashtags: [
+            "#CadastruVsIntabulare",
+            "#CadastruOradea",
+            "#IntabulareOradea",
+            "#Philatopo",
+            "#TopografieOradea",
+            "#CarteaFunciara",
+          ],
+          cta: "Ai \u00EEnc\u0103 \u00EEntreb\u0103ri? Scrie-le \u00EEn comentarii \u2014 r\u0103spundem la toate.",
+          google:
+            "Cadastru = m\u0103sur\u0103toare tehnic\u0103. Intabulare = \u00EEnregistrare juridic\u0103. Philatopo se ocup\u0103 de ambele. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 9,
+          num: "#9",
+          date: "2026-03-14",
+          day: 14,
+          month: 3,
+          weekday: "Vineri",
+          pilon: "bts",
+          pilonLabel: "BTS",
+          pilonEmoji: "\u{1F535}",
+          title: "O zi din via\u021Ba unui topograf",
+          subject: "O zi din via\u021Ba unui topograf",
+          format: "CAR 5-6",
+          formatFull: "Carousel, 5-6 slide-uri \u2014 behind the scenes",
+          week: "S\u0103pt\u0103m\u00E2na 3 (9\u201314 Martie)",
+          caption: `Cum arat\u0103 o zi de lucru la Philatopo? Nu e doar \u201Emergi pe teren \u0219i m\u0103sori\u201D. E mult mai mult. \u{1F5D3}\uFE0F
+
+07:30 \u2014 Verific\u0103m dosarele \u0219i preg\u0103tim echipamentul
+08:30 \u2014 Pe teren: calibrare GNSS, trasare puncte, m\u0103sur\u0103toare
+11:00 \u2014 A doua loca\u021Bie: ridicare topografic\u0103 pentru un PUZ
+13:00 \u2014 Birou: procesare date, import \u00EEn software, verificare
+15:00 \u2014 Documenta\u021Bie: plan de amplasament, releveu, cerere de recep\u021Bie
+16:30 \u2014 Depunere dosar la OCPI \u2014 totul complet, din prima
+
+De la teren la dosar finalizat \u2014 asta facem \u00EEn fiecare zi.
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201EProcesul nostru zilnic: de la calibrarea echipamentelor GNSS diminea\u021Ba, la depunerea dosarului complet la OCPI \u00EEn aceea\u0219i zi. Fiecare etap\u0103 \u2014 teren, procesare, documenta\u021Bie, depunere \u2014 este gestionat\u0103 intern, f\u0103r\u0103 externalizare.\u201D`,
+          visual: `Slide 1 \u2014 Fotografie pe teren, \u201EO ZI DIN VIA\u021AA UNUI TOPOGRAF\u201D
+Slide 2 \u2014 07:30: Preg\u0103tire echipament
+Slide 3 \u2014 08:30: Pe teren cu GNSS
+Slide 4 \u2014 13:00: Birou, procesare date
+Slide 5 \u2014 16:30: Depunere OCPI
+Slide 6 \u2014 CTA: \u201EA\u0218A LUCR\u0102M. \u00CEN FIECARE ZI.\u201D`,
+          hashtags: [
+            "#OZiDeTopograf",
+            "#BehindTheScenes",
+            "#Philatopo",
+            "#TopografieOradea",
+            "#ViataDeTopo",
+            "#CadastruOradea",
+            "#PeTerenCuPhilatopo",
+          ],
+          cta: "Vrei s\u0103 vezi mai mult din ce facem pe teren? Urm\u0103re\u0219te-ne \u2014 post\u0103m regulat.",
+          google:
+            "O zi la Philatopo: de la teren la dosar depus la OCPI. Cadastru, intabulare, trasare \u2014 toate realizate cu precizie. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 10,
+          num: "#10",
+          date: "2026-03-17",
+          day: 17,
+          month: 3,
+          weekday: "Luni",
+          pilon: "edu",
+          pilonLabel: "EDU",
+          pilonEmoji: "\u{1F7E0}",
+          title: "5 gre\u0219eli frecvente c\u00E2nd vinzi un teren",
+          subject: "5 gre\u0219eli v\u00E2nzare teren",
+          format: "CAR 6",
+          formatFull: "Carousel, 6 slide-uri",
+          week: "S\u0103pt\u0103m\u00E2na 4 \u2014 Ziua Topografiei (16\u201321 Martie)",
+          caption: `Vinzi un teren \u0219i crezi c\u0103 \u201Ee totul \u00EEn regul\u0103\u201D? Posibil s\u0103 nu fie. \u26A0\uFE0F
+
+\u274C #1: Nu ai cadastru actualizat
+\u274C #2: Suprafa\u021Ba din acte difer\u0103 de cea real\u0103
+\u274C #3: Limitele cu vecinii nu sunt clare
+\u274C #4: Construc\u021Bii neintabulate pe teren
+\u274C #5: La\u0219i totul pe ultima sut\u0103 de metri
+
+\u{1F4A1} Solu\u021Bia? Preg\u0103te\u0219te-\u021Bi actele DIN TIMP. Noi te ajut\u0103m cu tot ce \u021Bine de topografie.
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201ETranzac\u021Biile imobiliare blocate din motive cadastrale sunt mai frecvente dec\u00E2t ar trebui. Cele mai comune probleme: diferen\u021Be de suprafa\u021B\u0103, limite neclare, construc\u021Bii neintabulate. Recomandarea noastr\u0103: verificare cadastral\u0103 cu minim 30 de zile \u00EEnainte de tranzac\u021Bie.\u201D`,
+          visual: `Slide 1 \u2014 Cover: Num\u0103rul \u201E5\u201D mare, \u201EGRE\u0218ELI C\u00C2ND VINZI UN TEREN\u201D
+Slide-urile 2-6: C\u00E2te o gre\u0219eal\u0103 cu num\u0103r, titlu, explica\u021Bie \u0219i icon
+Slide 6: \u201ESOLU\u021AIA?\u201D + CTA Philatopo pe fundal Portocaliu`,
+          hashtags: [
+            "#GreseliCadastruale",
+            "#VanzareTeren",
+            "#CadastruOradea",
+            "#Philatopo",
+            "#TopografieOradea",
+            "#IntabulareOradea",
+            "#SfaturiImobiliare",
+          ],
+          cta: "Vinzi un teren? Scrie-ne \u0219i verific\u0103m dac\u0103 dosarul t\u0103u e complet. Gratuit, \u00EEn 30 de minute.",
+          google:
+            "5 gre\u0219eli frecvente la v\u00E2nzarea unui teren \u2014 lipsa cadastrului, diferen\u021Be de suprafa\u021B\u0103, limite neclare. Philatopo te ajut\u0103. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 11,
+          num: "#11",
+          date: "2026-03-19",
+          day: 19,
+          month: 3,
+          weekday: "Miercuri",
+          pilon: "edu",
+          pilonLabel: "EDU",
+          pilonEmoji: "\u{1F7E0}",
+          title: "Ce este un plan de situa\u021Bie \u0219i c\u00E2nd ai nevoie de el?",
+          subject: "Plan de situa\u021Bie",
+          format: "REEL",
+          formatFull: "Reel text + muzic\u0103 (30-45s)",
+          week: "S\u0103pt\u0103m\u00E2na 4 \u2014 Ziua Topografiei (16\u201321 Martie)",
+          caption: `Vrei s\u0103 construe\u0219ti? Atunci ai nevoie de un plan de situa\u021Bie. \u{1F3D7}\uFE0F
+
+Planul de situa\u021Bie = o hart\u0103 detaliat\u0103 a terenului t\u0103u care arat\u0103:
+\u2192 Limitele exacte ale propriet\u0103\u021Bii
+\u2192 Construc\u021Biile existente
+\u2192 Vecin\u0103t\u0103\u021Bile
+\u2192 Coordonatele \u00EEn sistem Stereo 70
+\u2192 Accesul la drum
+\u2192 Re\u021Belele de utilit\u0103\u021Bi
+
+C\u00E2nd ai nevoie:
+\u2705 La autoriza\u021Bia de construire (OBLIGATORIU)
+\u2705 La certificatul de urbanism
+\u2705 La PUZ sau PUD
+\u2705 La dezmembrare sau alipire
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201EPlanul de situa\u021Bie este documentul topografic obligatoriu pentru orice autoriza\u021Bie de construire. Include: limite de proprietate, construc\u021Bii existente, coordonate Stereo 70. Philatopo livreaz\u0103 \u00EEn format CAD, gata de integrat \u00EEn proiectul de arhitectur\u0103.\u201D`,
+          visual: `Reel Storyboard:
+0-3s: \u201ECE ESTE UN PLAN DE SITUA\u021AIE?\u201D zoom-in
+4-10s: Teren se completeaz\u0103 progresiv cu limite, construc\u021Bie, coordonate
+11-18s: \u201EC\u00C2ND AI NEVOIE:\u201D + lista animat\u0103
+19-25s: Plan de situa\u021Bie real (anonimizat)
+26-30s: \u201ESUN\u0102-NE. M\u0102SUR\u0102M. LIVR\u0102M.\u201D + Logo`,
+          hashtags: [
+            "#PlanDeSituatie",
+            "#AutorizatieConstruire",
+            "#Philatopo",
+            "#TopografieOradea",
+            "#CadastruOradea",
+            "#Construiesti",
+            "#UrbanismOradea",
+          ],
+          cta: "Construe\u0219ti \u00EEn 2026? Hai s\u0103 preg\u0103tim planul de situa\u021Bie. Sun\u0103 sau scrie-ne.",
+          google:
+            "Plan de situa\u021Bie \u2014 obligatoriu la autoriza\u021Bia de construire. Philatopo: m\u0103sur\u0103toare + livrare documenta\u021Bie. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 12,
+          num: "#12",
+          date: "2026-03-21",
+          day: 21,
+          month: 3,
+          weekday: "Vineri",
+          pilon: "brand",
+          pilonLabel: "BRAND",
+          pilonEmoji: "\u{1F7E4}",
+          title: "Ziua Topografiei \u2014 post celebrativ + echipa",
+          subject: "Ziua Interna\u021Bional\u0103 a Topografiei",
+          format: "SI",
+          formatFull: "Single Image 1080\u00D71080",
+          week: "S\u0103pt\u0103m\u00E2na 4 \u2014 Ziua Topografiei (16\u201321 Martie)",
+          caption: `21 Martie \u2014 Ziua Interna\u021Bional\u0103 a Topografiei. \u{1F4D0}
+
+De mii de ani, oamenii m\u0103soar\u0103 p\u0103m\u00E2ntul. De la piramidele Egiptului, la drumurile romane, la cadastrul digital din 2026 \u2014 topografia a fost mereu acolo unde civiliza\u021Bia avea nevoie de precizie.
+
+Noi, la Philatopo, facem asta \u00EEn fiecare zi: transform\u0103m terenul \u00EEn coordonate, coordonatele \u00EEn documente, documentele \u00EEn siguran\u021B\u0103 juridic\u0103.
+
+\u0218i o facem pentru c\u0103 iubim ceea ce facem. De asta ne-am numit Philatopo \u2014 iubirea de loc.
+
+La mul\u021Bi ani tuturor topografilor din Rom\u00E2nia! \u{1F1F7}\u{1F1F4}
+
+Precizie la fiecare punct. Azi \u0219i \u00EEn fiecare zi.
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201E21 Martie \u2014 Ziua Interna\u021Bional\u0103 a Topografiei. De la cadastrul roman la tehnologia GNSS, topografia r\u0103m\u00E2ne funda\u021Bia oric\u0103rei construc\u021Bii, tranzac\u021Bii sau investi\u021Bii imobiliare. La mul\u021Bi ani tuturor colegilor topografi!\u201D`,
+          visual: `Fotografie echip\u0103 Philatopo pe teren
+Overlay gradient Slate 60-70%
+Text: \u201E21 MARTIE \u2014 ZIUA TOPOGRAFIEI\u201D Poppins Bold
+Sub text: \u201EPrecizie la fiecare punct.\u201D Inter Portocaliu
+Alternativ\u0103: Compas logo m\u0103rit artistic + text central`,
+          hashtags: [
+            "#ZiuaTopografiei",
+            "#21Martie",
+            "#TopografieOradea",
+            "#Philatopo",
+            "#LaMultiAni",
+            "#PrecizieLaFiecarePunct",
+            "#TopografRomania",
+          ],
+          cta: "La mul\u021Bi ani, topografi! Dac\u0103 ai nevoie de noi, suntem aici \u2014 azi \u0219i \u00EEn fiecare zi.",
+          google:
+            "21 Martie \u2014 Ziua Topografiei! Philatopo Oradea: cadastru, intabulare, trasare cu precizie. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 13,
+          num: "#13",
+          date: "2026-03-24",
+          day: 24,
+          month: 3,
+          weekday: "Luni",
+          pilon: "edu",
+          pilonLabel: "EDU",
+          pilonEmoji: "\u{1F7E0}",
+          title: "Dezmembrare teren: c\u00E2nd \u0219i de ce?",
+          subject: "Dezmembrare teren",
+          format: "CAR 5",
+          formatFull: "Carousel, 5 slide-uri",
+          week: "S\u0103pt\u0103m\u00E2na 5 (23\u201328 Martie)",
+          caption: `Ai un teren mare \u0219i vrei s\u0103 vinzi doar o parte? Sau ai mo\u0219tenit un teren \u00EEmpreun\u0103 cu fra\u021Bii t\u0103i? Ai nevoie de dezmembrare. \u{1F4CF}
+
+Ce este dezmembrarea?
+= \u00CEmp\u0103r\u021Birea unui teren \u00EEn dou\u0103 sau mai multe loturi separate, fiecare cu CF propriu.
+
+C\u00E2nd ai nevoie:
+\u2705 Vinzi o parte din teren
+\u2705 Mo\u0219tenire \u2014 \u00EEmp\u0103r\u021Bire \u00EEntre mo\u0219tenitori
+\u2705 Vrei s\u0103 construe\u0219ti pe un lot separat
+\u2705 Dezvoltare imobiliar\u0103 \u2014 parcelare
+
+Ce presupune:
+1. M\u0103sur\u0103toare pe teren (GNSS)
+2. Proiect de dezmembrare
+3. Aviz de la prim\u0103rie
+4. Depunere la OCPI
+5. Rezultat: 2+ loturi cu CF propriu
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201EDezmembrarea cadastral\u0103 este procedura prin care un teren cu un singur num\u0103r cadastral este \u00EEmp\u0103r\u021Bit \u00EEn dou\u0103 sau mai multe loturi, fiecare cu carte funciar\u0103 proprie. Philatopo gestioneaz\u0103 \u00EEntregul proces: de la m\u0103sur\u0103toare GNSS, la documenta\u021Bie \u0219i depunere OCPI.\u201D`,
+          visual: `Slide 1 \u2014 Cover: \u201EDEZMEMBRARE TEREN\u201D + grafic teren \u2192 2 loturi
+Slide 2 \u2014 Ce este dezmembrarea: teren cu 1 CF \u2192 2 CF-uri
+Slide 3 \u2014 C\u00E2nd ai nevoie: 4 situa\u021Bii cu iconuri
+Slide 4 \u2014 Cum func\u021Bioneaz\u0103: Flowchart 5 pa\u0219i
+Slide 5 \u2014 CTA: \u201EAI UN TEREN DE DEZMEMBRAT?\u201D`,
+          hashtags: [
+            "#Dezmembrareteren",
+            "#CadastruOradea",
+            "#Philatopo",
+            "#TopografieOradea",
+            "#Parcelare",
+            "#Mostenire",
+            "#TerenDeVanzare",
+          ],
+          cta: "Ai un teren de \u00EEmp\u0103r\u021Bit? Scrie-ne, \u00EE\u021Bi spunem exact ce presupune \u0219i c\u00E2t cost\u0103.",
+          google:
+            "Dezmembrare teren Oradea \u2014 \u00EEmp\u0103r\u021Bire cadastral\u0103 cu CF separat pentru fiecare lot. Philatopo. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 14,
+          num: "#14",
+          date: "2026-03-26",
+          day: 26,
+          month: 3,
+          weekday: "Miercuri",
+          pilon: "bts",
+          pilonLabel: "BTS",
+          pilonEmoji: "\u{1F535}",
+          title: "Cum lucr\u0103m: de la teren la dosar finalizat",
+          subject: "Studiu de caz: cum lucr\u0103m",
+          format: "CAR 5-6",
+          formatFull: "Carousel, 5-6 slide-uri \u2014 studiu de caz",
+          week: "S\u0103pt\u0103m\u00E2na 5 (23\u201328 Martie)",
+          caption: `Vrei s\u0103 vezi concret cum func\u021Bioneaz\u0103 un proiect de cadastru? De la primul telefon p\u00E2n\u0103 la dosarul depus la OCPI? \u{1F4CB}
+
+Pasul 1 \u2014 Ne contactezi
+Prime\u0219ti r\u0103spuns \u00EEn max 30 de minute. \u00CE\u021Bi spunem c\u00E2t cost\u0103.
+
+Pasul 2 \u2014 Venim pe teren
+M\u0103sur\u0103m cu echipamente GNSS. Tu nu trebuie s\u0103 faci nimic.
+
+Pasul 3 \u2014 Proces\u0103m datele
+Import coordonate, creare documenta\u021Bie, verificare.
+
+Pasul 4 \u2014 Preg\u0103tim dosarul complet
+Tu doar semnezi.
+
+Pasul 5 \u2014 Depunem la OCPI
+Dosarul complet, depus \u00EEn 24h. Prime\u0219ti num\u0103r \u0219i termen.
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201EProcesul Philatopo: r\u0103spuns \u00EEn 30 de minute, m\u0103sur\u0103toare GNSS pe teren, procesare \u0219i documenta\u021Bie complet\u0103, depunere la OCPI \u00EEn 24 de ore. Fiecare etap\u0103 este gestionat\u0103 intern \u2014 f\u0103r\u0103 externalizare, f\u0103r\u0103 \u00EEnt\u00E2rzieri.\u201D`,
+          visual: `Slide 1 \u2014 \u201ECUM LUCR\u0102M LA PHILATOPO\u201D + Flowchart icon
+Slide 2 \u2014 Pasul 01: Contact, r\u0103spuns 30 min
+Slide 3 \u2014 Pasul 02: Teren cu GNSS
+Slide 4 \u2014 Pasul 03-04: Procesare + dosar
+Slide 5 \u2014 Pasul 05: Depunere OCPI, badge \u2705 GATA
+Slide 6 \u2014 CTA: \u201ESIMPLU. CLAR. F\u0102R\u0102 SURPRIZE.\u201D`,
+          hashtags: [
+            "#CumLucram",
+            "#Philatopo",
+            "#CadastruOradea",
+            "#TopografieOradea",
+            "#ProcesTransparent",
+            "#FaraSurprize",
+            "#DosarComplet",
+          ],
+          cta: "Ai nevoie de cadastru? Sun\u0103-ne \u0219i \u00EEn 30 de minute \u0219tii tot: pre\u021B, acte, termen.",
+          google:
+            "Cum lucr\u0103m la Philatopo: r\u0103spuns \u00EEn 30 min, m\u0103sur\u0103toare GNSS, dosar depus la OCPI \u00EEn 24h. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 15,
+          num: "#15",
+          date: "2026-03-28",
+          day: 28,
+          month: 3,
+          weekday: "Vineri",
+          pilon: "int",
+          pilonLabel: "INT",
+          pilonEmoji: "\u{1F7E3}",
+          title: "Quiz: Adev\u0103rat sau Fals despre cadastru",
+          subject: "Quiz Adev\u0103rat sau Fals",
+          format: "REEL",
+          formatFull: "Reel text + muzic\u0103 (45-60s)",
+          week: "S\u0103pt\u0103m\u00E2na 5 (23\u201328 Martie)",
+          caption: `C\u00E2t de bine te pricepi la cadastru? Hai s\u0103 test\u0103m cu un quiz rapid. \u{1F9E0}
+
+\u2753 1. \u201ECadastrul gratuit \u00EEnseamn\u0103 c\u0103 nu mai am nevoie de topograf.\u201D
+\u274C FALS
+
+\u2753 2. \u201EDac\u0103 am extras CF, am \u0219i cadastru.\u201D
+\u274C FALS
+
+\u2753 3. \u201EIntabularea este obligatorie la v\u00E2nzare.\u201D
+\u2705 ADEV\u0102RAT
+
+\u2753 4. \u201ETopograful doar m\u0103soar\u0103 terenul.\u201D
+\u274C FALS
+
+C\u00E2te ai nimerit? Scrie \u00EEn comentarii! \u{1F447}
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201E4 mituri despre cadastru demontate: 1) Cadastrul gratuit elimin\u0103 nevoia de topograf \u2014 fals. 2) Extrasul CF confirm\u0103 acurate\u021Bea cadastrului \u2014 fals. 3) Intabularea este op\u021Bional\u0103 \u2014 fals din 2023. 4) Topograful doar m\u0103soar\u0103 \u2014 fals, gestion\u0103m \u00EEntregul flux.\u201D`,
+          visual: `Reel Storyboard:
+0-3s: \u201EADEV\u0102RAT SAU FALS? \u{1F914}\u201D
+4-10s: Afirma\u021Bia #1 \u2192 \u201E\u274C FALS\u201D \u0219tampil\u0103 ro\u0219ie
+11-18s: Afirma\u021Bia #2 \u2192 \u201E\u274C FALS\u201D
+19-26s: Afirma\u021Bia #3 \u2192 \u201E\u2705 ADEV\u0102RAT\u201D \u0219tampil\u0103 verde
+27-34s: Afirma\u021Bia #4 \u2192 \u201E\u274C FALS\u201D
+35-40s: \u201EC\u00C2T AI GHICIT? SCRIE \u00CEN COMENTARII!\u201D
+41-45s: Logo + tagline + telefon`,
+          hashtags: [
+            "#QuizCadastru",
+            "#AdevaratSauFals",
+            "#Philatopo",
+            "#TopografieOradea",
+            "#CadastruOradea",
+            "#MituriCadastru",
+            "#StiaiCa",
+          ],
+          cta: "C\u00E2te ai ghicit? Scrie \u00EEn comentarii. \u0218i dac\u0103 ai \u00EEntreb\u0103ri reale despre cadastru \u2014 ne g\u0103se\u0219ti mereu aici.",
+          google:
+            "C\u00E2t \u0219tii despre cadastru? 4 mituri demontate de Philatopo. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 16,
+          num: "#16",
+          date: "2026-03-30",
+          day: 30,
+          month: 3,
+          weekday: "Luni",
+          pilon: "act",
+          pilonLabel: "ACT",
+          pilonEmoji: "\u{1F7E2}",
+          title: "Prim\u0103vara = sezonul construc\u021Biilor. Ai terenul preg\u0103tit?",
+          subject: "Prim\u0103vara = sezonul construc\u021Biilor",
+          format: "SI",
+          formatFull: "Single Image 1080\u00D71080",
+          week: "S\u0103pt\u0103m\u00E2na 6 (30\u201331 Martie)",
+          caption: `A venit prim\u0103vara. \u0218i dac\u0103 planurile tale pentru 2026 includ o construc\u021Bie, acum e momentul s\u0103 verifici dac\u0103 terenul e preg\u0103tit. \u{1F331}\u{1F3D7}\uFE0F
+
+\u00CEnainte de a turna funda\u021Bia, ai nevoie de:
+
+\u2705 Cadastru actualizat
+\u2705 Plan de situa\u021Bie \u2014 obligatoriu pentru autoriza\u021Bia de construire
+\u2705 Trasare limite
+\u2705 Trasare axe funda\u021Bie
+
+Toate astea le rezolv\u0103m noi. Rapid, cu echipamente GNSS, f\u0103r\u0103 b\u0103t\u0103i de cap.
+
+\u{1F4A1} Sfat: nu l\u0103sa topografia pe ultima sut\u0103 de metri. Programeaz\u0103-te acum.
+
+\u{1F4F2} 0733.777.762 | philatopo.ro`,
+          linkedin: `\u201EOdat\u0103 cu \u00EEnceperea sezonului de construc\u021Bii, verifica\u021Bi documenta\u021Bia topografic\u0103: cadastru actualizat, plan de situa\u021Bie, trasare limite \u0219i axe de funda\u021Bie. Philatopo ofer\u0103 pachete complete pentru constructori \u0219i dezvoltatori.\u201D`,
+          visual: `Fotografie teren/\u0219antier la \u00EEnceput de prim\u0103var\u0103
+Overlay gradient Slate 60%
+Text: \u201EPRIM\u0102VARA = SEZONUL CONSTRUC\u021AIILOR\u201D Poppins Bold
+Subtitlu: \u201EAi terenul preg\u0103tit?\u201D Inter Portocaliu
+Checklist: \u2705 Cadastru \u00B7 \u2705 Plan de situa\u021Bie \u00B7 \u2705 Trasare`,
+          hashtags: [
+            "#SezonulConstructiilor",
+            "#Construiesti2026",
+            "#CadastruOradea",
+            "#Philatopo",
+            "#TopografieOradea",
+            "#PlanDeSituatie",
+            "#TrasareTeren",
+          ],
+          cta: "Construe\u0219ti \u00EEn 2026? Sun\u0103 acum \u0219i preg\u0103tim terenul.",
+          google:
+            "Prim\u0103vara 2026 \u2014 sezonul construc\u021Biilor. Philatopo: cadastru, plan de situa\u021Bie, trasare teren. Sun\u0103: 0733.777.762",
+        },
+        {
+          id: 17,
+          num: "BLOG",
+          date: "2026-03-17",
+          day: 17,
+          month: 3,
+          weekday: "~15-20 Martie",
+          pilon: "blog",
+          pilonLabel: "BLOG",
+          pilonEmoji: "\u{1F4DD}",
+          title:
+            "Ghid complet: C\u00E2t cost\u0103 cadastrul \u0219i intabularea \u00EEn Oradea \u00EEn 2026",
+          subject: "Articol SEO Blog",
+          format: "ARTICOL",
+          formatFull: "Articol blog ~1.500 cuvinte",
+          week: "S\u0103pt\u0103m\u00E2na 4 \u2014 Ziua Topografiei (16\u201321 Martie)",
+          caption: `Articol blog SEO complet cu pre\u021Buri reale pentru toate serviciile de cadastru \u0219i intabulare \u00EEn Oradea.
+
+Sec\u021Biuni:
+\u2192 Ce include pre\u021Bul unui cadastru
+\u2192 Pre\u021Buri pe tip de proprietate (apartament, cas\u0103, teren, trasare, ridicare topo, dezmembrare)
+\u2192 De ce difer\u0103 pre\u021Burile de la o firm\u0103 la alta
+\u2192 Cum func\u021Bioneaz\u0103 procesul la Philatopo
+\u2192 Cadastru gratuit \u2014 se aplic\u0103 \u00EEn cazul t\u0103u?
+
+Target SEO: \u201Epre\u021B cadastru Oradea 2026\u201D, \u201Ec\u00E2t cost\u0103 intabularea Oradea\u201D
+URL: philatopo.ro/blog/pret-cadastru-oradea-2026`,
+          linkedin: `Articol de referin\u021B\u0103 pentru pia\u021Ba din Oradea \u2014 share pe LinkedIn cu introducere profesional\u0103.`,
+          visual: `Publicare pe philatopo.ro/blog
+Schema markup: FAQPage + LocalBusiness
+Internal links din post\u0103rile #2, #4, #8, #13`,
+          hashtags: [
+            "#PretCadastru2026",
+            "#CadastruOradea",
+            "#GhidComplet",
+            "#Philatopo",
+            "#TopografieOradea",
+            "#IntabulareOradea",
+            "#BlogTopografie",
+          ],
+          cta: "Cite\u0219te ghidul complet pe philatopo.ro/blog",
+          google:
+            "Pre\u021Buri cadastru Oradea 2026: apartament de la 920 RON, cas\u0103/teren de la 1.120 RON. Ghid complet Philatopo.",
+        },
+      ];
+
+      // ── Pillar Colors ──
+      const pilonColors = {
+        edu: "var(--edu)",
+        bts: "var(--bts)",
+        act: "var(--act)",
+        int: "var(--int)",
+        brand: "var(--brand)",
+        blog: "var(--blog)",
+      };
+
+      // ── Build Calendar Grids ──
+      function buildMonthGrid(containerId, year, month, startDayOfWeek) {
+        const container = document.getElementById(containerId);
+        const daysInMonth = new Date(year, month, 0).getDate();
+        const firstDay = new Date(year, month - 1, 1).getDay();
+        const offset = firstDay === 0 ? 6 : firstDay - 1;
+
+        let html = "";
+        for (let i = 0; i < offset; i++) {
+          html += '<div class="day-cell empty"></div>';
+        }
+        for (let d = 1; d <= daysInMonth; d++) {
+          const jsDay = new Date(year, month - 1, d).getDay();
+          const isWeekend = jsDay === 0 || jsDay === 6;
+          const isToday = d === 21 && month === 2 && year === 2026;
+          const dayPosts = posts.filter(
+            (p) => p.day === d && p.month === month && p.id !== 17
+          );
+          const blogOnDay =
+            month === 3 && d >= 15 && d <= 20
+              ? posts.find((p) => p.id === 17)
+              : null;
+
+          html += `<div class="day-cell ${isWeekend ? "weekend" : ""} ${
+            isToday ? "today" : ""
+          }">`;
+          html += `<div class="day-number">${d}</div>`;
+          dayPosts.forEach((p) => {
+            html += `<div class="post-chip" data-pilon="${p.pilon}" data-id="${
+              p.id
+            }" style="background:${pilonColors[p.pilon]}" onclick="openModal(${
+              p.id
+            })">`;
+            html += `<span class="format-tag">${p.format}</span>${
+              p.subject.length > 22
+                ? p.subject.substring(0, 20) + "\u2026"
+                : p.subject
+            }`;
+            html += "</div>";
+          });
+          if (blogOnDay && d === 17) {
+            html += `<div class="post-chip" data-pilon="blog" data-id="17" style="background:${pilonColors.blog}" onclick="openModal(17)">`;
+            html += `<span class="format-tag">BLOG</span>Articol SEO`;
+            html += "</div>";
+          }
+          html += "</div>";
+        }
+        const totalCells = offset + daysInMonth;
+        const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+        for (let i = 0; i < remaining; i++) {
+          html += '<div class="day-cell empty"></div>';
+        }
+        container.innerHTML = html;
+      }
+
+      buildMonthGrid("febGrid", 2026, 2);
+      buildMonthGrid("marGrid", 2026, 3);
+
+      // ── Build List View ──
+      function buildListView() {
+        const container = document.getElementById("listView");
+        const weeks = {};
+        posts.forEach((p) => {
+          if (!weeks[p.week]) weeks[p.week] = [];
+          weeks[p.week].push(p);
+        });
+        let html = "";
+        Object.keys(weeks).forEach((weekName) => {
+          html += `<div class="mb-8">`;
+          html += `<div class="font-poppins text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3 pl-1">${weekName}</div>`;
+          weeks[weekName].forEach((p) => {
+            const monthNames = { 2: "Feb", 3: "Mar" };
+            html += `<div class="list-card" data-pilon="${p.pilon}" data-id="${
+              p.id
+            }" style="border-left-color:${
+              pilonColors[p.pilon]
+            }" onclick="openModal(${p.id})">`;
+            html += `<div class="list-date"><div class="day">${
+              p.day
+            }</div><div class="weekday">${p.weekday.substring(
+              0,
+              3
+            )}</div><div class="month-sm">${
+              monthNames[p.month] || ""
+            }</div></div>`;
+            html += `<div class="list-content">`;
+            html += `<h3>${p.num} \u2014 ${p.subject}</h3>`;
+            html += `<div class="subtitle">${p.title}</div>`;
+            html += `<div class="list-badges">`;
+            html += `<span class="badge" style="background:${
+              pilonColors[p.pilon]
+            }; color:#fff">${p.pilonEmoji} ${p.pilonLabel}</span>`;
+            html += `<span class="badge badge-format">${p.formatFull}</span>`;
+            html += `</div></div></div>`;
+          });
+          html += `</div>`;
+        });
+        container.innerHTML = html;
+      }
+      buildListView();
+
+      // ── Modal ──
+      function openModal(id) {
+        const p = posts.find((x) => x.id === id);
+        if (!p) return;
+        const monthNames = { 2: "Februarie", 3: "Martie" };
+        document.getElementById(
+          "modalPostNum"
+        ).textContent = `Postarea ${p.num}`;
+        document.getElementById("modalPostNum").style.color =
+          pilonColors[p.pilon];
+        document.getElementById("modalTitle").textContent = p.title;
+        document.getElementById("modalMeta").innerHTML = `
+        <span><strong>${p.weekday}, ${p.day} ${
+          monthNames[p.month]
+        } 2026</strong></span>
+        <span>${p.pilonEmoji} ${p.pilonLabel}</span>
+        <span>${p.formatFull}</span>
+    `;
+
+        const body = document.getElementById("modalBody");
+        body.innerHTML = `
+        <div class="modal-section">
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="switchTab(this, 'tab-fb-${
+                  p.id
+                }')">FB / IG</button>
+                <button class="tab-btn" onclick="switchTab(this, 'tab-li-${
+                  p.id
+                }')">LinkedIn</button>
+                <button class="tab-btn" onclick="switchTab(this, 'tab-gb-${
+                  p.id
+                }')">Google Business</button>
+            </div>
+            <div class="tab-content active" id="tab-fb-${p.id}">
+                <div class="caption">${escapeHtml(p.caption)}</div>
+            </div>
+            <div class="tab-content" id="tab-li-${p.id}">
+                <div class="linkedin-text">${escapeHtml(p.linkedin)}</div>
+            </div>
+            <div class="tab-content" id="tab-gb-${p.id}">
+                <div class="google-text">${escapeHtml(p.google)}</div>
+            </div>
+        </div>
+        <div class="modal-section">
+            <h4>\u{1F3A8} Brief Vizual (Designer)</h4>
+            <div class="visual-desc">${escapeHtml(p.visual)}</div>
+        </div>
+        <div class="modal-section">
+            <h4># Hashtag-uri</h4>
+            <div class="hashtags">${p.hashtags
+              .map((h) => `<span class="hashtag">${h}</span>`)
+              .join("")}</div>
+        </div>
+        <div class="modal-section">
+            <h4>\u{1F4E3} CTA</h4>
+            <div class="cta-text">${escapeHtml(p.cta)}</div>
+        </div>
+    `;
+
+        document.getElementById("modalOverlay").classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal() {
+        document.getElementById("modalOverlay").classList.remove("open");
+        document.body.style.overflow = "";
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      function switchTab(btn, tabId) {
+        const parent = btn.closest(".modal-section");
+        parent
+          .querySelectorAll(".tab-btn")
+          .forEach((b) => b.classList.remove("active"));
+        parent
+          .querySelectorAll(".tab-content")
+          .forEach((t) => t.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(tabId).classList.add("active");
+      }
+
+      document
+        .getElementById("modalClose")
+        .addEventListener("click", closeModal);
+      document.getElementById("modalOverlay").addEventListener("click", (e) => {
+        if (e.target === document.getElementById("modalOverlay")) closeModal();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+      });
+
+      // ── View Toggle ──
+      document.querySelectorAll(".view-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".view-btn")
+            .forEach((b) => {
+              b.classList.remove("active", "bg-white", "text-slate_deep", "shadow-sm");
+              b.classList.add("text-slate-500");
+            });
+          btn.classList.add("active", "bg-white", "text-slate_deep", "shadow-sm");
+          btn.classList.remove("text-slate-500");
+          const view = btn.dataset.view;
+          if (view === "calendar") {
+            document.getElementById("calendarView").classList.remove("hidden");
+            document.getElementById("calendarView").style.display = "";
+            document.getElementById("listView").classList.remove("active");
+          } else {
+            document.getElementById("calendarView").classList.add("hidden");
+            document.getElementById("calendarView").style.display = "none";
+            document.getElementById("listView").classList.add("active");
+          }
+        });
+      });
+
+      // Init toggle button styles
+      document.querySelectorAll(".view-btn").forEach((btn) => {
+        if (btn.classList.contains("active")) {
+          btn.classList.add("bg-white", "text-slate_deep", "shadow-sm");
+        } else {
+          btn.classList.add("text-slate-500");
+        }
+      });
+
+      // ── Filter by Pillar ──
+      let activeFilter = "all";
+      document.querySelectorAll(".legend-item").forEach((item) => {
+        item.addEventListener("click", () => {
+          const filter = item.dataset.filter;
+          activeFilter = filter;
+          document.querySelectorAll(".legend-item").forEach((li) => {
+            if (filter === "all") {
+              li.classList.remove("dimmed", "ring-2", "ring-offset-1");
+              li.style.opacity = "";
+              if (li.dataset.filter === "all") {
+                li.classList.add("ring-2", "ring-offset-1");
+                li.style.opacity = "";
+              }
+            } else {
+              li.classList.remove("ring-2", "ring-offset-1");
+              if (li.dataset.filter === filter) {
+                li.classList.add("ring-2", "ring-offset-1");
+                li.style.opacity = "";
+              } else if (li.dataset.filter !== "all") {
+                li.style.opacity = "0.4";
+              } else {
+                li.style.opacity = "";
+              }
+            }
+          });
+          document.querySelectorAll(".post-chip").forEach((chip) => {
+            if (filter === "all") {
+              chip.classList.remove("hidden");
+            } else {
+              chip.classList.toggle("hidden", chip.dataset.pilon !== filter);
+            }
+          });
+          document.querySelectorAll(".list-card").forEach((card) => {
+            if (filter === "all") {
+              card.classList.remove("hidden");
+            } else {
+              card.classList.toggle("hidden", card.dataset.pilon !== filter);
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

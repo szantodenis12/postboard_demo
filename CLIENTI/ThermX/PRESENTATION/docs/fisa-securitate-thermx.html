@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>thermX — Fișă de Securitate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6B00;
+      --orange-light: #FFF3E8;
+      --blue: #1B3A5C;
+      --blue-light: #E8F0F8;
+      --red: #D32F2F;
+      --red-light: #FDECEA;
+      --green: #2E7D32;
+      --green-light: #E8F5E9;
+      --text: #1a1a1a;
+      --text-muted: #555;
+      --border: #e0e0e0;
+      --bg: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    @page {
+      size: A4;
+      margin: 20mm 18mm 25mm 18mm;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 16px;
+      border-bottom: 3px solid var(--orange);
+      margin-bottom: 28px;
+    }
+
+    .doc-header__logo img { height: 52px; }
+
+    .doc-header__company {
+      text-align: right;
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .doc-header__company strong {
+      color: var(--text);
+      font-size: 9pt;
+    }
+
+    .doc-title {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .doc-title h1 {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 22pt;
+      font-weight: 800;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .doc-title .subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 12pt;
+      font-weight: 600;
+      color: var(--blue);
+      text-transform: uppercase;
+    }
+
+    .doc-title .doc-ref {
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .section-title {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 12pt;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 8px 14px;
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      margin: 24px 0 12px;
+    }
+
+    .section-title span.num {
+      color: var(--orange);
+      margin-right: 6px;
+    }
+
+    .sub-title {
+      font-weight: 600;
+      font-size: 10.5pt;
+      color: var(--text);
+      margin: 12px 0 6px;
+    }
+
+    p { margin-bottom: 8px; }
+
+    .warning-box {
+      background: var(--red-light);
+      border-left: 4px solid var(--red);
+      padding: 12px 16px;
+      margin: 12px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning-box strong { color: var(--red); }
+
+    .safe-box {
+      background: var(--green-light);
+      border-left: 4px solid var(--green);
+      padding: 12px 16px;
+      margin: 12px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .safe-box strong { color: var(--green); }
+
+    .info-box {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 12px 16px;
+      margin: 12px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .highlight-box {
+      background: var(--orange-light);
+      border-left: 4px solid var(--orange);
+      padding: 12px 16px;
+      margin: 12px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 10pt;
+    }
+
+    th, td {
+      padding: 8px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--blue);
+      color: #fff;
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 600;
+      font-size: 9.5pt;
+      text-transform: uppercase;
+    }
+
+    tr:nth-child(even) { background: #f8f9fa; }
+
+    ul, ol {
+      margin: 6px 0 10px 22px;
+    }
+
+    li { margin-bottom: 4px; }
+
+    .cols-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 12px 0;
+    }
+
+    .step-box {
+      background: #f8f9fa;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 8px 0;
+    }
+
+    .step-box__title {
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 700;
+      font-size: 10pt;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    .doc-footer {
+      margin-top: 32px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8pt;
+      color: var(--text-muted);
+    }
+
+    .doc-footer a {
+      color: var(--orange);
+      text-decoration: none;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 18px 0;
+    }
+
+    @media print {
+      body { font-size: 9.5pt; line-height: 1.45; }
+      .doc-header { margin-bottom: 16px; padding-bottom: 12px; }
+      .section-title { margin-top: 16px; margin-bottom: 8px; page-break-after: avoid; }
+      .no-print { display: none; }
+      .page-break { page-break-before: always; }
+      a { color: var(--text) !important; text-decoration: none; }
+      table { page-break-inside: avoid; }
+      tr { page-break-inside: avoid; }
+      .warning-box, .safe-box, .info-box, .highlight-box { page-break-inside: avoid; }
+      .step-box { page-break-inside: avoid; }
+      .cols-2 { page-break-inside: avoid; }
+      p { orphans: 3; widows: 3; }
+      h2, h3 { page-break-after: avoid; }
+    }
+
+    @media screen {
+      body {
+        max-width: 210mm;
+        margin: 20px auto;
+        padding: 30px 28px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border-radius: 4px;
+      }
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: 'Exo 2', sans-serif;
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge--green { background: var(--green); color: #fff; }
+    .badge--red { background: var(--red); color: #fff; }
+    .badge--orange { background: var(--orange); color: #fff; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Nano Revolution SRL</strong><br>
+      Str. Ogorului Nr. 3, Oradea<br>
+      Jud. Bihor, 410554, România<br>
+      <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a><br>
+      +40 771 445 577
+    </div>
+  </header>
+
+  <!-- ═══ TITLE ═══ -->
+  <div class="doc-title">
+    <h1>Fișă de Securitate</h1>
+    <div class="subtitle">thermX Insulation Coating</div>
+    <div class="doc-ref">Ref. SDS-THERMX-2026 &nbsp;|&nbsp; Rev. 03 &nbsp;|&nbsp; Data: 07.03.2026 &nbsp;|&nbsp; Conforme Reg. (CE) nr. 1907/2006 (REACH)</div>
+  </div>
+
+
+  <!-- ═══ SECTION 1 ═══ -->
+  <div class="section-title"><span class="num">1.</span> Identificarea substanței / amestecului și a societății</div>
+
+  <div class="cols-2">
+    <div>
+      <p class="sub-title">Identificare produs</p>
+      <p><strong>thermX INSULATION COATING</strong></p>
+      <p>Liant organic pentru utilizare civilă și industrială, interior și exterior.</p>
+      <p><strong>Domenii de aplicare:</strong> arhitectură, inginerie termică, transport.</p>
+    </div>
+    <div>
+      <p class="sub-title">Producător / Distribuitor</p>
+      <p><strong>Nano Revolution SRL</strong><br>
+      Str. Ogorului Nr. 3, Oradea<br>
+      Jud. Bihor, 410554, România<br>
+      Tel: +40 771 445 577<br>
+      E-mail: contact@nanorevolution.ro</p>
+      <p class="sub-title">Persoana responsabilă</p>
+      <p>Alexandru Țucudean-Șușman<br>E-mail: office@sinca.org</p>
+    </div>
+  </div>
+
+
+  <!-- ═══ SECTION 2 ═══ -->
+  <div class="section-title"><span class="num">2.</span> Identificarea pericolelor</div>
+
+  <p class="sub-title">Clasificare conform Regulamentului REACH:</p>
+
+  <div class="safe-box">
+    <strong>Nu este clasificat ca amestec periculos.</strong>
+  </div>
+
+  <p class="sub-title">Elemente de etichetare</p>
+  <ul>
+    <li><strong>S 2</strong> — A nu se lăsa la îndemâna copiilor.</li>
+    <li><strong>S 26</strong> — În caz de contact cu ochii, se spală imediat cu apă abundentă.</li>
+  </ul>
+
+  <p class="sub-title">Alte pericole</p>
+  <p>A nu se depozita în locuri cu temperaturi sub 0°C. La utilizare conform instrucțiunilor, materialul nu prezintă condiții nocive.</p>
+
+
+  <!-- ═══ SECTION 3 ═══ -->
+  <div class="section-title"><span class="num">3.</span> Compoziție / informații privind ingredientele</div>
+
+  <p><strong>Tip:</strong> Amestec</p>
+  <p>Material flexibil de izolație cu microsfere ceramice goale și rutilice, umplute cu gaz rarefiat, legate cu polimer acrilic și cauciuc.</p>
+
+  <div class="info-box">
+    <p>Materialul conține aditivi bioprotectori (biocizi, conservanți, antifungici) care previn procesele de fermentare și împiedică dezvoltarea fungilor. Fiind pe bază de apă, este clasificat ca produs ecologic.</p>
+  </div>
+
+
+  <!-- ═══ SECTION 4 ═══ -->
+  <div class="section-title"><span class="num">4.</span> Măsuri de prim ajutor</div>
+
+  <div class="step-box">
+    <div class="step-box__title">Înghițire</div>
+    <ul>
+      <li>Se clătește cavitatea bucală cu apă abundentă</li>
+      <li>Se consultă un medic și se prezintă eticheta sau fișa de securitate</li>
+      <li>Nu se administrează nimic pe cale orală unei persoane inconștiente</li>
+    </ul>
+  </div>
+
+  <div class="step-box">
+    <div class="step-box__title">Inhalare</div>
+    <ul>
+      <li>Se scoate persoana la aer curat</li>
+      <li>Se desfac hainele strânse și se asigură o poziție confortabilă</li>
+    </ul>
+  </div>
+
+  <div class="step-box">
+    <div class="step-box__title">Contact cu pielea</div>
+    <ul>
+      <li>Se îndepărtează hainele contaminate</li>
+      <li>Se spală pielea cu apă și săpun timp de minimum 15 minute</li>
+    </ul>
+  </div>
+
+  <div class="step-box">
+    <div class="step-box__title">Contact cu ochii</div>
+    <ul>
+      <li>Se spală ochii cu apă, deschizând pleoapele, timp de minimum 10 minute</li>
+      <li>Dacă apar simptome, se consultă imediat un medic</li>
+    </ul>
+  </div>
+
+  <div class="safe-box">
+    <p><strong>La utilizare corectă, materialul nu prezintă condiții nocive.</strong></p>
+  </div>
+
+
+  <!-- ═══ PAGE 2 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Fișă de Securitate</strong> — thermX Insulation Coating &nbsp;|&nbsp; Pag. 2/4
+    </div>
+  </header>
+
+
+  <!-- ═══ SECTION 5 ═══ -->
+  <div class="section-title"><span class="num">5.</span> Măsuri de stingere a incendiilor</div>
+
+  <div class="highlight-box">
+    <p><strong>Necombustibil!</strong></p>
+    <p>MSZ-EN 15824:2009 — Clasa de inflamabilitate: Clasa A (uscat/polimerizat), Clasa C (lichid/înainte de aplicare)</p>
+  </div>
+
+  <p class="sub-title">Agenți de stingere adecvați</p>
+  <p>Spumă, pulbere de stingere, dioxid de carbon, jet de apă pulverizată.</p>
+
+  <p class="sub-title">Pericole speciale</p>
+  <p>În caz de incendiu se pot elibera gaze toxice, care pot fi nocive la inhalare.</p>
+
+  <p class="sub-title">Recomandări pentru pompieri</p>
+  <p>Conform reglementărilor, se poartă echipament complet de protecție cu aparat de respirație independent. Produsul în sine este neinflamabil, dar trebuie răcit cu apă pulverizată în caz de expunere la foc.</p>
+
+
+  <!-- ═══ SECTION 6 ═══ -->
+  <div class="section-title"><span class="num">6.</span> Măsuri în caz de scurgere accidentală</div>
+
+  <p class="sub-title">Personal nespecializat</p>
+  <p>Doar persoanele instruite, echipate corespunzător pot interveni la locul incidentului.</p>
+
+  <p class="sub-title">Personal de urgență</p>
+  <p>Se poartă echipament de protecție și se asigură ventilație adecvată.</p>
+
+  <p class="sub-title">Precauții ecologice</p>
+  <p>Materialul nu trebuie să ajungă în ape, pânza freatică sau canalizare. În caz de poluare, se notifică imediat autoritățile competente.</p>
+
+  <p class="sub-title">Metode de curățare</p>
+  <p>Materialul scurs se absoarbe cu material absorbant (ex. liant universal) și se depozitează în recipiente etichetate. La colectare, depozitare și eliminare se utilizează echipament individual de protecție.</p>
+
+
+  <!-- ═══ SECTION 7 ═══ -->
+  <div class="section-title"><span class="num">7.</span> Manipulare și depozitare</div>
+
+  <div class="cols-2">
+    <div>
+      <p class="sub-title">Manipulare sigură</p>
+      <ul>
+        <li>Respectarea regulilor generale de igienă este obligatorie</li>
+        <li>Nu se eliberează în spații închise și nu se pulverizează</li>
+        <li>Se asigură ventilație eficientă și, dacă este necesar, aspirație locală</li>
+        <li>Nu există reglementări speciale privind incendiul și explozia</li>
+      </ul>
+    </div>
+    <div>
+      <p class="sub-title">Condiții de depozitare</p>
+      <ul>
+        <li>Doar în ambalajul original, închis și etichetat</li>
+        <li>Spațiu ventilat și curat</li>
+        <li>A nu se lăsa să ajungă pe sol sau în mediu</li>
+        <li>Loc răcoros și uscat, ferit de temperaturi extreme</li>
+        <li><strong>Temperatură recomandată: 5–26°C</strong></li>
+        <li>La temperaturi peste 60°C, calitatea poate fi afectată</li>
+      </ul>
+      <p><strong>Recipient:</strong> Găleată de plastic; se depozitează în ambalajul original.</p>
+    </div>
+  </div>
+
+
+  <!-- ═══ SECTION 8 ═══ -->
+  <div class="section-title"><span class="num">8.</span> Controlul expunerii / protecție individuală</div>
+
+  <p class="sub-title">Inspecție tehnică la locul de muncă</p>
+  <ul>
+    <li>Se evită vărsarea amestecului pe podea, haine, piele sau în ochi</li>
+    <li>Se asigură ventilație adecvată</li>
+    <li>Se evită contactul cu pielea și ochii</li>
+    <li>Spălarea temeinică a mâinilor în pauze și la terminarea lucrului</li>
+    <li>Se recomandă utilizarea cremei de protecție a pielii</li>
+  </ul>
+
+  <p class="sub-title">Echipament individual de protecție</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Tip protecție</th>
+        <th>Recomandare</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Ochi / Față</td>
+        <td>Ochelari de protecție conformi reglementărilor</td>
+      </tr>
+      <tr>
+        <td>Mâini</td>
+        <td>Mănuși de cauciuc butilic conforme reglementărilor</td>
+      </tr>
+      <tr>
+        <td>Corp</td>
+        <td>Îmbrăcăminte de protecție conformă reglementărilor</td>
+      </tr>
+      <tr>
+        <td>Căi respiratorii</td>
+        <td>Nu este necesară protecție specială</td>
+      </tr>
+      <tr>
+        <td>Pericole termice</td>
+        <td>Nu sunt cunoscute</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══ PAGE 3 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Fișă de Securitate</strong> — thermX Insulation Coating &nbsp;|&nbsp; Pag. 3/4
+    </div>
+  </header>
+
+
+  <!-- ═══ SECTION 9 ═══ -->
+  <div class="section-title"><span class="num">9.</span> Proprietăți fizice și chimice</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:50%">Parametru</th>
+        <th>Valoare / Metodă</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Aspect</td><td>Lichid alb</td></tr>
+      <tr><td>Miros</td><td>Ușor, caracteristic</td></tr>
+      <tr><td>Prag olfactiv</td><td>—</td></tr>
+      <tr><td>pH</td><td>—</td></tr>
+      <tr><td>Punct de topire / solidificare</td><td>—</td></tr>
+      <tr><td>Interval de fierbere</td><td>—</td></tr>
+      <tr><td>Punct de aprindere</td><td>—</td></tr>
+      <tr><td>Viteză de evaporare</td><td>—</td></tr>
+      <tr><td>Pericol de inflamabilitate</td><td>Inflamabil (în stare lichidă)</td></tr>
+      <tr><td>Densitate</td><td>Conform MSZEN 101506:1999</td></tr>
+      <tr><td>Solubilitate</td><td>Diluabil cu apă distilată</td></tr>
+      <tr><td>Coeficient de partiție</td><td>N-octanol / apă</td></tr>
+      <tr><td>Temperatură de autoaprindere</td><td>Inflamabil</td></tr>
+      <tr><td>Punct de descompunere</td><td>Nu se descompune</td></tr>
+      <tr><td>Proprietăți explozive</td><td>—</td></tr>
+      <tr><td>Proprietăți oxidante</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <p><strong>Temperatură recomandată de utilizare:</strong> −35°C → +260°C</p>
+  </div>
+
+
+  <!-- ═══ SECTION 10 ═══ -->
+  <div class="section-title"><span class="num">10.</span> Stabilitate și reactivitate</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:50%">Criteriu</th>
+        <th>Informație</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Reactivitate</td><td>Necunoscută</td></tr>
+      <tr><td>Stabilitate chimică</td><td>Stabil la temperatură normală și condiții obișnuite de lucru</td></tr>
+      <tr><td>Reacții periculoase</td><td>Niciun risc cunoscut</td></tr>
+      <tr><td>Condiții de evitat</td><td>Necunoscute</td></tr>
+      <tr><td>Materiale incompatibile</td><td>Necunoscute</td></tr>
+      <tr><td>Produse de descompunere periculoase</td><td>Monoxid de carbon, dioxid de carbon</td></tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══ SECTION 11 ═══ -->
+  <div class="section-title"><span class="num">11.</span> Informații toxicologice</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:50%">Parametru</th>
+        <th>Rezultat</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Toxicitate acută</td><td>Necunoscută</td></tr>
+      <tr><td>Iritare</td><td>Necunoscută</td></tr>
+      <tr><td>Efect caustic</td><td>Necunoscut</td></tr>
+      <tr><td>Sensibilizare</td><td>Necunoscută</td></tr>
+      <tr><td>Toxicitate la doze repetate</td><td>Necunoscută</td></tr>
+      <tr><td>Efect cancerigen</td><td>Necunoscut</td></tr>
+      <tr><td>Mutagenitate</td><td>Necunoscută</td></tr>
+      <tr><td>Efect asupra reproducerii</td><td>Necunoscut</td></tr>
+    </tbody>
+  </table>
+
+  <div class="safe-box">
+    <p><strong>La utilizare corectă, materialul nu prezintă condiții nocive.</strong></p>
+  </div>
+
+  <p>Căi posibile de expunere: înghițire, inhalare, contact cu pielea și ochii.</p>
+
+
+  <!-- ═══ SECTION 12 ═══ -->
+  <div class="section-title"><span class="num">12.</span> Informații ecologice</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:50%">Criteriu</th>
+        <th>Informație</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Toxicitate</td><td>Niciun risc cunoscut. A nu se elibera necontrolat în mediu.</td></tr>
+      <tr><td>Persistență și degradabilitate</td><td>Niciun risc cunoscut</td></tr>
+      <tr><td>Potențial de bioacumulare</td><td>Niciun risc cunoscut</td></tr>
+      <tr><td>Mobilitate în sol</td><td>Niciun risc cunoscut</td></tr>
+      <tr><td>Rezultate PBT și vPvB</td><td>Niciun risc cunoscut</td></tr>
+      <tr><td>Alte efecte nocive</td><td>Niciun risc cunoscut</td></tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══ PAGE 4 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Fișă de Securitate</strong> — thermX Insulation Coating &nbsp;|&nbsp; Pag. 4/4
+    </div>
+  </header>
+
+
+  <!-- ═══ SECTION 13 ═══ -->
+  <div class="section-title"><span class="num">13.</span> Eliminarea deșeurilor</div>
+
+  <p class="sub-title">Metode de gestionare a deșeurilor</p>
+  <p>Produsul se tratează și se elimină conform Regulamentului Guvernamental nr. 98/2001 (VI.15.), modificat prin HG 340/2004, HG 313/2005, și HG 16/2001.</p>
+
+  <p class="sub-title">Eliminarea materialului</p>
+  <p>Pentru informații privind reciclarea, se contactează producătorul. Cod deșeu: <strong>08 02 03</strong> — suspensie apoasă cu materiale ceramice.</p>
+
+  <p class="sub-title">Eliminarea ambalajului</p>
+  <p>Ambalajul curat este reciclabil. Ambalajul contaminat se elimină ca deșeu conform reglementărilor.</p>
+
+
+  <!-- ═══ SECTION 14 ═══ -->
+  <div class="section-title"><span class="num">14.</span> Informații privind transportul</div>
+
+  <div class="safe-box">
+    <p><strong>Produsul nu constituie o expediție periculoasă!</strong></p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:50%">Criteriu</th>
+        <th>Informație</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Număr ONU</td><td>—</td></tr>
+      <tr><td>Denumire transport ONU</td><td>—</td></tr>
+      <tr><td>Clasificare pericol</td><td>—</td></tr>
+      <tr><td>Grup ambalare</td><td>—</td></tr>
+      <tr><td>Pericole ecologice</td><td>—</td></tr>
+      <tr><td>Transport MARPOL 73/78</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══ SECTION 15 ═══ -->
+  <div class="section-title"><span class="num">15.</span> Informații privind reglementarea</div>
+
+  <p class="sub-title">Regulamentul internațional REACH</p>
+  <p>Regulamentul (CE) nr. 1907/2006 al Parlamentului European și al Consiliului (18 decembrie 2006) privind înregistrarea, evaluarea, autorizarea și restricționarea substanțelor chimice (REACH).</p>
+
+  <p class="sub-title">Regulamentul internațional CLP</p>
+  <p>Regulamentul (CE) nr. 1272/2008 al Parlamentului European și al Consiliului (16 decembrie 2008) privind clasificarea, etichetarea și ambalarea substanțelor și amestecurilor.</p>
+
+  <p class="sub-title">Reglementări naționale aplicabile</p>
+  <ul>
+    <li>Legea nr. 360/2003 privind regimul substanțelor periculoase, cu modificările ulterioare</li>
+    <li>HG 1408/2008 privind clasificarea, etichetarea și ambalarea substanțelor periculoase</li>
+    <li>Regulamentul (CE) nr. 453/2010/EU — Directivele 453/2010 REACH</li>
+  </ul>
+
+
+  <!-- ═══ SECTION 16 ═══ -->
+  <div class="section-title"><span class="num">16.</span> Alte informații</div>
+
+  <p class="sub-title">Abrevieri utilizate</p>
+  <ul>
+    <li><strong>DNEL</strong> — Nivel derivat fără efect (Derived No Effect Level)</li>
+    <li><strong>PNEC</strong> — Concentrație estimată fără efect (Predicted No Effect Concentration)</li>
+    <li><strong>CMR</strong> — Cancerogen, mutagen, toxic pentru reproducere</li>
+    <li><strong>PBT</strong> — Persistent, bioacumulativ și toxic</li>
+  </ul>
+
+  <div class="divider"></div>
+
+  <div class="warning-box">
+    <p><strong>Declinare de responsabilitate:</strong> Informațiile, datele și recomandările din această fișă de securitate au fost considerate corecte și elaborate de specialiști competenți la data publicării. Ele servesc doar ca ghid de utilizare a materialului. Producătorul nu își asumă responsabilitatea directă sau indirectă pentru utilizarea necorespunzătoare a produsului. Utilizatorul este obligat să respecte toate cerințele legislative aplicabile.</p>
+  </div>
+
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="doc-footer">
+    <div>&copy; 2026 Nano Revolution SRL — Toate drepturile rezervate</div>
+    <div>
+      <a href="https://nanorevolution.ro">nanorevolution.ro</a> &nbsp;|&nbsp;
+      <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a>
+    </div>
+  </footer>
+
+</body>
+</html>

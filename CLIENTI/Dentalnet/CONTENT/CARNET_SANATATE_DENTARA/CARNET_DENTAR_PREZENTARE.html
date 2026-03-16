@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #36454F;
+    background: #F5F5DC;
+    line-height: 1.5;
+  }
+
+  /* COVER PAGE */
+  .cover {
+    width: 100%;
+    height: 297mm;
+    background: linear-gradient(160deg, #A3C1AD 0%, #8FB39E 40%, #7DA58F 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    page-break-after: always;
+    padding: 60px;
+    position: relative;
+  }
+
+  .cover-logo {
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 60px;
+  }
+
+  .cover h1 {
+    font-size: 38px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .cover h2 {
+    font-size: 22px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 60px;
+  }
+
+  .cover-meta {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    line-height: 2;
+  }
+
+  .cover-footer {
+    position: absolute;
+    bottom: 40px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* CONTENT PAGES */
+  .page {
+    width: 100%;
+    min-height: 297mm;
+    padding: 50px 55px;
+    background: #FAFAF5;
+    page-break-after: always;
+    position: relative;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #A3C1AD;
+    padding-bottom: 12px;
+    margin-bottom: 35px;
+  }
+
+  .page-header-brand {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #A3C1AD;
+  }
+
+  .page-header-section {
+    font-size: 11px;
+    color: #999;
+  }
+
+  .page-footer {
+    position: absolute;
+    bottom: 30px;
+    left: 55px;
+    right: 55px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #bbb;
+    border-top: 1px solid #eee;
+    padding-top: 8px;
+  }
+
+  /* SECTION HEADERS */
+  .section-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #36454F;
+    margin-bottom: 8px;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 30px;
+  }
+
+  /* STATS */
+  .stats-row {
+    display: flex;
+    gap: 16px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+  }
+
+  .stat-box {
+    flex: 1;
+    min-width: 100px;
+    background: #fff;
+    border: 1px solid #e8e8e0;
+    border-radius: 8px;
+    padding: 18px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 32px;
+    font-weight: 800;
+    color: #A3C1AD;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+  }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box {
+    background: linear-gradient(135deg, #A3C1AD 0%, #8FB39E 100%);
+    color: #fff;
+    padding: 24px 28px;
+    border-radius: 10px;
+    margin: 20px 0;
+  }
+
+  .highlight-box h4 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .highlight-box p {
+    font-size: 13px;
+    opacity: 0.9;
+    line-height: 1.6;
+  }
+
+  /* TABLES */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 12px;
+  }
+
+  th {
+    background: #A3C1AD;
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #eee;
+    color: #555;
+  }
+
+  tr:nth-child(even) td {
+    background: #f9f9f4;
+  }
+
+  /* CARDS */
+  .card {
+    background: #fff;
+    border: 1px solid #e8e8e0;
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin-bottom: 18px;
+  }
+
+  .card.accent {
+    border-left: 4px solid #A3C1AD;
+    background: linear-gradient(90deg, #f4f9f6 0%, #fff 30%);
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #36454F;
+    margin-bottom: 10px;
+  }
+
+  .card-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #A3C1AD;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .card-body {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.65;
+  }
+
+  /* MOCKUP AREA */
+  .mockup-box {
+    background: #f0f4f1;
+    border: 2px dashed #c5d8cc;
+    border-radius: 10px;
+    padding: 24px;
+    margin: 16px 0;
+    text-align: center;
+  }
+
+  .mockup-box .label {
+    font-size: 10px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .mockup-box .content {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.7;
+  }
+
+  /* COMPARISON */
+  .compare-row {
+    display: flex;
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .compare-col {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #e8e8e0;
+    border-radius: 10px;
+    padding: 22px;
+  }
+
+  .compare-col.old {
+    opacity: 0.6;
+  }
+
+  .compare-col.new {
+    border-color: #A3C1AD;
+    border-width: 2px;
+  }
+
+  .compare-col h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #36454F;
+  }
+
+  .compare-col ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .compare-col ul li {
+    font-size: 12px;
+    color: #555;
+    padding: 4px 0;
+    border-bottom: 1px solid #f5f5f0;
+  }
+
+  .price-tag {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 8px 0;
+  }
+
+  .price-tag.old { color: #cc6666; }
+  .price-tag.new { color: #A3C1AD; }
+
+  /* NEEDS LIST */
+  .needs-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .needs-list li {
+    padding: 10px 14px;
+    margin-bottom: 6px;
+    background: #fff;
+    border: 1px solid #e8e8e0;
+    border-radius: 6px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .status-done { color: #2e7d32; font-weight: 700; font-size: 11px; }
+  .status-todo { color: #e65100; font-weight: 700; font-size: 11px; }
+  .status-info { color: #1565c0; font-weight: 700; font-size: 11px; }
+
+  /* PAGE MOCKUP */
+  .page-mockup {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 10px 0;
+    font-size: 11px;
+    color: #666;
+    line-height: 1.6;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .page-mockup h5 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #36454F;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .page-mockup .field {
+    color: #bbb;
+    border-bottom: 1px dotted #ddd;
+    display: inline-block;
+    min-width: 180px;
+  }
+
+  .two-col {
+    display: flex;
+    gap: 16px;
+  }
+
+  .two-col > div {
+    flex: 1;
+  }
+
+  /* TAG */
+  .tag {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  .tag-print { background: #e8f5e9; color: #2e7d32; }
+  .tag-digital { background: #e3f2fd; color: #1565c0; }
+  .tag-free { background: #fff3e0; color: #e65100; }
+
+  /* FLOW */
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .flow-number {
+    width: 36px;
+    height: 36px;
+    background: #A3C1AD;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .flow-content {
+    flex: 1;
+  }
+
+  .flow-content h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #36454F;
+    margin-bottom: 4px;
+  }
+
+  .flow-content p {
+    font-size: 12px;
+    color: #777;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div class="cover-logo">Epic Digital Hub</div>
+  <h1>Carnetul de Sănătate<br>Dentară</h1>
+  <h2>DentalNet Kids &mdash; Concept &amp; Design</h2>
+  <div class="cover-meta">
+    Pregătit de: Epic Digital Hub<br>
+    Client: Dental Net SRL &mdash; Dr. Șipoș Lucian<br>
+    Data: 21.02.2026<br>
+    Clasificare: Confidențial
+  </div>
+  <div class="cover-footer">Carnetul de Sănătate Dentară &mdash; Model Hybrid: Card Fizic + Pagină Digitală</div>
+</div>
+
+<!-- PAGE 2: CONCEPT -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Concept</span>
+  </div>
+
+  <div class="section-title">De Ce un Carnet de Sănătate Dentară?</div>
+  <div class="section-subtitle">Instrumentul care face prevenția vizibilă și măsurabilă</div>
+
+  <p style="font-size: 13px; color: #555; margin-bottom: 24px; line-height: 1.7;">
+    La pediatru, fiecare copil are un carnet de sănătate &mdash; vaccinuri, greutate, înălțime, totul e urmărit. La dentist? <strong>Nimeni din Oradea nu face asta.</strong> Carnetul de Sănătate Dentară transformă prevenția dintr-un cuvânt frumos într-un <strong>sistem concret</strong>: evaluare risc, harta dinților, jurnal de vizite, recomandări personalizate. Este elementul tangibil care diferențiază DentalNet Kids de orice alt cabinet.
+  </p>
+
+  <div class="highlight-box">
+    <h4>Ce rezolvă Carnetul</h4>
+    <p>
+      <strong>Pentru părinte:</strong> Vede progresul copilului, știe exact ce s-a făcut și ce urmează.<br>
+      <strong>Pentru medic:</strong> Istoric complet la fiecare vizită, evaluare risc documentată, continuitate.<br>
+      <strong>Pentru brand:</strong> Diferențiator fizic &mdash; copilul pleacă cu ceva în mână. Nimeni altcineva nu oferă asta.
+    </p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-number">0</div>
+      <div class="stat-label">Competitori cu carnet</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number">100%</div>
+      <div class="stat-label">Copii care primesc</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number">6</div>
+      <div class="stat-label">Vizite per carnet</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number">~3 ani</div>
+      <div class="stat-label">Durată utilizare</div>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="background: linear-gradient(135deg, #36454F 0%, #4a5a68 100%);">
+    <h4>Modelul ales: Hybrid (Card Fizic + Digital)</h4>
+    <p>
+      Cardul fizic conține <strong>doar ce completează medicul</strong> (fișe vizită, hartă dinți, evaluare risc). Tot conținutul educativ (periaj, nutriție, urgențe, diplome) trece pe <strong>o pagină web</strong> accesibilă prin QR code. Rezultat: cost de print redus cu ~60%, conținut educativ nelimitat și actualizabil.
+    </p>
+  </div>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>2</span>
+  </div>
+</div>
+
+<!-- PAGE 3: COST COMPARISON -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Comparație Costuri</span>
+  </div>
+
+  <div class="section-title">De Ce Hybrid?</div>
+  <div class="section-subtitle">Aceeași valoare percepută, cost semnificativ mai mic</div>
+
+  <div class="compare-row">
+    <div class="compare-col old">
+      <h4>&#10007; Variantă clasică (28 pagini)</h4>
+      <div class="price-tag old">10-17 RON/buc</div>
+      <ul>
+        <li>28 pagini full color</li>
+        <li>Copertă laminată soft-touch</li>
+        <li>12 stickere ZEN pe coală separată</li>
+        <li>Conținut educativ fix, neactualizabil</li>
+        <li>Mult conținut citit o singură dată</li>
+        <li>La 500 copii: <strong>5.000-8.500 RON</strong></li>
+      </ul>
+    </div>
+    <div class="compare-col new">
+      <h4>&#10003; Model Hybrid (8 pag. + digital)</h4>
+      <div class="price-tag new">3-5 RON/buc</div>
+      <ul>
+        <li>8 pagini &mdash; doar tracking medical</li>
+        <li>Copertă couché mat (fără laminare)</li>
+        <li>6 stickere ZEN pe coală separată</li>
+        <li>Conținut educativ online (QR code)</li>
+        <li>Actualizabil oricând, gratuit</li>
+        <li>La 500 copii: <strong>1.500-2.500 RON</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <h4>Economie: ~60-70%</h4>
+    <p>
+      La un tiraj de 500 de carnete, economia este de <strong>3.500-6.000 RON</strong>. Bani care pot merge în reclame, ședința foto sau website. Iar conținutul educativ online are avantajul că poate fi actualizat, extins și partajat fără costuri suplimentare.
+    </p>
+  </div>
+
+  <h3 style="font-size: 16px; margin: 28px 0 14px; color: #36454F;">Ce e în card vs. ce e online</h3>
+
+  <table>
+    <tr>
+      <th>Conținut</th>
+      <th>Card Fizic</th>
+      <th>Pagină Web</th>
+    </tr>
+    <tr>
+      <td>Date copil + medic</td>
+      <td><strong>&#10003;</strong></td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td>Harta dinților (lapte + permanenți)</td>
+      <td><strong>&#10003;</strong></td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td>Fișe de vizită (6 vizite)</td>
+      <td><strong>&#10003;</strong></td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td>Evaluare risc carii</td>
+      <td><strong>&#10003;</strong></td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td>Ghid periaj pas cu pas</td>
+      <td>&mdash;</td>
+      <td><strong>&#10003;</strong></td>
+    </tr>
+    <tr>
+      <td>Alimente prietene vs. viclene</td>
+      <td>&mdash;</td>
+      <td><strong>&#10003;</strong></td>
+    </tr>
+    <tr>
+      <td>Calendar erupție dinți</td>
+      <td>&mdash;</td>
+      <td><strong>&#10003;</strong></td>
+    </tr>
+    <tr>
+      <td>Ce fac în urgență</td>
+      <td>&mdash;</td>
+      <td><strong>&#10003;</strong></td>
+    </tr>
+    <tr>
+      <td>Diplome &amp; realizări</td>
+      <td>&mdash;</td>
+      <td><strong>&#10003;</strong></td>
+    </tr>
+    <tr>
+      <td>Termeni prietenoși pentru copii</td>
+      <td>&mdash;</td>
+      <td><strong>&#10003;</strong></td>
+    </tr>
+    <tr>
+      <td>Prezentare pachete &amp; prețuri</td>
+      <td>&mdash;</td>
+      <td><strong>&#10003;</strong></td>
+    </tr>
+  </table>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>3</span>
+  </div>
+</div>
+
+<!-- PAGE 4: PHYSICAL CARD - SPECS + COVER -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Card Fizic &mdash; Specificații</span>
+  </div>
+
+  <div class="section-title">Cardul Fizic</div>
+  <div class="section-subtitle">8 pagini &mdash; o coală A3 pliată, capsată &mdash; doar ce completează medicul</div>
+
+  <table>
+    <tr>
+      <th>Specificație</th>
+      <th>Detaliu</th>
+    </tr>
+    <tr>
+      <td>Format</td>
+      <td><strong>A5</strong> (148 &times; 210 mm)</td>
+    </tr>
+    <tr>
+      <td>Pagini</td>
+      <td><strong>8</strong> (1 coală A3 pliată)</td>
+    </tr>
+    <tr>
+      <td>Legare</td>
+      <td>Capsă simplă (1 capsă centru)</td>
+    </tr>
+    <tr>
+      <td>Hârtie interior</td>
+      <td>170g couché mat</td>
+    </tr>
+    <tr>
+      <td>Hârtie copertă</td>
+      <td>250g couché mat</td>
+    </tr>
+    <tr>
+      <td>Culori</td>
+      <td>CMYK full color</td>
+    </tr>
+    <tr>
+      <td>Cost estimat</td>
+      <td><strong>2-4 RON/buc</strong> la tiraj 500+</td>
+    </tr>
+  </table>
+
+  <h3 style="font-size: 16px; margin: 28px 0 14px; color: #36454F;">Copertă Față</h3>
+
+  <div class="page-mockup" style="text-align: center; padding: 30px;">
+    <div style="font-size: 9px; color: #A3C1AD; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">Logo DentalNet Kids</div>
+    <div style="font-size: 22px; font-weight: 800; color: #36454F; margin-bottom: 20px; line-height: 1.3;">Carnetul Meu de<br>Sănătate Dentară</div>
+    <div style="font-size: 12px; color: #888; margin-bottom: 6px;">Numele: <span class="field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    <div style="font-size: 12px; color: #888; margin-bottom: 20px;">Data nașterii: <span class="field">&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    <div style="font-size: 13px; font-style: italic; color: #A3C1AD; margin-bottom: 20px;">Creștem dinți sănătoși.</div>
+    <div style="width: 80px; height: 80px; border: 2px dashed #c5d8cc; border-radius: 8px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #bbb;">QR CODE</div>
+    <div style="font-size: 9px; color: #bbb;">dentalnetkids.ro/carnet</div>
+    <div style="position: relative; text-align: right; margin-top: 10px; font-size: 9px; color: #c5d8cc;">[ ZEN &mdash; colțul din dreapta jos ]</div>
+  </div>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>4</span>
+  </div>
+</div>
+
+<!-- PAGE 5: CARD - INTERIOR PAGES -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Card Fizic &mdash; Pagini Interior</span>
+  </div>
+
+  <h3 style="font-size: 16px; margin: 0 0 14px; color: #36454F;">Pagina 1 &mdash; Date Copil + Harta Dinților</h3>
+
+  <div class="two-col">
+    <div>
+      <div class="page-mockup">
+        <h5>Datele Mele</h5>
+        Nume și prenume: <span class="field"></span><br>
+        Data nașterii: <span class="field">&nbsp;/&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+        Alergii: <span class="field"></span><br>
+        Medic: Dr. <span class="field"></span><br>
+        Prima vizită: <span class="field">&nbsp;/&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      </div>
+    </div>
+    <div>
+      <div class="page-mockup" style="text-align: center;">
+        <h5>Harta Dinților Mei</h5>
+        <div style="margin: 10px 0;">
+          <div style="font-size: 10px; color: #A3C1AD; font-weight: 600; margin-bottom: 4px;">Dinți de lapte (20)</div>
+          <div style="font-size: 18px; letter-spacing: 2px; color: #ccc;">⌒⌒⌒⌒⌒⌒⌒⌒⌒⌒</div>
+          <div style="font-size: 18px; letter-spacing: 2px; color: #ccc;">⌣⌣⌣⌣⌣⌣⌣⌣⌣⌣</div>
+        </div>
+        <div style="margin: 10px 0;">
+          <div style="font-size: 10px; color: #A3C1AD; font-weight: 600; margin-bottom: 4px;">Dinți permanenți (28-32)</div>
+          <div style="font-size: 18px; letter-spacing: 2px; color: #ccc;">⌒⌒⌒⌒⌒⌒⌒⌒⌒⌒⌒⌒⌒⌒</div>
+          <div style="font-size: 18px; letter-spacing: 2px; color: #ccc;">⌣⌣⌣⌣⌣⌣⌣⌣⌣⌣⌣⌣⌣⌣</div>
+        </div>
+        <div style="font-size: 10px; color: #888; margin-top: 8px;">
+          &#x1F7E2; Sănătos &nbsp; &#x1F7E1; De urmărit &nbsp; &#x1F534; Tratat &nbsp; ✕ Extras &nbsp; S Sigilat
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-size: 16px; margin: 24px 0 14px; color: #36454F;">Paginile 2-7 &mdash; Fișe de Vizită (×6)</h3>
+
+  <div class="page-mockup">
+    <h5>Vizita nr. ___</h5>
+    <div class="two-col" style="margin-bottom: 10px;">
+      <div>Data: <span class="field">&nbsp;&nbsp;/&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      <div>Vârsta: <span class="field">&nbsp;&nbsp;</span> ani <span class="field">&nbsp;&nbsp;</span> luni</div>
+    </div>
+    <div style="margin-bottom: 10px;">
+      <strong>Proceduri efectuate:</strong><br>
+      ☐ Control preventiv &nbsp;&nbsp; ☐ Igienizare profesională &nbsp;&nbsp; ☐ Fluorizare<br>
+      ☐ Sigilare molari &nbsp;&nbsp; ☐ Radiografie &nbsp;&nbsp; ☐ Tratament: <span class="field"></span>
+    </div>
+    <div style="margin-bottom: 10px;">
+      <strong>Evaluare risc carii:</strong> &nbsp; ☐ Scăzut &#x1F7E2; &nbsp; ☐ Moderat &#x1F7E1; &nbsp; ☐ Crescut &#x1F534;
+    </div>
+    <div style="margin-bottom: 10px;">
+      <strong>Observații:</strong> <span class="field" style="min-width: 100%;"></span>
+    </div>
+    <div style="margin-bottom: 10px;">
+      <strong>Recomandări:</strong> <span class="field" style="min-width: 100%;"></span>
+    </div>
+    <div class="two-col">
+      <div>Următoarea programare: <span class="field">&nbsp;&nbsp;/&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      <div style="text-align: right;">Semnătura medic: <span class="field"></span> &nbsp;&nbsp; <span style="color: #A3C1AD;">[Sticker ZEN]</span></div>
+    </div>
+  </div>
+
+  <div class="card accent" style="margin-top: 16px;">
+    <div class="card-label">Gamificare</div>
+    <div class="card-body">
+      La fiecare vizită, copilul primește un <strong>sticker ZEN</strong> diferit pe care îl lipește în carnet. 6 vizite = 6 stickere colecționate. Motivează copilul să revină și creează o asociere pozitivă cu vizita la dentist.
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>5</span>
+  </div>
+</div>
+
+<!-- PAGE 6: CARD - BACK COVER + STICKERS -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Card Fizic &mdash; Copertă Spate + Stickere</span>
+  </div>
+
+  <h3 style="font-size: 16px; margin: 0 0 14px; color: #36454F;">Copertă Spate</h3>
+
+  <div class="page-mockup" style="text-align: center; padding: 30px;">
+    <div style="font-size: 9px; color: #A3C1AD; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;">Logo DentalNet Kids</div>
+    <div style="font-size: 16px; font-weight: 700; color: #36454F; margin-bottom: 16px;">Prevenim. Nu reparăm.</div>
+    <div style="font-size: 11px; color: #888; line-height: 2; margin-bottom: 16px;">
+      &#x1F4CD; Str. Mihail Kogălniceanu 49a, Oradea 410074<br>
+      &#x1F4F1; 0259 418 757 / 0723 336 320<br>
+      &#x1F4E7; scdentalnetsrl@yahoo.com<br>
+      &#x1F553; Luni-Vineri: 8:00-20:00
+    </div>
+    <div style="font-size: 11px; color: #555; margin-bottom: 12px;">
+      @dentalnet.kids &nbsp;&nbsp;&nbsp;&nbsp; Dentalnet KIDS
+    </div>
+    <div style="font-size: 11px; color: #A3C1AD; font-style: italic; margin-bottom: 12px;">
+      Când se termină cele 6 vizite,<br>solicită un carnet nou la recepție.
+    </div>
+    <div style="width: 60px; height: 60px; border: 2px dashed #c5d8cc; border-radius: 6px; margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; font-size: 8px; color: #bbb;">QR</div>
+    <div style="font-size: 9px; color: #bbb;">dentalnetkids.ro/carnet</div>
+    <div style="text-align: right; margin-top: 10px; font-size: 9px; color: #c5d8cc;">[ ZEN face cu mâna ]</div>
+  </div>
+
+  <h3 style="font-size: 16px; margin: 24px 0 14px; color: #36454F;">Coală Stickere ZEN &mdash; Print Separat</h3>
+
+  <div class="card">
+    <div class="card-label">Specificații stickere</div>
+    <table style="margin: 8px 0 0;">
+      <tr><td>Format</td><td>Coală A4, 6 stickere rotunde</td></tr>
+      <tr><td>Dimensiune sticker</td><td>&Oslash; 40mm</td></tr>
+      <tr><td>Hârtie</td><td>Autoadezivă, laminare mată</td></tr>
+      <tr><td>Cost estimat</td><td>~0,50-1 RON/coală la tiraj 500+</td></tr>
+    </table>
+  </div>
+
+  <div style="margin-top: 16px;">
+    <div class="card-label" style="margin-bottom: 10px;">Cele 6 pose ZEN (stickere)</div>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+      <div style="width: 90px; height: 90px; background: #f9f9f4; border: 1px solid #e8e8e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #999; text-align: center; padding: 8px;">ZEN cu stea</div>
+      <div style="width: 90px; height: 90px; background: #f9f9f4; border: 1px solid #e8e8e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #999; text-align: center; padding: 8px;">ZEN thumbs up</div>
+      <div style="width: 90px; height: 90px; background: #f9f9f4; border: 1px solid #e8e8e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #999; text-align: center; padding: 8px;">ZEN cu scut</div>
+      <div style="width: 90px; height: 90px; background: #f9f9f4; border: 1px solid #e8e8e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #999; text-align: center; padding: 8px;">ZEN cu pelerină</div>
+      <div style="width: 90px; height: 90px; background: #f9f9f4; border: 1px solid #e8e8e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #999; text-align: center; padding: 8px;">ZEN cu &#10003;</div>
+      <div style="width: 90px; height: 90px; background: #f9f9f4; border: 1px solid #e8e8e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #999; text-align: center; padding: 8px;">ZEN pe podium</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>6</span>
+  </div>
+</div>
+
+<!-- PAGE 7: DIGITAL PAGE -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Pagina Digitală</span>
+  </div>
+
+  <div class="section-title">dentalnetkids.ro/carnet</div>
+  <div class="section-subtitle">Tot conținutul educativ &mdash; accesibil prin QR code, gratuit, actualizabil</div>
+
+  <p style="font-size: 13px; color: #555; margin-bottom: 24px; line-height: 1.7;">
+    Părintele scanează QR-ul din carnetul fizic și ajunge pe o pagină web dedicată. Aici găsește tot ce trebuie să știe despre sănătatea dentară a copilului &mdash; fără să aglomerăm carnetul tipărit.
+  </p>
+
+  <div class="card accent">
+    <div class="card-label"><span class="tag tag-digital">Digital</span> Secțiunea 1</div>
+    <div class="card-title">Ghid de Periaj &mdash; Pas cu Pas</div>
+    <div class="card-body">
+      6 pași simpli de periaj, ilustrați cu icoane ZEN. Regula de aur pe vârste: cine periază și până când. Durata: 2 minute, de 2 ori pe zi. Visual: ZEN lângă o periuță de dinți.
+    </div>
+  </div>
+
+  <div class="card accent">
+    <div class="card-label"><span class="tag tag-digital">Digital</span> Secțiunea 2</div>
+    <div class="card-title">Alimente Prietene vs. Alimente Viclene</div>
+    <div class="card-body">
+      Ghid vizual: ce alimente protejează dinții și care atacă. 3 reguli simple pentru gustări. Visual: alimente sănătoase vs. dulciuri, stilul brandului.
+    </div>
+  </div>
+
+  <div class="card accent">
+    <div class="card-label"><span class="tag tag-digital">Digital</span> Secțiunea 3</div>
+    <div class="card-title">Calendar Erupție Dinți</div>
+    <div class="card-body">
+      Tabel complet: când apar dinții de lapte (6-33 luni) și dinții permanenți (6-25 ani). Atenționare specială: molarul de 6 ani &mdash; primul dinte permanent, adesea neobservat de părinți.
+    </div>
+  </div>
+
+  <div class="card accent">
+    <div class="card-label"><span class="tag tag-digital">Digital</span> Secțiunea 4</div>
+    <div class="card-title">Ce Fac în Urgență</div>
+    <div class="card-body">
+      Protocol clar: dinte căzut din accident (5 pași), când suni la medic, numere de urgență. Informație critică pe care părintele o are mereu la un scan distanță.
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-top: 4px;">
+    <div class="card accent">
+      <div class="card-label"><span class="tag tag-digital">Digital</span> Secțiunea 5</div>
+      <div class="card-title">Diplomele DentalNet Kids</div>
+      <div class="card-body">
+        7 diplome colecționabile: prima vizită, campion la periaj, 1 an fără carii, molari sigilați, etc. Pot fi interactive pe website sau descărcabile ca PDF.
+      </div>
+    </div>
+    <div class="card accent">
+      <div class="card-label"><span class="tag tag-digital">Digital</span> Secțiunea 6-7</div>
+      <div class="card-title">Termeni + Pachete</div>
+      <div class="card-body">
+        Dicționar prietenos (anestezie = „picături de somn"), prezentarea pachetelor START / CREȘTERE / SCUT cu prețuri și beneficii.
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>7</span>
+  </div>
+</div>
+
+<!-- PAGE 8: FLOW + EXPERIENCE -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Experiența Completă</span>
+  </div>
+
+  <div class="section-title">Cum Funcționează</div>
+  <div class="section-subtitle">Experiența părintelui de la prima vizită</div>
+
+  <div class="flow-step">
+    <div class="flow-number">1</div>
+    <div class="flow-content">
+      <h4>Prima vizită (pachetul START &mdash; gratuit)</h4>
+      <p>Copilul primește Carnetul de Sănătate Dentară. Medicul completează datele, face prima evaluare de risc, marchează harta dinților. Copilul primește primul sticker ZEN.</p>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="flow-number">2</div>
+    <div class="flow-content">
+      <h4>Acasă &mdash; scanează QR</h4>
+      <p>Părintele scanează QR-ul din carnet. Accesează ghidul de periaj, alimentația sănătoasă, calendarul dinților. Informații utile oricând, fără să sune la cabinet.</p>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="flow-number">3</div>
+    <div class="flow-content">
+      <h4>Vizitele de control (CREȘTERE sau SCUT)</h4>
+      <p>La fiecare vizită, medicul completează fișa din carnet: proceduri, evaluare risc actualizată, recomandări. Copilul primește un sticker ZEN nou. Carnetul devine jurnalul sănătății dentare.</p>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="flow-number">4</div>
+    <div class="flow-content">
+      <h4>După 6 vizite (~3 ani)</h4>
+      <p>Carnetul se termină. Familia solicită un carnet nou la recepție. Vechiul carnet rămâne ca istoric. Ciclul continuă.</p>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="flow-number">5</div>
+    <div class="flow-content">
+      <h4>Diplome &amp; realizări (online)</h4>
+      <p>Pe pagina digitală, copilul acumulează diplome: primul an fără carii, campion la periaj, molari sigilați. Motivație pe termen lung.</p>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="margin-top: 24px;">
+    <h4>De ce funcționează</h4>
+    <p>
+      Carnetul nu e doar un document medical &mdash; e un <strong>ritual</strong>. Copilul asociază vizita la dentist cu colecționarea de stickere ZEN. Părintele vede progresul concret. Medicul are istorie documentată. Iar DentalNet Kids devine singurul cabinet care oferă <strong>un sistem</strong>, nu doar o consultație.
+    </p>
+  </div>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>8</span>
+  </div>
+</div>
+
+<!-- PAGE 9: NEXT STEPS -->
+<div class="page">
+  <div class="page-header">
+    <span class="page-header-brand">DentalNet Kids</span>
+    <span class="page-header-section">Pașii Următori</span>
+  </div>
+
+  <div class="section-title">Ce Urmează</div>
+  <div class="section-subtitle">De la aprobare la carnetul tipărit</div>
+
+  <div class="flow-step">
+    <div class="flow-number">1</div>
+    <div class="flow-content">
+      <h4>Aprobare concept</h4>
+      <p>Dr. Șipoș aprobă structura cardului fizic și conținutul paginii digitale.</p>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="flow-number">2</div>
+    <div class="flow-content">
+      <h4>Generare vizuale Midjourney</h4>
+      <p>Copertă, ZEN poses pentru stickere, diagrame dinți, ilustrații pagină web. ~22 prompt-uri pregătite.</p>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="flow-number">3</div>
+    <div class="flow-content">
+      <h4>Design în Canva/Figma</h4>
+      <p>Layout card fizic (8 pagini) + coala de stickere. Export print-ready PDF (CMYK, 300 DPI, bleed 3mm).</p>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="flow-number">4</div>
+    <div class="flow-content">
+      <h4>Construire pagină web</h4>
+      <p>dentalnetkids.ro/carnet &mdash; conținut educativ complet cu vizuale. Generare QR code.</p>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="flow-number">5</div>
+    <div class="flow-content">
+      <h4>Tipărire</h4>
+      <p>Tiraj inițial recomandat: 500 carnete + 500 coli stickere. Estimare cost total: ~1.750-2.500 RON.</p>
+    </div>
+  </div>
+
+  <h3 style="font-size: 16px; margin: 28px 0 14px; color: #36454F;">Vizuale Necesare</h3>
+
+  <ul class="needs-list">
+    <li>
+      ZEN &mdash; imagine originală 3D (referință Midjourney)
+      <span class="status-done">&#10003; GATA</span>
+    </li>
+    <li>
+      ZEN &mdash; 6 variante sticker (pose diferite)
+      <span class="status-todo">DE GENERAT</span>
+    </li>
+    <li>
+      Diagrame dinți (lapte + permanenți) &mdash; stil cartoon
+      <span class="status-todo">DE GENERAT</span>
+    </li>
+    <li>
+      Background copertă + fundal pagini vizită
+      <span class="status-todo">DE GENERAT</span>
+    </li>
+    <li>
+      Ilustrații pagină web (periaj, nutriție, urgențe, diplome)
+      <span class="status-todo">DE GENERAT</span>
+    </li>
+    <li>
+      QR code &rarr; dentalnetkids.ro/carnet
+      <span class="status-info">DUPĂ WEBSITE</span>
+    </li>
+    <li>
+      Logo DentalNet Kids (versiune finală)
+      <span class="status-info">ÎN LUCRU</span>
+    </li>
+  </ul>
+
+  <div class="highlight-box" style="margin-top: 24px;">
+    <h4>Rezumat Buget Estimat</h4>
+    <p>
+      <strong>500 carnete fizice:</strong> 1.000-2.000 RON<br>
+      <strong>500 coli stickere:</strong> 250-500 RON<br>
+      <strong>Pagina web (carnet digital):</strong> inclusă în dezvoltarea website-ului<br>
+      <strong>Total:</strong> ~1.250-2.500 RON (vs. 5.000-8.500 RON varianta 28 pagini)
+    </p>
+  </div>
+
+  <div class="page-footer">
+    <span>Epic Digital Hub &mdash; Confidențial</span>
+    <span>9</span>
+  </div>
+</div>
+
+<!-- BACK COVER -->
+<div class="cover" style="background: linear-gradient(160deg, #36454F 0%, #4a5a68 100%);">
+  <div class="cover-logo" style="color: rgba(163,193,173,0.7);">Epic Digital Hub</div>
+  <h1 style="font-size: 32px;">Creștem dinți sănătoși.</h1>
+  <h2 style="font-size: 18px; color: rgba(255,255,255,0.6);">DentalNet Kids &mdash; Oradea</h2>
+  <div class="cover-meta" style="margin-top: 40px;">
+    Epic Digital Hub<br>
+    contact@epicdigitalhub.ro<br><br>
+    Pregătit pentru: Dr. Șipoș Lucian &mdash; Dental Net SRL<br>
+    21.02.2026
+  </div>
+</div>
+
+</body>
+</html>

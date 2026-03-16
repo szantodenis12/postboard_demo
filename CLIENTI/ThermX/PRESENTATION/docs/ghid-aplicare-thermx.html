@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>thermX — Ghid de Aplicare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6B00;
+      --orange-light: #FFF3E8;
+      --blue: #1B3A5C;
+      --blue-light: #E8F0F8;
+      --green: #2E7D32;
+      --green-light: #E8F5E9;
+      --red: #D32F2F;
+      --red-light: #FDECEA;
+      --text: #1a1a1a;
+      --text-muted: #555;
+      --border: #e0e0e0;
+      --bg: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    @page {
+      size: A4;
+      margin: 20mm 18mm 25mm 18mm;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 16px;
+      border-bottom: 3px solid var(--orange);
+      margin-bottom: 28px;
+    }
+
+    .doc-header__logo img { height: 52px; }
+
+    .doc-header__company {
+      text-align: right;
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .doc-header__company strong {
+      color: var(--text);
+      font-size: 9pt;
+    }
+
+    .doc-title {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .doc-title h1 {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 22pt;
+      font-weight: 800;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .doc-title .subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 12pt;
+      font-weight: 600;
+      color: var(--orange);
+      text-transform: uppercase;
+    }
+
+    .doc-title .doc-ref {
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .section-title {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 13pt;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--orange);
+      margin: 28px 0 14px;
+    }
+
+    .section-title--sm {
+      font-size: 11pt;
+      border-bottom: 1px solid var(--border);
+    }
+
+    p { margin-bottom: 10px; }
+
+    .lead {
+      font-size: 11pt;
+      font-weight: 600;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .highlight-box {
+      background: var(--orange-light);
+      border-left: 4px solid var(--orange);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .highlight-box p { margin-bottom: 0; }
+
+    .info-box {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .info-box p { margin-bottom: 4px; }
+
+    .safe-box {
+      background: var(--green-light);
+      border-left: 4px solid var(--green);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .safe-box strong { color: var(--green); }
+
+    .warning-box {
+      background: var(--red-light);
+      border-left: 4px solid var(--red);
+      padding: 14px 18px;
+      margin: 14px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .warning-box strong { color: var(--red); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 10pt;
+    }
+
+    th, td {
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--blue);
+      color: #fff;
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 600;
+      font-size: 9.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    tr:nth-child(even) { background: #f8f9fa; }
+
+    td:first-child { font-weight: 500; }
+
+    .table-value { font-weight: 600; color: var(--text); }
+
+    ul, ol {
+      margin: 8px 0 12px 22px;
+    }
+
+    li { margin-bottom: 5px; }
+
+    ul.check-list {
+      list-style: none;
+      margin-left: 0;
+    }
+
+    ul.check-list li {
+      padding-left: 22px;
+      position: relative;
+    }
+
+    ul.check-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--orange);
+      font-weight: 700;
+    }
+
+    .cols-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 14px 0;
+    }
+
+    /* — STEP CARDS — */
+    .step {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 16px;
+      margin: 16px 0;
+      padding: 16px;
+      background: #f8f9fa;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .step__number {
+      width: 48px;
+      height: 48px;
+      background: var(--orange);
+      color: #fff;
+      font-family: 'Exo 2', sans-serif;
+      font-size: 18pt;
+      font-weight: 800;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step__title {
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 700;
+      font-size: 11pt;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .step__content {
+      font-size: 10pt;
+    }
+
+    .step__content p { margin-bottom: 6px; }
+
+    .step__content ul { margin: 4px 0 4px 18px; }
+
+    /* — TOOL CARD — */
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .tool-card {
+      background: var(--blue-light);
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .tool-card__icon {
+      font-size: 24pt;
+      margin-bottom: 6px;
+    }
+
+    .tool-card__name {
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 700;
+      font-size: 9.5pt;
+      color: var(--blue);
+      text-transform: uppercase;
+    }
+
+    .tool-card__detail {
+      font-size: 8.5pt;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    .doc-footer {
+      margin-top: 32px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8pt;
+      color: var(--text-muted);
+    }
+
+    .doc-footer a {
+      color: var(--orange);
+      text-decoration: none;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: 'Exo 2', sans-serif;
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge--orange { background: var(--orange); color: #fff; }
+    .badge--blue { background: var(--blue); color: #fff; }
+    .badge--red { background: var(--red); color: #fff; }
+
+    @media print {
+      body { font-size: 9.5pt; line-height: 1.45; }
+      .doc-header { margin-bottom: 16px; padding-bottom: 12px; }
+      .section-title { margin-top: 18px; margin-bottom: 10px; page-break-after: avoid; }
+      .section-title--sm { page-break-after: avoid; }
+      .no-print { display: none; }
+      .page-break { page-break-before: always; }
+      a { color: var(--text) !important; text-decoration: none; }
+      table { page-break-inside: avoid; }
+      tr { page-break-inside: avoid; }
+      .highlight-box, .info-box, .safe-box, .warning-box { page-break-inside: avoid; }
+      .step { page-break-inside: avoid; }
+      .tool-grid { page-break-inside: avoid; }
+      .cols-2 { page-break-inside: avoid; }
+      p { orphans: 3; widows: 3; }
+      h2, h3 { page-break-after: avoid; }
+    }
+
+    @media screen {
+      body {
+        max-width: 210mm;
+        margin: 20px auto;
+        padding: 30px 28px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border-radius: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Nano Revolution SRL</strong><br>
+      Str. Ogorului Nr. 3, Oradea<br>
+      Jud. Bihor, 410554, România<br>
+      <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a><br>
+      +40 771 445 577
+    </div>
+  </header>
+
+  <!-- ═══ TITLE ═══ -->
+  <div class="doc-title">
+    <h1>Ghid de Aplicare</h1>
+    <div class="subtitle">Instrucțiuni complete pentru aplicarea thermX</div>
+    <div class="doc-ref">Ref. GA-THERMX-2026 &nbsp;|&nbsp; Rev. 01 &nbsp;|&nbsp; Data: 08.03.2026</div>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong>Acest ghid</strong> este destinat aplicatorilor profesioniști și conține instrucțiunile complete pentru pregătirea, aplicarea și verificarea membranei termoizolante thermX. Respectarea acestor instrucțiuni este obligatorie pentru validarea garanției de 20 de ani.</p>
+  </div>
+
+
+  <!-- ═══ 1. UNELTE ȘI MATERIALE ═══ -->
+  <h2 class="section-title">1. Unelte și materiale necesare</h2>
+
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-card__icon">&#9881;</div>
+      <div class="tool-card__name">Pensulă / Trafalet</div>
+      <div class="tool-card__detail">Trafalet cu fir scurt (velur) sau pensulă de calitate</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card__icon">&#9881;</div>
+      <div class="tool-card__name">Pistol Airless</div>
+      <div class="tool-card__detail">Pentru suprafețe mari; duză recomandată: 0,43–0,53 mm</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card__icon">&#9881;</div>
+      <div class="tool-card__name">Etalon de grosime</div>
+      <div class="tool-card__detail">Verificare grosime strat umed / uscat</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card__icon">&#9881;</div>
+      <div class="tool-card__name">Malaxor / Mixer</div>
+      <div class="tool-card__detail">Omogenizare material înainte de aplicare (turație joasă)</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card__icon">&#9881;</div>
+      <div class="tool-card__name">Bandă de mascare</div>
+      <div class="tool-card__detail">Protecția zonelor adiacente</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card__icon">&#9881;</div>
+      <div class="tool-card__name">EIP</div>
+      <div class="tool-card__detail">Mănuși, ochelari de protecție, îmbrăcăminte de lucru</div>
+    </div>
+  </div>
+
+
+  <!-- ═══ 2. VERIFICĂRI PRELIMINARE ═══ -->
+  <h2 class="section-title">2. Verificări preliminare</h2>
+
+  <h3 class="section-title section-title--sm">2.1 Verificări ambientale <span class="badge badge--blue">Obligatoriu</span></h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:45%">Parametru</th>
+        <th style="width:25%">Valoare admisibilă</th>
+        <th>Observații</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Temperatura suprafeței</td>
+        <td class="table-value">+1°C → +150°C</td>
+        <td>Se măsoară cu termometru de contact</td>
+      </tr>
+      <tr>
+        <td>Temperatura ambientală</td>
+        <td class="table-value">+5°C → +35°C</td>
+        <td>Optimă: +15°C → +25°C</td>
+      </tr>
+      <tr>
+        <td>Umiditate relativă aer</td>
+        <td class="table-value">&lt; 80%</td>
+        <td>Se măsoară cu higrometru</td>
+      </tr>
+      <tr>
+        <td>Precipitații</td>
+        <td class="table-value">Absente</td>
+        <td>Nu se aplică în ploaie, ceață sau ninsoare</td>
+      </tr>
+      <tr>
+        <td>Vânt</td>
+        <td class="table-value">&lt; 30 km/h</td>
+        <td>Vântul puternic accelerează uscarea neuniformă</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-title section-title--sm">2.2 Verificarea materialului</h3>
+
+  <ul class="check-list">
+    <li>Verificați data de expirare pe ambalaj</li>
+    <li>Materialul nu a fost expus la temperaturi sub +5°C (verificați condițiile de transport)</li>
+    <li>Ambalajul este intact, fără semne de deteriorare</li>
+    <li>Culoarea este omogenă (alb, fără zone decolorate sau separare de faze)</li>
+    <li>Omogenizați materialul cu malaxor la turație joasă timp de 2–3 minute</li>
+  </ul>
+
+  <div class="warning-box">
+    <p><strong>Nu se diluează!</strong> thermX se utilizează exclusiv în forma livrată de producător. Diluarea cu apă sau alte substanțe alterează proprietățile termice și anulează garanția.</p>
+  </div>
+
+
+  <!-- ═══ PAGE 2 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Ghid de Aplicare</strong> — thermX Izolație Nanoceramică &nbsp;|&nbsp; Pag. 2/5
+    </div>
+  </header>
+
+
+  <!-- ═══ 3. PREGĂTIRE SUPRAFAȚĂ ═══ -->
+  <h2 class="section-title">3. Pregătirea suprafeței</h2>
+
+  <p class="lead">Calitatea pregătirii suprafeței determină direct performanța și durabilitatea izolației. Această etapă este critică.</p>
+
+  <div class="step">
+    <div class="step__number">A</div>
+    <div class="step__content">
+      <div class="step__title">Curățare mecanică</div>
+      <p>Îndepărtați toate particulele neaderente: praf, mortar vechi dezlipit, rugină, vopsea exfoliată, mucegai. Utilizați perie de sârmă, șpaclu sau jet de apă sub presiune (pentru suprafețe exterioare).</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step__number">B</div>
+    <div class="step__content">
+      <div class="step__title">Degresare</div>
+      <p>Îndepărtați orice urmă de grăsime, ulei sau substanțe hidrofobe. Utilizați solvenți compatibili sau detergenți industriali. Clătiți cu apă curată și lăsați să se usuce complet.</p>
+      <ul>
+        <li><strong>Metal:</strong> degresare chimică obligatorie</li>
+        <li><strong>Beton:</strong> verificare hidrofobizare (testul picăturii de apă)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step__number">C</div>
+    <div class="step__content">
+      <div class="step__title">Grunduire (unde este cazul)</div>
+      <p>Suprafețele metalice necesită grunduire anticorozivă compatibilă cu acrilații. Se aplică grundul și se lasă să se usuce complet (conform instrucțiunilor grundului) înainte de aplicarea thermX.</p>
+      <ul>
+        <li><strong>Beton:</strong> nu necesită grunduire dacă suprafața este matură (≥28 zile) și curată</li>
+        <li><strong>Lemn:</strong> nu necesită grunduire; thermX aderă direct</li>
+        <li><strong>Metal:</strong> grunduire anticorozivă obligatorie</li>
+        <li><strong>Suprafețe vopsite:</strong> se aplică direct dacă vopseaua este aderentă și stabilă</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step__number">D</div>
+    <div class="step__content">
+      <div class="step__title">Verificare umiditate reziduală</div>
+      <p>Suprafața trebuie să fie uscată. Pentru beton: umiditate reziduală <strong>&lt; 5%</strong> (se măsoară cu higrometru de contact). Pentru suprafețe exterioare: se verifică absența condensului de suprafață.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step__number">E</div>
+    <div class="step__content">
+      <div class="step__title">Mascare zone adiacente</div>
+      <p>Aplicați bandă de mascare pe toate suprafețele adiacente care nu trebuie acoperite: tâmplărie, geamuri, profile metalice vizibile, zone de îmbinare cu alte materiale.</p>
+    </div>
+  </div>
+
+
+  <!-- ═══ PAGE 3 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Ghid de Aplicare</strong> — thermX Izolație Nanoceramică &nbsp;|&nbsp; Pag. 3/5
+    </div>
+  </header>
+
+
+  <!-- ═══ 4. PROCESUL DE APLICARE ═══ -->
+  <h2 class="section-title">4. Procesul de aplicare</h2>
+
+  <div class="step">
+    <div class="step__number">1</div>
+    <div class="step__content">
+      <div class="step__title">Omogenizare material</div>
+      <p>Amestecați materialul cu malaxor la turație joasă (200–400 rot/min) timp de 2–3 minute. Evitați turația mare — nu introduceți aer în material.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step__number">2</div>
+    <div class="step__content">
+      <div class="step__title">Aplicare primul strat</div>
+      <p>Aplicați un strat uniform de <strong>0,5 mm grosime</strong> folosind una din metodele de mai jos:</p>
+      <ul>
+        <li><strong>Pensulă:</strong> mișcări încrucișate, strat uniform, fără zone supraîncărcate</li>
+        <li><strong>Trafalet:</strong> trafalet cu fir scurt (velur), rulare uniformă într-o singură direcție, apoi perpendicular</li>
+        <li><strong>Airless:</strong> presiune 150–180 bar, duză 0,43–0,53 mm, distanță 30–40 cm de suprafață</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step__number">3</div>
+    <div class="step__content">
+      <div class="step__title">Uscare primul strat</div>
+      <p>Lăsați stratul aplicat să se usuce complet:</p>
+      <table style="margin:8px 0;">
+        <thead>
+          <tr>
+            <th>Condiții</th>
+            <th>Timp minim uscare</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>20°C, 60% umiditate relativă</td>
+            <td class="table-value">24 ore</td>
+          </tr>
+          <tr>
+            <td>15°C, 70% umiditate relativă</td>
+            <td class="table-value">36 ore</td>
+          </tr>
+          <tr>
+            <td>10°C, 80% umiditate relativă</td>
+            <td class="table-value">48 ore</td>
+          </tr>
+          <tr>
+            <td>30°C, 40% umiditate relativă</td>
+            <td class="table-value">16 ore</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="font-size:9pt; color:var(--text-muted);">Stratul este uscat când culoarea devine uniform albă și nu se lipește la atingere.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step__number">4</div>
+    <div class="step__content">
+      <div class="step__title">Verificare și aplicare straturi suplimentare</div>
+      <p>După uscarea completă a fiecărui strat:</p>
+      <ul>
+        <li>Inspectați vizual stratul pentru zone neacoperite, bule sau discontinuități</li>
+        <li>Corectați eventualele defecte cu pensulă, local</li>
+        <li>Aplicați stratul următor perpendicular pe direcția stratului anterior</li>
+        <li>Repetați procesul până la atingerea grosimii totale specificate în proiect</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step__number">5</div>
+    <div class="step__content">
+      <div class="step__title">Verificare finală</div>
+      <p>După uscarea ultimului strat (min. 24h):</p>
+      <ul>
+        <li>Măsurați grosimea totală cu etalon de grosime — minimum 3 puncte per m²</li>
+        <li>Verificați continuitatea membranei — fără zone descoperite, fisuri sau exfolieri</li>
+        <li>Îndepărtați banda de mascare cu atenție</li>
+        <li>Documentați aplicarea în jurnalul de lucrări</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- ═══ PAGE 4 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Ghid de Aplicare</strong> — thermX Izolație Nanoceramică &nbsp;|&nbsp; Pag. 4/5
+    </div>
+  </header>
+
+
+  <!-- ═══ 5. CONSUM ═══ -->
+  <h2 class="section-title">5. Tabel de consum</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Grosime totală</th>
+        <th>Nr. straturi</th>
+        <th>Consum / m²</th>
+        <th>Consum / 10 m²</th>
+        <th>Utilizare tipică</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="table-value">0,5 mm</td>
+        <td>1</td>
+        <td>~1,0 L</td>
+        <td>~10 L</td>
+        <td>Pereți interiori, plafoane</td>
+      </tr>
+      <tr>
+        <td class="table-value">1,0 mm</td>
+        <td>2</td>
+        <td>~2,0 L</td>
+        <td>~20 L</td>
+        <td>Fațade, acoperișuri, pardoseli</td>
+      </tr>
+      <tr>
+        <td class="table-value">1,5 mm</td>
+        <td>3</td>
+        <td>~3,0 L</td>
+        <td>~30 L</td>
+        <td>Fațade expuse, conducte HVAC</td>
+      </tr>
+      <tr>
+        <td class="table-value">2,0 mm</td>
+        <td>4</td>
+        <td>~4,0 L</td>
+        <td>~40 L</td>
+        <td>Punți termice, zone critice</td>
+      </tr>
+      <tr>
+        <td class="table-value">3,0 mm</td>
+        <td>6</td>
+        <td>~6,0 L</td>
+        <td>~60 L</td>
+        <td>Aplicații industriale (conducte, rezervoare)</td>
+      </tr>
+      <tr>
+        <td class="table-value">3,5 mm</td>
+        <td>7</td>
+        <td>~7,0 L</td>
+        <td>~70 L</td>
+        <td>Aplicații industriale extreme</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <p><strong>Notă:</strong> Consumul efectiv poate fi cu 10–15% mai mare pe suprafețe poroase sau rugoase (beton brut, BCA, tencuială veche). Se recomandă calcularea unei rezerve de 15% față de consumul teoretic.</p>
+  </div>
+
+
+  <!-- ═══ 6. APLICARE PE TIPURI DE SUPRAFEȚE ═══ -->
+  <h2 class="section-title">6. Instrucțiuni specifice pe tip de substrat</h2>
+
+  <div class="cols-2">
+    <div>
+      <h3 class="section-title section-title--sm">Beton / Tencuială</h3>
+      <ul>
+        <li>Nu necesită grunduire</li>
+        <li>Beton matur (min. 28 zile)</li>
+        <li>Umiditate reziduală &lt;5%</li>
+        <li>Se aplică direct pe suprafață curată</li>
+        <li>Grosime recomandată: 0,5–1,5 mm</li>
+      </ul>
+
+      <h3 class="section-title section-title--sm">Metal</h3>
+      <ul>
+        <li>Grunduire anticorozivă obligatorie</li>
+        <li>Degresare chimică prealabilă</li>
+        <li>Îndepărtare completă rugină</li>
+        <li>Se aplică după uscarea grundului</li>
+        <li>Grosime recomandată: 0,5–1,5 mm</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="section-title section-title--sm">Lemn / OSB</h3>
+      <ul>
+        <li>Nu necesită grunduire</li>
+        <li>Suprafață uscată (umiditate &lt;15%)</li>
+        <li>Se aplică direct</li>
+        <li>Grosime recomandată: 0,5–1,0 mm</li>
+      </ul>
+
+      <h3 class="section-title section-title--sm">Conducte HVAC</h3>
+      <ul>
+        <li>Curățare și degresare suprafață metalică</li>
+        <li>Grunduire anticorozivă</li>
+        <li>Se aplică uniform pe circumferință</li>
+        <li>Atenție la fitinguri și îmbinări</li>
+        <li>Grosime conform calcul termic (0,5–3,5 mm)</li>
+      </ul>
+
+      <h3 class="section-title section-title--sm">Suprafețe vopsite</h3>
+      <ul>
+        <li>Vopseaua existentă trebuie să fie aderentă</li>
+        <li>Se verifică prin testul grilajului (EN ISO 2409)</li>
+        <li>Nu se aplică peste vopsea exfoliată</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- ═══ PAGE 5 ═══ -->
+  <div class="page-break"></div>
+
+  <header class="doc-header">
+    <div class="doc-header__logo">
+      <img src="../thermx-logo.png" alt="thermX">
+    </div>
+    <div class="doc-header__company">
+      <strong>Ghid de Aplicare</strong> — thermX Izolație Nanoceramică &nbsp;|&nbsp; Pag. 5/5
+    </div>
+  </header>
+
+
+  <!-- ═══ 7. TROUBLESHOOTING ═══ -->
+  <h2 class="section-title">7. Probleme frecvente și soluții</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:28%">Problemă</th>
+        <th style="width:32%">Cauză probabilă</th>
+        <th>Soluție</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Bășicări (bule) în strat</td>
+        <td>Suprafață umedă sau material aplicat prea gros într-un singur strat</td>
+        <td>Lăsați să se usuce, șlefuiți ușor zona, reaplicați în strat subțire (0,5 mm)</td>
+      </tr>
+      <tr>
+        <td>Exfoliere / dezlipire</td>
+        <td>Suprafață grasă, praf neîndepărtat, sau grunduire lipsă pe metal</td>
+        <td>Îndepărtați zona afectată, refaceți pregătirea suprafeței, reaplicați</td>
+      </tr>
+      <tr>
+        <td>Fisuri la uscare</td>
+        <td>Strat prea gros (peste 0,7 mm per strat) sau uscare prea rapidă (soare direct, vânt)</td>
+        <td>Aplicați straturi de max. 0,5 mm. Protejați de soare direct în primele 4h</td>
+      </tr>
+      <tr>
+        <td>Zone cu grosime insuficientă</td>
+        <td>Suprafață rugoasă care absoarbe materialul</td>
+        <td>Aplicați un strat suplimentar local, verificați cu etalon</td>
+      </tr>
+      <tr>
+        <td>Uscare prelungită (peste 48h)</td>
+        <td>Temperatură scăzută și/sau umiditate ridicată</td>
+        <td>Asigurați ventilație. Interior: utilizați dezumidificator. Nu forțați uscarea cu surse de căldură directă</td>
+      </tr>
+      <tr>
+        <td>Culoare neuniformă după uscare</td>
+        <td>Grosime neuniformă a stratului aplicat</td>
+        <td>Nu afectează performanța. Dacă este necesar estetic, aplicați un strat suplimentar uniform</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══ 8. DEPOZITARE ═══ -->
+  <h2 class="section-title">8. Depozitare și manipulare pe șantier</h2>
+
+  <div class="cols-2">
+    <div>
+      <h3 class="section-title section-title--sm">Depozitare</h3>
+      <ul>
+        <li>În ambalajul original, închis</li>
+        <li>Temperatură: <strong>+5°C → +26°C</strong></li>
+        <li>Loc uscat, ventilat, ferit de soare</li>
+        <li>Nu se depozitează la temperaturi sub 0°C</li>
+        <li>La temperaturi peste 60°C: calitatea se degradează</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="section-title section-title--sm">Siguranță</h3>
+      <ul>
+        <li>Purtați mănuși și ochelari de protecție</li>
+        <li>Nu necesită protecție respiratorie specială</li>
+        <li>Produs pe bază de apă — ecologic, netoxic</li>
+        <li>Spălare instrumente cu apă (înainte de uscare)</li>
+        <li>Deșeuri: cod 08 02 03</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <p><strong>După uscare / polimerizare:</strong> thermX se curăță mecanic. Instrumentele se spală cu apă imediat după utilizare, înainte ca materialul să se usuce.</p>
+  </div>
+
+
+  <!-- ═══ 9. JURNAL LUCRĂRI ═══ -->
+  <h2 class="section-title">9. Jurnalul de lucrări — checklist</h2>
+
+  <p>Completați pentru fiecare zonă / element constructiv:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:5%"></th>
+        <th style="width:50%">Verificare</th>
+        <th>Valoare / Observații</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Suprafața curățată și degresată</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Grunduire efectuată (dacă este cazul)</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Temperatura suprafeței la aplicare</td>
+        <td>_____ °C</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Temperatura ambientală</td>
+        <td>_____ °C</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Umiditate relativă aer</td>
+        <td>_____ %</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Nr. lot material thermX</td>
+        <td>LOT-_________</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Nr. straturi aplicate</td>
+        <td>_____ straturi</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Grosime totală măsurată (medie)</td>
+        <td>_____ mm</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Timp uscare respectat între straturi</td>
+        <td>_____ ore</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Inspecție vizuală — membrană continuă, fără defecte</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Data aplicare / Data verificare</td>
+        <td>___/___/2026</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">&#9744;</td>
+        <td>Aplicator (nume, semnătură)</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══ DISCLAIMER ═══ -->
+  <div class="divider"></div>
+
+  <p style="font-size: 8.5pt; color: var(--text-muted); line-height: 1.5;">
+    Acest ghid de aplicare este furnizat de Nano Revolution SRL ca suport pentru aplicatorii profesioniști. Respectarea instrucțiunilor din acest ghid este obligatorie pentru validarea garanției produsului. Producătorul nu își asumă responsabilitatea pentru deteriorarea cauzată de nerespectarea instrucțiunilor. Pentru situații neacoperite de acest ghid, contactați departamentul de suport tehnic.
+  </p>
+
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="doc-footer">
+    <div>&copy; 2026 Nano Revolution SRL — Toate drepturile rezervate</div>
+    <div>
+      <a href="https://nanorevolution.ro">nanorevolution.ro</a> &nbsp;|&nbsp;
+      <a href="mailto:contact@nanorevolution.ro">contact@nanorevolution.ro</a>
+    </div>
+  </footer>
+
+</body>
+</html>
