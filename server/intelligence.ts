@@ -7,8 +7,8 @@ import { scanClients } from './scanner.js'
 import type { Response } from 'express'
 
 const router = express.Router()
-const DATA_DIR = resolve(import.meta.dirname, '..', 'data')
-const PROJECT_ROOT = resolve(import.meta.dirname, '..', '..', '..')
+const DATA_DIR = resolve(process.cwd(), 'data')
+const PROJECT_ROOT = process.cwd()
 
 // ── SSE helpers ──────────────────────────────────────────
 function initSSE(res: Response) {

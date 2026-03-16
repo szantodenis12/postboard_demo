@@ -92,13 +92,14 @@ const app = express()
 const PORT = process.env.PORT || 3001
 
 // Root of the Epic Digital Hub project
-const PROJECT_ROOT = resolve(import.meta.dirname, '..')
-const STATUSES_FILE = resolve(import.meta.dirname, '..', 'data', 'statuses.json')
-const CAPTIONS_FILE = resolve(import.meta.dirname, '..', 'data', 'captions.json')
-const DATES_FILE = resolve(import.meta.dirname, '..', 'data', 'dates.json')
-const POST_PUBLISH_OPTIONS_FILE = resolve(import.meta.dirname, '..', 'data', 'post-publish-options.json')
-const HIDDEN_FILE = resolve(import.meta.dirname, '..', 'data', 'hidden.json')
-const PAGE_MAPPING_FILE = resolve(import.meta.dirname, '..', 'data', 'page-mapping.json')
+// Project root is the current working directory
+const PROJECT_ROOT = process.cwd()
+const STATUSES_FILE = resolve(PROJECT_ROOT, 'data', 'statuses.json')
+const CAPTIONS_FILE = resolve(PROJECT_ROOT, 'data', 'captions.json')
+const DATES_FILE = resolve(PROJECT_ROOT, 'data', 'dates.json')
+const POST_PUBLISH_OPTIONS_FILE = resolve(PROJECT_ROOT, 'data', 'post-publish-options.json')
+const HIDDEN_FILE = resolve(PROJECT_ROOT, 'data', 'hidden.json')
+const PAGE_MAPPING_FILE = resolve(PROJECT_ROOT, 'data', 'page-mapping.json')
 
 
 // Global sync state

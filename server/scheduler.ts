@@ -1,8 +1,8 @@
 import { resolve } from 'path'
 import { db } from './firebase.js'
 
-const SCHEDULER_FILE = resolve(import.meta.dirname, '..', 'data', 'scheduler.json')
-const SCHEDULER_LOG_FILE = resolve(import.meta.dirname, '..', 'data', 'scheduler-log.json')
+const SCHEDULER_FILE = resolve(process.cwd(), 'data', 'scheduler.json')
+const SCHEDULER_LOG_FILE = resolve(process.cwd(), 'data', 'scheduler-log.json')
 
 export interface ClientScheduleConfig {
   autoPublish: boolean

@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { scanClients } from './scanner.js'
 
 const router = Router()
-const CRM_FILE = resolve(import.meta.dirname, '..', 'data', 'crm.json')
+const CRM_FILE = resolve(process.cwd(), 'data', 'crm.json')
 
 // ── Types ──────────────────────────────────────────────
 
@@ -314,7 +314,7 @@ router.get('/contracts/:id/pdf-data', (req, res) => {
   let clientColor = '#7c3aed'
   let postCount = 0
   try {
-    const PROJECT_ROOT = resolve(import.meta.dirname, '..', '..', '..')
+    const PROJECT_ROOT = process.cwd()
     const data = scanClients(PROJECT_ROOT)
     const client = data.clients.find((c: any) => c.id === contract.clientId)
     if (client) {

@@ -18,11 +18,11 @@ export interface MetaConnections {
 }
 
 // ── Config ───────────────────────────────────────────────
-const CONNECTIONS_FILE = resolve(import.meta.dirname, '..', 'data', 'connections.json')
-const INSTAGRAM_OVERRIDES_FILE = resolve(import.meta.dirname, '..', 'data', 'instagram-overrides.json')
+const CONNECTIONS_FILE = resolve(process.cwd(), 'data', 'connections.json')
+const INSTAGRAM_OVERRIDES_FILE = resolve(process.cwd(), 'data', 'instagram-overrides.json')
 
 function loadEnv() {
-  const envPath = resolve(import.meta.dirname, '..', '.env')
+  const envPath = resolve(process.cwd(), '.env')
   if (!existsSync(envPath)) return {}
   const content = readFileSync(envPath, 'utf-8')
   const env: Record<string, string> = {}

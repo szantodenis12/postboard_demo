@@ -59,7 +59,8 @@ export interface AnalyticsStore {
 }
 
 // ── Persistence ──────────────────────────────────────────
-const ANALYTICS_FILE = resolve(import.meta.dirname, '..', 'data', 'analytics.json')
+const ANALYTICS_FILE = resolve(process.cwd(), 'data', 'analytics.json')
+const REPORTS_FILE = resolve(process.cwd(), 'data', 'reports.json')
 
 export function readAnalytics(): AnalyticsStore {
   try {
@@ -295,8 +296,7 @@ export interface ReportToken {
   googleSnapshot?: any // GoogleInsightsData when available
 }
 
-const REPORTS_FILE = resolve(import.meta.dirname, '..', 'data', 'reports.json')
-
+// ── Report tokens persistence ─────────────────────────────
 export function readReports(): ReportToken[] {
   try {
     if (existsSync(REPORTS_FILE)) {

@@ -49,13 +49,13 @@ export interface GoogleInsightsRetryJob {
 }
 
 // ── Config ───────────────────────────────────────────────
-const CONNECTIONS_FILE = resolve(import.meta.dirname, '..', 'data', 'google-connections.json')
-const GOOGLE_MAPPING_FILE = resolve(import.meta.dirname, '..', 'data', 'google-mapping.json')
-const GOOGLE_ANALYTICS_FILE = resolve(import.meta.dirname, '..', 'data', 'google-analytics.json')
-const GOOGLE_RETRY_QUEUE_FILE = resolve(import.meta.dirname, '..', 'data', 'google-retry-queue.json')
+const CONNECTIONS_FILE = resolve(process.cwd(), 'data', 'google-connections.json')
+const GOOGLE_MAPPING_FILE = resolve(process.cwd(), 'data', 'google-mapping.json')
+const GOOGLE_ANALYTICS_FILE = resolve(process.cwd(), 'data', 'google-analytics.json')
+const GOOGLE_RETRY_QUEUE_FILE = resolve(process.cwd(), 'data', 'google-retry-queue.json')
 
 function loadEnv() {
-  const envPath = resolve(import.meta.dirname, '..', '.env')
+  const envPath = resolve(process.cwd(), '.env')
   if (!existsSync(envPath)) return {}
   const content = readFileSync(envPath, 'utf-8')
   const env: Record<string, string> = {}
