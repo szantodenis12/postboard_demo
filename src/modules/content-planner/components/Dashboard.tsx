@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useState, useCallback, useEffect } from 'react'
-import { TrendingUp, Rocket, Trash2 } from 'lucide-react'
+import { TrendingUp, Rocket, Trash2, Plus } from 'lucide-react'
 import { AnimatePresence } from 'framer-motion'
 import { useApp } from '../../../core/context'
 import { StatsBar } from '../../../core/ui/StatsBar'
@@ -11,15 +11,17 @@ import { ClientCard } from './ClientCard'
 import { ClientDetail } from './ClientDetail'
 import { PostDetailModal } from './PostDetailModal'
 import { PillarBalance } from './PillarBalance'
+import { PostFormModal } from '../../../core/ui/PostFormModal'
 import { usePublish } from '../hooks/usePublish'
 import { useHealthScores } from '../hooks/useHealthScores'
 import type { Post } from '../../../core/types'
 
 export function Dashboard() {
-  const { data, selectedClient, setSelectedClient, updatePostStatus, updatePostCaption, getPublishConfig, deletePost, getImageUrl } = useApp()
+  const { data, selectedClient, setSelectedClient, updatePostStatus, updatePostCaption, getPublishConfig, deletePost, getImageUrl, createPost } = useApp()
   const handlePublish = usePublish()
   const { getScore } = useHealthScores()
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
+  const [showCreateModal, setShowCreateModal] = useState(false)
 
   const client = selectedClient
     ? data.clients.find(c => c.id === selectedClient)
@@ -87,10 +89,21 @@ export function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         className="mb-6"
       >
-        <h2 className="text-2xl font-bold text-white mb-1">Dashboard</h2>
-        <p className="text-sm text-white/30">
-          Manage social media content across all your clients
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-1">Dashboard</h2>
+            <p className="text-sm text-white/30">
+              Manage social media content across all your clients
+            </p>
+          </div>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-accent-violet to-accent-cyan hover:shadow-lg hover:shadow-accent-cyan/20 text-white rounded-xl font-bold transition-all active:scale-95"
+          >
+            <Plus size={18} />
+            <span>New Post</span>
+          </button>
+        </div>
       </motion.div>
 
       {/* Stats */}
@@ -281,6 +294,18 @@ export function Dashboard() {
             }}
             publishConfig={getPublishConfig(selectedPost.clientId)}
             onPublish={handlePublish}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showCreateModal && (
+          <PostFormModal
+            isOpen={showCreateModal}
+            onClose={() => setShowCreateModal(false)}
+            onSave={createPost}
+            clients={data.clients}
+            selectedClientId={selectedClient || undefined}
           />
         )}
       </AnimatePresence>

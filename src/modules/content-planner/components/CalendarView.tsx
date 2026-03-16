@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronLeft, ChevronRight, X, GripVertical,
   CalendarDays, LayoutGrid, Flag, Sparkles,
-  Wand2, Loader2, Trash2,
+  Wand2, Loader2, Trash2, Plus
 } from 'lucide-react'
 import { useState, useMemo, useCallback } from 'react'
 import {
@@ -22,6 +22,7 @@ import { useToast } from '../../../core/ui/ToastProvider'
 import { PlatformDot, PlatformBadge } from '../../../core/ui/PlatformBadge'
 import { StatusBadge } from '../../../core/ui/StatusBadge'
 import { PostDetailModal } from './PostDetailModal'
+import { PostFormModal } from '../../../core/ui/PostFormModal'
 import { usePublish } from '../hooks/usePublish'
 import type { Post } from '../../../core/types'
 import {
@@ -42,7 +43,7 @@ type ViewMode = 'month' | 'week'
 export function CalendarView() {
   const {
     data, selectedClient, setSelectedClient,
-    updatePostStatus, updatePostCaption, updatePostDate, getPublishConfig, getImageUrl, deletePost,
+    updatePostStatus, updatePostCaption, updatePostDate, getPublishConfig, getImageUrl, deletePost, createPost
   } = useApp()
   const { toast } = useToast()
   const handlePublish = usePublish()
@@ -65,6 +66,7 @@ export function CalendarView() {
   const [aiGenerating, setAiGenerating] = useState(false)
   const [aiResult, setAiResult] = useState('')
   const [showAiPanel, setShowAiPanel] = useState(false)
+  const [showCreateModal, setShowCreateModal] = useState(false)
 
   const handleAiCalendarFill = useCallback(async () => {
     const clientId = selectedClient || clients[0]?.id
@@ -337,6 +339,14 @@ export function CalendarView() {
             >
               {aiGenerating ? <Loader2 size={13} className="animate-spin" /> : <Wand2 size={13} />}
               AI Fill Month
+            </button>
+
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-accent-violet text-white hover:bg-accent-violet/90 transition-all shadow-lg shadow-accent-violet/20"
+            >
+              <Plus size={13} />
+              Craft New Post
             </button>
 
             <div className="w-px h-5 bg-white/[0.06]" />
@@ -677,6 +687,19 @@ export function CalendarView() {
             }}
             publishConfig={getPublishConfig(selectedPost.clientId)}
             onPublish={handlePublish}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ── Post Creation Modal ────────────────────── */}
+      <AnimatePresence>
+        {showCreateModal && (
+          <PostFormModal
+            isOpen={showCreateModal}
+            onClose={() => setShowCreateModal(false)}
+            onSave={createPost}
+            clients={data.clients}
+            selectedClientId={selectedClient || undefined}
           />
         )}
       </AnimatePresence>

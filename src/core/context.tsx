@@ -32,6 +32,7 @@ interface AppContextValue {
   updatePostDate: (postId: string, date: string) => void
   updatePostPublishOptions: (postId: string, options: PostPublishOptions) => Promise<boolean>
   deletePost: (postId: string) => void
+  createPost: (postData: any) => Promise<any>
 
   // Meta
   meta: MetaStatus
@@ -74,7 +75,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (typeof window === 'undefined') return false
     return window.localStorage.getItem(SHOW_EXPIRED_STORAGE_KEY) === '1'
   })
-  const { data, loading, error, refresh, updatePostStatus, updatePostCaption, updatePostDate, updatePostPublishOptions, deletePost } = useData({
+  const { data, loading, error, refresh, updatePostStatus, updatePostCaption, updatePostDate, updatePostPublishOptions, deletePost, createPost } = useData({
     includeExpired: showExpiredPosts,
   })
   const metaHook = useMeta()
@@ -97,6 +98,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     updatePostDate,
     updatePostPublishOptions,
     deletePost,
+    createPost,
     meta: metaHook.meta,
     pageMapping: metaHook.pageMapping,
     metaLoading: metaHook.loading,

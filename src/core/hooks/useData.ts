@@ -194,5 +194,40 @@ export function useData({ includeExpired = false }: { includeExpired?: boolean }
     updatePostCaption,
     updatePostPublishOptions,
     deletePost,
+    createPost: useCallback(async (postData: any) => {
+      const { files, ...payload } = postData
+      try {
+        setLoading(true)
+        const res = await fetch('/api/posts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
+        if (!res.ok) throw new Error(`Failed to create post: ${res.status}`)
+        const newPost = await res.json()
+
+        // Handle file uploads if present
+        if (files && files.length > 0) {
+          const formData = new FormData()
+          files.forEach((f: File) => formData.append('files', f))
+          
+          const uploadRes = await fetch(`/api/posts/${newPost.id}/media/${payload.clientId}`, {
+            method: 'POST',
+            body: formData,
+          })
+          if (!uploadRes.ok) {
+            console.error('Files failed to upload, but post was created.')
+          }
+        }
+
+        await refresh()
+        return newPost
+      } catch (err) {
+        console.error('Post creation error:', err)
+        throw err
+      } finally {
+        setLoading(false)
+      }
+    }, [refresh]),
   }
 }

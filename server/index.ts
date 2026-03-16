@@ -921,7 +921,11 @@ app.post('/api/posts/:id/media/:clientId', upload.array('files', 10), async (req
           resumable: false
         })
 
-        await blob.makePublic()
+        try {
+          await blob.makePublic()
+        } catch (err) {
+          console.warn(`Could not make file public: ${fileName}. Error:`, err)
+        }
         const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`
 
         return {
@@ -999,7 +1003,11 @@ app.post('/api/posts/:id/image/:clientId', upload.single('file'), async (req, re
       resumable: false
     })
 
-    await blob.makePublic()
+    try {
+      await blob.makePublic()
+    } catch (err) {
+      console.warn(`Could not make file public (legacy): ${fileName}. Error:`, err)
+    }
     const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`
 
     const image = normalizePostMediaItem({
@@ -1167,7 +1175,11 @@ app.post('/api/uploads/:clientId', upload.array('files', 10), async (req, res) =
           resumable: false
         })
 
-        await blob.makePublic()
+        try {
+          await blob.makePublic()
+        } catch (err) {
+          console.warn(`Could not make file public (general): ${fileName}. Error:`, err)
+        }
         const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`
 
         return {
