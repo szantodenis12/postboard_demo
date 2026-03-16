@@ -578,6 +578,22 @@ app.get('/api/posts/hidden', async (_req, res) => {
   }
 })
 
+// Update a post status
+app.patch('/api/posts/:id/status', async (req, res) => {
+  try {
+    const { status } = req.body
+    if (!status) {
+      res.status(400).json({ error: 'Status is required' })
+      return
+    }
+    await db.collection('posts').doc(req.params.id).update({ status })
+    res.json({ id: req.params.id, status, updated: true })
+  } catch (error) {
+    console.error('Update status error:', error)
+    res.status(500).json({ error: 'Failed to update status' })
+  }
+})
+
 // Bulk update statuses
 app.patch('/api/posts/status/bulk', async (req, res) => {
   const { updates } = req.body as { updates: { id: string; status: string }[] }

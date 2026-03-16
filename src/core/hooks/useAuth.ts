@@ -45,8 +45,17 @@ export function useAuth() {
   }, [])
 
   const isAuthenticated = !!user
+  const isReviewPath = window.location.pathname.startsWith('/review/')
 
-  return { isAuthenticated, authRequired: true, checking, user, error, login, logout }
+  return { 
+    isAuthenticated, 
+    authRequired: isReviewPath ? false : true, 
+    checking, 
+    user, 
+    error, 
+    login, 
+    logout 
+  }
 }
 
 // Add auth token to all fetch requests

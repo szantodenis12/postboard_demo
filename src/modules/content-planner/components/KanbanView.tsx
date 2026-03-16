@@ -19,7 +19,7 @@ import {
 } from '@dnd-kit/sortable'
 import {
   FileEdit, CheckCircle2, Clock, Send, GripVertical,
-  Calendar, Hash,
+  Calendar, Hash, Trash2,
   Image, Layers, Video, BookImage, Type,
 } from 'lucide-react'
 import { useApp } from '../../../core/context'
@@ -47,7 +47,7 @@ const FORMAT_ICONS: Record<string, typeof Image> = {
 }
 
 export function KanbanView() {
-  const { data, selectedClient, updatePostStatus, updatePostCaption, getPublishConfig, getImageUrl, hasPostMedia } = useApp()
+  const { data, selectedClient, updatePostStatus, updatePostCaption, getPublishConfig, getImageUrl, hasPostMedia, deletePost } = useApp()
   const { toast } = useToast()
   const handlePublish = usePublish()
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
@@ -171,6 +171,7 @@ export function KanbanView() {
                   getPublishConfig={getPublishConfig}
                   getImageUrl={getImageUrl}
                   hasPostMedia={hasPostMedia}
+                  onRemovePost={deletePost}
                 />
               </motion.div>
             )
@@ -208,9 +209,10 @@ export function KanbanView() {
 }
 
 // ── Droppable Column ─────────────────────────────────────
-function DroppableColumn({ id, posts, isOver, isValidDrop, columnColor, showClient, onPostClick, getPublishConfig, getImageUrl, hasPostMedia }: {
+function DroppableColumn({ id, posts, isOver, isValidDrop, columnColor, showClient, onPostClick, getPublishConfig, getImageUrl, hasPostMedia, onRemovePost }: {
   id: PostStatus; posts: KanbanPost[]; isOver: boolean; isValidDrop: boolean; columnColor: string
   showClient: boolean; onPostClick: (p: Post) => void; getPublishConfig: (id: string) => any; getImageUrl: (postId: string) => string | null; hasPostMedia: (postId: string) => boolean
+  onRemovePost: (id: string) => void
 }) {
   const { setNodeRef } = useDroppable({ id })
   return (
@@ -232,6 +234,7 @@ function DroppableColumn({ id, posts, isOver, isValidDrop, columnColor, showClie
             getPublishConfig={getPublishConfig}
             imageUrl={getImageUrl(post.id)}
             hasVisual={hasPostMedia(post.id)}
+            onRemove={() => onRemovePost(post.id)}
           />
         ))}
       </SortableContext>
@@ -246,8 +249,8 @@ function DroppableColumn({ id, posts, isOver, isValidDrop, columnColor, showClie
 }
 
 // ── Draggable Card ───────────────────────────────────────
-function DraggableCard({ post, showClient, onPostClick, getPublishConfig, imageUrl, hasVisual }: {
-  post: KanbanPost; showClient: boolean; onPostClick: (p: Post) => void; getPublishConfig: (id: string) => any; imageUrl: string | null; hasVisual: boolean
+function DraggableCard({ post, showClient, onPostClick, getPublishConfig, imageUrl, hasVisual, onRemove }: {
+  post: KanbanPost; showClient: boolean; onPostClick: (p: Post) => void; getPublishConfig: (id: string) => any; imageUrl: string | null; hasVisual: boolean; onRemove: () => void
 }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: post.id })
   const FormatIcon = FORMAT_ICONS[post.format] || Image
@@ -279,7 +282,21 @@ function DraggableCard({ post, showClient, onPostClick, getPublishConfig, imageU
           </button>
           <PlatformBadge platform={post.platform} />
           <span className="flex items-center gap-1 text-[10px] text-white/30"><FormatIcon size={11} /></span>
-          {config && <span className="ml-auto text-[9px] text-white/15 truncate max-w-[80px]">{config.pageName}</span>}
+          <div className="ml-auto flex items-center gap-1.5">
+            {config && <span className="text-[9px] text-white/15 truncate max-w-[80px]">{config.pageName}</span>}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                if (confirm('Sigur vrei să ștergi această postare?')) {
+                  onRemove()
+                }
+              }}
+              className="p-1 rounded bg-red-500/10 hover:bg-red-500/20 text-red-400/50 hover:text-red-400/80 transition-all opacity-0 group-hover:opacity-100"
+              title="Șterge"
+            >
+              <Trash2 size={11} />
+            </button>
+          </div>
         </div>
         {showClient && post.color && (
           <div className="flex items-center gap-1.5 mb-2">

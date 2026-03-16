@@ -6,3 +6,4 @@ data/*.json
 dist-server
 .firebase
 *debug.log
+serviceAccountKey.json

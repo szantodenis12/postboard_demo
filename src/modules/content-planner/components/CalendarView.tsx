@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronLeft, ChevronRight, X, GripVertical,
   CalendarDays, LayoutGrid, Flag, Sparkles,
-  Wand2, Loader2,
+  Wand2, Loader2, Trash2,
 } from 'lucide-react'
 import { useState, useMemo, useCallback } from 'react'
 import {
@@ -42,7 +42,7 @@ type ViewMode = 'month' | 'week'
 export function CalendarView() {
   const {
     data, selectedClient, setSelectedClient,
-    updatePostStatus, updatePostCaption, updatePostDate, getPublishConfig, getImageUrl,
+    updatePostStatus, updatePostCaption, updatePostDate, getPublishConfig, getImageUrl, deletePost,
   } = useApp()
   const { toast } = useToast()
   const handlePublish = usePublish()
@@ -491,6 +491,7 @@ export function CalendarView() {
                     activeId={activeId}
                     events={events}
                     onPostClick={setSelectedPost}
+                    onRemovePost={deletePost}
                     getImageUrl={getImageUrl}
                   />
                 )
@@ -591,9 +592,23 @@ export function CalendarView() {
                           </span>
                         )}
                       </div>
-                      {post.time && (
-                        <span className="text-[10px] text-white/25">{post.time}</span>
-                      )}
+                      <div className="flex items-center gap-1.5">
+                        {post.time && (
+                          <span className="text-[10px] text-white/25">{post.time}</span>
+                        )}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            if (confirm('Sigur vrei să ștergi această postare?')) {
+                              deletePost(post.id)
+                            }
+                          }}
+                          className="p-1 rounded bg-red-500/10 hover:bg-red-500/20 text-red-400/50 hover:text-red-400/80 transition-all opacity-0 group-hover/day-post:opacity-100"
+                          title="Șterge postarea"
+                        >
+                          <Trash2 size={10} />
+                        </button>
+                      </div>
                     </div>
                   </motion.div>
                 ))}
@@ -743,11 +758,12 @@ function DroppableDay({
 
 function DroppableWeekDay({
   dateStr, date, dayPosts, isToday, isWeekend, isDragOver,
-  activeId, events, onPostClick, getImageUrl,
+  activeId, events, onPostClick, onRemovePost, getImageUrl,
 }: {
   dateStr: string; date: Date; dayPosts: CalendarPost[]; isToday: boolean
   isWeekend: boolean; isDragOver: boolean; activeId: string | null
   events?: CalendarEvent[]; onPostClick: (post: Post) => void
+  onRemovePost: (postId: string) => void
   getImageUrl: (postId: string) => string | null
 }) {
   const { setNodeRef } = useDroppable({ id: dateStr })
@@ -806,6 +822,7 @@ function DroppableWeekDay({
             post={post}
             isDragging={post.id === activeId}
             onClick={() => onPostClick(post)}
+            onRemove={() => onRemovePost(post.id)}
             imageUrl={getImageUrl(post.id)}
           />
         ))}
@@ -824,8 +841,8 @@ function DroppableWeekDay({
 // WeekPostCard — Detailed post card for week view
 // ═══════════════════════════════════════════════════════════
 
-function WeekPostCard({ post, isDragging, onClick, imageUrl }: {
-  post: CalendarPost; isDragging: boolean; onClick: () => void; imageUrl?: string | null
+function WeekPostCard({ post, isDragging, onClick, onRemove, imageUrl }: {
+  post: CalendarPost; isDragging: boolean; onClick: () => void; onRemove: () => void; imageUrl?: string | null
 }) {
   const { attributes, listeners, setNodeRef } = useDraggable({ id: post.id })
 
@@ -881,9 +898,23 @@ function WeekPostCard({ post, isDragging, onClick, imageUrl }: {
               {post.pillar}
             </span>
           )}
-          {post.time && (
-            <span className="text-[9px] text-white/20 ml-auto">{post.time}</span>
-          )}
+          <div className="ml-auto flex items-center gap-1.5">
+            {post.time && (
+              <span className="text-[9px] text-white/20">{post.time}</span>
+            )}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                if (confirm('Sigur vrei să ștergi această postare?')) {
+                  onRemove()
+                }
+              }}
+              className="p-1 rounded bg-red-500/10 hover:bg-red-500/20 text-red-400/50 hover:text-red-400/80 transition-all opacity-0 group-hover/wcard:opacity-100"
+              title="Șterge"
+            >
+              <Trash2 size={9} />
+            </button>
+          </div>
         </div>
       </div>
     </div>

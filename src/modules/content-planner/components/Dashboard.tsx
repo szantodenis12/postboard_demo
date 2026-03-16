@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useState, useCallback, useEffect } from 'react'
-import { TrendingUp, Rocket } from 'lucide-react'
+import { TrendingUp, Rocket, Trash2 } from 'lucide-react'
 import { AnimatePresence } from 'framer-motion'
 import { useApp } from '../../../core/context'
 import { StatsBar } from '../../../core/ui/StatsBar'
@@ -16,7 +16,7 @@ import { useHealthScores } from '../hooks/useHealthScores'
 import type { Post } from '../../../core/types'
 
 export function Dashboard() {
-  const { data, selectedClient, setSelectedClient, updatePostStatus, updatePostCaption, getPublishConfig } = useApp()
+  const { data, selectedClient, setSelectedClient, updatePostStatus, updatePostCaption, getPublishConfig, deletePost, getImageUrl } = useApp()
   const handlePublish = usePublish()
   const { getScore } = useHealthScores()
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
@@ -137,6 +137,18 @@ export function Dashboard() {
                     </span>
                     <div className="ml-auto flex items-center gap-1.5">
                       <PlatformBadge platform={post.platform} />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          if (confirm('Sigur vrei să ștergi această postare?')) {
+                            deletePost(post.id)
+                          }
+                        }}
+                        className="p-1 rounded bg-red-500/10 hover:bg-red-500/20 text-red-400/50 hover:text-red-400/80 transition-all opacity-0 group-hover:opacity-100"
+                        title="Șterge"
+                      >
+                        <Trash2 size={10} />
+                      </button>
                     </div>
                   </div>
                   <p className="text-xs text-white/60 line-clamp-2 mb-2">{post.caption.slice(0, 100)}</p>
@@ -182,6 +194,21 @@ export function Dashboard() {
                     <span className="text-[11px] font-medium" style={{ color: (post as any).color }}>
                       {post.clientName}
                     </span>
+                    <div className="ml-auto flex items-center gap-1.5">
+                      <PlatformBadge platform={post.platform} />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          if (confirm('Sigur vrei să ștergi această postare?')) {
+                            deletePost(post.id)
+                          }
+                        }}
+                        className="p-1 rounded bg-red-500/10 hover:bg-red-500/20 text-red-400/50 hover:text-red-400/80 transition-all opacity-0 group-hover:opacity-100"
+                        title="Șterge"
+                      >
+                        <Trash2 size={10} />
+                      </button>
+                    </div>
                   </div>
                   <div className="text-[11px] text-white/40 mb-1.5">
                     {new Date(post.date).toLocaleDateString('ro-RO', {

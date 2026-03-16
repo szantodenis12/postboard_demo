@@ -9,6 +9,7 @@ import { useAuth } from './core/hooks/useAuth'
 import { AuthCallback } from './modules/settings/components/AuthCallback'
 import { GoogleAuthCallback } from './modules/settings/components/GoogleAuthCallback'
 import { getViewComponent, defaultViewId } from './modules/registry'
+import { PublicReviewBoard } from './modules/client-portal/components/PublicReviewBoard'
 
 function AppContent({ onLogout, authEnabled }: { onLogout?: () => void; authEnabled?: boolean }) {
   const { data, loading, error, refresh, refreshMeta, setSelectedClient } = useApp()
@@ -45,6 +46,12 @@ function AppContent({ onLogout, authEnabled }: { onLogout?: () => void; authEnab
   }
   if (isGoogleCallback) {
     return <GoogleAuthCallback onComplete={() => refresh()} />
+  }
+
+  // Handle review links
+  const isReviewPage = window.location.pathname.startsWith('/review/')
+  if (isReviewPage) {
+    return <PublicReviewBoard />
   }
 
   if (loading && data.clients.length === 0) {

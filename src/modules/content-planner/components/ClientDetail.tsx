@@ -21,7 +21,7 @@ export function ClientDetail({
   getPublishConfig?: (clientId: string) => PublishConfig | null
   onPublish?: (postId: string, platform: 'facebook' | 'instagram', caption: string) => Promise<{ success: boolean; error?: string }>
 }) {
-  const { getImageUrl, hasPostMedia } = useApp()
+  const { getImageUrl, hasPostMedia, deletePost } = useApp()
   const [platformFilter, setPlatformFilter] = useState<Platform | null>(null)
   const [statusFilter, setStatusFilter] = useState<PostStatus | null>(null)
 
@@ -172,6 +172,7 @@ export function ClientDetail({
               onPublish={onPublish}
               imageUrl={getImageUrl(post.id)}
               hasVisual={hasPostMedia(post.id)}
+              onDelete={deletePost}
             />
           ))}
         {filteredPosts.length === 0 && (

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import {
   Calendar, Clock, Image, Layers, Video, BookImage, Type, Hash,
   FileEdit, CheckCircle2, Send, ChevronRight,
-  Facebook, Instagram, Loader2, AlertCircle, Check, Maximize2,
+  Facebook, Instagram, Loader2, AlertCircle, Check, Maximize2, Trash2,
 } from 'lucide-react'
 import { PlatformBadge } from '../../../core/ui/PlatformBadge'
 import { useReadinessScore } from '../hooks/useReadinessScore'
@@ -48,6 +48,7 @@ export function PostCard({
   onPublish,
   imageUrl,
   hasVisual = false,
+  onDelete,
 }: {
   post: Post
   index: number
@@ -59,6 +60,7 @@ export function PostCard({
   onPublish?: (postId: string, platform: 'facebook' | 'instagram', caption: string) => Promise<{ success: boolean; error?: string }>
   imageUrl?: string | null
   hasVisual?: boolean
+  onDelete?: (postId: string) => void
 }) {
   const [showStatusPicker, setShowStatusPicker] = useState(false)
   const [fbState, setFbState] = useState<PublishState>('idle')
@@ -135,6 +137,22 @@ export function PostCard({
             grade={readiness.grade}
             factors={readiness.factors}
           />
+
+          {/* Delete icon */}
+          {onDelete && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                if (confirm('Sigur vrei să ștergi această postare?')) {
+                  onDelete(post.id)
+                }
+              }}
+              className="p-1 rounded opacity-0 group-hover:opacity-100 bg-red-500/10 hover:bg-red-500/20 text-red-400/50 hover:text-red-400/80 transition-all"
+              title="Delete post"
+            >
+              <Trash2 size={11} />
+            </button>
+          )}
 
           {/* Open detail icon */}
           {onClick && (

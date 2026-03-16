@@ -378,12 +378,26 @@ export function PostDetailModal({
               </div>
             </div>
 
-            <button
-              onClick={onClose}
-              className="p-2 rounded-lg hover:bg-white/[0.06] transition-colors shrink-0"
-            >
-              <X size={18} className="text-white/40" />
-            </button>
+            <div className="flex items-center gap-1 shrink-0">
+              <button
+                onClick={() => {
+                  if (confirm('Sigur vrei să ștergi această postare?')) {
+                    deletePost(post.id)
+                    onClose()
+                  }
+                }}
+                className="p-2 rounded-lg hover:bg-red-500/10 text-white/20 hover:text-red-400 transition-colors"
+                title="Șterge postarea"
+              >
+                <Trash2 size={18} />
+              </button>
+              <button
+                onClick={onClose}
+                className="p-2 rounded-lg hover:bg-white/[0.06] transition-colors"
+              >
+                <X size={18} className="text-white/40" />
+              </button>
+            </div>
           </div>
 
           {/* Body — scrollable */}
