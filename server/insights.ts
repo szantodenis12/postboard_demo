@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { resolve } from 'path'
-import { getEffectiveInstagramAccountId, readConnections, type PageConnection } from './meta.ts'
+import { getEffectiveInstagramAccountId, readConnections, type PageConnection } from './meta.js'
 
 // ── Types ────────────────────────────────────────────────
 export interface PostMetric {

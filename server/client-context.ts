@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'fs'
 import { basename, join, relative } from 'path'
 import matter from 'gray-matter'
-import { scanClients } from './scanner.ts'
+import { scanClients } from './scanner.js'
 
 type ContextUseFor =
   | 'ads'

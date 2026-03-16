@@ -2,8 +2,8 @@ import express from 'express'
 import { spawn } from 'child_process'
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'fs'
 import { resolve, join } from 'path'
-import { getClientContext } from './ai.ts'
-import { scanClients } from './scanner.ts'
+import { getClientContext } from './ai.js'
+import { scanClients } from './scanner.js'
 import type { Response } from 'express'
 
 const router = express.Router()

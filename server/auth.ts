@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
-import { auth } from './firebase.ts'
+import { auth } from './firebase.js'
 
 export function login(req: Request, res: Response) {
   res.status(400).json({ error: 'Login is now handled client-side via Firebase Auth' })

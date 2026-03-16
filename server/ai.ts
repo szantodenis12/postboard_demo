@@ -5,7 +5,7 @@ import {
   buildClientContextPackage,
   type BuildClientContextOptions,
   type ClientContextTask,
-} from './client-context.ts'
+} from './client-context.js'
 
 // ── Client Context Builder ──────────────────────────────
 

@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { resolve } from 'path'
 import { readFileSync, writeFileSync, existsSync } from 'fs'
-import { scanClients } from './scanner.ts'
+import { scanClients } from './scanner.js'
 
 const router = Router()
 const CRM_FILE = resolve(import.meta.dirname, '..', 'data', 'crm.json')

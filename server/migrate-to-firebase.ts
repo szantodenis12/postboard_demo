@@ -1,5 +1,5 @@
-import { db } from './firebase.ts'
-import { scanClients } from './scanner.ts'
+import { db } from './firebase.js'
+import { scanClients } from './scanner.js'
 import { resolve } from 'path'
 import { readFileSync, existsSync } from 'fs'
 
