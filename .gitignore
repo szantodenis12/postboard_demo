@@ -3,3 +3,6 @@ dist
 .env
 data/*.json
 *.pem
+dist-server
+.firebase
+*debug.log
