@@ -3866,29 +3866,25 @@ app.delete('/api/utm/:linkId', (req, res) => {
 const INDEX_HTML_PATH = resolve(PROJECT_ROOT, 'index.html')
 const DIST_INDEX_HTML_PATH = resolve(PROJECT_ROOT, 'dist', 'index.html')
 
+// SPA Shell Helper
 function serveApp(res: any) {
-  // Prefer the source index.html in dev (root), but dist in production
-  const htmlPath = existsSync(INDEX_HTML_PATH) ? INDEX_HTML_PATH : DIST_INDEX_HTML_PATH
-  console.log(`[SPA Shell] Serving from: ${htmlPath}`)
-  try {
-    const html = readFileSync(htmlPath, 'utf-8')
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
-    res.setHeader('Pragma', 'no-cache')
-    res.setHeader('Expires', '0')
-    res.type('html').send(html)
-  } catch (err) {
-    console.error(`[SPA Shell] Error reading ${htmlPath}:`, err)
-    res.status(500).send('Application shell not found')
+  const DIST_INDEX = resolve(PROJECT_ROOT, 'dist', 'index.html')
+  const ROOT_INDEX = resolve(PROJECT_ROOT, 'index.html')
+  const htmlPath = existsSync(DIST_INDEX) ? DIST_INDEX : ROOT_INDEX
+  
+  if (!existsSync(htmlPath)) {
+    console.error(`[SPA Shell] File not found: ${htmlPath}`)
+    return res.status(500).send('Application shell not found. Make sure to run the build first.')
   }
+
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+  res.setHeader('Pragma', 'no-cache')
+  res.setHeader('Expires', '0')
+  res.sendFile(htmlPath)
 }
 
-app.get('/review/:token', (_req, res) => {
-  serveApp(res)
-})
-
-app.get('/portal/:token', (_req, res) => {
-  serveApp(res)
-})
+app.get('/review/:token', (_req, res) => serveApp(res))
+app.get('/portal/:token', (_req, res) => serveApp(res))
 
 // Client portal API — returns client data, posts, analytics, feedback, and white-label config
 app.get('/api/portal/:token/data', async (req, res) => {
