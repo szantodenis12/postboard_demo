@@ -22,7 +22,19 @@ if (!getApps().length) {
       })
       console.log('✅ Firebase Admin initialized with serviceAccountKey.json')
     } else if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-      const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
+      let serviceAccountRaw = process.env.FIREBASE_SERVICE_ACCOUNT
+      // Handle escaped quotes from some CI/App Hosting environments
+      if (serviceAccountRaw.startsWith('"{') || serviceAccountRaw.includes('\\"')) {
+         try {
+           serviceAccountRaw = JSON.parse(serviceAccountRaw)
+         } catch {
+           serviceAccountRaw = serviceAccountRaw.replace(/\\"/g, '"').replace(/^"|"$/g, '')
+         }
+      }
+      const serviceAccount = typeof serviceAccountRaw === 'string' 
+        ? JSON.parse(serviceAccountRaw) 
+        : serviceAccountRaw
+
       app = initializeApp({
         credential: cert(serviceAccount),
         storageBucket: process.env.FIREBASE_STORAGE_BUCKET || `${serviceAccount.project_id}.appspot.com`
