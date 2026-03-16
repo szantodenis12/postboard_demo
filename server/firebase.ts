@@ -22,18 +22,29 @@ if (!getApps().length) {
       })
       console.log('✅ Firebase Admin initialized with serviceAccountKey.json')
     } else if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-      let serviceAccountRaw = process.env.FIREBASE_SERVICE_ACCOUNT
-      // Handle escaped quotes from some CI/App Hosting environments
-      if (serviceAccountRaw.startsWith('"{') || serviceAccountRaw.includes('\\"')) {
-         try {
-           serviceAccountRaw = JSON.parse(serviceAccountRaw)
-         } catch {
-           serviceAccountRaw = serviceAccountRaw.replace(/\\"/g, '"').replace(/^"|"$/g, '')
-         }
+      let raw = process.env.FIREBASE_SERVICE_ACCOUNT.trim()
+      let serviceAccount: any
+
+      // 1. Try to clean up aggressively escaped strings from App Hosting secrets
+      if (raw.startsWith('"') && raw.endsWith('"')) {
+        raw = raw.slice(1, -1)
       }
-      const serviceAccount = typeof serviceAccountRaw === 'string' 
-        ? JSON.parse(serviceAccountRaw) 
-        : serviceAccountRaw
+      if (raw.includes('\\"')) {
+        raw = raw.replace(/\\"/g, '"')
+      }
+
+      // 2. Parse JSON
+      try {
+        serviceAccount = JSON.parse(raw)
+      } catch (err) {
+        console.error('Failed to parse FIREBASE_SERVICE_ACCOUNT JSON:', err)
+        throw new Error('Invalid JSON in FIREBASE_SERVICE_ACCOUNT')
+      }
+
+      // 3. Fix private_key newlines (CRITICAL for 401 Unauthorized errors)
+      if (serviceAccount.private_key) {
+        serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n')
+      }
 
       app = initializeApp({
         credential: cert(serviceAccount),
