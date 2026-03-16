@@ -179,12 +179,18 @@ export function useCRM() {
 
   // ── Contracts ──────────────────────────────────────
   const addContract = useCallback(async (contract: Omit<CRMContract, 'id' | 'createdAt'>) => {
+    console.log('CRM: Adding contract...', contract)
     const res = await fetch(`${API}/contracts`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(contract),
     })
+    if (!res.ok) {
+      console.error('CRM: Add contract failed:', res.status, await res.text())
+      throw new Error(`Add contract failed: ${res.status}`)
+    }
     const { contract: created } = await res.json()
+    console.log('CRM: Contract created:', created)
     setData(prev => ({
       ...prev,
       contracts: [created, ...prev.contracts],
@@ -214,12 +220,18 @@ export function useCRM() {
 
   // ── Invoices ───────────────────────────────────────
   const addInvoice = useCallback(async (invoice: Omit<CRMInvoice, 'id' | 'createdAt'>) => {
+    console.log('CRM: Adding invoice...', invoice)
     const res = await fetch(`${API}/invoices`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(invoice),
     })
+    if (!res.ok) {
+      console.error('CRM: Add invoice failed:', res.status, await res.text())
+      throw new Error(`Add invoice failed: ${res.status}`)
+    }
     const { invoice: created } = await res.json()
+    console.log('CRM: Invoice created:', created)
     setData(prev => ({
       ...prev,
       invoices: [created, ...prev.invoices],

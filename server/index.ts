@@ -161,8 +161,25 @@ app.use('/api/crm', crmRouter)
 app.use('/api/intelligence', intelligenceRouter)
 
 // ── Multer config ─────────────────────────────────────────
+const UPLOAD_DIR = '/tmp/uploads'
+if (!existsSync(UPLOAD_DIR)) {
+  try {
+    mkdirSync(UPLOAD_DIR, { recursive: true })
+  } catch (err) {
+    console.warn(`Failed to create ${UPLOAD_DIR}, falling back to local 'uploads' folder:`, err)
+  }
+}
+
 const upload = multer({
-  storage: multer.memoryStorage(),
+  storage: multer.diskStorage({
+    destination: (_req, _file, cb) => {
+      // Use /tmp/uploads if it exists/is writable, otherwise fallback to local project directory
+      cb(null, existsSync(UPLOAD_DIR) ? UPLOAD_DIR : resolve(PROJECT_ROOT, 'uploads'))
+    },
+    filename: (_req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`)
+    }
+  }),
   limits: { fileSize: 100 * 1024 * 1024 }, // 100MB
   fileFilter: (_req, file, cb) => {
     const allowed = /\.(jpg|jpeg|png|gif|webp|mp4|mov|svg)$/i
@@ -911,24 +928,29 @@ app.post('/api/posts/:id/media/:clientId', upload.array('files', 10), async (req
 
   try {
     const bucket = storage.bucket()
-    const results = await Promise.all(
-      files.map(async (file) => {
-        const fileName = `${clientId}/${Date.now()}-${file.originalname}`
-        const blob = bucket.file(fileName)
+    const results: any[] = []
 
-        await blob.save(file.buffer, {
+    // Sequential processing to save memory (especially for 1GB limit servers)
+    for (const file of files) {
+      const fileName = `${clientId}/${Date.now()}-${file.originalname}`
+      console.log(`[Upload] Processing: ${fileName} (${file.size} bytes)`)
+      
+      try {
+        await bucket.upload(file.path, {
+          destination: fileName,
           metadata: { contentType: file.mimetype },
           resumable: false
         })
 
+        const blob = bucket.file(fileName)
         try {
           await blob.makePublic()
         } catch (err) {
           console.warn(`Could not make file public: ${fileName}. Error:`, err)
         }
+        
         const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`
-
-        return {
+        results.push({
           clientId,
           filename: fileName,
           url,
@@ -936,9 +958,16 @@ app.post('/api/posts/:id/media/:clientId', upload.array('files', 10), async (req
           mimeType: file.mimetype,
           originalName: file.originalname,
           addedAt: new Date().toISOString()
+        })
+      } finally {
+        // CLEANUP: always delete the temp file from disk
+        try {
+          if (existsSync(file.path)) unlinkSync(file.path)
+        } catch (err) {
+          console.warn(`Failed to cleanup temp file: ${file.path}`, err)
         }
-      })
-    )
+      }
+    }
 
     const postRef = db.collection('posts').doc(postId)
     const postDoc = await postRef.get()
@@ -954,7 +983,13 @@ app.post('/api/posts/:id/media/:clientId', upload.array('files', 10), async (req
     res.json({ success: true, media: updatedMedia })
   } catch (error: any) {
     console.error('Storage upload error:', error)
-    res.status(500).json({ error: error.message })
+    // Cleanup any remaining files on error if possible
+    if (files) {
+      files.forEach(f => {
+        try { if (existsSync(f.path)) unlinkSync(f.path) } catch {}
+      })
+    }
+    res.status(500).json({ error: error.message || 'Server-side upload error' })
   }
 })
 
@@ -996,44 +1031,56 @@ app.post('/api/posts/:id/image/:clientId', upload.single('file'), async (req, re
   try {
     const bucket = storage.bucket()
     const fileName = `${clientId}/${Date.now()}-${file.originalname}`
-    const blob = bucket.file(fileName)
-
-    await blob.save(file.buffer, {
-      metadata: { contentType: file.mimetype },
-      resumable: false
-    })
-
+    
+    console.log(`[Upload-Legacy] Processing: ${fileName}`)
+    
     try {
-      await blob.makePublic()
-    } catch (err) {
-      console.warn(`Could not make file public (legacy): ${fileName}. Error:`, err)
+      await bucket.upload(file.path, {
+        destination: fileName,
+        metadata: { contentType: file.mimetype },
+        resumable: false
+      })
+
+      const blob = bucket.file(fileName)
+      try {
+        await blob.makePublic()
+      } catch (err) {
+        console.warn(`Could not make file public (legacy): ${fileName}. Error:`, err)
+      }
+
+      const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`
+      const image = normalizePostMediaItem({
+        clientId,
+        filename: fileName.replace(`${clientId}/`, ''),
+        url,
+        type: 'image',
+        mimeType: file.mimetype,
+        originalName: file.originalname,
+        addedAt: new Date().toISOString(),
+      })
+
+      if (!image) {
+        res.status(400).json({ error: 'Invalid file metadata' })
+        return
+      }
+
+      const media = replacePostMedia(postId, [image])
+      res.json({
+        success: true,
+        image: { clientId, filename: image.filename, url: image.url, originalName: file.originalname },
+        media
+      })
+    } finally {
+      // CLEANUP
+      try {
+        if (existsSync(file.path)) unlinkSync(file.path)
+      } catch (err) {
+        console.warn(`Failed to cleanup legacy temp file: ${file.path}`, err)
+      }
     }
-    const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`
-
-    const image = normalizePostMediaItem({
-      clientId,
-      filename: fileName.replace(`${clientId}/`, ''),
-      url,
-      type: 'image',
-      mimeType: file.mimetype,
-      originalName: file.originalname,
-      addedAt: new Date().toISOString(),
-    })
-
-    if (!image) {
-      res.status(400).json({ error: 'Invalid file metadata' })
-      return
-    }
-
-    const media = replacePostMedia(postId, [image])
-    res.json({
-      success: true,
-      image: { clientId, filename: image.filename, url: image.url, originalName: file.originalname },
-      media
-    })
   } catch (error: any) {
     console.error('Legacy image upload error:', error)
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: error.message || 'Server-side upload error' })
   }
 })
 
