@@ -37,7 +37,7 @@ export function BillingTracker() {
   const [showAddContract, setShowAddContract] = useState(false)
   const [showAddInvoice, setShowAddInvoice] = useState(false)
   const [newContract, setNewContract] = useState({
-    title: '', startDate: '', endDate: '', monthlyValue: '', status: 'pending' as ContractStatus, notes: '',
+    title: '', startDate: '', endDate: '', monthlyValue: '', status: 'active' as ContractStatus, notes: '',
   })
   const [newInvoice, setNewInvoice] = useState({
     number: '', amount: '', currency: 'RON', status: 'draft' as InvoiceStatus,
@@ -89,35 +89,64 @@ export function BillingTracker() {
 
   async function submitContract() {
     const clientId = selectedClient || data.clients[0]?.id
-    if (!clientId || !newContract.title || !newContract.startDate) return
-    await crm.addContract({
-      clientId,
-      title: newContract.title,
-      startDate: newContract.startDate,
-      endDate: newContract.endDate || undefined,
-      monthlyValue: newContract.monthlyValue ? parseFloat(newContract.monthlyValue) : undefined,
-      status: newContract.status,
-      notes: newContract.notes || undefined,
-    })
-    setShowAddContract(false)
-    setNewContract({ title: '', startDate: '', endDate: '', monthlyValue: '', status: 'pending', notes: '' })
+    if (!clientId) {
+      alert('Te rog selectează un client mai întâi.')
+      return
+    }
+    if (!newContract.title || !newContract.startDate) {
+      alert('Te rog completează titlul și data de început.')
+      return
+    }
+
+    try {
+      console.log('[Billing] Submitting contract for client:', clientId)
+      await crm.addContract({
+        clientId,
+        title: newContract.title,
+        startDate: newContract.startDate,
+        endDate: newContract.endDate || undefined,
+        monthlyValue: newContract.monthlyValue ? parseFloat(newContract.monthlyValue) : undefined,
+        status: newContract.status,
+        notes: newContract.notes || undefined,
+      })
+      setShowAddContract(false)
+      setNewContract({ title: '', startDate: '', endDate: '', monthlyValue: '', status: 'active', notes: '' })
+      // crm.addContract should ideally trigger a refresh of crm.data via the hook
+    } catch (err: any) {
+      console.error('[Billing] Submit contract error:', err)
+      alert(`Eroare la adăugarea contractului: ${err.message || 'Unknown error'}. Verifică consola pentru detalii.`)
+    }
   }
 
   async function submitInvoice() {
     const clientId = selectedClient || data.clients[0]?.id
-    if (!clientId || !newInvoice.number || !newInvoice.amount || !newInvoice.dueDate) return
-    await crm.addInvoice({
-      clientId,
-      number: newInvoice.number,
-      amount: parseFloat(newInvoice.amount),
-      currency: newInvoice.currency,
-      status: newInvoice.status,
-      issuedDate: newInvoice.issuedDate,
-      dueDate: newInvoice.dueDate,
-      description: newInvoice.description || undefined,
-    })
-    setShowAddInvoice(false)
-    setNewInvoice({ number: '', amount: '', currency: 'RON', status: 'draft', issuedDate: new Date().toISOString().split('T')[0], dueDate: '', description: '' })
+    if (!clientId) {
+      alert('Te rog selectează un client mai întâi.')
+      return
+    }
+    if (!newInvoice.number || !newInvoice.amount || !newInvoice.dueDate) {
+      alert('Te rog completează numărul, suma și data scadentă.')
+      return
+    }
+
+    try {
+      console.log('[Billing] Submitting invoice for client:', clientId)
+      await crm.addInvoice({
+        clientId,
+        number: newInvoice.number,
+        amount: parseFloat(newInvoice.amount),
+        currency: newInvoice.currency,
+        status: newInvoice.status,
+        issuedDate: newInvoice.issuedDate,
+        dueDate: newInvoice.dueDate,
+        description: newInvoice.description || undefined,
+      })
+      setShowAddInvoice(false)
+      setNewInvoice({ number: '', amount: '', currency: 'RON', status: 'draft', issuedDate: new Date().toISOString().split('T')[0], dueDate: '', description: '' })
+    } catch (err: any) {
+      console.error('[Billing] Submit invoice error:', err)
+      alert(`Eroare la adăugarea facturii: ${err.message || 'Unknown error'}. Verifică consola pentru detalii.`)
+    }
   }
 
   function formatAmount(amount: number, currency = 'RON') {

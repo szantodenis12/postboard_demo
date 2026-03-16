@@ -203,7 +203,10 @@ export function useData({ includeExpired = false }: { includeExpired?: boolean }
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         })
-        if (!res.ok) throw new Error(`Failed to create post: ${res.status}`)
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}))
+          throw new Error(errData.error || `Failed to create post: ${res.status}`)
+        }
         const newPost = await res.json()
 
         // Handle file uploads if present
@@ -211,19 +214,27 @@ export function useData({ includeExpired = false }: { includeExpired?: boolean }
           const formData = new FormData()
           files.forEach((f: File) => formData.append('files', f))
           
+          console.log(`[Upload] Sending ${files.length} files for post ${newPost.id}`)
           const uploadRes = await fetch(`/api/posts/${newPost.id}/media/${payload.clientId}`, {
             method: 'POST',
             body: formData,
           })
+          
           if (!uploadRes.ok) {
-            console.error('Files failed to upload, but post was created.')
+            const errData = await uploadRes.json().catch(() => ({}))
+            const errMsg = errData.error || `Upload failed: ${uploadRes.status}`
+            console.error('[Upload] Media upload failed:', errMsg)
+            alert(`Postul a fost creat, dar încărcarea fișierelor a eșuat: ${errMsg}`)
+          } else {
+            console.log('[Upload] Media uploaded successfully')
           }
         }
 
         await refresh()
         return newPost
-      } catch (err) {
+      } catch (err: any) {
         console.error('Post creation error:', err)
+        alert(`Eroare la crearea postării: ${err.message}`)
         throw err
       } finally {
         setLoading(false)

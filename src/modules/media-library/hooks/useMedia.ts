@@ -92,13 +92,23 @@ export function useMedia(clientFilter: string | null) {
           }
         })
         xhr.addEventListener('load', () => {
+          console.log(`[MediaLibrary] Upload response status: ${xhr.status}`)
           if (xhr.status >= 200 && xhr.status < 300) {
             resolve(JSON.parse(xhr.responseText))
           } else {
-            reject(new Error(`Upload failed: ${xhr.status}`))
+            console.error('[MediaLibrary] Upload error response:', xhr.responseText)
+            let errMsg = `Upload failed: ${xhr.status}`
+            try {
+              const parsed = JSON.parse(xhr.responseText)
+              if (parsed.error) errMsg = parsed.error
+            } catch {}
+            reject(new Error(errMsg))
           }
         })
-        xhr.addEventListener('error', () => reject(new Error('Upload failed')))
+        xhr.addEventListener('error', () => {
+          console.error('[MediaLibrary] XHR Network Error')
+          reject(new Error('Upload failed: Network error or connection refused'))
+        })
         xhr.open('POST', `${API}/api/uploads/${clientId}`)
         xhr.send(formData)
       })

@@ -163,7 +163,7 @@ app.use('/api/intelligence', intelligenceRouter)
 // ── Multer config ─────────────────────────────────────────
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
+  limits: { fileSize: 100 * 1024 * 1024 }, // 100MB
   fileFilter: (_req, file, cb) => {
     const allowed = /\.(jpg|jpeg|png|gif|webp|mp4|mov|svg)$/i
     if (allowed.test(extname(file.originalname))) {
@@ -4009,6 +4009,26 @@ if (isProduction) {
     })
   }
 }
+
+// Global error handler
+app.use((err: any, req: any, res: any, next: any) => {
+  if (err instanceof multer.MulterError) {
+    console.error('[MulterError]', err)
+    return res.status(400).json({ 
+      error: `Eroare la încărcare: ${err.message}`,
+      code: err.code,
+      field: err.field
+    })
+  }
+  
+  if (err) {
+    console.error('[GlobalError]', err)
+    return res.status(res.statusCode === 200 ? 500 : res.statusCode).json({ 
+      error: err.message || 'A intervenit o eroare neașteptată'
+    })
+  }
+  next()
+})
 
 app.listen(PORT, () => {
   console.log(`\n  ⚡ PostBoard API running at http://localhost:${PORT}`)
