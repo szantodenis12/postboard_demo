@@ -1,8 +1,7 @@
 import express from 'express'
-import { spawn } from 'child_process'
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'fs'
 import { resolve, join } from 'path'
-import { getClientContext } from './ai.js'
+import { getClientContext, runClaude } from './ai.js'
 import { db } from './firebase.js'
 import type { Response } from 'express'
 
@@ -54,33 +53,6 @@ function sendSSE(res: Response, data: any) {
 function endSSE(res: Response) {
   res.write('data: [DONE]\n\n')
   res.end()
-}
-function runClaude(res: Response, prompt: string, options?: { allowWeb?: boolean }) {
-  initSSE(res)
-  const env = { ...process.env, NO_COLOR: '1', CLAUDECODE: '' }
-  const args = ['-p', '--model', 'sonnet']
-  if (options?.allowWeb) args.push('--allowedTools', 'WebSearch,WebFetch', '--permission-mode', 'auto')
-  const proc = spawn('claude', args, {
-    env,
-    stdio: ['pipe', 'pipe', 'pipe'],
-  })
-  proc.stdin.write(prompt)
-  proc.stdin.end()
-  res.on('close', () => { if (!proc.killed) proc.kill('SIGTERM') })
-  proc.stdout.on('data', (chunk: Buffer) => {
-    const text = chunk.toString()
-    if (text) sendSSE(res, { text })
-  })
-  proc.stderr.on('data', (chunk: Buffer) => {
-    console.error('[intelligence]', chunk.toString().trim())
-  })
-  proc.on('close', (code) => {
-    if (code !== 0 && !res.writableEnded) sendSSE(res, { error: `Claude exited with code ${code}` })
-    if (!res.writableEnded) endSSE(res)
-  })
-  proc.on('error', (err) => {
-    if (!res.writableEnded) { sendSSE(res, { error: err.message }); endSSE(res) }
-  })
 }
 
 function readJSON(file: string): any {
@@ -252,52 +224,51 @@ Rules:
 - Captions should be full, ready-to-publish text in Romanian (not just ideas).
 - Time should be optimal only if supported by the internal context; otherwise choose a neutral working hour and do not claim it is validated by data.
 - ${postsPerWeek} posts per week, spread across the month.`
+
   runClaudeWithParsing(res, prompt)
 })
 
-// ── Enhanced Claude runner that parses structured posts ───
-function runClaudeWithParsing(res: Response, prompt: string, options?: { allowWeb?: boolean }) {
+// ── SDK runner that parses structured posts ───
+async function runClaudeWithParsing(res: Response, prompt: string) {
   initSSE(res)
-  const env = { ...process.env, NO_COLOR: '1', CLAUDECODE: '' }
-  const args = ['-p', '--model', 'sonnet']
-  if (options?.allowWeb) args.push('--allowedTools', 'WebSearch,WebFetch', '--permission-mode', 'auto')
-  const proc = spawn('claude', args, {
-    env,
-    stdio: ['pipe', 'pipe', 'pipe'],
-  })
-  proc.stdin.write(prompt)
-  proc.stdin.end()
-  res.on('close', () => { if (!proc.killed) proc.kill('SIGTERM') })
-
+  
   let fullOutput = ''
+  
+  try {
+    const mockRes = {
+      setHeader: () => {},
+      flushHeaders: () => {},
+      write: (data: string) => {
+        const match = data.match(/^data: (.*)\n\n$/)
+        if (match) {
+          const parsed = JSON.parse(match[1])
+          if (parsed.text) {
+            fullOutput += parsed.text
+            res.write(data)
+          }
+        }
+      },
+      end: () => {},
+      on: () => {},
+      writableEnded: false
+    } as any
 
-  proc.stdout.on('data', (chunk: Buffer) => {
-    const text = chunk.toString()
-    if (text) {
-      fullOutput += text
-      sendSSE(res, { text })
-    }
-  })
-  proc.stderr.on('data', (chunk: Buffer) => {
-    console.error('[intelligence]', chunk.toString().trim())
-  })
-  proc.on('close', (code) => {
-    if (code !== 0 && !res.writableEnded) {
-      sendSSE(res, { error: `Claude exited with code ${code}` })
-    }
-
+    await runClaude(mockRes, prompt)
+    
     // Parse structured posts from the full output
+    const posts = parsePostsFromOutput(fullOutput)
+    if (posts.length > 0) {
+      sendSSE(res, { type: 'complete', posts })
+    }
+    
+    if (!res.writableEnded) endSSE(res)
+  } catch (error: any) {
+    console.error('[claude parsing error]', error)
     if (!res.writableEnded) {
-      const posts = parsePostsFromOutput(fullOutput)
-      if (posts.length > 0) {
-        sendSSE(res, { type: 'complete', posts })
-      }
+      sendSSE(res, { error: error.message })
       endSSE(res)
     }
-  })
-  proc.on('error', (err) => {
-    if (!res.writableEnded) { sendSSE(res, { error: err.message }); endSSE(res) }
-  })
+  }
 }
 
 // ── Parse posts from Claude output ───────────────────────
@@ -505,7 +476,7 @@ Research this competitor online, then cover:
 5) Comparison table — key differentiators (Metric | Our Client | Competitor)
 
 All recommendations in Romanian.`
-    runClaude(res, prompt, { allowWeb: true })
+    runClaude(res, prompt)
     return
   }
 
@@ -561,7 +532,7 @@ Specific gaps and opportunities our client can exploit based on competitor weakn
 
 All recommendations and insights in Romanian with proper diacritics (ă, â, î, ș, ț).`
 
-  runClaude(res, prompt, { allowWeb: true })
+  runClaude(res, prompt)
 })
 
 // ══════════════════════════════════════════════════════════

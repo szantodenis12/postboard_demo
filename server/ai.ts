@@ -1,5 +1,6 @@
 import { spawn, execSync } from 'child_process'
 import type { Response } from 'express'
+import Anthropic from '@anthropic-ai/sdk'
 import {
   buildClientContext,
   buildClientContextPackage,
@@ -74,53 +75,45 @@ function endSSE(res: Response) {
   res.end()
 }
 
-// ── Claude Code CLI Runner ──────────────────────────────
+// ── Anthropic SDK Client ─────────────────────────────
 
-const DEFAULT_MODEL = process.env.POSTBOARD_AI_MODEL || 'sonnet'
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+})
 
-function runClaude(res: Response, prompt: string, meta?: { sources?: string[] }) {
+const DEFAULT_MODEL = './ sonnet' // Claude Code model string vs SDK model string
+
+export async function runClaude(res: Response, prompt: string, meta?: { sources?: string[]; model?: string }) {
   initSSE(res)
   if (meta?.sources && meta.sources.length > 0) {
     sendSSE(res, { type: 'sources', sources: meta.sources })
   }
 
-  const env = { ...process.env, NO_COLOR: '1', CLAUDECODE: '' }
-  const proc = spawn('claude', ['-p', '--model', DEFAULT_MODEL], {
-    env,
-    stdio: ['pipe', 'pipe', 'pipe'],
-  })
+  try {
+    const stream = anthropic.messages.stream({
+      model: meta?.model || 'claude-3-5-sonnet-20241022',
+      max_tokens: 4096,
+      messages: [{ role: 'user', content: prompt }],
+    })
 
-  // Send prompt via stdin to avoid OS argument length limits
-  proc.stdin.write(prompt)
-  proc.stdin.end()
+    stream.on('text', (text) => {
+      sendSSE(res, { text })
+    })
 
-  // Kill process if client disconnects
-  res.on('close', () => {
-    if (!proc.killed) proc.kill('SIGTERM')
-  })
+    // Kill stream if client disconnects
+    res.on('close', () => {
+      stream.controller.abort()
+    })
 
-  proc.stdout.on('data', (chunk: Buffer) => {
-    const text = chunk.toString()
-    if (text) sendSSE(res, { text })
-  })
-
-  proc.stderr.on('data', (chunk: Buffer) => {
-    console.error('[claude cli]', chunk.toString().trim())
-  })
-
-  proc.on('close', (code) => {
-    if (code !== 0 && !res.writableEnded) {
-      sendSSE(res, { error: `Claude exited with code ${code}` })
-    }
+    await stream.done()
     if (!res.writableEnded) endSSE(res)
-  })
-
-  proc.on('error', (err) => {
+  } catch (error: any) {
+    console.error('[claude sdk error]', error)
     if (!res.writableEnded) {
-      sendSSE(res, { error: err.message })
+      sendSSE(res, { error: error.message })
       endSSE(res)
     }
-  })
+  }
 }
 
 function inferChatTask(text: string): ClientContextTask {
@@ -353,13 +346,8 @@ function getAspectRatio(platform: string, format: string): string {
   return '1:1'
 }
 
-// ── Check if Claude Code CLI is available ───────────────
+// ── Check if AI is configured ─────────────────────────
 
 export function isAIConfigured(): boolean {
-  try {
-    execSync('which claude', { stdio: 'ignore' })
-    return true
-  } catch {
-    return false
-  }
+  return !!process.env.ANTHROPIC_API_KEY
 }
