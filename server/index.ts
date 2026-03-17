@@ -1252,7 +1252,11 @@ app.post('/api/uploads/:clientId', upload.array('files', 10), async (req, res) =
         try { if (existsSync(f.path)) unlinkSync(f.path) } catch {}
       })
     }
-    res.status(500).json({ error: error.message || 'Server-side upload error' })
+    res.status(500).json({ 
+      error: error.message || 'Server-side upload error',
+      details: error.message,
+      code: error.code
+    })
   }
 })
 
