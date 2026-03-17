@@ -16,11 +16,12 @@ if (!getApps().length) {
     
     if (existsSync(serviceAccountPath)) {
       const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'))
+      const bucketName = process.env.FIREBASE_STORAGE_BUCKET || `${serviceAccount.project_id}.firebasestorage.app`
       app = initializeApp({
         credential: cert(serviceAccount),
-        storageBucket: process.env.FIREBASE_STORAGE_BUCKET || `${serviceAccount.project_id}.appspot.com`
+        storageBucket: bucketName
       })
-      console.log('✅ Firebase Admin initialized with serviceAccountKey.json')
+      console.log(`✅ Firebase Admin initialized with serviceAccountKey.json. Bucket: ${bucketName}`)
     } else if (process.env.FIREBASE_SERVICE_ACCOUNT) {
       let raw = process.env.FIREBASE_SERVICE_ACCOUNT.trim()
       let serviceAccount: any
@@ -46,11 +47,12 @@ if (!getApps().length) {
         serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n')
       }
 
+      const bucketName = process.env.FIREBASE_STORAGE_BUCKET || `${serviceAccount.project_id}.firebasestorage.app`
       app = initializeApp({
         credential: cert(serviceAccount),
-        storageBucket: process.env.FIREBASE_STORAGE_BUCKET || `${serviceAccount.project_id}.appspot.com`
+        storageBucket: bucketName
       })
-      console.log('✅ Firebase Admin initialized with FIREBASE_SERVICE_ACCOUNT env var')
+      console.log(`✅ Firebase Admin initialized with FIREBASE_SERVICE_ACCOUNT env var. Bucket: ${bucketName}`)
     } else {
       console.warn('⚠️ No Firebase service account found. Firestore/Auth will fail if called. Please add serviceAccountKey.json or FIREBASE_SERVICE_ACCOUNT env var.')
       app = initializeApp() 
