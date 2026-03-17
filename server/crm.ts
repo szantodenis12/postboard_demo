@@ -109,7 +109,7 @@ router.get('/', async (_req, res) => {
     res.json({ profiles, activities, tasks, contracts, invoices })
   } catch (error: any) {
     console.error('Failed to fetch CRM data:', error)
-    res.status(500).json({ error: 'Failed to fetch CRM data' })
+    res.status(500).json({ error: 'Failed to fetch CRM data', details: error.message })
   }
 })
 
@@ -124,8 +124,9 @@ router.put('/profiles', async (req, res) => {
   try {
     await db.collection('crm_profiles').doc(profile.clientId).set(profile, { merge: true })
     res.json({ success: true, profile })
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to update profile' })
+  } catch (error: any) {
+    console.error('Failed to update profile:', error)
+    res.status(500).json({ error: 'Failed to update profile', details: error.message })
   }
 })
 
@@ -133,8 +134,9 @@ router.get('/profiles/:clientId', async (req, res) => {
   try {
     const doc = await db.collection('crm_profiles').doc(req.params.clientId).get()
     res.json({ profile: doc.exists ? doc.data() : null })
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch profile' })
+  } catch (error: any) {
+    console.error('Failed to fetch profile:', error)
+    res.status(500).json({ error: 'Failed to fetch profile', details: error.message })
   }
 })
 
@@ -158,8 +160,9 @@ router.post('/activities', async (req, res) => {
   try {
     await db.collection('crm_activities').doc(activity.id).set(activity)
     res.json({ success: true, activity })
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to create activity' })
+  } catch (error: any) {
+    console.error('Failed to create activity:', error)
+    res.status(500).json({ error: 'Failed to create activity', details: error.message })
   }
 })
 
@@ -167,8 +170,9 @@ router.delete('/activities/:id', async (req, res) => {
   try {
     await db.collection('crm_activities').doc(req.params.id).delete()
     res.json({ success: true })
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to delete activity' })
+  } catch (error: any) {
+    console.error('Failed to delete activity:', error)
+    res.status(500).json({ error: 'Failed to delete activity', details: error.message })
   }
 })
 
@@ -194,8 +198,9 @@ router.post('/tasks', async (req, res) => {
   try {
     await db.collection('crm_tasks').doc(task.id).set(task)
     res.json({ success: true, task })
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to create task' })
+  } catch (error: any) {
+    console.error('Failed to create task:', error)
+    res.status(500).json({ error: 'Failed to create task', details: error.message })
   }
 })
 
@@ -219,8 +224,9 @@ router.patch('/tasks/:id', async (req, res) => {
     // Fetch fresh task to return
     const updatedDoc = await taskRef.get()
     res.json({ success: true, task: updatedDoc.data() })
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to update task' })
+  } catch (error: any) {
+    console.error('Failed to update task:', error)
+    res.status(500).json({ error: 'Failed to update task', details: error.message })
   }
 })
 
@@ -228,8 +234,9 @@ router.delete('/tasks/:id', async (req, res) => {
   try {
     await db.collection('crm_tasks').doc(req.params.id).delete()
     res.json({ success: true })
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to delete task' })
+  } catch (error: any) {
+    console.error('Failed to delete task:', error)
+    res.status(500).json({ error: 'Failed to delete task', details: error.message })
   }
 })
 
@@ -255,8 +262,9 @@ router.post('/contracts', async (req, res) => {
   try {
     await db.collection('crm_contracts').doc(contract.id).set(contract)
     res.json({ success: true, contract })
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to create contract' })
+  } catch (error: any) {
+    console.error('Failed to create contract:', error)
+    res.status(500).json({ error: 'Failed to create contract', details: error.message })
   }
 })
 

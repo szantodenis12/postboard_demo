@@ -1077,51 +1077,71 @@ app.delete('/api/posts/:id/image', async (req, res) => {
   }
 })
 
-// ── Media Metadata Persistence ──────────────────────────
-const MEDIA_META_FILE = resolve(import.meta.dirname, '..', 'data', 'media-meta.json')
-
-function readMediaMeta(): Record<string, { tags: string[]; description: string; originalName?: string }> {
+// ── Media Metadata (Firestore) ──────────────────────────
+async function readMediaMeta(): Promise<Record<string, { tags: string[]; description: string; originalName?: string }>> {
   try {
-    if (existsSync(MEDIA_META_FILE)) {
-      return JSON.parse(readFileSync(MEDIA_META_FILE, 'utf-8'))
-    }
-  } catch { /* ignore */ }
-  return {}
+    const snap = await db.collection('media_meta').get()
+    const meta: Record<string, any> = {}
+    snap.docs.forEach(doc => { meta[doc.id.replace(/___/g, '/')] = doc.data() })
+    return meta
+  } catch (error) {
+    console.error('Error reading media meta from Firestore:', error)
+    return {}
+  }
 }
 
-function writeMediaMeta(meta: Record<string, { tags: string[]; description: string; originalName?: string }>) {
-  writeFileSync(MEDIA_META_FILE, JSON.stringify(meta, null, 2), 'utf-8')
+async function writeMediaMeta(key: string, data: { tags: string[]; description: string; originalName?: string }) {
+  // Firestore doc IDs can't contain slashes, so escape them (clientId/filename -> clientId___filename)
+  const docId = key.replace(/\//g, '___')
+  await db.collection('media_meta').doc(docId).set(data, { merge: true })
+}
+
+async function deleteMediaMeta(key: string) {
+  const docId = key.replace(/\//g, '___')
+  await db.collection('media_meta').doc(docId).delete()
 }
 
 // Get all media metadata
-app.get('/api/media/meta', (_req, res) => {
-  res.json(readMediaMeta())
+app.get('/api/media/meta', async (_req, res) => {
+  try {
+    const meta = await readMediaMeta()
+    res.json(meta)
+  } catch (error: any) {
+    console.error('List media meta error:', error)
+    res.status(500).json({ error: 'Failed to list metadata', details: error.message })
+  }
 })
 
 // Upsert metadata for a file (key = "clientId/filename")
-app.put('/api/media/meta', (req, res) => {
+app.put('/api/media/meta', async (req, res) => {
   const { key, meta } = req.body
   if (!key || !meta) {
     res.status(400).json({ error: 'Missing key or meta' })
     return
   }
-  const all = readMediaMeta()
-  all[key] = { ...all[key], ...meta }
-  writeMediaMeta(all)
-  res.json({ success: true })
+  try {
+    await writeMediaMeta(key, meta)
+    res.json({ success: true })
+  } catch (error: any) {
+    console.error('Update media meta error:', error)
+    res.status(500).json({ error: 'Failed to update metadata', details: error.message })
+  }
 })
 
 // Delete metadata for a file
-app.delete('/api/media/meta', (req, res) => {
+app.delete('/api/media/meta', async (req, res) => {
   const { key } = req.body
   if (!key) {
     res.status(400).json({ error: 'Missing key' })
     return
   }
-  const all = readMediaMeta()
-  delete all[key]
-  writeMediaMeta(all)
-  res.json({ success: true })
+  try {
+    await deleteMediaMeta(key)
+    res.json({ success: true })
+  } catch (error: any) {
+    console.error('Delete media meta error:', error)
+    res.status(500).json({ error: 'Failed to delete metadata', details: error.message })
+  }
 })
 
 // ── Media Upload Routes ─────────────────────────────────
