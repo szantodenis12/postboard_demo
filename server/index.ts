@@ -562,25 +562,46 @@ app.put('/api/posts/:id', async (req, res) => {
   }
 })
 
-// Hide (soft-delete) a post
+// Hard-delete a post and its associated media
 app.delete('/api/posts/:id', async (req, res) => {
   try {
-    await db.collection('posts').doc(req.params.id).update({ hidden: true })
-    res.json({ success: true })
-  } catch (error) {
-    console.error('Hide post error:', error)
-    res.status(500).json({ error: 'Failed to hide post' })
-  }
-})
+    const postId = req.params.id
+    const postRef = db.collection('posts').doc(postId)
+    const doc = await postRef.get()
+    
+    if (!doc.exists) {
+      res.status(404).json({ error: 'Post not found' })
+      return
+    }
 
-// Restore a hidden post
-app.post('/api/posts/:id/restore', async (req, res) => {
-  try {
-    await db.collection('posts').doc(req.params.id).update({ hidden: false })
+    const postData = doc.data()
+    const media = postData?.media || []
+
+    // Delete associated media from Firebase Storage
+    if (media.length > 0) {
+      const gcsBucket = storage.bucket()
+      for (const item of media) {
+        if (item.filename && item.clientId) {
+          try {
+            const file = gcsBucket.file(`${item.clientId}/${item.filename}`)
+            const [exists] = await file.exists()
+            if (exists) {
+              await file.delete()
+              console.log(`[Storage] Deleted orphaned post media: ${item.clientId}/${item.filename}`)
+            }
+          } catch (storageErr) {
+            console.warn(`[Storage] Failed to delete media ${item.filename} for post ${postId}:`, storageErr)
+          }
+        }
+      }
+    }
+
+    // Delete the post document from Firestore
+    await postRef.delete()
     res.json({ success: true })
   } catch (error) {
-    console.error('Restore post error:', error)
-    res.status(500).json({ error: 'Failed to restore post' })
+    console.error('Delete post error:', error)
+    res.status(500).json({ error: 'Failed to delete post' })
   }
 })
 
@@ -632,9 +653,6 @@ app.patch('/api/posts/status/bulk', async (req, res) => {
 })
 
 // ── Post Image Attachments ──────────────────────────────
-const POST_IMAGES_FILE = resolve(import.meta.dirname, '..', 'data', 'post-images.json')
-const POST_MEDIA_FILE = resolve(import.meta.dirname, '..', 'data', 'post-media.json')
-
 type PostMediaType = 'image' | 'video'
 
 interface PostImage {
@@ -675,55 +693,7 @@ function normalizePostMediaItem(item: any): PostMediaItem | null {
   }
 }
 
-function readLegacyPostImages(): Record<string, PostImage> {
-  try {
-    if (existsSync(POST_IMAGES_FILE)) {
-      return JSON.parse(readFileSync(POST_IMAGES_FILE, 'utf-8'))
-    }
-  } catch { /* ignore */ }
-  return {}
-}
 
-function normalizePostMediaStore(raw: Record<string, any>): Record<string, PostMediaItem[]> {
-  const normalized: Record<string, PostMediaItem[]> = {}
-  for (const [postId, value] of Object.entries(raw || {})) {
-    const entries = Array.isArray(value) ? value : value ? [value] : []
-    const items = entries
-      .map(normalizePostMediaItem)
-      .filter((item): item is PostMediaItem => !!item)
-    if (items.length > 0) normalized[postId] = items
-  }
-  return normalized
-}
-
-function readPostMedia(): Record<string, PostMediaItem[]> {
-  try {
-    if (existsSync(POST_MEDIA_FILE)) {
-      return normalizePostMediaStore(JSON.parse(readFileSync(POST_MEDIA_FILE, 'utf-8')))
-    }
-  } catch { /* ignore */ }
-
-  return normalizePostMediaStore(
-    Object.fromEntries(
-      Object.entries(readLegacyPostImages()).map(([postId, image]) => [
-        postId,
-        [{ ...image, type: 'image' as const }],
-      ]),
-    ),
-  )
-}
-
-function writePostMedia(media: Record<string, PostMediaItem[]>) {
-  const sanitized: Record<string, PostMediaItem[]> = {}
-  for (const [postId, items] of Object.entries(media || {})) {
-    const normalizedItems = (items || [])
-      .map(normalizePostMediaItem)
-      .filter((item): item is PostMediaItem => !!item)
-    if (normalizedItems.length > 0) sanitized[postId] = normalizedItems
-  }
-  writeFileSync(POST_MEDIA_FILE, JSON.stringify(sanitized, null, 2), 'utf-8')
-  writeFileSync(POST_IMAGES_FILE, JSON.stringify(toLegacyPostImages(sanitized), null, 2), 'utf-8')
-}
 
 function getPrimaryPostImage(items: PostMediaItem[] | undefined): PostImage | null {
   const image = (items || []).find(item => item.type === 'image')
@@ -812,11 +782,14 @@ function resolveInstagramPublishMedia(
   return { payload: null, error: 'missing_image' as const }
 }
 
-function appendPostMedia(postId: string, items: PostMediaItem[]) {
-  const store = readPostMedia()
-  const existing = store[postId] || []
-  const merged = [...existing]
-  const seen = new Set(existing.map(postMediaKey))
+async function appendPostMedia(postId: string, items: PostMediaItem[]) {
+  if (items.length === 0) return []
+  const postRef = db.collection('posts').doc(postId)
+  const doc = await postRef.get()
+  const current = doc.exists ? (doc.data()?.media || []) : []
+  
+  const merged = [...current]
+  const seen = new Set(current.map(postMediaKey))
 
   for (const item of items) {
     const key = postMediaKey(item)
@@ -826,34 +799,34 @@ function appendPostMedia(postId: string, items: PostMediaItem[]) {
     }
   }
 
-  if (merged.length > 0) store[postId] = merged
-  else delete store[postId]
-  writePostMedia(store)
-  return store[postId] || []
+  await postRef.update({ media: merged })
+  return merged
 }
 
-function replacePostMedia(postId: string, items: PostMediaItem[]) {
-  const store = readPostMedia()
-  if (items.length > 0) store[postId] = items
-  else delete store[postId]
-  writePostMedia(store)
-  return store[postId] || []
+async function replacePostMedia(postId: string, items: PostMediaItem[]) {
+  const postRef = db.collection('posts').doc(postId)
+  await postRef.update({ media: items })
+  return items
 }
 
-function removePostMedia(postId: string, filename?: string) {
-  const store = readPostMedia()
-  if (!store[postId]) return []
+async function removePostMedia(postId: string, filename?: string) {
+  const postRef = db.collection('posts').doc(postId)
+  const doc = await postRef.get()
+  if (!doc.exists) return []
+
+  const current = doc.data()?.media || []
+  if (current.length === 0) return []
 
   if (!filename) {
-    delete store[postId]
+    // Clear all media
+    await postRef.update({ media: [] })
+    return []
   } else {
-    const next = store[postId].filter(item => item.filename !== filename)
-    if (next.length > 0) store[postId] = next
-    else delete store[postId]
+    // Remove specific file
+    const next = current.filter((item: any) => item.filename !== filename)
+    await postRef.update({ media: next })
+    return next
   }
-
-  writePostMedia(store)
-  return store[postId] || []
 }
 
 // Get all post→media mappings from Firestore
@@ -868,8 +841,9 @@ app.get('/api/post-media', async (_req, res) => {
       }
     })
     res.json(mapping)
-  } catch (error: any) {
-    res.status(500).json({ error: `Failed to fetch post media: ${error?.message || error}` })
+  } catch (err) {
+    console.error('Failed to fetch post media mapping:', err)
+    res.status(500).json({ error: 'Failed to fetch media mapping' })
   }
 })
 
@@ -994,13 +968,17 @@ app.post('/api/posts/:id/media/:clientId', upload.array('files', 10), async (req
 })
 
 // Remove one media item or clear all media from a post
-app.delete('/api/posts/:id/media', (req, res) => {
-  const filename = typeof req.query.filename === 'string' ? req.query.filename : undefined
-  const media = removePostMedia(req.params.id, filename)
-  res.json({ success: true, media })
+app.delete('/api/posts/:id/media', async (req, res) => {
+  try {
+    const filename = typeof req.query.filename === 'string' ? req.query.filename : undefined
+    const media = await removePostMedia(req.params.id, filename)
+    res.json({ success: true, media })
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || 'Failed to remove media' })
+  }
 })
 
-app.put('/api/posts/:id/image', (req, res) => {
+app.put('/api/posts/:id/image', async (req, res) => {
   const { id } = req.params
   const image = normalizePostMediaItem({
     clientId: req.body?.clientId,
@@ -1014,8 +992,13 @@ app.put('/api/posts/:id/image', (req, res) => {
     res.status(400).json({ error: 'Missing clientId, filename, or url' })
     return
   }
-  const media = replacePostMedia(id, [image])
-  res.json({ success: true, image: getPrimaryPostImage(media), media })
+  
+  try {
+    const media = await replacePostMedia(id, [image])
+    res.json({ success: true, image: getPrimaryPostImage(media), media })
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || 'Failed to replace image' })
+  }
 })
 
 // Legacy compatibility: upload a single image and replace existing media
@@ -1064,7 +1047,7 @@ app.post('/api/posts/:id/image/:clientId', upload.single('file'), async (req, re
         return
       }
 
-      const media = replacePostMedia(postId, [image])
+      const media = await replacePostMedia(postId, [image])
       res.json({
         success: true,
         image: { clientId, filename: image.filename, url: image.url, originalName: file.originalname },
@@ -1085,9 +1068,13 @@ app.post('/api/posts/:id/image/:clientId', upload.single('file'), async (req, re
 })
 
 // Legacy compatibility: clear all attachments for a post
-app.delete('/api/posts/:id/image', (req, res) => {
-  removePostMedia(req.params.id)
-  res.json({ success: true })
+app.delete('/api/posts/:id/image', async (req, res) => {
+  try {
+    await removePostMedia(req.params.id)
+    res.json({ success: true })
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to clear post images' })
+  }
 })
 
 // ── Media Metadata Persistence ──────────────────────────
@@ -2926,7 +2913,6 @@ async function runScheduler() {
     const mapping = readPageMapping()
     const connections = readConnections()
     const googleMapping = readGoogleMapping()
-    const postMedia = readPostMedia()
 
     // 1. Fetch all scheduled posts from Firestore that are due
     const postsSnap = await db.collection('posts')
@@ -2967,7 +2953,7 @@ async function runScheduler() {
             results.push({ postId: post.id, action: 'skipped', reason: 'No Google mapping' })
             continue
           }
-          const postImage = getPrimaryPostImage(postMedia[post.id])
+          const postImage = getPrimaryPostImage(post.media)
           const imgUrl = postImage ? `${PUBLIC_ORIGIN}${postImage.url}` : undefined
           await publishToGoogle(googleLocationName, message, imgUrl)
         } else if (post.platform === 'facebook') {
@@ -2984,7 +2970,7 @@ async function runScheduler() {
             results.push({ postId: post.id, action: 'skipped', reason: 'No Meta mapping' })
             continue
           }
-          const facebookMedia = resolveFacebookPublishMedia(post, postMedia[post.id])
+          const facebookMedia = resolveFacebookPublishMedia(post, post.media)
           if (facebookMedia === null) {
             await addSchedulerLog({
               postId: post.id, clientId, clientName: post.clientName,
@@ -3023,7 +3009,7 @@ async function runScheduler() {
             results.push({ postId: post.id, action: 'skipped', reason: 'Manual Instagram music required' })
             continue
           }
-          const instagramResolution = resolveInstagramPublishMedia(post, postMedia[post.id])
+          const instagramResolution = resolveInstagramPublishMedia(post, post.media)
           if (!instagramResolution.payload) {
             const instagramMessage = instagramResolution.error === 'missing_video'
               ? 'Skipped: Instagram video post requires an attached video'
