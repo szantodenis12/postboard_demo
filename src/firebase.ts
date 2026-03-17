@@ -20,6 +20,11 @@ console.log('Firebase Config loaded:', {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 
+import { setPersistence, browserLocalPersistence } from 'firebase/auth'
 export const auth = getAuth(app)
+setPersistence(auth, browserLocalPersistence).catch(err => {
+  console.error('Failed to set Firebase Auth persistence:', err)
+})
+
 export const db = getFirestore(app)
 export const storage = getStorage(app)

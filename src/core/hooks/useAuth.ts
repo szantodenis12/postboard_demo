@@ -3,6 +3,8 @@ import { auth } from '../../firebase'
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged, User } from 'firebase/auth'
 
 const TOKEN_KEY = 'postboard_token'
+const SESSION_START_KEY = 'postboard_session_start'
+const SESSION_DURATION_MS = 60 * 60 * 1000 // 1 hour
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null)
@@ -10,13 +12,31 @@ export function useAuth() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    // Session duration enforcement
+    const sessionStart = localStorage.getItem(SESSION_START_KEY)
+    const now = Date.now()
+    
+    if (sessionStart && now - parseInt(sessionStart) > SESSION_DURATION_MS) {
+      console.log('Session expired (over 1h)')
+      signOut(auth)
+      localStorage.removeItem(TOKEN_KEY)
+      localStorage.removeItem(SESSION_START_KEY)
+      setChecking(false)
+      return
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser)
       if (currentUser) {
         const token = await currentUser.getIdToken()
         localStorage.setItem(TOKEN_KEY, token)
+        // If logged in but no session start (e.g. from previous version), set it now
+        if (!localStorage.getItem(SESSION_START_KEY)) {
+           localStorage.setItem(SESSION_START_KEY, Date.now().toString())
+        }
       } else {
         localStorage.removeItem(TOKEN_KEY)
+        localStorage.removeItem(SESSION_START_KEY)
       }
       setChecking(false)
     })
@@ -28,6 +48,7 @@ export function useAuth() {
     setError(null)
     try {
       await signInWithEmailAndPassword(auth, email, password)
+      localStorage.setItem(SESSION_START_KEY, Date.now().toString())
       return true
     } catch (err: any) {
       setError(err.message || 'Login failed')
@@ -39,6 +60,7 @@ export function useAuth() {
     try {
       await signOut(auth)
       localStorage.removeItem(TOKEN_KEY)
+      localStorage.removeItem(SESSION_START_KEY)
     } catch {
       // ignore
     }
