@@ -1,10 +1,8 @@
 import { Router } from 'express'
-import { resolve } from 'path'
-import { readFileSync, writeFileSync, existsSync } from 'fs'
+import { db } from './firebase.js'
 import { scanClients } from './scanner.js'
 
 const router = Router()
-const CRM_FILE = resolve(process.cwd(), 'data', 'crm.json')
 
 // ── Types ──────────────────────────────────────────────
 
@@ -69,63 +67,80 @@ interface CRMInvoice {
   createdAt: string
 }
 
-interface CRMData {
-  profiles: Record<string, CRMProfile>
-  activities: CRMActivity[]
-  tasks: CRMTask[]
-  contracts: CRMContract[]
-  invoices: CRMInvoice[]
-}
-
-// ── Persistence ────────────────────────────────────────
-
-function readCRM(): CRMData {
-  try {
-    if (existsSync(CRM_FILE)) {
-      return JSON.parse(readFileSync(CRM_FILE, 'utf-8'))
-    }
-  } catch { /* ignore */ }
-  return { profiles: {}, activities: [], tasks: [], contracts: [], invoices: [] }
-}
-
-function writeCRM(data: CRMData) {
-  writeFileSync(CRM_FILE, JSON.stringify(data, null, 2), 'utf-8')
-}
-
 function genId(prefix: string) {
   return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`
+}
+
+// Helper to fetch all docs from a collection as type T[]
+async function fetchCollection<T>(collectionName: string): Promise<T[]> {
+  const snap = await db.collection(collectionName).get()
+  return snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as unknown as T))
+}
+
+// Helper to fetch a dictionary of profiles
+async function fetchProfiles(): Promise<Record<string, CRMProfile>> {
+  const snap = await db.collection('crm_profiles').get()
+  const profiles: Record<string, CRMProfile> = {}
+  snap.docs.forEach(doc => {
+    profiles[doc.id] = doc.data() as CRMProfile
+  })
+  return profiles
 }
 
 // ── Routes ─────────────────────────────────────────────
 
 // Get all CRM data
-router.get('/', (_req, res) => {
-  res.json(readCRM())
+router.get('/', async (_req, res) => {
+  try {
+    const [profiles, activities, tasks, contracts, invoices] = await Promise.all([
+      fetchProfiles(),
+      fetchCollection<CRMActivity>('crm_activities'),
+      fetchCollection<CRMTask>('crm_tasks'),
+      fetchCollection<CRMContract>('crm_contracts'),
+      fetchCollection<CRMInvoice>('crm_invoices')
+    ])
+
+    // Sort arrays (newest first for activities/contracts/invoices, based on original behavior)
+    activities.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    tasks.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    contracts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    invoices.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+
+    res.json({ profiles, activities, tasks, contracts, invoices })
+  } catch (error: any) {
+    console.error('Failed to fetch CRM data:', error)
+    res.status(500).json({ error: 'Failed to fetch CRM data' })
+  }
 })
 
 // ── Profiles ───────────────────────────────────────────
 
-router.put('/profiles', (req, res) => {
+router.put('/profiles', async (req, res) => {
   const profile = req.body as CRMProfile
   if (!profile.clientId) {
     res.status(400).json({ error: 'Missing clientId' })
     return
   }
-  const crm = readCRM()
-  crm.profiles[profile.clientId] = profile
-  writeCRM(crm)
-  res.json({ success: true, profile })
+  try {
+    await db.collection('crm_profiles').doc(profile.clientId).set(profile, { merge: true })
+    res.json({ success: true, profile })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update profile' })
+  }
 })
 
-router.get('/profiles/:clientId', (req, res) => {
-  const crm = readCRM()
-  const profile = crm.profiles[req.params.clientId]
-  res.json({ profile: profile || null })
+router.get('/profiles/:clientId', async (req, res) => {
+  try {
+    const doc = await db.collection('crm_profiles').doc(req.params.clientId).get()
+    res.json({ profile: doc.exists ? doc.data() : null })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch profile' })
+  }
 })
 
 // ── Activities ─────────────────────────────────────────
 
-router.post('/activities', (req, res) => {
+router.post('/activities', async (req, res) => {
   const { clientId, type, title, description, date } = req.body
   if (!clientId || !title) {
     res.status(400).json({ error: 'Missing clientId or title' })
@@ -140,22 +155,26 @@ router.post('/activities', (req, res) => {
     date: date || new Date().toISOString().split('T')[0],
     createdAt: new Date().toISOString(),
   }
-  const crm = readCRM()
-  crm.activities.unshift(activity)
-  writeCRM(crm)
-  res.json({ success: true, activity })
+  try {
+    await db.collection('crm_activities').doc(activity.id).set(activity)
+    res.json({ success: true, activity })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create activity' })
+  }
 })
 
-router.delete('/activities/:id', (req, res) => {
-  const crm = readCRM()
-  crm.activities = crm.activities.filter(a => a.id !== req.params.id)
-  writeCRM(crm)
-  res.json({ success: true })
+router.delete('/activities/:id', async (req, res) => {
+  try {
+    await db.collection('crm_activities').doc(req.params.id).delete()
+    res.json({ success: true })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete activity' })
+  }
 })
 
 // ── Tasks ──────────────────────────────────────────────
 
-router.post('/tasks', (req, res) => {
+router.post('/tasks', async (req, res) => {
   const { clientId, title, description, status, priority, dueDate, assignee } = req.body
   if (!clientId || !title) {
     res.status(400).json({ error: 'Missing clientId or title' })
@@ -172,41 +191,51 @@ router.post('/tasks', (req, res) => {
     assignee,
     createdAt: new Date().toISOString(),
   }
-  const crm = readCRM()
-  crm.tasks.unshift(task)
-  writeCRM(crm)
-  res.json({ success: true, task })
+  try {
+    await db.collection('crm_tasks').doc(task.id).set(task)
+    res.json({ success: true, task })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create task' })
+  }
 })
 
-router.patch('/tasks/:id', (req, res) => {
-  const crm = readCRM()
-  const task = crm.tasks.find(t => t.id === req.params.id)
-  if (!task) {
-    res.status(404).json({ error: 'Task not found' })
-    return
+router.patch('/tasks/:id', async (req, res) => {
+  try {
+    const taskRef = db.collection('crm_tasks').doc(req.params.id)
+    const doc = await taskRef.get()
+    if (!doc.exists) {
+      res.status(404).json({ error: 'Task not found' })
+      return
+    }
+    const updates = req.body
+    if (updates.status === 'done' && !doc.data()?.completedAt) {
+      updates.completedAt = new Date().toISOString()
+    }
+    if (updates.status && updates.status !== 'done') {
+      updates.completedAt = null // Use null to remove in Firestore merge
+    }
+    await taskRef.set(updates, { merge: true })
+    
+    // Fetch fresh task to return
+    const updatedDoc = await taskRef.get()
+    res.json({ success: true, task: updatedDoc.data() })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update task' })
   }
-  const updates = req.body
-  Object.assign(task, updates)
-  if (updates.status === 'done' && !task.completedAt) {
-    task.completedAt = new Date().toISOString()
-  }
-  if (updates.status && updates.status !== 'done') {
-    task.completedAt = undefined
-  }
-  writeCRM(crm)
-  res.json({ success: true, task })
 })
 
-router.delete('/tasks/:id', (req, res) => {
-  const crm = readCRM()
-  crm.tasks = crm.tasks.filter(t => t.id !== req.params.id)
-  writeCRM(crm)
-  res.json({ success: true })
+router.delete('/tasks/:id', async (req, res) => {
+  try {
+    await db.collection('crm_tasks').doc(req.params.id).delete()
+    res.json({ success: true })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete task' })
+  }
 })
 
 // ── Contracts ──────────────────────────────────────────
 
-router.post('/contracts', (req, res) => {
+router.post('/contracts', async (req, res) => {
   const { clientId, title, startDate, endDate, monthlyValue, status, notes } = req.body
   if (!clientId || !title || !startDate) {
     res.status(400).json({ error: 'Missing clientId, title, or startDate' })
@@ -223,34 +252,42 @@ router.post('/contracts', (req, res) => {
     notes,
     createdAt: new Date().toISOString(),
   }
-  const crm = readCRM()
-  crm.contracts.unshift(contract)
-  writeCRM(crm)
-  res.json({ success: true, contract })
-})
-
-router.patch('/contracts/:id', (req, res) => {
-  const crm = readCRM()
-  const contract = crm.contracts.find(c => c.id === req.params.id)
-  if (!contract) {
-    res.status(404).json({ error: 'Contract not found' })
-    return
+  try {
+    await db.collection('crm_contracts').doc(contract.id).set(contract)
+    res.json({ success: true, contract })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create contract' })
   }
-  Object.assign(contract, req.body)
-  writeCRM(crm)
-  res.json({ success: true, contract })
 })
 
-router.delete('/contracts/:id', (req, res) => {
-  const crm = readCRM()
-  crm.contracts = crm.contracts.filter(c => c.id !== req.params.id)
-  writeCRM(crm)
-  res.json({ success: true })
+router.patch('/contracts/:id', async (req, res) => {
+  try {
+    const ref = db.collection('crm_contracts').doc(req.params.id)
+    const doc = await ref.get()
+    if (!doc.exists) {
+      res.status(404).json({ error: 'Contract not found' })
+      return
+    }
+    await ref.set(req.body, { merge: true })
+    const updatedDoc = await ref.get()
+    res.json({ success: true, contract: updatedDoc.data() })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update contract' })
+  }
+})
+
+router.delete('/contracts/:id', async (req, res) => {
+  try {
+    await db.collection('crm_contracts').doc(req.params.id).delete()
+    res.json({ success: true })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete contract' })
+  }
 })
 
 // ── Invoices ───────────────────────────────────────────
 
-router.post('/invoices', (req, res) => {
+router.post('/invoices', async (req, res) => {
   const { clientId, number, amount, currency, status, issuedDate, dueDate, paidDate, description } = req.body
   if (!clientId || !number || amount === undefined || !issuedDate || !dueDate) {
     res.status(400).json({ error: 'Missing required invoice fields' })
@@ -269,62 +306,77 @@ router.post('/invoices', (req, res) => {
     description,
     createdAt: new Date().toISOString(),
   }
-  const crm = readCRM()
-  crm.invoices.unshift(invoice)
-  writeCRM(crm)
-  res.json({ success: true, invoice })
-})
-
-router.patch('/invoices/:id', (req, res) => {
-  const crm = readCRM()
-  const invoice = crm.invoices.find(i => i.id === req.params.id)
-  if (!invoice) {
-    res.status(404).json({ error: 'Invoice not found' })
-    return
+  try {
+    await db.collection('crm_invoices').doc(invoice.id).set(invoice)
+    res.json({ success: true, invoice })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create invoice' })
   }
-  Object.assign(invoice, req.body)
-  writeCRM(crm)
-  res.json({ success: true, invoice })
 })
 
-router.delete('/invoices/:id', (req, res) => {
-  const crm = readCRM()
-  crm.invoices = crm.invoices.filter(i => i.id !== req.params.id)
-  writeCRM(crm)
-  res.json({ success: true })
+router.patch('/invoices/:id', async (req, res) => {
+  try {
+    const ref = db.collection('crm_invoices').doc(req.params.id)
+    const doc = await ref.get()
+    if (!doc.exists) {
+      res.status(404).json({ error: 'Invoice not found' })
+      return
+    }
+    await ref.set(req.body, { merge: true })
+    const updatedDoc = await ref.get()
+    res.json({ success: true, invoice: updatedDoc.data() })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update invoice' })
+  }
+})
+
+router.delete('/invoices/:id', async (req, res) => {
+  try {
+    await db.collection('crm_invoices').doc(req.params.id).delete()
+    res.json({ success: true })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete invoice' })
+  }
 })
 
 // ── Contract PDF Data ──────────────────────────────────
 
-router.get('/contracts/:id/pdf-data', (req, res) => {
-  const crm = readCRM()
-  const contract = crm.contracts.find(c => c.id === req.params.id)
-  if (!contract) {
-    res.status(404).json({ error: 'Contract not found' })
-    return
-  }
-  const profile = crm.profiles[contract.clientId] || null
-
-  // Try to get client display name from scanner data
-  // Fallback: convert clientId to title case (e.g., "autosiena-oradea" → "AutoSiena Oradea")
-  let clientName = contract.clientId
-    .split(/[-_]/)
-    .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ')
-  let clientColor = '#7c3aed'
-  let postCount = 0
+router.get('/contracts/:id/pdf-data', async (req, res) => {
   try {
-    const PROJECT_ROOT = process.cwd()
-    const data = scanClients(PROJECT_ROOT)
-    const client = data.clients.find((c: any) => c.id === contract.clientId)
-    if (client) {
-      clientName = client.displayName
-      clientColor = client.color
-      postCount = client.stats.total
+    const contractDoc = await db.collection('crm_contracts').doc(req.params.id).get()
+    if (!contractDoc.exists) {
+      res.status(404).json({ error: 'Contract not found' })
+      return
     }
-  } catch { /* ignore */ }
+    const contract = contractDoc.data() as CRMContract
 
-  res.json({ contract, profile, clientName, clientColor, postCount })
+    const profileDoc = await db.collection('crm_profiles').doc(contract.clientId).get()
+    const profile = profileDoc.exists ? profileDoc.data() : null
+
+    // Try to get client display name from scanner data
+    let clientName = contract.clientId
+      .split(/[-_]/)
+      .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ')
+    let clientColor = '#7c3aed'
+    let postCount = 0
+    
+    try {
+      const PROJECT_ROOT = process.cwd()
+      const data = scanClients(PROJECT_ROOT)
+      const client = data.clients.find((c: any) => c.id === contract.clientId)
+      if (client) {
+        clientName = client.displayName
+        clientColor = client.color
+        postCount = client.stats.total
+      }
+    } catch { /* ignore */ }
+
+    res.json({ contract, profile, clientName, clientColor, postCount })
+  } catch (error) {
+    console.error('Failed to generate PDF data:', error)
+    res.status(500).json({ error: 'Failed to gather PDF data' })
+  }
 })
 
 export default router

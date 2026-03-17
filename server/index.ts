@@ -1212,36 +1212,52 @@ app.post('/api/uploads/:clientId', upload.array('files', 10), async (req, res) =
 
   try {
     const bucket = storage.bucket()
-    const uploaded = await Promise.all(
-      files.map(async (file) => {
-        const fileName = `${clientId}/${Date.now()}-${file.originalname}`
-        const blob = bucket.file(fileName)
+    const uploaded: any[] = []
 
-        await blob.save(file.buffer, {
+    for (const file of files) {
+      const fileName = `${clientId}/${Date.now()}-${file.originalname}`
+      console.log(`[Upload-General] Processing: ${fileName} (${file.size} bytes)`)
+
+      try {
+        await bucket.upload(file.path, {
+          destination: fileName,
           metadata: { contentType: file.mimetype },
           resumable: false
         })
 
+        const blob = bucket.file(fileName)
         try {
           await blob.makePublic()
         } catch (err) {
           console.warn(`Could not make file public (general): ${fileName}. Error:`, err)
         }
-        const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`
 
-        return {
+        const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`
+        uploaded.push({
           filename: fileName.replace(`${clientId}/`, ''),
           originalName: file.originalname,
           size: file.size,
           mimeType: file.mimetype,
           url,
+        })
+      } finally {
+        try {
+          if (existsSync(file.path)) unlinkSync(file.path)
+        } catch (err) {
+          console.warn(`Failed to cleanup temp file: ${file.path}`, err)
         }
-      })
-    )
+      }
+    }
+    
     res.json({ success: true, files: uploaded })
   } catch (error: any) {
     console.error('Upload error:', error)
-    res.status(500).json({ error: error.message })
+    if (files) {
+      files.forEach(f => {
+        try { if (existsSync(f.path)) unlinkSync(f.path) } catch {}
+      })
+    }
+    res.status(500).json({ error: error.message || 'Server-side upload error' })
   }
 })
 
