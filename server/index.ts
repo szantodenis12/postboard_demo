@@ -1151,9 +1151,13 @@ app.get('/api/uploads', async (_req, res) => {
 
     allFiles.sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt))
     res.json({ files: allFiles })
-  } catch (error) {
+  } catch (error: any) {
     console.error('List all uploads error:', error)
-    res.status(500).json({ error: 'Failed to list uploads' })
+    res.status(500).json({ 
+      error: 'Failed to list uploads', 
+      details: error.message,
+      code: error.code
+    })
   }
 })
 
@@ -1182,9 +1186,13 @@ app.get('/api/uploads/:clientId', async (req, res) => {
 
     clientFiles.sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt))
     res.json({ files: clientFiles })
-  } catch (error) {
+  } catch (error: any) {
     console.error(`List uploads for ${clientId} error:`, error)
-    res.status(500).json({ error: `Failed to list uploads for ${clientId}` })
+    res.status(500).json({ 
+      error: `Failed to list uploads for ${clientId}`,
+      details: error.message,
+      code: error.code
+    })
   }
 })
 

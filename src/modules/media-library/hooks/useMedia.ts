@@ -110,6 +110,13 @@ export function useMedia(clientFilter: string | null) {
           reject(new Error('Upload failed: Network error or connection refused'))
         })
         xhr.open('POST', `${API}/api/uploads/${clientId}`)
+
+        // Add Authorization header
+        const token = localStorage.getItem('postboard_token')
+        if (token) {
+          xhr.setRequestHeader('Authorization', `Bearer ${token}`)
+        }
+
         xhr.send(formData)
       })
 
