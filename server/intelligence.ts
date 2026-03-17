@@ -613,8 +613,18 @@ router.get('/health-scores', async (req, res) => {
   const { clientId } = req.query
   try {
     const cd = await getClientsData(clientId as string)
-    const analytics = readJSON(resolve(DATA_DIR, 'analytics.json')) || {}
-    const crm = readJSON(resolve(DATA_DIR, 'crm.json')) || { contracts: [] }
+    
+    // Fetch analytics and contracts from Firestore
+    const [analyticsSnap, crmSnap] = await Promise.all([
+      db.collection('analytics').get(),
+      db.collection('crm_contracts').get()
+    ])
+    
+    const analytics: Record<string, any> = {}
+    analyticsSnap.docs.forEach(doc => { analytics[doc.id] = doc.data() })
+    
+    const allContracts = crmSnap.docs.map(doc => doc.data())
+    
     const clients = clientId ? cd.clients.filter(c => c.id === clientId) : cd.clients
 
     const scores = clients.map(cl => {
@@ -635,23 +645,27 @@ router.get('/health-scores', async (req, res) => {
       const total = cl.stats.total || 1
       const ratio = (cl.stats.approved + cl.stats.published + cl.stats.scheduled) / total
       let approval = ratio > 0.8 ? 25 : ratio > 0.6 ? 20 : ratio > 0.4 ? 15 : 10
-      const contracts = (crm.contracts || []).filter((c: any) => c.clientId === cl.id)
-      let contract = 15
-      if (contracts.some((c: any) => c.status === 'active')) contract = 25
-      else if (contracts.some((c: any) => c.status === 'expired')) contract = 5
+      
+      const contracts = allContracts.filter((c: any) => c.clientId === cl.id)
+      let contractScore = 15
+      if (contracts.some((c: any) => c.status === 'active')) contractScore = 25
+      else if (contracts.some((c: any) => c.status === 'expired')) contractScore = 5
 
-      const score = posting + engagement + approval + contract
+      const score = posting + engagement + approval + contractScore
       const grade = score >= 80 ? 'excellent' : score >= 65 ? 'good' : score >= 50 ? 'fair' : score >= 35 ? 'at-risk' : 'critical'
       const alerts: string[] = []
       if (posting < 10) alerts.push('No posts in last 4 weeks')
       if (engagement <= 10) alerts.push('Engagement declining')
-      if (contract <= 5) alerts.push('Contract expired')
+      if (contractScore <= 5) alerts.push('Contract expired')
       if (approval <= 10) alerts.push('Low approval rate')
 
-      return { clientId: cl.id, score, grade, factors: { postingConsistency: posting, engagementTrend: engagement, approvalSpeed: approval, contractStatus: contract }, alerts }
+      return { clientId: cl.id, score, grade, factors: { postingConsistency: posting, engagementTrend: engagement, approvalSpeed: approval, contractStatus: contractScore }, alerts }
     })
     res.json({ scores })
-  } catch (err: any) { res.status(500).json({ error: err.message }) }
+  } catch (err: any) { 
+    console.error('Failed to fetch health scores:', err)
+    res.status(500).json({ error: err.message }) 
+  }
 })
 
 // ══════════════════════════════════════════════════════════
@@ -754,27 +768,45 @@ router.get('/roi', async (req, res) => {
 router.get('/agency-metrics', async (_req, res) => {
   try {
     const cd = await getClientsData()
-    const crm = readJSON(resolve(DATA_DIR, 'crm.json')) || { contracts: [] }
+    // Fetch active contracts from Firestore
+    const contractsSnap = await db.collection('crm_contracts').get()
+    const allContracts = contractsSnap.docs.map(doc => doc.data())
+    const activeContracts = allContracts.filter((c: any) => c.status === 'active')
+    
     const now = new Date()
     const mp = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`
-    const activeContracts = (crm.contracts || []).filter((c: any) => c.status === 'active')
-    const mrr = activeContracts.reduce((s: number, c: any) => s + (c.monthlyValue || 0), 0)
+    
+    const mrr = activeContracts.reduce((s: number, c: any) => s + (Number(c.monthlyValue) || 0), 0)
+    
     let postsThisMonth = 0, totalPosts = 0
     const status: Record<string, number> = { draft: 0, approved: 0, scheduled: 0, published: 0 }
     const pm = new Map<string, number>()
+    
     const breakdown = cd.clients.map(cl => {
       const mp2 = cl.posts.filter((p: any) => p.date.startsWith(mp)).length
       postsThisMonth += mp2; totalPosts += cl.stats.total
       status.draft += cl.stats.draft; status.approved += cl.stats.approved
       status.scheduled += cl.stats.scheduled; status.published += cl.stats.published
-      for (const p of cl.posts) { if (p.pillar) { const k = p.pillar.toLowerCase().trim(); pm.set(k, (pm.get(k)||0)+1) } }
+      
+      for (const p of cl.posts) { 
+        if (p.pillar) { 
+          const k = p.pillar.toLowerCase().trim(); 
+          pm.set(k, (pm.get(k)||0)+1) 
+        } 
+      }
+      
       const c = activeContracts.find((c: any) => c.clientId === cl.id)
-      return { clientId: cl.id, displayName: cl.displayName, color: cl.color, posts: mp2, healthScore: 0, mrr: c?.monthlyValue || 0 }
+      return { clientId: cl.id, displayName: cl.displayName, color: cl.color, posts: mp2, healthScore: 0, mrr: Number(c?.monthlyValue) || 0 }
     })
+    
     const pt = Array.from(pm.values()).reduce((s,v)=>s+v,0)
     const pillarBalance = Array.from(pm.entries()).map(([p,c])=>({ pillar:p, count:c, percentage: pt>0?Math.round((c/pt)*1000)/10:0, color: PILLAR_COLORS[p]||'#64748b' })).sort((a,b)=>b.count-a.count)
+    
     res.json({ totalClients: cd.clients.length, totalPosts, postsThisMonth, mrr, avgHealthScore: 0, clientBreakdown: breakdown, pillarBalance, statusBreakdown: status })
-  } catch (err: any) { res.status(500).json({ error: err.message }) }
+  } catch (err: any) { 
+    console.error('Failed to fetch agency metrics:', err)
+    res.status(500).json({ error: err.message }) 
+  }
 })
 
 // ══════════════════════════════════════════════════════════
