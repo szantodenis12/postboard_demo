@@ -65,6 +65,8 @@ if (!getApps().length) {
   app = getApps()[0]
 }
 
-export const db = getFirestore(app)
+const firestore = getFirestore(app)
+firestore.settings({ ignoreUndefinedProperties: true })
+export const db = firestore
 export const auth = getAuth(app)
 export const storage = getStorage(app)
