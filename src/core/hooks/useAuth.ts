@@ -11,30 +11,50 @@ export function useAuth() {
   const [checking, setChecking] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const logout = useCallback(async () => {
+    console.log('[Auth] logout: Initiating logout process.')
+    try {
+      await signOut(auth)
+      localStorage.removeItem(TOKEN_KEY)
+      localStorage.removeItem(SESSION_START_KEY)
+      console.log('[Auth] logout: Successfully logged out and cleared local storage.')
+    } catch (err) {
+      console.error('[Auth] logout: Error during signOut:', err)
+    }
+  }, [])
+
   useEffect(() => {
+    // Immediate check if user is already available
+    if (auth.currentUser) {
+      console.log('[Auth] currentUser already present on mount')
+      setUser(auth.currentUser)
+    }
+
     // Session duration enforcement
     const sessionStart = localStorage.getItem(SESSION_START_KEY)
     const now = Date.now()
     
-    if (sessionStart && now - parseInt(sessionStart) > SESSION_DURATION_MS) {
-      console.log('Session expired (over 1h)')
-      signOut(auth)
-      localStorage.removeItem(TOKEN_KEY)
-      localStorage.removeItem(SESSION_START_KEY)
+    if (sessionStart && (now - parseInt(sessionStart)) > SESSION_DURATION_MS) {
+      console.warn('[Auth] Session expired (>1h), logging out...')
+      logout()
       setChecking(false)
       return
     }
 
+    // Listen for auth state changes
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser)
+      console.log('[Auth] State changed:', currentUser ? 'LOGGED_IN' : 'LOGGED_OUT')
+      
       if (currentUser) {
+        setUser(currentUser)
         const token = await currentUser.getIdToken()
         localStorage.setItem(TOKEN_KEY, token)
-        // If logged in but no session start (e.g. from previous version), set it now
+        
         if (!localStorage.getItem(SESSION_START_KEY)) {
            localStorage.setItem(SESSION_START_KEY, Date.now().toString())
         }
       } else {
+        setUser(null)
         localStorage.removeItem(TOKEN_KEY)
         localStorage.removeItem(SESSION_START_KEY)
       }
@@ -42,7 +62,7 @@ export function useAuth() {
     })
 
     return () => unsubscribe()
-  }, [])
+  }, [logout])
 
   const login = useCallback(async (email: string, password: string) => {
     setError(null)
@@ -53,16 +73,6 @@ export function useAuth() {
     } catch (err: any) {
       setError(err.message || 'Login failed')
       return false
-    }
-  }, [])
-
-  const logout = useCallback(async () => {
-    try {
-      await signOut(auth)
-      localStorage.removeItem(TOKEN_KEY)
-      localStorage.removeItem(SESSION_START_KEY)
-    } catch {
-      // ignore
     }
   }, [])
 
