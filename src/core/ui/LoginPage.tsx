@@ -103,9 +103,30 @@ export function LoginPage({ onLogin, error }: {
           </button>
         </form>
 
-        <p className="text-center text-[10px] text-white/10 mt-6">
-          Powered by PostBoard — Epic Digital Hub
-        </p>
+        <div className="flex flex-col items-center gap-2 mt-8">
+          <div className="flex items-center gap-2 text-[10px] text-white/20">
+            <a 
+              href="/meta-data-deletion" 
+              className="hover:text-accent-violet transition-colors underline decoration-white/5 underline-offset-4"
+            >
+              Data Deletion
+            </a>
+            <span className="opacity-30">•</span>
+            <a 
+              href="/privacy-policy" 
+              className="hover:text-accent-violet transition-colors underline decoration-white/5 underline-offset-4"
+            >
+              Privacy Policy
+            </a>
+            <span className="opacity-30">•</span>
+            <a 
+              href="/terms-of-service" 
+              className="hover:text-accent-violet transition-colors underline decoration-white/5 underline-offset-4"
+            >
+              Terms of Service
+            </a>
+          </div>
+        </div>
       </motion.div>
     </div>
   )

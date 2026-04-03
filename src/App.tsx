@@ -10,6 +10,9 @@ import { AuthCallback } from './modules/settings/components/AuthCallback'
 import { GoogleAuthCallback } from './modules/settings/components/GoogleAuthCallback'
 import { getViewComponent, defaultViewId } from './modules/registry'
 import { PublicReviewBoard } from './modules/client-portal/components/PublicReviewBoard'
+import { MetaDataDeletionPage } from './core/ui/MetaDataDeletionPage'
+import PrivacyPolicyPage from './core/ui/PrivacyPolicyPage'
+import TermsOfServicePage from './core/ui/TermsOfServicePage'
 
 function AppContent({ onLogout, authEnabled }: { onLogout?: () => void; authEnabled?: boolean }) {
   const { data, loading, error, refresh, refreshMeta, setSelectedClient } = useApp()
@@ -125,6 +128,18 @@ function AppContent({ onLogout, authEnabled }: { onLogout?: () => void; authEnab
 
 export default function App() {
   const auth = useAuth()
+  const path = window.location.pathname
+
+  // Public pages bypass auth
+  if (path === '/meta-data-deletion') {
+    return <MetaDataDeletionPage />
+  }
+  if (path === '/privacy-policy') {
+    return <PrivacyPolicyPage />
+  }
+  if (path === '/terms-of-service') {
+    return <TermsOfServicePage />
+  }
 
   // Still checking auth status
   if (auth.checking) {

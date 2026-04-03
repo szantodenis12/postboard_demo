@@ -90,7 +90,7 @@ function resolveInstagramAccountId(page: any): string | undefined {
 // ── OAuth helpers ────────────────────────────────────────
 // Scopes are loaded from .env so you can adjust without code changes
 // Add META_SCOPES to .env to override, e.g.: META_SCOPES=pages_show_list,pages_read_engagement
-const DEFAULT_SCOPES = 'pages_show_list,pages_read_engagement,pages_manage_posts,instagram_basic,instagram_content_publish,business_management'
+const DEFAULT_SCOPES = 'pages_show_list,pages_read_engagement,pages_manage_content,instagram_basic,instagram_content_publish,business_management'
 const META_SCOPES = env.META_SCOPES || DEFAULT_SCOPES
 
 export function getLoginUrl(): string {
