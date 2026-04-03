@@ -21,23 +21,10 @@ export interface MetaConnections {
 const CONNECTIONS_FILE = resolve(process.cwd(), 'data', 'connections.json')
 const INSTAGRAM_OVERRIDES_FILE = resolve(process.cwd(), 'data', 'instagram-overrides.json')
 
-function loadEnv() {
-  const envPath = resolve(process.cwd(), '.env')
-  if (!existsSync(envPath)) return {}
-  const content = readFileSync(envPath, 'utf-8')
-  const env: Record<string, string> = {}
-  for (const line of content.split('\n')) {
-    const match = line.match(/^(\w+)=(.*)$/)
-    if (match) env[match[1]] = match[2].trim()
-  }
-  return env
-}
-
-const env = loadEnv()
-export const META_APP_ID = env.META_APP_ID || process.env.META_APP_ID || ''
-export const META_APP_SECRET = env.META_APP_SECRET || process.env.META_APP_SECRET || ''
-export const APP_ORIGIN = (env.POSTBOARD_APP_ORIGIN || process.env.POSTBOARD_APP_ORIGIN || 'http://localhost:5173').replace(/\/+$/, '')
-export const PUBLIC_ORIGIN = (env.POSTBOARD_PUBLIC_ORIGIN || process.env.POSTBOARD_PUBLIC_ORIGIN || APP_ORIGIN || 'http://localhost:3001').replace(/\/+$/, '')
+export const META_APP_ID = process.env.META_APP_ID || ''
+export const META_APP_SECRET = process.env.META_APP_SECRET || ''
+export const APP_ORIGIN = (process.env.POSTBOARD_APP_ORIGIN || 'http://localhost:5173').replace(/\/+$/, '')
+export const PUBLIC_ORIGIN = (process.env.POSTBOARD_PUBLIC_ORIGIN || APP_ORIGIN || 'http://localhost:3001').replace(/\/+$/, '')
 const REDIRECT_URI = `${APP_ORIGIN}/auth/callback`
 
 // ── Connections persistence ──────────────────────────────
@@ -87,11 +74,10 @@ function resolveInstagramAccountId(page: any): string | undefined {
   return page?.instagram_business_account?.id || page?.connected_instagram_account?.id || undefined
 }
 
-// ── OAuth helpers ────────────────────────────────────────
 // Scopes are loaded from .env so you can adjust without code changes
-// Add META_SCOPES to .env to override, e.g.: META_SCOPES=pages_show_list,pages_read_engagement
-const DEFAULT_SCOPES = 'pages_show_list,pages_read_engagement,pages_manage_content,instagram_basic,instagram_content_publish,business_management'
-const META_SCOPES = env.META_SCOPES || DEFAULT_SCOPES
+// Add META_SCOPES to .env to override
+const DEFAULT_SCOPES = 'pages_show_list,pages_read_engagement,pages_manage_posts,instagram_basic,instagram_content_publish,business_management,ads_management,ads_read'
+const META_SCOPES = process.env.META_SCOPES || DEFAULT_SCOPES
 
 export function getLoginUrl(): string {
   return `https://www.facebook.com/v21.0/dialog/oauth?client_id=${META_APP_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${META_SCOPES}&response_type=code`
