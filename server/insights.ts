@@ -59,8 +59,9 @@ export interface AnalyticsStore {
 }
 
 // ── Persistence ──────────────────────────────────────────
-const ANALYTICS_FILE = resolve(process.cwd(), 'data', 'analytics.json')
-const REPORTS_FILE = resolve(process.cwd(), 'data', 'reports.json')
+const DATA_DIR = resolve(process.env.DATA_DIR || resolve(process.cwd(), 'data'))
+const ANALYTICS_FILE = resolve(DATA_DIR, 'analytics.json')
+const REPORTS_FILE = resolve(DATA_DIR, 'reports.json')
 
 export function readAnalytics(): AnalyticsStore {
   try {

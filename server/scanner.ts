@@ -608,7 +608,7 @@ function extractPosts(content: string, filePath: string, clientId: string, clien
 
 // ── Main scanner ─────────────────────────────────────────
 export function scanClients(rootPath: string): { clients: Client[], totals: any } {
-  const clientiDir = join(rootPath, 'CLIENTI')
+  const clientiDir = process.env.CLIENTI_DIR || join(rootPath, 'CLIENTI')
   if (!existsSync(clientiDir)) {
     return { clients: [], totals: { clients: 0, posts: 0, draft: 0, approved: 0, scheduled: 0, published: 0 } }
   }

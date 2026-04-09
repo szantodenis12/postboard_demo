@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { CheckCircle2, AlertCircle, Loader2 } from 'lucide-react'
 
@@ -6,6 +6,8 @@ export function AuthCallback({ onComplete }: { onComplete: () => void }) {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
   const [message, setMessage] = useState('Connecting to Meta...')
   const [pages, setPages] = useState<{ pageName: string; hasInstagram: boolean }[]>([])
+
+  const called = useRef(false)
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -23,6 +25,9 @@ export function AuthCallback({ onComplete }: { onComplete: () => void }) {
       setMessage('No authorization code received')
       return
     }
+
+    if (called.current) return
+    called.current = true
 
     // Exchange code for tokens
     fetch('/api/meta/connect', {

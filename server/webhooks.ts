@@ -1,8 +1,9 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { resolve } from 'path'
 
-const WEBHOOKS_FILE = resolve(process.cwd(), 'data', 'webhooks.json')
-const WEBHOOK_LOG_FILE = resolve(process.cwd(), 'data', 'webhook-log.json')
+const DATA_DIR = resolve(process.env.DATA_DIR || resolve(process.cwd(), 'data'))
+const WEBHOOKS_FILE = resolve(DATA_DIR, 'webhooks.json')
+const WEBHOOK_LOG_FILE = resolve(DATA_DIR, 'webhook-log.json')
 
 export type WebhookEvent =
   | 'post.status_changed'

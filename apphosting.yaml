@@ -16,3 +16,7 @@ environmentVariables:
     value: https://app.epicdigitalhub.ro
   - variable: META_SCOPES
     value: pages_show_list,pages_read_engagement,pages_manage_posts,instagram_basic,instagram_content_publish,ads_management,ads_read,business_management
+  - variable: DATA_DIR
+    value: /workspace/storage/data
+  - variable: CLIENTI_DIR
+    value: /workspace/storage/CLIENTI

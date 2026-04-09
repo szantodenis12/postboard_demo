@@ -91,15 +91,26 @@ import { login, verify, authMiddleware, isAuthEnabled } from './auth.js'
 const app = express()
 const PORT = process.env.PORT || 3001
 
-// Root of the Epic Digital Hub project
-// Project root is the current working directory
 const PROJECT_ROOT = process.cwd()
-const STATUSES_FILE = resolve(PROJECT_ROOT, 'data', 'statuses.json')
-const CAPTIONS_FILE = resolve(PROJECT_ROOT, 'data', 'captions.json')
-const DATES_FILE = resolve(PROJECT_ROOT, 'data', 'dates.json')
-const POST_PUBLISH_OPTIONS_FILE = resolve(PROJECT_ROOT, 'data', 'post-publish-options.json')
-const HIDDEN_FILE = resolve(PROJECT_ROOT, 'data', 'hidden.json')
-const PAGE_MAPPING_FILE = resolve(PROJECT_ROOT, 'data', 'page-mapping.json')
+const DATA_DIR = resolve(process.env.DATA_DIR || resolve(PROJECT_ROOT, 'data'))
+const CLIENTI_DIR = resolve(process.env.CLIENTI_DIR || resolve(PROJECT_ROOT, 'CLIENTI'))
+
+// Ensure data directory exists
+if (!existsSync(DATA_DIR)) {
+  try {
+    mkdirSync(DATA_DIR, { recursive: true })
+    console.log(`[Storage] Created data directory: ${DATA_DIR}`)
+  } catch (err) {
+    console.error(`[Storage] Failed to create data directory ${DATA_DIR}:`, err)
+  }
+}
+
+const STATUSES_FILE = resolve(DATA_DIR, 'statuses.json')
+const CAPTIONS_FILE = resolve(DATA_DIR, 'captions.json')
+const DATES_FILE = resolve(DATA_DIR, 'dates.json')
+const POST_PUBLISH_OPTIONS_FILE = resolve(DATA_DIR, 'post-publish-options.json')
+const HIDDEN_FILE = resolve(DATA_DIR, 'hidden.json')
+const PAGE_MAPPING_FILE = resolve(DATA_DIR, 'page-mapping.json')
 
 
 // Global sync state
@@ -108,6 +119,23 @@ let lastChangeTime = Date.now()
 function notifyChange() {
   lastChangeTime = Date.now()
 }
+
+// Health check endpoint for storage
+app.get('/api/health/storage', (_req, res) => {
+  res.json({
+    dataDir: DATA_DIR,
+    dataDirExists: existsSync(DATA_DIR),
+    writable: (() => {
+      try {
+        const testFile = resolve(DATA_DIR, '.write_test')
+        writeFileSync(testFile, 'test')
+        unlinkSync(testFile)
+        return true
+      } catch { return false }
+    })(),
+    projectRoot: PROJECT_ROOT,
+  })
+})
 
 
 app.use(helmet({
@@ -161,20 +189,19 @@ app.use('/api/crm', crmRouter)
 app.use('/api/intelligence', intelligenceRouter)
 
 // ── Multer config ─────────────────────────────────────────
-const UPLOAD_DIR = '/tmp/uploads'
+const UPLOAD_DIR = process.env.UPLOAD_DIR || resolve(DATA_DIR, 'uploads')
 if (!existsSync(UPLOAD_DIR)) {
   try {
     mkdirSync(UPLOAD_DIR, { recursive: true })
   } catch (err) {
-    console.warn(`Failed to create ${UPLOAD_DIR}, falling back to local 'uploads' folder:`, err)
+    console.warn(`Failed to create ${UPLOAD_DIR}, uploads may fail if not writable:`, err)
   }
 }
 
 const upload = multer({
   storage: multer.diskStorage({
     destination: (_req, _file, cb) => {
-      // Use /tmp/uploads if it exists/is writable, otherwise fallback to local project directory
-      cb(null, existsSync(UPLOAD_DIR) ? UPLOAD_DIR : resolve(PROJECT_ROOT, 'uploads'))
+      cb(null, UPLOAD_DIR)
     },
     filename: (_req, file, cb) => {
       cb(null, `${Date.now()}-${file.originalname}`)
@@ -4113,7 +4140,7 @@ app.use((err: any, req: any, res: any, next: any) => {
 
 app.listen(PORT, () => {
   console.log(`\n  ⚡ PostBoard API running at http://localhost:${PORT}`)
-  console.log(`  📁 Scanning: ${PROJECT_ROOT}/CLIENTI\n`)
+  console.log(`  📁 Scanning: ${CLIENTI_DIR}\n`)
   // Start scheduler on boot
   startSchedulerTimer()
 })

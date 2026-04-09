@@ -49,10 +49,11 @@ export interface GoogleInsightsRetryJob {
 }
 
 // ── Config ───────────────────────────────────────────────
-const CONNECTIONS_FILE = resolve(process.cwd(), 'data', 'google-connections.json')
-const GOOGLE_MAPPING_FILE = resolve(process.cwd(), 'data', 'google-mapping.json')
-const GOOGLE_ANALYTICS_FILE = resolve(process.cwd(), 'data', 'google-analytics.json')
-const GOOGLE_RETRY_QUEUE_FILE = resolve(process.cwd(), 'data', 'google-retry-queue.json')
+const DATA_DIR = resolve(process.env.DATA_DIR || resolve(process.cwd(), 'data'))
+const CONNECTIONS_FILE = resolve(DATA_DIR, 'google-connections.json')
+const GOOGLE_MAPPING_FILE = resolve(DATA_DIR, 'google-mapping.json')
+const GOOGLE_ANALYTICS_FILE = resolve(DATA_DIR, 'google-analytics.json')
+const GOOGLE_RETRY_QUEUE_FILE = resolve(DATA_DIR, 'google-retry-queue.json')
 
 function loadEnv() {
   const envPath = resolve(process.cwd(), '.env')

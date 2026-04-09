@@ -189,7 +189,7 @@ function findMarkdownFiles(dir: string): string[] {
 }
 
 function resolveClientDir(projectRoot: string, clientId: string): string | null {
-  const clientiDir = join(projectRoot, 'CLIENTI')
+  const clientiDir = process.env.CLIENTI_DIR || join(projectRoot, 'CLIENTI')
   if (!existsSync(clientiDir)) return null
 
   for (const entry of readdirSync(clientiDir)) {

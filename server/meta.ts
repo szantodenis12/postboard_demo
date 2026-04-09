@@ -18,8 +18,9 @@ export interface MetaConnections {
 }
 
 // ── Config ───────────────────────────────────────────────
-const CONNECTIONS_FILE = resolve(process.cwd(), 'data', 'connections.json')
-const INSTAGRAM_OVERRIDES_FILE = resolve(process.cwd(), 'data', 'instagram-overrides.json')
+const DATA_DIR = resolve(process.env.DATA_DIR || resolve(process.cwd(), 'data'))
+const CONNECTIONS_FILE = resolve(DATA_DIR, 'connections.json')
+const INSTAGRAM_OVERRIDES_FILE = resolve(DATA_DIR, 'instagram-overrides.json')
 
 export const META_APP_ID = process.env.META_APP_ID || ''
 export const META_APP_SECRET = process.env.META_APP_SECRET || ''
@@ -167,24 +168,24 @@ export interface FacebookPublishMedia {
 
 export type InstagramPublishMedia =
   | {
+    type: 'image' | 'video'
+    url: string
+    shareToFeed?: boolean
+  }
+  | {
+    type: 'carousel'
+    items: Array<{
       type: 'image' | 'video'
       url: string
-      shareToFeed?: boolean
-    }
+    }>
+  }
   | {
-      type: 'carousel'
-      items: Array<{
-        type: 'image' | 'video'
-        url: string
-      }>
+    type: 'story'
+    media: {
+      type: 'image' | 'video'
+      url: string
     }
-  | {
-      type: 'story'
-      media: {
-        type: 'image' | 'video'
-        url: string
-      }
-    }
+  }
 
 async function createInstagramContainer(igAccountId: string, payload: Record<string, unknown>) {
   const containerUrl = `https://graph.facebook.com/v21.0/${igAccountId}/media`
@@ -280,15 +281,15 @@ export async function publishToInstagram(
   if (media.type === 'story') {
     const containerPayload = media.media.type === 'video'
       ? {
-          media_type: 'STORIES',
-          video_url: media.media.url,
-          access_token: pageToken,
-        }
+        media_type: 'STORIES',
+        video_url: media.media.url,
+        access_token: pageToken,
+      }
       : {
-          media_type: 'STORIES',
-          image_url: media.media.url,
-          access_token: pageToken,
-        }
+        media_type: 'STORIES',
+        image_url: media.media.url,
+        access_token: pageToken,
+      }
 
     const container = await createInstagramContainer(igAccountId, containerPayload)
     if (media.media.type === 'video') {
@@ -310,16 +311,16 @@ export async function publishToInstagram(
     for (const item of media.items) {
       const childPayload = item.type === 'video'
         ? {
-            media_type: 'REELS',
-            video_url: item.url,
-            is_carousel_item: true,
-            access_token: pageToken,
-          }
+          media_type: 'REELS',
+          video_url: item.url,
+          is_carousel_item: true,
+          access_token: pageToken,
+        }
         : {
-            image_url: item.url,
-            is_carousel_item: true,
-            access_token: pageToken,
-          }
+          image_url: item.url,
+          is_carousel_item: true,
+          access_token: pageToken,
+        }
       const child = await createInstagramContainer(igAccountId, childPayload)
       childIds.push(child.id)
       if (item.type === 'video') {
@@ -345,17 +346,17 @@ export async function publishToInstagram(
 
   const containerPayload = media.type === 'video'
     ? {
-        media_type: 'REELS',
-        video_url: media.url,
-        caption,
-        share_to_feed: media.shareToFeed ?? false,
-        access_token: pageToken,
-      }
+      media_type: 'REELS',
+      video_url: media.url,
+      caption,
+      share_to_feed: media.shareToFeed ?? false,
+      access_token: pageToken,
+    }
     : {
-        image_url: media.url,
-        caption,
-        access_token: pageToken,
-      }
+      image_url: media.url,
+      caption,
+      access_token: pageToken,
+    }
 
   const container = await createInstagramContainer(igAccountId, containerPayload)
 

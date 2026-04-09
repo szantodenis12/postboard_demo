@@ -6,8 +6,9 @@ import { db } from './firebase.js'
 import type { Response } from 'express'
 
 const router = express.Router()
-const DATA_DIR = resolve(process.cwd(), 'data')
+const DATA_DIR = resolve(process.env.DATA_DIR || resolve(process.cwd(), 'data'))
 const PROJECT_ROOT = process.cwd()
+const CLIENTI_DIR = resolve(process.env.CLIENTI_DIR || resolve(PROJECT_ROOT, 'CLIENTI'))
 
 // Helper to fetch clients and posts from Firestore instead of local disk
 async function getClientsData(clientId?: string) {
@@ -73,7 +74,7 @@ const PILLAR_COLORS: Record<string, string> = {
 // The scanner generates clientId as: dirName.toLowerCase().replace(/[^a-z0-9]/g, '-')
 // We need to reverse that to find the actual folder name.
 function resolveClientDir(clientId: string): string | null {
-  const clientiDir = join(PROJECT_ROOT, 'CLIENTI')
+  const clientiDir = CLIENTI_DIR
   if (!existsSync(clientiDir)) return null
   try {
     const dirs = readdirSync(clientiDir)
@@ -349,7 +350,7 @@ router.post('/calendar-fill/apply', (req, res) => {
   }
 
   const clientName = clientDir.replace(/_/g, ' ')
-  const socialMediaDir = join(PROJECT_ROOT, 'CLIENTI', clientDir, 'CONTENT', 'SOCIAL_MEDIA')
+  const socialMediaDir = join(CLIENTI_DIR, clientDir, 'CONTENT', 'SOCIAL_MEDIA')
 
   // Ensure directory exists
   mkdirSync(socialMediaDir, { recursive: true })
