@@ -77,7 +77,7 @@ function resolveInstagramAccountId(page: any): string | undefined {
 
 // Scopes are loaded from .env so you can adjust without code changes
 // Add META_SCOPES to .env to override
-const DEFAULT_SCOPES = 'pages_show_list,pages_read_engagement,pages_manage_posts,instagram_basic,instagram_content_publish,business_management,ads_management,ads_read'
+const DEFAULT_SCOPES = 'pages_read_engagement,pages_show_list,pages_manage_posts,instagram_basic,instagram_content_publish,business_management,ads_management,ads_read,read_insights'
 const META_SCOPES = process.env.META_SCOPES || DEFAULT_SCOPES
 
 export function getLoginUrl(): string {
