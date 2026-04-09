@@ -75,8 +75,6 @@ import {
   refreshGoogleConnectionLocations,
   readGoogleConnections,
   writeGoogleConnections,
-  readGoogleMapping,
-  writeGoogleMapping,
   readGoogleAnalytics,
   writeGoogleAnalytics,
   publishToGoogle,
@@ -110,7 +108,6 @@ const CAPTIONS_FILE = resolve(DATA_DIR, 'captions.json')
 const DATES_FILE = resolve(DATA_DIR, 'dates.json')
 const POST_PUBLISH_OPTIONS_FILE = resolve(DATA_DIR, 'post-publish-options.json')
 const HIDDEN_FILE = resolve(DATA_DIR, 'hidden.json')
-const PAGE_MAPPING_FILE = resolve(DATA_DIR, 'page-mapping.json')
 
 
 // Global sync state
@@ -326,17 +323,40 @@ function parseIncludeExpired(value: unknown) {
 }
 
 // ── Page-to-client mapping ───────────────────────────────
-function readPageMapping(): Record<string, string> {
+async function readPageMapping(): Promise<Record<string, string>> {
   try {
-    if (existsSync(PAGE_MAPPING_FILE)) {
-      return JSON.parse(readFileSync(PAGE_MAPPING_FILE, 'utf-8'))
-    }
-  } catch { /* ignore */ }
-  return {}
+    const doc = await db.collection('settings').doc('pageMapping').get()
+    return doc.exists ? doc.data() as Record<string, string> : {}
+  } catch (error) {
+    console.error('Error reading page mapping from Firestore:', error)
+    return {}
+  }
 }
 
-function writePageMapping(mapping: Record<string, string>) {
-  writeFileSync(PAGE_MAPPING_FILE, JSON.stringify(mapping, null, 2), 'utf-8')
+async function writePageMapping(mapping: Record<string, string>) {
+  try {
+    await db.collection('settings').doc('pageMapping').set(mapping)
+  } catch (error) {
+    console.error('Error writing page mapping to Firestore:', error)
+  }
+}
+
+async function readGoogleMapping(): Promise<Record<string, string>> {
+  try {
+    const doc = await db.collection('settings').doc('googleMapping').get()
+    return doc.exists ? doc.data() as Record<string, string> : {}
+  } catch (error) {
+    console.error('Error reading google mapping from Firestore:', error)
+    return {}
+  }
+}
+
+async function writeGoogleMapping(mapping: Record<string, string>) {
+  try {
+    await db.collection('settings').doc('googleMapping').set(mapping)
+  } catch (error) {
+    console.error('Error writing google mapping to Firestore:', error)
+  }
 }
 
 function serializeMetaPage(page: {
@@ -2338,24 +2358,24 @@ app.post('/api/google/disconnect', (req, res) => {
 })
 
 // Get location-to-client mapping
-app.get('/api/google/mapping', (_req, res) => {
-  res.json(readGoogleMapping())
+app.get('/api/google/mapping', async (_req, res) => {
+  res.json(await readGoogleMapping())
 })
 
 // Set a client→location mapping
-app.put('/api/google/mapping', (req, res) => {
+app.put('/api/google/mapping', async (req, res) => {
   const { clientId, locationName } = req.body
   if (!clientId) {
     res.status(400).json({ error: 'Missing clientId' })
     return
   }
-  const mapping = readGoogleMapping()
+  const mapping = await readGoogleMapping()
   if (locationName) {
     mapping[clientId] = locationName
   } else {
     delete mapping[clientId]
   }
-  writeGoogleMapping(mapping)
+  await writeGoogleMapping(mapping)
   res.json({ success: true, mapping })
 })
 
@@ -2374,7 +2394,7 @@ function toGoogleRetryResponse(job: GoogleInsightsRetryJob | null) {
 app.post('/api/google/analytics/:clientId/fetch', async (req, res) => {
   const { clientId } = req.params
   const { period } = req.body
-  const mapping = readGoogleMapping()
+  const mapping = await readGoogleMapping()
   const locationName = mapping[clientId]
   if (!locationName) {
     res.status(400).json({ error: 'No Google location mapped to this client. Go to Settings.' })
@@ -2436,7 +2456,7 @@ app.post('/api/google/publish', async (req, res) => {
     res.status(400).json({ error: 'Missing clientId or message' })
     return
   }
-  const mapping = readGoogleMapping()
+  const mapping = await readGoogleMapping()
   const locationName = mapping[clientId]
   if (!locationName) {
     res.status(400).json({ error: 'No Google location mapped to this client. Go to Settings to map a location.' })
@@ -2490,7 +2510,7 @@ app.post('/api/analytics/:clientId/fetch', async (req, res) => {
   const { period } = req.body // optional 'YYYY-MM'
 
   // Get page mapping for this client
-  const mapping = readPageMapping()
+  const mapping = await readPageMapping()
   const pageId = mapping[clientId]
   if (!pageId) {
     res.status(400).json({ error: 'No Meta page mapped to this client. Go to Settings to map a page.' })
@@ -2670,7 +2690,7 @@ async function resolveMetaSnapshotForReport(clientId: string, periods: string[])
   if (periods.length === 0) return cached
   if (periods.length === 1 && cached?.period === periods[0]) return cached
 
-  const mapping = readPageMapping()
+  const mapping = await readPageMapping()
   const pageId = mapping[clientId]
   if (!pageId) return null
 
@@ -2698,7 +2718,7 @@ async function resolveGoogleSnapshotForReport(clientId: string, periods: string[
   if (periods.length === 0) return cached
   if (periods.length === 1 && cached?.period === periods[0]) return cached
 
-  const mapping = readGoogleMapping()
+  const mapping = await readGoogleMapping()
   const locationName = mapping[clientId]
   if (!locationName) return null
 
@@ -2969,9 +2989,9 @@ async function runScheduler() {
     if (!config.enabled) return { skipped: true, reason: 'Scheduler disabled' }
 
     const todayStr = getBucharestDateString()
-    const mapping = readPageMapping()
+    const mapping = await readPageMapping()
     const connections = readConnections()
-    const googleMapping = readGoogleMapping()
+    const googleMapping = await readGoogleMapping()
 
     // 1. Fetch all scheduled posts from Firestore that are due
     const postsSnap = await db.collection('posts')
@@ -3186,9 +3206,9 @@ async function runAnalyticsSync(options: { force?: boolean } = {}) {
 
   const targetPeriod = getBucharestMonthPeriod()
   const data = await scanClients(PROJECT_ROOT)
-  const mapping = readPageMapping()
+  const mapping = await readPageMapping()
   const connections = readConnections()
-  const googleMapping = readGoogleMapping()
+  const googleMapping = await readGoogleMapping()
   const analyticsStore = readAnalytics()
   const googleStore = readGoogleAnalytics()
 
